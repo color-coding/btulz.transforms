@@ -7,21 +7,22 @@ import org.colorcoding.tools.btulz.models.IProperty;
 import org.colorcoding.tools.btulz.models.IPropertyData;
 import org.colorcoding.tools.btulz.models.IPropertyModel;
 import org.colorcoding.tools.btulz.models.IPropertyModels;
+import org.colorcoding.tools.btulz.models.PropertyData;
+import org.colorcoding.tools.btulz.models.PropertyModel;
+import org.colorcoding.tools.btulz.models.PropertyModels;
 import org.colorcoding.tools.btulz.models.data.emDataType;
-import org.colorcoding.tools.btulz.models.data.emPropertyType;
 import org.colorcoding.tools.btulz.models.data.emYesNo;
 
 import junit.framework.TestCase;
 
 public class testModels extends TestCase {
 
-	public void testDomainModels() {
+	public void testDomainModels() throws InstantiationException, IllegalAccessException {
 		IDomain domain = new Domain();
 		domain.setName("TrainingTesting");
 		domain.setShortName("TT");
 		domain.setDescription("培训&测试");
 
-		IProperty property;
 		IPropertyData propertyData;
 		IPropertyModel propertyModel;
 		IPropertyModels propertyModels;
@@ -31,10 +32,9 @@ public class testModels extends TestCase {
 		model.setDescription("销售订单");
 		model.setShortName("CC_TT_SO");
 		model.setMapped("CC_TT_ORDR");
-		property = model.getProperties().create(emPropertyType.pt_Data);
-		property.setName("DocumentEntry");
-		property.setDescription("单据编号");
-		propertyData = (IPropertyData) property;
+		propertyData = model.getProperties().create(PropertyData.class);
+		propertyData.setName("DocumentEntry");
+		propertyData.setDescription("单据编号");
 		propertyData.setDataType(emDataType.dt_Numeric);
 		propertyData.setPrimaryKey(emYesNo.Yes);
 		propertyData.setMapped("DocEntry");
@@ -44,18 +44,16 @@ public class testModels extends TestCase {
 		userModel.setDescription("用户");
 		userModel.setShortName("CC_TT_US");
 		userModel.setMapped("CC_TT_OUSR");
-		property = userModel.getProperties().create(emPropertyType.pt_Data);
-		property.setName("UserCode");
-		property.setDescription("用户编码");
-		propertyData = (IPropertyData) property;
+		propertyData = userModel.getProperties().create(PropertyData.class);
+		propertyData.setName("UserCode");
+		propertyData.setDescription("用户编码");
 		propertyData.setDataType(emDataType.dt_Alphanumeric);
 		propertyData.setPrimaryKey(emYesNo.Yes);
 		propertyData.setMapped("Code");
 
-		property = model.getProperties().create(emPropertyType.pt_Model);
-		property.setName("DocumentUser");
-		property.setDescription("单据创建人");
-		propertyModel = (IPropertyModel) property;
+		propertyModel = model.getProperties().create(PropertyModel.class);
+		propertyModel.setName("DocumentUser");
+		propertyModel.setDescription("单据创建人");
 		propertyModel.setModel(userModel);
 
 		IModel modelLine = domain.getModels().create();
@@ -63,25 +61,22 @@ public class testModels extends TestCase {
 		modelLine.setDescription("销售订单行");
 		modelLine.setShortName("CC_TT_SOLINE");
 		modelLine.setMapped("CC_TT_RDR1");
-		property = modelLine.getProperties().create(emPropertyType.pt_Data);
-		property.setName("DocumentEntry");
-		property.setDescription("单据编号");
-		propertyData = (IPropertyData) property;
+		propertyData = modelLine.getProperties().create(PropertyData.class);
+		propertyData.setName("DocumentEntry");
+		propertyData.setDescription("单据编号");
 		propertyData.setDataType(emDataType.dt_Numeric);
 		propertyData.setPrimaryKey(emYesNo.Yes);
 		propertyData.setMapped("DocEntry");
-		property = modelLine.getProperties().create(emPropertyType.pt_Data);
-		property.setName("DocumentLine");
-		property.setDescription("单据行号");
-		propertyData = (IPropertyData) property;
+		propertyData = modelLine.getProperties().create(PropertyData.class);
+		propertyData.setName("DocumentLine");
+		propertyData.setDescription("单据行号");
 		propertyData.setDataType(emDataType.dt_Numeric);
 		propertyData.setPrimaryKey(emYesNo.Yes);
 		propertyData.setMapped("LineId");
 
-		property = model.getProperties().create(emPropertyType.pt_Models);
-		property.setName("Lines");
-		property.setDescription("单据行集合");
-		propertyModels = (IPropertyModels) property;
+		propertyModels = model.getProperties().create(PropertyModels.class);
+		propertyModels.setName("Lines");
+		propertyModels.setDescription("单据行集合");
 		propertyModels.setModel(modelLine);
 
 		System.out.println(domain.toString());

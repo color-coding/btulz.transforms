@@ -11,8 +11,8 @@ public class Properties extends ArrayList<IProperty> implements IProperties {
 	 */
 	private static final long serialVersionUID = 2215636759503857382L;
 
-	
-	public IProperty create(emPropertyType type) {
+	@Override
+	public IProperty create(emPropertyType type) throws ClassNotFoundException {
 		if (type == emPropertyType.pt_Data) {
 			IPropertyData item = new PropertyData();
 			if (this.add(item)) {
@@ -29,7 +29,15 @@ public class Properties extends ArrayList<IProperty> implements IProperties {
 				return item;
 			}
 		}
-		throw new RuntimeException();
+		throw new ClassNotFoundException();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <P extends IProperty> P create(Class<P> type) throws InstantiationException, IllegalAccessException {
+		IProperty item = type.newInstance();
+		this.add(item);
+		return (P) item;
 	}
 
 }

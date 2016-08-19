@@ -2,7 +2,7 @@ package org.colorcoding.tools.btulz.transformers;
 
 import org.colorcoding.tools.btulz.models.IDomain;
 
-public class FileTransformer extends Transformer implements IFileTransformer {
+public abstract class FileTransformer extends Transformer implements IFileTransformer {
 
 	private boolean groupingFile;
 

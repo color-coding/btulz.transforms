@@ -4,45 +4,50 @@ import org.colorcoding.tools.btulz.models.data.emModelType;
 
 public class Model implements IModel {
 
+	public boolean equals(IModel model) {
+		if (this.getName() != null && model != null && this.getName().equals(model.getName())) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean equals(Object model) {
+		return this.equals((IModel) model);
+	}
+
 	private String name;
 
-	
 	public String getName() {
 		return this.name;
 	}
 
-	
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	private String shortName;
 
-	
 	public String getShortName() {
 		return this.shortName;
 	}
 
-	
 	public void setShortName(String shortName) {
 		this.shortName = shortName;
 	}
 
 	private String description;
 
-	
 	public String getDescription() {
 		return this.description;
 	}
 
-	
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
 	private emModelType modelType;
 
-	
 	public emModelType getModelType() {
 		if (this.modelType == null) {
 			this.modelType = emModelType.mt_Unspecified;
@@ -50,14 +55,12 @@ public class Model implements IModel {
 		return this.modelType;
 	}
 
-	
 	public void setModelType(emModelType modelType) {
 		this.modelType = modelType;
 	}
 
 	private IProperties properties;
 
-	
 	public IProperties getProperties() {
 		if (this.properties == null) {
 			this.properties = new Properties();
@@ -67,17 +70,14 @@ public class Model implements IModel {
 
 	private String mapped;
 
-	
 	public String getMapped() {
 		return this.mapped;
 	}
 
-	
 	public void setMapped(String mapped) {
 		this.mapped = mapped;
 	}
 
-	
 	public String toString() {
 		return String.format("model:%s type:%s", this.getName(), this.getModelType());
 	}

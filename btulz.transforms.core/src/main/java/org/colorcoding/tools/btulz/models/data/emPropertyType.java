@@ -8,6 +8,10 @@ package org.colorcoding.tools.btulz.models.data;
  */
 public enum emPropertyType {
 	/**
+	 * 未指定
+	 */
+	pt_Unspecified,
+	/**
 	 * 数据类型
 	 */
 	pt_Data,
