@@ -62,4 +62,11 @@ public interface IDomain {
 	 * @return
 	 */
 	IBusinessObjects getBusinessObjects();
+
+	/**
+	 * 深度克隆
+	 * 
+	 * @return
+	 */
+	IDomain clone();
 }

@@ -8,11 +8,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
+import org.colorcoding.tools.btulz.Serializer;
 
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "Domain", namespace = Environment.NAMESPACE_BTULZ_MODELS)
 @XmlRootElement(name = "Domain", namespace = Environment.NAMESPACE_BTULZ_MODELS)
 public class Domain implements IDomain {
+
+	public boolean equals(IDomain domain) {
+		if (this.getName() != null && domain != null && this.getName().equals(domain.getName())) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean equals(Object model) {
+		return this.equals((IDomain) model);
+	}
 
 	@XmlAttribute(name = "Name")
 	private String name;
@@ -67,7 +80,13 @@ public class Domain implements IDomain {
 		return this.businessObjects;
 	}
 
+	@Override
 	public String toString() {
 		return String.format("domain:%s", this.getName());
+	}
+
+	@Override
+	public IDomain clone() {
+		return (IDomain) Serializer.Clone(this);
 	}
 }

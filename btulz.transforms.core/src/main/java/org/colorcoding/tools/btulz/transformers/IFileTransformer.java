@@ -26,44 +26,57 @@ public interface IFileTransformer {
 	void setGroupingFile(boolean value);
 
 	/**
-	 * 获取-工作目录
-	 * 
-	 * @return
-	 */
-	String getWorkFolder();
-
-	/**
-	 * 设置-工作目录
-	 * 
-	 * @param foder
-	 */
-	void setWorkFolder(String foder);
-
-	/**
 	 * 输入文件
 	 * 
 	 * @param filePath
+	 *            路径
+	 * @param includingSubFolder
+	 * @throws TransformException
+	 * @throws MultiTransformException
+	 *             包含子项文件夹
 	 */
-	void input(String filePath);
+	void load(String filePath, boolean includingSubFolder) throws TransformException, MultiTransformException;
 
 	/**
 	 * 输入文件数组
 	 * 
 	 * @param filePathes
+	 *            路径
+	 * @param includingSubFolder
+	 * @throws TransformException
+	 * @throws MultiTransformException
+	 *             包含子项文件夹
 	 */
-	void input(String[] filePathes);
+	void load(String[] filePathes, boolean includingSubFolder) throws TransformException, MultiTransformException;
 
 	/**
 	 * 输入的模型
 	 * 
 	 * @param domain
 	 */
-	void input(IDomain domain);
+	void load(IDomain domain);
 
 	/**
-	 * 转换为领域模型
+	 * 获取当前的领域模型
 	 * 
 	 * @return
 	 */
-	IDomain[] getDomainModels();
+	IDomain[] getWorkingDomains();
+
+	/**
+	 * 保存模型
+	 * 
+	 * @throws TransformException
+	 * @throws MultiTransformException
+	 */
+	void save() throws TransformException, MultiTransformException;
+
+	/**
+	 * 输出目录
+	 * 
+	 * @param folder
+	 * @throws TransformException
+	 * @throws MultiTransformException
+	 */
+	void save(String folder) throws TransformException, MultiTransformException;
 }

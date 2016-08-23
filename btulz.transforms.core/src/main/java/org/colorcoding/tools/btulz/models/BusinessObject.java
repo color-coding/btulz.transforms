@@ -7,13 +7,14 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
+import org.colorcoding.tools.btulz.Serializer;
 
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "BusinessObject", namespace = Environment.NAMESPACE_BTULZ_MODELS)
 public class BusinessObject implements IBusinessObject {
 
-	public boolean equals(IProperty property) {
-		if (this.getName() != null && property != null && this.getName().equals(property.getName())) {
+	public boolean equals(IBusinessObject businessObject) {
+		if (this.getName() != null && businessObject != null && this.getName().equals(businessObject.getName())) {
 			return true;
 		}
 		return false;
@@ -21,7 +22,7 @@ public class BusinessObject implements IBusinessObject {
 
 	@Override
 	public boolean equals(Object property) {
-		return this.equals((IProperty) property);
+		return this.equals((IBusinessObject) property);
 	}
 
 	@XmlAttribute(name = "Name")
@@ -93,4 +94,13 @@ public class BusinessObject implements IBusinessObject {
 		return this.relatedBOs;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("business object:%s", this.getName());
+	}
+
+	@Override
+	public IBusinessObject clone() {
+		return (IBusinessObject) Serializer.Clone(this);
+	}
 }

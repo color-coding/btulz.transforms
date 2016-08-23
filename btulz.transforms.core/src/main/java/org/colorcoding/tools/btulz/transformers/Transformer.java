@@ -4,24 +4,39 @@ import java.util.ArrayList;
 
 public abstract class Transformer implements ITransformer {
 
+	public Transformer() {
+		this.initialize();
+	}
+
+	/**
+	 * 初始化函数，可重载
+	 */
+	protected void initialize() {
+
+	}
+
 	private boolean keeepResults;
 
-	public boolean isKeepResults() {
+	public final boolean isKeepResults() {
 		return this.keeepResults;
 	}
 
-	public void setKeepResults(boolean value) {
+	public final void setKeepResults(boolean value) {
 		this.keeepResults = value;
 	}
 
 	private boolean interruptOnError;
 
-	public boolean isInterruptOnError() {
+	public final boolean isInterruptOnError() {
 		return this.interruptOnError;
 	}
 
-	public void setInterruptOnError(boolean value) {
+	public final void setInterruptOnError(boolean value) {
 		this.interruptOnError = value;
+	}
+
+	protected void clearResults() {
+		this.errors = null;
 	}
 
 	private ArrayList<Exception> errors;
@@ -31,7 +46,7 @@ public abstract class Transformer implements ITransformer {
 	 * 
 	 * @return
 	 */
-	public Exception[] getErrors() {
+	public final Exception[] getErrors() {
 		return errors.toArray(new Exception[] {});
 	}
 
@@ -40,7 +55,7 @@ public abstract class Transformer implements ITransformer {
 	 * 
 	 * @param error
 	 */
-	protected void logError(Exception error) {
+	protected final void logError(Exception error) {
 		if (error == null) {
 			return;
 		}

@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
+import org.colorcoding.tools.btulz.Serializer;
 import org.colorcoding.tools.btulz.models.data.emDataSubType;
 import org.colorcoding.tools.btulz.models.data.emDataType;
 import org.colorcoding.tools.btulz.models.data.emYesNo;
@@ -145,8 +146,13 @@ public class Property implements IProperty {
 		this.mapped = mapped;
 	}
 
+	@Override
 	public String toString() {
 		return String.format("property:%s type:%s", this.getName(), this.getDeclaredType());
 	}
 
+	@Override
+	public IProperty clone() {
+		return (IProperty) Serializer.Clone(this);
+	}
 }

@@ -80,4 +80,10 @@ public interface IBusinessObject {
 	 */
 	IBusinessObjectItems getRelatedBOs();
 
+	/**
+	 * 深度克隆
+	 * 
+	 * @return
+	 */
+	IBusinessObject clone();
 }

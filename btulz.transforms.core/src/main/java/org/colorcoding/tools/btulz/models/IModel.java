@@ -86,4 +86,11 @@ public interface IModel {
 	 * @param value
 	 */
 	void setEntity(boolean value);
+
+	/**
+	 * 深度克隆
+	 * 
+	 * @return
+	 */
+	IModel clone();
 }

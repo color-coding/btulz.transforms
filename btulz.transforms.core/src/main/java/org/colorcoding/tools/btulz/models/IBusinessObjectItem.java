@@ -22,4 +22,12 @@ public interface IBusinessObjectItem extends IBusinessObject {
 	 * @param relation
 	 */
 	void setRelation(emBORelation relation);
+
+	/**
+	 * 深度克隆
+	 * 
+	 * @return
+	 */
+	@Override
+	IBusinessObjectItem clone();
 }

@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
+import org.colorcoding.tools.btulz.Serializer;
 import org.colorcoding.tools.btulz.models.data.emModelType;
 
 @XmlAccessorType(XmlAccessType.NONE)
@@ -20,14 +21,14 @@ public class Model implements IModel {
 		return false;
 	}
 
-	public Model() {
-		this.setEntity(true);
-
-	}
-
 	@Override
 	public boolean equals(Object model) {
 		return this.equals((IModel) model);
+	}
+
+	public Model() {
+		this.setEntity(true);
+
 	}
 
 	@XmlAttribute(name = "Name")
@@ -100,8 +101,13 @@ public class Model implements IModel {
 		return this.properties;
 	}
 
+	@Override
 	public String toString() {
 		return String.format("model:%s type:%s", this.getName(), this.getModelType());
 	}
 
+	@Override
+	public IModel clone() {
+		return (IModel) Serializer.Clone(this);
+	}
 }

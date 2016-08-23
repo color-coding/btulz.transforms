@@ -136,4 +136,11 @@ public interface IProperty {
 	 * @param mapped
 	 */
 	void setMapped(String mapped);
+
+	/**
+	 * 深度克隆
+	 * 
+	 * @return
+	 */
+	IProperty clone();
 }

@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
+import org.colorcoding.tools.btulz.Serializer;
 import org.colorcoding.tools.btulz.models.data.emBORelation;
 import org.colorcoding.tools.btulz.models.data.emModelType;
 
@@ -37,5 +38,15 @@ public class BusinessObjectItem extends BusinessObject implements IBusinessObjec
 				|| model.getModelType() == emModelType.DocumentLine || model.getModelType() == emModelType.SimpleLine) {
 			this.setRelation(emBORelation.OneToMany);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return String.format("business object item:%s", this.getName());
+	}
+
+	@Override
+	public IBusinessObjectItem clone() {
+		return (IBusinessObjectItem) Serializer.Clone(this);
 	}
 }

@@ -71,4 +71,13 @@ public class Environment {
 			throw new RuntimeException(e);
 		}
 	}
+
+	/**
+	 * 获取工作目录
+	 * 
+	 * @return
+	 */
+	public static String getWorkingFolder() {
+		return getStartupFolder();
+	}
 }
