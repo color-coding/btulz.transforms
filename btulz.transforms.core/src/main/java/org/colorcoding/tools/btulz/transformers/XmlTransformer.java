@@ -92,7 +92,7 @@ public class XmlTransformer extends FileTransformer {
 		String fileName = outFolder.getPath() + File.separator + String
 				.format("ds_%s%s%s", shortName == null ? "" : shortName + "_", name, FILE_EXTENSION).toLowerCase();
 		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-		Comment comment = document.createComment("btulz transform v0.0.1");
+		Comment comment = document.createComment("by btulz transforms v0.0.1");
 		document.appendChild(comment);
 		// 领域模型
 		Element root = document.createElement("Domain");
@@ -164,7 +164,6 @@ public class XmlTransformer extends FileTransformer {
 		// 将xml写到文件中
 		javax.xml.transform.Transformer transformer = TransformerFactory.newInstance().newTransformer();
 		DOMSource source = new DOMSource(document);
-
 		// 添加xml 头信息
 		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");

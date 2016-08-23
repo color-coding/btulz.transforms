@@ -17,3 +17,4 @@ hs_err_pid*
 # release folder
 /release/
 /.vs/
+/target/
