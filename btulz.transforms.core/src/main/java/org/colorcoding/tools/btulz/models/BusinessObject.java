@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
@@ -11,6 +12,7 @@ import org.colorcoding.tools.btulz.Serializer;
 
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "BusinessObject", namespace = Environment.NAMESPACE_BTULZ_MODELS)
+@XmlRootElement(name = "BusinessObject", namespace = Environment.NAMESPACE_BTULZ_MODELS)
 public class BusinessObject implements IBusinessObject {
 
 	public boolean equals(IBusinessObject businessObject) {
@@ -23,6 +25,10 @@ public class BusinessObject implements IBusinessObject {
 	@Override
 	public boolean equals(Object property) {
 		return this.equals((IBusinessObject) property);
+	}
+
+	public BusinessObject() {
+		this.relatedBOs = new BusinessObjectItems();
 	}
 
 	@XmlAttribute(name = "Name")

@@ -15,6 +15,8 @@ import org.colorcoding.tools.btulz.Serializer;
 @XmlRootElement(name = "Domain", namespace = Environment.NAMESPACE_BTULZ_MODELS)
 public class Domain implements IDomain {
 
+	public static final String FILE_NAME_SEPARATOR = "_";
+
 	public boolean equals(IDomain domain) {
 		if (this.getName() != null && domain != null && this.getName().equals(domain.getName())) {
 			return true;
@@ -25,6 +27,11 @@ public class Domain implements IDomain {
 	@Override
 	public boolean equals(Object model) {
 		return this.equals((IDomain) model);
+	}
+
+	public Domain() {
+		this.models = new Models();
+		this.businessObjects = new BusinessObjects();
 	}
 
 	@XmlAttribute(name = "Name")
@@ -42,7 +49,32 @@ public class Domain implements IDomain {
 	private String shortName;
 
 	public String getShortName() {
+		if (this.shortName == null) {
+			IBusinessObject bo = this.getBusinessObjects().firstOrDefault();
+			if (bo != null) {
+				this.shortName = this.getShortName(bo.getShortName());
+			} else {
+				IModel model = this.getModels().firstOrDefault();
+				if (model != null) {
+					this.shortName = this.getShortName(model.getMapped());
+				}
+			}
+		}
 		return this.shortName;
+	}
+
+	private String getShortName(String name) {
+		if (name == null || name.equals("")) {
+			return null;
+		}
+		String[] tmps = name.split(FILE_NAME_SEPARATOR);
+		if (tmps.length > 2) {
+			String tmp = tmps[1];
+			if (tmp.length() >= 1 && tmp.length() <= 5) {
+				return tmp;
+			}
+		}
+		return null;
 	}
 
 	public void setShortName(String shortName) {
@@ -88,5 +120,17 @@ public class Domain implements IDomain {
 	@Override
 	public IDomain clone() {
 		return (IDomain) Serializer.Clone(this);
+	}
+
+	@Override
+	public IDomain clone(boolean noChilds) {
+		if (noChilds) {
+			Domain domain = new Domain();
+			domain.setName(this.getName());
+			domain.setDescription(this.getDescription());
+			domain.setShortName(this.getShortName());
+			return domain;
+		}
+		return this.clone();
 	}
 }

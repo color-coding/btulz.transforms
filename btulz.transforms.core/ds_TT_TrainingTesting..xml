@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Domain Name="TrainingTesting" ShortName="TT">
+<Property DataSubType="None" DataType="Numeric" Description="单据编号" EditSize="8" Mapped="DocEntry" Name="DocumentEntry" PrimaryKey="Yes"/>
+<Property DataSubType="None" DataType="Alphanumeric" Description="用户编码" EditSize="8" Mapped="Code" Name="UserCode" PrimaryKey="Yes"/>
+<Property DataSubType="None" DataType="Numeric" Description="单据行号" EditSize="8" Mapped="LineId" Name="DocumentLine" PrimaryKey="Yes"/>
+<Property DataSubType="None" DataType="Alphanumeric" Description="用户编码" EditSize="8" Mapped="Code" Name="UserCode" PrimaryKey="Yes"/>
+<RelatedBO MappedModel="SalesOrderLine" Relation="OneToMany" ShortName="null"/>
+</Domain>

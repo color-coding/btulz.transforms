@@ -186,8 +186,14 @@ public abstract class FileTransformer extends Transformer implements IFileTransf
 			// 按领域归集业务对象（去重），并记录模型（不去重）
 			ArrayList<IModel> allModels = new ArrayList<>();
 			for (IDomain tmpDomain : domains) {
+				if (tmpDomain == null) {
+					continue;
+				}
 				for (IBusinessObject tmpBO : tmpDomain.getBusinessObjects()) {
-					IDomain newDomain = tmpDomain.clone();
+					if (tmpBO == null) {
+						continue;
+					}
+					IDomain newDomain = tmpDomain.clone(true);
 					newDomain.getBusinessObjects().add(tmpBO.clone());
 					groupDomains.add(newDomain);
 				}
@@ -206,6 +212,9 @@ public abstract class FileTransformer extends Transformer implements IFileTransf
 	private Collection<IModel> getModels(ArrayList<IModel> models, IBusinessObject businessObject) {
 		ArrayList<IModel> returnModels = new ArrayList<>();
 		for (IModel model : models) {
+			if (model == null) {
+				continue;
+			}
 			if (model.getName().equals(businessObject.getMappedModel())) {
 				returnModels.add(model.clone());
 			}

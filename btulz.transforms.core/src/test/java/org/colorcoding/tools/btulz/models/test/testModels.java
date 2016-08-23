@@ -12,6 +12,7 @@ import org.colorcoding.tools.btulz.models.IBusinessObjectItem;
 import org.colorcoding.tools.btulz.models.IDomain;
 import org.colorcoding.tools.btulz.models.IModel;
 import org.colorcoding.tools.btulz.models.IProperty;
+import org.colorcoding.tools.btulz.models.data.emBORelation;
 import org.colorcoding.tools.btulz.models.data.emDataType;
 import org.colorcoding.tools.btulz.models.data.emModelType;
 import org.colorcoding.tools.btulz.models.data.emYesNo;
@@ -20,8 +21,7 @@ import junit.framework.TestCase;
 
 public class testModels extends TestCase {
 
-	public void testDomainModels()
-			throws InstantiationException, IllegalAccessException, ClassNotFoundException, JAXBException {
+	public IDomain createDomain() throws ClassNotFoundException {
 		IDomain domain = new Domain();
 		domain.setName("TrainingTesting");
 		domain.setShortName("TT");
@@ -76,10 +76,24 @@ public class testModels extends TestCase {
 		bo.setMappedModel(orderModel);
 		IBusinessObjectItem boItem = bo.getRelatedBOs().create();
 		boItem.setMappedModel(userModel);// 1:1
+		boItem.setRelation(emBORelation.OneToOne);
 		boItem = bo.getRelatedBOs().create();
 		boItem.setMappedModel(modelLine);// 1:n
+		boItem.setRelation(emBORelation.OneToMany);
 		boItem = boItem.getRelatedBOs().create();
 		boItem.setMappedModel(userModel);// 1：1，孙子
+		boItem.setRelation(emBORelation.OneToOne);
+
+		propertyData.clone();
+		userModel.clone();
+		bo.clone();
+		domain.clone();
+		return domain;
+	}
+
+	public void testDomainModels()
+			throws InstantiationException, IllegalAccessException, ClassNotFoundException, JAXBException {
+		IDomain domain = this.createDomain();
 
 		JAXBContext context = JAXBContext.newInstance(domain.getClass());
 		Marshaller marshaller = context.createMarshaller();

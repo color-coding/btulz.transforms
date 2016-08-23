@@ -69,4 +69,13 @@ public interface IDomain {
 	 * @return
 	 */
 	IDomain clone();
+
+	/**
+	 * 深度克隆
+	 * 
+	 * @param noChilds
+	 *            不包含子项
+	 * @return
+	 */
+	IDomain clone(boolean noChilds);
 }

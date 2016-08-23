@@ -35,7 +35,6 @@ public class Serializer {
 	 */
 	public static Object Clone(Object object, Class<?>... types) {
 		try {
-
 			Class<?>[] knownTypes = new Class[types.length + 1];
 			knownTypes[0] = object.getClass();
 			for (int i = 0; i < types.length; i++) {

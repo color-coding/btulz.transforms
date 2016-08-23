@@ -10,6 +10,13 @@ import java.util.List;
  */
 public interface IModels extends List<IModel> {
 	/**
+	 * 获取第一个或默认对象
+	 * 
+	 * @return
+	 */
+	IModel firstOrDefault();
+
+	/**
 	 * 创建并添加模型
 	 * 
 	 * @return

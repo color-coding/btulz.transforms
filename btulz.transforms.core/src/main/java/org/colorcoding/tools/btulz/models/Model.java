@@ -4,14 +4,17 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.Serializer;
 import org.colorcoding.tools.btulz.models.data.emModelType;
+import org.colorcoding.tools.btulz.models.data.emYesNo;
 
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "Model", namespace = Environment.NAMESPACE_BTULZ_MODELS)
+@XmlRootElement(name = "Model", namespace = Environment.NAMESPACE_BTULZ_MODELS)
 public class Model implements IModel {
 
 	public boolean equals(IModel model) {
@@ -27,8 +30,8 @@ public class Model implements IModel {
 	}
 
 	public Model() {
-		this.setEntity(true);
-
+		this.setEntity(emYesNo.Yes);
+		this.properties = new Properties();
 	}
 
 	@XmlAttribute(name = "Name")
@@ -79,15 +82,15 @@ public class Model implements IModel {
 	}
 
 	@XmlAttribute(name = "Entity")
-	private boolean entity;
+	private emYesNo entity;
 
 	@Override
-	public boolean isEntity() {
+	public emYesNo isEntity() {
 		return this.entity;
 	}
 
 	@Override
-	public void setEntity(boolean value) {
+	public void setEntity(emYesNo value) {
 		this.entity = value;
 	}
 

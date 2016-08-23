@@ -24,4 +24,12 @@ public class Models extends ArrayList<IModel> implements IModels {
 		return null;
 	}
 
+	@Override
+	public IModel firstOrDefault() {
+		if (this.size() > 0) {
+			return this.get(0);
+		}
+		return null;
+	}
+
 }

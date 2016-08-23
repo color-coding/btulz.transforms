@@ -2,6 +2,8 @@ package org.colorcoding.tools.btulz.models;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
@@ -11,8 +13,10 @@ import org.colorcoding.tools.btulz.models.data.emModelType;
 
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "BusinessObjectItem", namespace = Environment.NAMESPACE_BTULZ_MODELS)
+@XmlRootElement(name = "BusinessObjectItem", namespace = Environment.NAMESPACE_BTULZ_MODELS)
 public class BusinessObjectItem extends BusinessObject implements IBusinessObjectItem {
 
+	@XmlAttribute(name = "Relation")
 	private emBORelation relation;
 
 	@Override

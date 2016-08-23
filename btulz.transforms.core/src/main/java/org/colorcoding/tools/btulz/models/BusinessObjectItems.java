@@ -24,4 +24,12 @@ public class BusinessObjectItems extends ArrayList<IBusinessObjectItem> implemen
 		throw new ClassNotFoundException();
 	}
 
+	@Override
+	public IBusinessObjectItem firstOrDefault() {
+		if (this.size() > 0) {
+			return this.get(0);
+		}
+		return null;
+	}
+
 }

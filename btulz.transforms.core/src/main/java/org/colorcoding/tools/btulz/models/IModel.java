@@ -1,6 +1,7 @@
 package org.colorcoding.tools.btulz.models;
 
 import org.colorcoding.tools.btulz.models.data.emModelType;
+import org.colorcoding.tools.btulz.models.data.emYesNo;
 
 /**
  * 模型
@@ -80,12 +81,12 @@ public interface IModel {
 	 * 
 	 * @return
 	 */
-	boolean isEntity();
+	emYesNo isEntity();
 
 	/**
 	 * @param value
 	 */
-	void setEntity(boolean value);
+	void setEntity(emYesNo value);
 
 	/**
 	 * 深度克隆

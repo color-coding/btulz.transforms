@@ -24,4 +24,12 @@ public class BusinessObjects extends ArrayList<IBusinessObject> implements IBusi
 		throw new ClassNotFoundException();
 	}
 
+	@Override
+	public IBusinessObject firstOrDefault() {
+		if (this.size() > 0) {
+			return this.get(0);
+		}
+		return null;
+	}
+
 }

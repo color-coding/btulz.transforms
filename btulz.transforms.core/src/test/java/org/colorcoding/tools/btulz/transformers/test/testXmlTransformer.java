@@ -9,6 +9,7 @@ import javax.xml.bind.Marshaller;
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.models.Domain;
 import org.colorcoding.tools.btulz.models.IDomain;
+import org.colorcoding.tools.btulz.models.test.testModels;
 import org.colorcoding.tools.btulz.transformers.MultiTransformException;
 import org.colorcoding.tools.btulz.transformers.TransformException;
 import org.colorcoding.tools.btulz.transformers.XmlTransformer;
@@ -16,6 +17,14 @@ import org.colorcoding.tools.btulz.transformers.XmlTransformer;
 import junit.framework.TestCase;
 
 public class testXmlTransformer extends TestCase {
+
+	public void testSaveXml() throws ClassNotFoundException, TransformException, MultiTransformException {
+		IDomain domain = (new testModels()).createDomain();
+		XmlTransformer xmlTransformer = new XmlTransformer();
+		xmlTransformer.load(domain);
+		xmlTransformer.setInterruptOnError(true);
+		xmlTransformer.save();
+	}
 
 	public void testOldXml() throws JAXBException, TransformException, MultiTransformException {
 		XmlTransformer xmlTransformer = new XmlTransformer();
