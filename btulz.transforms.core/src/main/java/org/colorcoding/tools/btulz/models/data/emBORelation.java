@@ -5,19 +5,20 @@ import javax.xml.bind.annotation.XmlType;
 import org.colorcoding.tools.btulz.Environment;
 
 /**
- * 枚举，是否
+ * 业务对象关系
  * 
  * @author Niuren.Zhu
  *
  */
-@XmlType(name = "emYesNo", namespace = Environment.NAMESPACE_BTULZ_MODELS)
-public enum emYesNo {
+@XmlType(name = "emBORelation", namespace = Environment.NAMESPACE_BTULZ_MODELS)
+public enum emBORelation {
+
 	/**
-	 * 否
+	 * 一对多
 	 */
-	No,
+	OneToMany,
 	/**
-	 * 是
+	 * 一对一
 	 */
-	Yes;
+	OneToOne,
 }

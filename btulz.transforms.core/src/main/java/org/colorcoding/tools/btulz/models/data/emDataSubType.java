@@ -1,63 +1,68 @@
 package org.colorcoding.tools.btulz.models.data;
 
+import javax.xml.bind.annotation.XmlType;
+
+import org.colorcoding.tools.btulz.Environment;
+
 /**
  * 枚举，数据子类型
  * 
  * @author Niuren.Zhu
  *
  */
+@XmlType(name = "emDataSubType", namespace = Environment.NAMESPACE_BTULZ_MODELS)
 public enum emDataSubType {
 	/**
 	 * 默认
 	 */
-	st_None,
+	None,
 	/**
 	 * 地址
 	 */
-	st_Address,
+	Address,
 	/**
 	 * 电话
 	 */
-	st_Phone,
+	Phone,
 	/**
 	 * 时间
 	 */
-	st_Time,
+	Time,
 	/**
 	 * 率
 	 */
-	st_Rate,
+	Rate,
 	/**
 	 * 总计
 	 */
-	st_Sum,
+	Sum,
 	/**
 	 * 价格
 	 */
-	st_Price,
+	Price,
 	/**
 	 * 数量
 	 */
-	st_Quantity,
+	Quantity,
 	/**
 	 * 百分比
 	 */
-	st_Percentage,
+	Percentage,
 	/**
 	 * 单位数量
 	 */
-	st_Measurement,
+	Measurement,
 	/**
 	 * 连接
 	 */
-	st_Link,
+	Link,
 	/**
 	 * 图片
 	 */
-	st_Image,
+	Image,
 	/**
 	 * 邮箱
 	 */
-	st_Email,
+	Email,
 
 }

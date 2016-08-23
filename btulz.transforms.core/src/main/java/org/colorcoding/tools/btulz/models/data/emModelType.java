@@ -1,38 +1,43 @@
 package org.colorcoding.tools.btulz.models.data;
 
+import javax.xml.bind.annotation.XmlType;
+
+import org.colorcoding.tools.btulz.Environment;
+
 /**
  * 模型类型
  * 
  * @author Niuren.Zhu
  *
  */
+@XmlType(name = "emModelType", namespace = Environment.NAMESPACE_BTULZ_MODELS)
 public enum emModelType {
 	/**
 	 * 未指定
 	 */
-	mt_Unspecified,
+	Unspecified,
 	/**
 	 * 主数据
 	 */
-	mt_MasterData,
+	MasterData,
 	/**
 	 * 主数据行
 	 */
-	mt_MasterDataLine,
+	MasterDataLine,
 	/**
 	 * 单据
 	 */
-	mt_Document,
+	Document,
 	/**
 	 * 单据行
 	 */
-	mt_DocumentLine,
+	DocumentLine,
 	/**
 	 * 普通
 	 */
-	mt_Simple,
+	Simple,
 	/**
 	 * 普通行
 	 */
-	mt_SimpleLine,
+	SimpleLine,
 }

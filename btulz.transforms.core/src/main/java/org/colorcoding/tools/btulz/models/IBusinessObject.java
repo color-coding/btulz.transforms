@@ -1,14 +1,13 @@
 package org.colorcoding.tools.btulz.models;
 
-import org.colorcoding.tools.btulz.models.data.emModelType;
-
 /**
- * 模型
+ * 业务对象
  * 
  * @author Niuren.Zhu
  *
  */
-public interface IModel {
+public interface IBusinessObject {
+
 	/**
 	 * 获取-名称
 	 * 
@@ -40,50 +39,45 @@ public interface IModel {
 	void setDescription(String description);
 
 	/**
-	 * 获取-模型类型
+	 * 获取-短名称
 	 * 
 	 * @return
 	 */
-	emModelType getModelType();
+	String getShortName();
 
 	/**
-	 * 设置-模型类型
+	 * 设置-短名称
 	 * 
-	 * @param modelType
+	 * @param name
 	 */
-	void setModelType(emModelType modelType);
+	void setShortName(String name);
 
 	/**
-	 * 获取-属性集合
-	 * 
-	 * @return
-	 */
-	IProperties getProperties();
-
-	/**
-	 * 获取-绑定到
+	 * 获取-映射的对象名称
 	 * 
 	 * @return
 	 */
-	String getMapped();
+	String getMappedModel();
 
 	/**
-	 * 设置-绑定到
+	 * 设置-映射的对象名称
 	 * 
-	 * @param mapped
+	 * @param name
 	 */
-	void setMapped(String mapped);
+	void setMappedModel(String name);
 
 	/**
-	 * 是否为实体
+	 * 设置-映射的对象
 	 * 
+	 * @param model
+	 */
+	void setMappedModel(IModel model);
+
+	/**
+	 * 获取-关联的业务对象集合
 	 * 
 	 * @return
 	 */
-	boolean isEntity();
+	IBusinessObjectItems getRelatedBOs();
 
-	/**
-	 * @param value
-	 */
-	void setEntity(boolean value);
 }

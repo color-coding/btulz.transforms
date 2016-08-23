@@ -1,26 +1,31 @@
 package org.colorcoding.tools.btulz.models.data;
 
+import javax.xml.bind.annotation.XmlType;
+
+import org.colorcoding.tools.btulz.Environment;
+
 /**
  * 属性类型
  * 
  * @author Niuren.Zhu
  *
  */
+@XmlType(name = "emPropertyType", namespace = Environment.NAMESPACE_BTULZ_MODELS)
 public enum emPropertyType {
 	/**
 	 * 未指定
 	 */
-	pt_Unspecified,
+	Unspecified,
 	/**
 	 * 数据类型
 	 */
-	pt_Data,
+	Data,
 	/**
 	 * 模型
 	 */
-	pt_Model,
+	Model,
 	/**
 	 * 模型集合
 	 */
-	pt_Models
+	Models,
 }

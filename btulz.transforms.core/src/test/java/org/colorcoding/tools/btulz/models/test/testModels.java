@@ -1,108 +1,97 @@
 package org.colorcoding.tools.btulz.models.test;
 
+import java.io.StringWriter;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+
 import org.colorcoding.tools.btulz.models.Domain;
+import org.colorcoding.tools.btulz.models.IBusinessObject;
+import org.colorcoding.tools.btulz.models.IBusinessObjectItem;
 import org.colorcoding.tools.btulz.models.IDomain;
 import org.colorcoding.tools.btulz.models.IModel;
 import org.colorcoding.tools.btulz.models.IProperty;
-import org.colorcoding.tools.btulz.models.IPropertyData;
-import org.colorcoding.tools.btulz.models.IPropertyModel;
-import org.colorcoding.tools.btulz.models.IPropertyModels;
-import org.colorcoding.tools.btulz.models.PropertyData;
-import org.colorcoding.tools.btulz.models.PropertyModel;
-import org.colorcoding.tools.btulz.models.PropertyModels;
 import org.colorcoding.tools.btulz.models.data.emDataType;
+import org.colorcoding.tools.btulz.models.data.emModelType;
 import org.colorcoding.tools.btulz.models.data.emYesNo;
 
 import junit.framework.TestCase;
 
 public class testModels extends TestCase {
 
-	public void testDomainModels() throws InstantiationException, IllegalAccessException {
+	public void testDomainModels()
+			throws InstantiationException, IllegalAccessException, ClassNotFoundException, JAXBException {
 		IDomain domain = new Domain();
 		domain.setName("TrainingTesting");
 		domain.setShortName("TT");
 		domain.setDescription("培训&测试");
 
-		IPropertyData propertyData;
-		IPropertyModel propertyModel;
-		IPropertyModels propertyModels;
+		IProperty propertyData;
 
-		IModel model = domain.getModels().create();
-		model.setName("SalesOrder");
-		model.setDescription("销售订单");
-		model.setShortName("CC_TT_SO");
-		model.setMapped("CC_TT_ORDR");
-		propertyData = model.getProperties().create(PropertyData.class);
+		IModel orderModel = domain.getModels().create();
+		orderModel.setModelType(emModelType.Document);
+		orderModel.setName("SalesOrder");
+		orderModel.setDescription("销售订单");
+		orderModel.setMapped("CC_TT_ORDR");
+		propertyData = orderModel.getProperties().create();
 		propertyData.setName("DocumentEntry");
 		propertyData.setDescription("单据编号");
-		propertyData.setDataType(emDataType.dt_Numeric);
+		propertyData.setDataType(emDataType.Numeric);
 		propertyData.setPrimaryKey(emYesNo.Yes);
 		propertyData.setMapped("DocEntry");
 
 		IModel userModel = domain.getModels().create();
+		userModel.setModelType(emModelType.MasterData);
 		userModel.setName("User");
 		userModel.setDescription("用户");
-		userModel.setShortName("CC_TT_US");
 		userModel.setMapped("CC_TT_OUSR");
-		propertyData = userModel.getProperties().create(PropertyData.class);
+		propertyData = userModel.getProperties().create();
 		propertyData.setName("UserCode");
 		propertyData.setDescription("用户编码");
-		propertyData.setDataType(emDataType.dt_Alphanumeric);
+		propertyData.setDataType(emDataType.Alphanumeric);
 		propertyData.setPrimaryKey(emYesNo.Yes);
 		propertyData.setMapped("Code");
 
-		propertyModel = model.getProperties().create(PropertyModel.class);
-		propertyModel.setName("DocumentUser");
-		propertyModel.setDescription("单据创建人");
-		propertyModel.setModel(userModel);
-
 		IModel modelLine = domain.getModels().create();
+		modelLine.setModelType(emModelType.MasterData);
 		modelLine.setName("SalesOrderLine");
 		modelLine.setDescription("销售订单行");
-		modelLine.setShortName("CC_TT_SOLINE");
 		modelLine.setMapped("CC_TT_RDR1");
-		propertyData = modelLine.getProperties().create(PropertyData.class);
+		propertyData = modelLine.getProperties().create();
 		propertyData.setName("DocumentEntry");
 		propertyData.setDescription("单据编号");
-		propertyData.setDataType(emDataType.dt_Numeric);
+		propertyData.setDataType(emDataType.Numeric);
 		propertyData.setPrimaryKey(emYesNo.Yes);
 		propertyData.setMapped("DocEntry");
-		propertyData = modelLine.getProperties().create(PropertyData.class);
+		propertyData = modelLine.getProperties().create();
 		propertyData.setName("DocumentLine");
 		propertyData.setDescription("单据行号");
-		propertyData.setDataType(emDataType.dt_Numeric);
+		propertyData.setDataType(emDataType.Numeric);
 		propertyData.setPrimaryKey(emYesNo.Yes);
 		propertyData.setMapped("LineId");
 
-		propertyModels = model.getProperties().create(PropertyModels.class);
-		propertyModels.setName("Lines");
-		propertyModels.setDescription("单据行集合");
-		propertyModels.setModel(modelLine);
+		// 构建业务对象
+		IBusinessObject bo = domain.getBusinessObjects().create();
+		bo.setMappedModel(orderModel);
+		IBusinessObjectItem boItem = bo.getRelatedBOs().create();
+		boItem.setMappedModel(userModel);// 1:1
+		boItem = bo.getRelatedBOs().create();
+		boItem.setMappedModel(modelLine);// 1:n
+		boItem = boItem.getRelatedBOs().create();
+		boItem.setMappedModel(userModel);// 1：1，孙子
 
-		System.out.println(domain.toString());
+		JAXBContext context = JAXBContext.newInstance(domain.getClass());
+		Marshaller marshaller = context.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+		StringWriter writer = new StringWriter();
+		marshaller.marshal(domain, writer);
+		String oldXML = writer.toString();
+		System.out.println("序列化输出：");
+		System.out.println(oldXML);
 
-		for (IModel mItem : domain.getModels()) {
-			this.outPrint(mItem, 1);
-		}
-	}
-
-	private void outPrint(IModel model, int index) {
-		String space = "";
-		for (int i = 0; i < index; i++) {
-			space += " ";
-		}
-		System.out.println(space + model.toString());
-		space += " ";
-		for (IProperty pItem : model.getProperties()) {
-			System.out.println(space + pItem.toString());
-			if (pItem instanceof IPropertyModel) {
-				IPropertyModel nModel = (IPropertyModel) pItem;
-				this.outPrint(nModel.getModel(), index + 2);
-			} else if (pItem instanceof IPropertyModels) {
-				IPropertyModels nModel = (IPropertyModels) pItem;
-				this.outPrint(nModel.getModel(), index + 2);
-			}
-		}
 	}
 
 }

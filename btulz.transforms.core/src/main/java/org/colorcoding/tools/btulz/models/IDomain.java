@@ -1,7 +1,7 @@
 package org.colorcoding.tools.btulz.models;
 
 /**
- * 业务对象域
+ * 领域
  * 
  * @author Niuren.Zhu
  *
@@ -55,4 +55,11 @@ public interface IDomain {
 	 * @return
 	 */
 	IModels getModels();
+
+	/**
+	 * 获取-业务对象集合
+	 * 
+	 * @return
+	 */
+	IBusinessObjects getBusinessObjects();
 }

@@ -12,6 +12,17 @@ import java.net.URL;
  *
  */
 public class Environment {
+
+	/**
+	 * 命名空间-模型
+	 */
+	public static final String NAMESPACE_BTULZ_MODELS = "http://colorcoding.org/btulz/models";
+
+	/**
+	 * 命名空间-变形金刚
+	 */
+	public static final String NAMESPACE_BTULZ_TRANSFORMERS = "http://colorcoding.org/btulz/transformers";
+
 	/**
 	 * 程序启动的目录（主要的配置文件目录）
 	 * 
