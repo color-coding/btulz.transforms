@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
@@ -26,7 +25,6 @@ import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
@@ -39,40 +37,34 @@ public class XmlTransformer extends FileTransformer {
 
 	public static final String FILE_EXTENSION = ".xml";
 
+	protected IXmlParser createXmlParser(String sign) {
+		if (sign.equals("DomainModel")) {
+			return new XmlParser1();// 旧版解释器
+		} else if (sign.equals("Domain")) {
+			return new XmlParser();// 默认解释器
+		}
+		return null;
+	}
+
 	@Override
-	protected IDomain[] load(File file) {
+	protected IDomain[] load(File file) throws ParserConfigurationException, IOException, SAXException {
 		ArrayList<IDomain> domains = new ArrayList<>();
 		if (file != null && file.isFile() && file.getName().endsWith(FILE_EXTENSION)) {
-			try {
-				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-				DocumentBuilder db = dbf.newDocumentBuilder();
-				// 将xml文件解析
-				Document document = db.parse(file);
-				// 获得所有节点，递归遍历节点
-				NodeList employees = document.getChildNodes();
-				for (int i = 0; i < employees.getLength(); i++) {
-					// 取得一个节点
-					Node employee = employees.item(i);
-					NodeList employeeInfo = employee.getChildNodes();
-					for (int j = 0; j < employeeInfo.getLength(); j++) {
-						Node node = employeeInfo.item(j);
-						NodeList employeeMeta = node.getChildNodes();
-						for (int k = 0; k < employeeMeta.getLength(); k++) {
-							System.out.println(
-									employeeMeta.item(k).getNodeName() + ":" + employeeMeta.item(k).getTextContent());
+			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
+			IXmlParser xmlParser = null;
+			for (int i = 0; i < document.getChildNodes().getLength(); i++) {
+				Node firstNode = document.getChildNodes().item(i);
+				if (firstNode != null && firstNode.getNodeType() == Node.ELEMENT_NODE) {
+					xmlParser = this.createXmlParser(firstNode.getNodeName());
+					if (xmlParser != null) {
+						IDomain domain = xmlParser.parse(firstNode);
+						if (domain != null) {
+							domains.add(domain);
 						}
 					}
 				}
-				System.out.println("解析完毕");
-			} catch (FileNotFoundException e) {
-				System.out.println(e.getMessage());
-			} catch (ParserConfigurationException e) {
-				System.out.println(e.getMessage());
-			} catch (SAXException e) {
-				System.out.println(e.getMessage());
-			} catch (IOException e) {
-				System.out.println(e.getMessage());
 			}
+
 		}
 		return domains.toArray(new IDomain[] {});
 	}
@@ -92,37 +84,23 @@ public class XmlTransformer extends FileTransformer {
 		String fileName = outFolder.getPath() + File.separator + String
 				.format("ds_%s%s%s", shortName == null ? "" : shortName + "_", name, FILE_EXTENSION).toLowerCase();
 		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+
 		Comment comment = document.createComment("by btulz transforms v0.0.1");
 		document.appendChild(comment);
 		// 领域模型
+		// Element root =
+		// document.createElementNS(Environment.NAMESPACE_BTULZ_TRANSFORMERS,
+		// "Domain");
 		Element root = document.createElement("Domain");
-		root.setAttribute("Name", domain.getName());
-		root.setAttribute("ShortName", domain.getShortName());
+		this.writeElement(domain, root);
 		// 模型
 		for (IModel model : domain.getModels()) {
 			Element modelElement = document.createElement("Model");
-			modelElement.setAttribute("Name", model.getName());
-			modelElement.setAttribute("Description", model.getDescription());
-			modelElement.setAttribute("Mapped", model.getMapped());
-			modelElement.setAttribute("Type", String.valueOf(model.getModelType()));
-			if (model.isEntity() == emYesNo.No) {
-				modelElement.setAttribute("Entity", String.valueOf(model.isEntity()));
-			}
+			this.writeElement(model, modelElement);
 			// 模型属性
 			for (IProperty property : model.getProperties()) {
 				Element propertyElement = document.createElement("Property");
-				propertyElement.setAttribute("Name", property.getName());
-				propertyElement.setAttribute("Description", property.getDescription());
-				propertyElement.setAttribute("DataType", String.valueOf(property.getDataType()));
-				propertyElement.setAttribute("DataSubType", String.valueOf(property.getDataSubType()));
-				propertyElement.setAttribute("EditSize", String.valueOf(property.getEditSize()));
-				propertyElement.setAttribute("Mapped", property.getMapped());
-				if (property.isPrimaryKey() == emYesNo.Yes) {
-					propertyElement.setAttribute("PrimaryKey", String.valueOf(property.isPrimaryKey()));
-				}
-				if (property.isUniqueKey() == emYesNo.Yes) {
-					propertyElement.setAttribute("UniqueKey", String.valueOf(property.isUniqueKey()));
-				}
+				this.writeElement(property, propertyElement);
 				modelElement.appendChild(propertyElement);
 			}
 			root.appendChild(modelElement);
@@ -130,32 +108,10 @@ public class XmlTransformer extends FileTransformer {
 		// 业务对象
 		for (IBusinessObject businessObject : domain.getBusinessObjects()) {
 			Element boElement = document.createElement("BusinessObject");
-			if (businessObject.getName().equals(businessObject.getMappedModel())) {
-				boElement.setAttribute("MappedModel", businessObject.getMappedModel());
-				boElement.setAttribute("ShortName", businessObject.getShortName());
-			} else {
-				boElement.setAttribute("Name", businessObject.getName());
-				boElement.setAttribute("Description", businessObject.getDescription());
-				boElement.setAttribute("ShortName", businessObject.getShortName());
-				boElement.setAttribute("ShortName", businessObject.getShortName());
-				boElement.setAttribute("MappedModel", businessObject.getMappedModel());
-			}
+			this.writeElement(businessObject, boElement);
 			for (IBusinessObjectItem boItem : businessObject.getRelatedBOs()) {
 				Element biElement = document.createElement("RelatedBO");
-				biElement.setAttribute("Relation", String.valueOf(boItem.getRelation()));
-				if (boItem.getName().equals(boItem.getMappedModel())) {
-					biElement.setAttribute("MappedModel", boItem.getMappedModel());
-					if (boItem.getShortName() != null && !boItem.getShortName().equals(businessObject.getShortName())) {
-						biElement.setAttribute("ShortName", boItem.getShortName());
-					}
-				} else {
-					biElement.setAttribute("Name", boItem.getName());
-					biElement.setAttribute("Description", boItem.getDescription());
-					if (boItem.getShortName() != null && !boItem.getShortName().equals(businessObject.getShortName())) {
-						biElement.setAttribute("ShortName", boItem.getShortName());
-					}
-					biElement.setAttribute("MappedModel", boItem.getMappedModel());
-				}
+				this.writeElement(boItem, biElement, document);
 				boElement.appendChild(biElement);
 			}
 			root.appendChild(boElement);
@@ -172,4 +128,70 @@ public class XmlTransformer extends FileTransformer {
 		transformer.transform(source, result);
 	}
 
+	protected void writeElement(IDomain domain, Element element) {
+		element.setAttribute("Name", domain.getName());
+		element.setAttribute("ShortName", domain.getShortName());
+	}
+
+	protected void writeElement(IModel model, Element element) {
+		element.setAttribute("Name", model.getName());
+		element.setAttribute("Description", model.getDescription());
+		element.setAttribute("Mapped", model.getMapped());
+		element.setAttribute("ModelType", String.valueOf(model.getModelType()));
+		if (model.isEntity() == emYesNo.No) {
+			element.setAttribute("Entity", String.valueOf(model.isEntity()));
+		}
+	}
+
+	protected void writeElement(IProperty property, Element element) {
+		element.setAttribute("Name", property.getName());
+		element.setAttribute("Description", property.getDescription());
+		element.setAttribute("DataType", String.valueOf(property.getDataType()));
+		element.setAttribute("DataSubType", String.valueOf(property.getDataSubType()));
+		element.setAttribute("EditSize", String.valueOf(property.getEditSize()));
+		element.setAttribute("Mapped", property.getMapped());
+		if (property.isPrimaryKey() == emYesNo.Yes) {
+			element.setAttribute("PrimaryKey", String.valueOf(property.isPrimaryKey()));
+		}
+		if (property.isUniqueKey() == emYesNo.Yes) {
+			element.setAttribute("UniqueKey", String.valueOf(property.isUniqueKey()));
+		}
+	}
+
+	protected void writeElement(IBusinessObject bo, Element element) {
+		if (bo.getName().equals(bo.getMappedModel())) {
+			element.setAttribute("MappedModel", bo.getMappedModel());
+			element.setAttribute("ShortName", bo.getShortName());
+		} else {
+			element.setAttribute("Name", bo.getName());
+			element.setAttribute("Description", bo.getDescription());
+			element.setAttribute("ShortName", bo.getShortName());
+			element.setAttribute("ShortName", bo.getShortName());
+			element.setAttribute("MappedModel", bo.getMappedModel());
+		}
+	}
+
+	protected void writeElement(IBusinessObjectItem boItem, Element element, Document document) {
+		element.setAttribute("Relation", String.valueOf(boItem.getRelation()));
+		if (boItem.getName().equals(boItem.getMappedModel())) {
+			element.setAttribute("MappedModel", boItem.getMappedModel());
+			if (boItem.getShortName() != null && !boItem.getShortName().equals("")) {
+				element.setAttribute("ShortName", boItem.getShortName());
+			}
+		} else {
+			element.setAttribute("Name", boItem.getName());
+			element.setAttribute("Description", boItem.getDescription());
+			if (boItem.getShortName() != null && !boItem.getShortName().equals("")) {
+				element.setAttribute("ShortName", boItem.getShortName());
+			}
+			element.setAttribute("MappedModel", boItem.getMappedModel());
+		}
+		if (document != null) {
+			for (IBusinessObjectItem item : boItem.getRelatedBOs()) {
+				Element biElement = document.createElement("RelatedBO");
+				this.writeElement(item, biElement);
+				element.appendChild(biElement);
+			}
+		}
+	}
 }

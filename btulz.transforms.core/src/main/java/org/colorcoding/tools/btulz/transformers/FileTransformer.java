@@ -32,7 +32,7 @@ public abstract class FileTransformer extends Transformer implements IFileTransf
 	@Override
 	protected void clearResults() {
 		if (!this.isKeepResults()) {
-			this.getDomainModels().clear();
+			this.domainModels = null;
 		}
 		super.clearResults();
 	}
@@ -111,9 +111,13 @@ public abstract class FileTransformer extends Transformer implements IFileTransf
 					this.getDomainModels().add(domain);
 				}
 			}
-		} else if (file.isDirectory() && includingSubFolder) {
+		} else if (file.isDirectory()) {
 			for (File subFile : file.listFiles()) {
-				this.loadFile(subFile.getName(), false);
+				if (includingSubFolder && subFile.isDirectory()) {
+					this.loadFile(subFile.getPath(), true);
+				} else {
+					this.loadFile(subFile.getPath(), false);
+				}
 			}
 		}
 	}

@@ -17,11 +17,11 @@ public class BusinessObjectItems extends ArrayList<IBusinessObjectItem> implemen
 	private static final long serialVersionUID = 547175645190234604L;
 
 	@Override
-	public IBusinessObjectItem create() throws ClassNotFoundException {
+	public IBusinessObjectItem create() {
 		IBusinessObjectItem item = new BusinessObjectItem();
 		if (this.add(item))
 			return item;
-		throw new ClassNotFoundException();
+		return null;
 	}
 
 	@Override

@@ -14,7 +14,6 @@ public interface IBusinessObjects extends List<IBusinessObject> {
 	 * 创建并添加新的实例
 	 * 
 	 * @return
-	 * @throws ClassNotFoundException
 	 */
-	IBusinessObject create() throws ClassNotFoundException;
+	IBusinessObject create();
 }

@@ -18,12 +18,29 @@ import junit.framework.TestCase;
 
 public class testXmlTransformer extends TestCase {
 
-	public void testSaveXml() throws ClassNotFoundException, TransformException, MultiTransformException {
+	public void testSaveReadXml()
+			throws ClassNotFoundException, TransformException, MultiTransformException, JAXBException {
 		IDomain domain = (new testModels()).createDomain();
 		XmlTransformer xmlTransformer = new XmlTransformer();
 		xmlTransformer.load(domain);
 		xmlTransformer.setInterruptOnError(true);
 		xmlTransformer.save();
+		xmlTransformer.setKeepResults(false);
+		xmlTransformer.load(Environment.getWorkingFolder(), false);
+
+		JAXBContext context = JAXBContext.newInstance(Domain.class);
+		Marshaller marshaller = context.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+
+		System.out.println("序列化输出：");
+		for (IDomain item : xmlTransformer.getWorkingDomains()) {
+			StringWriter writer = new StringWriter();
+			marshaller.marshal(item, writer);
+			String oldXML = writer.toString();
+			System.out.println(oldXML);
+		}
 	}
 
 	public void testOldXml() throws JAXBException, TransformException, MultiTransformException {
