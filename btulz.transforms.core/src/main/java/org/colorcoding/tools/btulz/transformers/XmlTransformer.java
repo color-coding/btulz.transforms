@@ -1,16 +1,12 @@
 package org.colorcoding.tools.btulz.transformers;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -21,21 +17,23 @@ import org.colorcoding.tools.btulz.models.IDomain;
 import org.colorcoding.tools.btulz.models.IModel;
 import org.colorcoding.tools.btulz.models.IProperty;
 import org.colorcoding.tools.btulz.models.data.emYesNo;
-import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 /**
  * xml文件和领域模型的转换器
+ * 
+ * 使用的DOM解析
  * 
  * @author Niuren.Zhu
  *
  */
 public class XmlTransformer extends FileTransformer {
 
-	public static final String FILE_EXTENSION = ".xml";
+	public static final String XML_FILE_EXTENSION = ".xml";
+	public static final String XML_FILE_ENCODING = "utf-8";
+	public static final String XML_FILE_INDENT = "yes";
 
 	protected IXmlParser createXmlParser(String sign) {
 		if (sign.equals("DomainModel")) {
@@ -47,9 +45,9 @@ public class XmlTransformer extends FileTransformer {
 	}
 
 	@Override
-	protected IDomain[] load(File file) throws ParserConfigurationException, IOException, SAXException {
+	protected IDomain[] load(File file) throws Exception {
 		ArrayList<IDomain> domains = new ArrayList<>();
-		if (file != null && file.isFile() && file.getName().endsWith(FILE_EXTENSION)) {
+		if (file != null && file.isFile() && file.getName().endsWith(XML_FILE_EXTENSION)) {
 			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
 			IXmlParser xmlParser = null;
 			for (int i = 0; i < document.getChildNodes().getLength(); i++) {
@@ -69,28 +67,36 @@ public class XmlTransformer extends FileTransformer {
 		return domains.toArray(new IDomain[] {});
 	}
 
-	@Override
-	protected void save(File outFolder, IDomain domain)
-			throws ParserConfigurationException, FileNotFoundException, TransformerException {
+	protected String getSaveFilePath(String outFolder, IDomain domain) {
 		// 生成文件名称 DS_DN_DataInputTemplate.xml
-		String name = "unspecified";
+		String name = null;
 		String shortName = null;
 		if (domain.getShortName() != null && !domain.getShortName().equals("")) {
 			shortName = domain.getShortName();
 		}
-		if (domain.getName() != null && !domain.getName().equals("")) {
+		if (this.isGroupingFile() && domain.getBusinessObjects().size() == 1) {
+			name = domain.getBusinessObjects().get(0).getName();
+			if (name == null || name.equals("")) {
+				name = domain.getBusinessObjects().get(0).getMappedModel();
+			}
+		}
+		if ((name == null || name.equals("") || name.equals("null")) && domain.getName() != null
+				&& !domain.getName().equals("")) {
 			name = domain.getName();
 		}
-		String fileName = outFolder.getPath() + File.separator + String
-				.format("ds_%s%s%s", shortName == null ? "" : shortName + "_", name, FILE_EXTENSION).toLowerCase();
-		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+		if (name == null || name.equals("") || name.equals("null")) {
+			name = "unspecified";
+		}
+		String fileName = outFolder + File.separator + String
+				.format("ds_%s%s%s", shortName == null ? "" : shortName + "_", name, XML_FILE_EXTENSION).toLowerCase();
+		return fileName;
+	}
 
-		Comment comment = document.createComment("by btulz transforms v0.0.1");
-		document.appendChild(comment);
+	@Override
+	protected void save(File outFolder, IDomain domain) throws Exception {
+		String fileName = this.getSaveFilePath(outFolder.getPath(), domain);
+		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 		// 领域模型
-		// Element root =
-		// document.createElementNS(Environment.NAMESPACE_BTULZ_TRANSFORMERS,
-		// "Domain");
 		Element root = document.createElement("Domain");
 		this.writeElement(domain, root);
 		// 模型
@@ -121,8 +127,10 @@ public class XmlTransformer extends FileTransformer {
 		javax.xml.transform.Transformer transformer = TransformerFactory.newInstance().newTransformer();
 		DOMSource source = new DOMSource(document);
 		// 添加xml 头信息
-		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+		transformer.setOutputProperty(OutputKeys.ENCODING, XML_FILE_ENCODING);
+		transformer.setOutputProperty(OutputKeys.INDENT, XML_FILE_INDENT);
+		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 		PrintWriter pw = new PrintWriter(new FileOutputStream(fileName));
 		StreamResult result = new StreamResult(pw);
 		transformer.transform(source, result);
@@ -136,8 +144,8 @@ public class XmlTransformer extends FileTransformer {
 	protected void writeElement(IModel model, Element element) {
 		element.setAttribute("Name", model.getName());
 		element.setAttribute("Description", model.getDescription());
-		element.setAttribute("Mapped", model.getMapped());
 		element.setAttribute("ModelType", String.valueOf(model.getModelType()));
+		element.setAttribute("Mapped", model.getMapped());
 		if (model.isEntity() == emYesNo.No) {
 			element.setAttribute("Entity", String.valueOf(model.isEntity()));
 		}
@@ -159,7 +167,7 @@ public class XmlTransformer extends FileTransformer {
 	}
 
 	protected void writeElement(IBusinessObject bo, Element element) {
-		if (bo.getName().equals(bo.getMappedModel())) {
+		if (bo.getName() != null && bo.getName().equals(bo.getMappedModel())) {
 			element.setAttribute("MappedModel", bo.getMappedModel());
 			element.setAttribute("ShortName", bo.getShortName());
 		} else {
@@ -171,9 +179,9 @@ public class XmlTransformer extends FileTransformer {
 		}
 	}
 
-	protected void writeElement(IBusinessObjectItem boItem, Element element, Document document) {
+	private void writeElement(IBusinessObjectItem boItem, Element element, Document document) {
 		element.setAttribute("Relation", String.valueOf(boItem.getRelation()));
-		if (boItem.getName().equals(boItem.getMappedModel())) {
+		if (boItem.getName() != null && boItem.getName().equals(boItem.getMappedModel())) {
 			element.setAttribute("MappedModel", boItem.getMappedModel());
 			if (boItem.getShortName() != null && !boItem.getShortName().equals("")) {
 				element.setAttribute("ShortName", boItem.getShortName());

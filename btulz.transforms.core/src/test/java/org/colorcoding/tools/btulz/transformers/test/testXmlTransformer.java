@@ -1,5 +1,6 @@
 package org.colorcoding.tools.btulz.transformers.test;
 
+import java.io.File;
 import java.io.StringWriter;
 
 import javax.xml.bind.JAXBContext;
@@ -13,10 +14,13 @@ import org.colorcoding.tools.btulz.models.test.testModels;
 import org.colorcoding.tools.btulz.transformers.MultiTransformException;
 import org.colorcoding.tools.btulz.transformers.TransformException;
 import org.colorcoding.tools.btulz.transformers.XmlTransformer;
+import org.colorcoding.tools.btulz.transformers.XmlTransformerDom4j;
 
 import junit.framework.TestCase;
 
 public class testXmlTransformer extends TestCase {
+
+	public String old_xml_path = "\\org\\colorcoding\\tools\\btulz\\transformers\\test".replace("\\", File.separator);
 
 	public void testSaveReadXml()
 			throws ClassNotFoundException, TransformException, MultiTransformException, JAXBException {
@@ -26,8 +30,8 @@ public class testXmlTransformer extends TestCase {
 		xmlTransformer.setInterruptOnError(true);
 		xmlTransformer.save();
 		xmlTransformer.setKeepResults(false);
-		xmlTransformer.load(Environment.getWorkingFolder(), false);
-
+		xmlTransformer.load(Environment.getWorkingFolder() + old_xml_path, false);
+		xmlTransformer.save();
 		JAXBContext context = JAXBContext.newInstance(Domain.class);
 		Marshaller marshaller = context.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
@@ -41,6 +45,13 @@ public class testXmlTransformer extends TestCase {
 			String oldXML = writer.toString();
 			System.out.println(oldXML);
 		}
+		// 测试DOM4J实现，保存时元素顺序不乱
+		domain = (new testModels()).createDomain();
+		xmlTransformer = new XmlTransformerDom4j();
+		// xmlTransformer.setInterruptOnError(true);
+		xmlTransformer.load(Environment.getWorkingFolder() + old_xml_path, false);
+		xmlTransformer.setInterruptOnError(true);
+		xmlTransformer.save(Environment.getWorkingFolder() + File.separator + "dom4j");
 	}
 
 	public void testOldXml() throws JAXBException, TransformException, MultiTransformException {

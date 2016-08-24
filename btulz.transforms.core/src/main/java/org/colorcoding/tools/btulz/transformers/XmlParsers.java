@@ -160,17 +160,21 @@ class XmlParser1 extends XmlParser {
 	public <P> P convert(Class<P> type, String value) {
 		if (type == emModelType.class) {
 			if (value != null) {
-				if (value.equals("BOMasterData")) {
+				if (value.equals("bott_MasterData")) {
 					return (P) emModelType.MasterData;
-				} else if (value.equals("BOMasterDataLine")) {
+				} else if (value.equals("bott_MasterDataLines")) {
 					return (P) emModelType.MasterDataLine;
-				} else if (value.equals("BODocument")) {
+				} else if (value.equals("bott_Document")) {
 					return (P) emModelType.Document;
-				} else if (value.equals("BODocumentLine")) {
+				} else if (value.equals("bott_DocumentLines")) {
 					return (P) emModelType.DocumentLine;
-				} else if (value.equals("BOSimple")) {
+				} else if (value.equals("bott_SimpleObject")) {
 					return (P) emModelType.Simple;
-				} else if (value.equals("BOSimpleLine")) {
+				} else if (value.equals("bott_SimpleObjectLines")) {
+					return (P) emModelType.SimpleLine;
+				} else if (value.equals("bott_SimpleBusinessObject")) {
+					return (P) emModelType.Simple;
+				} else if (value.equals("bott_SimpleBusinessObjectLines")) {
 					return (P) emModelType.SimpleLine;
 				}
 			}
@@ -195,7 +199,7 @@ class XmlParser1 extends XmlParser {
 		} else if (type == emDataSubType.class) {
 			if (value != null) {
 				if (value.equals("st_None")) {
-					return (P) emDataSubType.None;
+					return (P) emDataSubType.Default;
 				} else if (value.equals("st_Address")) {
 					return (P) emDataSubType.Address;
 				} else if (value.equals("st_Phone")) {
@@ -224,7 +228,7 @@ class XmlParser1 extends XmlParser {
 					return (P) emDataSubType.Link;
 				}
 			}
-			return (P) emDataSubType.None;
+			return (P) emDataSubType.Default;
 		} else if (type == emBORelation.class) {
 			return (P) emBORelation.OneToMany;
 		} else {

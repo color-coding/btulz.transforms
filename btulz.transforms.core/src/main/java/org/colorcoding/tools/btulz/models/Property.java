@@ -31,7 +31,7 @@ public class Property implements IProperty {
 
 	public Property() {
 		this.setDataType(emDataType.Alphanumeric);
-		this.setDataSubType(emDataSubType.None);
+		this.setDataSubType(emDataSubType.Default);
 		this.setEditSize(8);
 		this.setPrimaryKey(emYesNo.No);
 		this.setUniqueKey(emYesNo.No);
@@ -117,7 +117,7 @@ public class Property implements IProperty {
 
 	public emDataSubType getDataSubType() {
 		if (this.dataSubType == null) {
-			this.dataSubType = emDataSubType.None;
+			this.dataSubType = emDataSubType.Default;
 		}
 		return this.dataSubType;
 	}

@@ -15,7 +15,7 @@ public enum emDataSubType {
 	/**
 	 * 默认
 	 */
-	None,
+	Default,
 	/**
 	 * 地址
 	 */

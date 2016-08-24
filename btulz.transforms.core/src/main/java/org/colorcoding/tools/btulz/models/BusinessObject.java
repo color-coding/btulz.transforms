@@ -35,6 +35,9 @@ public class BusinessObject implements IBusinessObject {
 	private String name;
 
 	public String getName() {
+		if (this.name == null) {
+			return this.getMappedModel();
+		}
 		return this.name;
 	}
 

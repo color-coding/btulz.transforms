@@ -47,6 +47,9 @@ public abstract class Transformer implements ITransformer {
 	 * @return
 	 */
 	public final Exception[] getErrors() {
+		if (this.errors == null) {
+			this.errors = new ArrayList<Exception>();
+		}
 		return errors.toArray(new Exception[] {});
 	}
 
