@@ -1,4 +1,4 @@
-package org.colorcoding.tools.btulz.transformers.test;
+package org.colorcoding.tools.btulz.test.transformers;
 
 import java.io.File;
 import java.io.StringWriter;
@@ -10,7 +10,7 @@ import javax.xml.bind.Marshaller;
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.models.Domain;
 import org.colorcoding.tools.btulz.models.IDomain;
-import org.colorcoding.tools.btulz.models.test.testModels;
+import org.colorcoding.tools.btulz.test.models.testModels;
 import org.colorcoding.tools.btulz.transformers.MultiTransformException;
 import org.colorcoding.tools.btulz.transformers.TransformException;
 import org.colorcoding.tools.btulz.transformers.XmlTransformer;

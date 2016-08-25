@@ -24,6 +24,15 @@ public class Environment {
 	public static final String NAMESPACE_BTULZ_TRANSFORMERS = "http://colorcoding.org/btulz/transformers";
 
 	/**
+	 * 命名空间-执行计划
+	 */
+	public static final String NAMESPACE_BTULZ_ORCHESTRATION = "http://colorcoding.org/btulz/orchestration";
+	/**
+	 * 命名空间-参数
+	 */
+	public static final String NAMESPACE_BTULZ_PARAMETERS = "http://colorcoding.org/btulz/parameters";
+
+	/**
 	 * 程序启动的目录（主要的配置文件目录）
 	 * 
 	 * @return

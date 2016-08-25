@@ -1,4 +1,4 @@
-package org.colorcoding.tools.btulz.models.test;
+package org.colorcoding.tools.btulz.test.models;
 
 import java.io.StringWriter;
 
