@@ -25,11 +25,11 @@ public class testSqlExecutionOrchestration extends TestCase {
 		step.setName("check db exists");
 		step.setScript("select 0 from sys.databases where name = 'ibas_demo'");
 		step = action.getSteps().create();
-		step.setRunValue("0");
+		step.setRunOnValue("0");// 状态值为0时运行此步骤
 		step.setName("db exists and check table exists");
 		step.setScript("select 1 from sys.sysobjects where name = 'cc_tt_user' and type = 'u'");
 		step = action.getSteps().create();
-		step.setRunValue("1");
+		step.setRunOnValue("1");// 状态值为1时运行此步骤
 		step.setName("table exists and query");
 		step.setScript("select * from ibas_demo..cc_tt_user");
 		orchestration.execute();

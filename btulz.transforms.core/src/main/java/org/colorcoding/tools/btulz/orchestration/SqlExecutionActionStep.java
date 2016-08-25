@@ -25,14 +25,14 @@ public class SqlExecutionActionStep extends ExecutionActionStep implements ISqlE
 		this.statement = value;
 	}
 
-	@XmlAttribute(name = "RunValue")
+	@XmlAttribute(name = "RunOnValue")
 	private String runValue;
 
-	public String getRunValue() {
+	public String getRunOnValue() {
 		return runValue;
 	}
 
-	public void setRunValue(String value) {
+	public void setRunOnValue(String value) {
 		this.runValue = value;
 	}
 
@@ -64,8 +64,8 @@ public class SqlExecutionActionStep extends ExecutionActionStep implements ISqlE
 
 	@Override
 	public boolean check(Object value) {
-		if (this.getRunValue() != null) {
-			if (!this.getRunValue().equals(value)) {
+		if (this.getRunOnValue() != null) {
+			if (!this.getRunOnValue().equals(value)) {
 				return false;
 			}
 		}

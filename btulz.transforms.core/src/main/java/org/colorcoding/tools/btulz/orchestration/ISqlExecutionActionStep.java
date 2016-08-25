@@ -31,12 +31,12 @@ public interface ISqlExecutionActionStep extends IExecutionActionStep {
 	 * 
 	 * @return
 	 */
-	String getRunValue();
+	String getRunOnValue();
 
 	/**
 	 * 设置-运行值
 	 */
-	void setRunValue(String value);
+	void setRunOnValue(String value);
 
 	/**
 	 * 获取-运行sql语句
