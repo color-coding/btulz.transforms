@@ -6,7 +6,6 @@ import java.sql.Statement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
@@ -15,7 +14,7 @@ import org.colorcoding.tools.btulz.Environment;
 @XmlType(name = "SqlExecutionAction", namespace = Environment.NAMESPACE_BTULZ_ORCHESTRATION)
 public class SqlExecutionAction extends ExecutionAction implements ISqlExecutionAction {
 
-	@XmlElementWrapper(name = "Steps")
+	// @XmlElementWrapper(name = "Steps")
 	@XmlElement(name = "Step", type = SqlExecutionActionStep.class)
 	private ISqlExecutionActionSteps steps = new SqlExecutionActionSteps();
 

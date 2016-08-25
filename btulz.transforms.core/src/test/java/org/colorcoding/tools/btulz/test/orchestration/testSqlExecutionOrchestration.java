@@ -1,5 +1,6 @@
 package org.colorcoding.tools.btulz.test.orchestration;
 
+import org.colorcoding.tools.btulz.Serializer;
 import org.colorcoding.tools.btulz.orchestration.ISqlExecutionAction;
 import org.colorcoding.tools.btulz.orchestration.ISqlExecutionActionStep;
 import org.colorcoding.tools.btulz.orchestration.SqlExecutionOrchestration;
@@ -22,15 +23,17 @@ public class testSqlExecutionOrchestration extends TestCase {
 		action.setName("query");
 		ISqlExecutionActionStep step = action.getSteps().create();
 		step.setName("check db exists");
-		step.getScripts().add("select 0 from sys.databases where name = 'ibas_demo'");
+		step.setScript("select 0 from sys.databases where name = 'ibas_demo'");
 		step = action.getSteps().create();
 		step.setRunValue("0");
 		step.setName("db exists and check table exists");
-		step.getScripts().add("select 1 from sys.sysobjects where name = 'cc_tt_user' and type = 'u'");
+		step.setScript("select 1 from sys.sysobjects where name = 'cc_tt_user' and type = 'u'");
 		step = action.getSteps().create();
 		step.setRunValue("1");
 		step.setName("table exists and query");
-		step.getScripts().add("select * from ibas_demo..cc_tt_user");
+		step.setScript("select * from ibas_demo..cc_tt_user");
 		orchestration.execute();
+
+		System.out.println(Serializer.toXmlString(orchestration, true));
 	}
 }

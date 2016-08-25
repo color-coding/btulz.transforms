@@ -1,5 +1,7 @@
 package org.colorcoding.tools.btulz.orchestration;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
@@ -8,6 +10,7 @@ import javax.xml.bind.annotation.XmlElement;
  * @author Niuren.Zhu
  *
  */
+@XmlAccessorType(XmlAccessType.NONE)
 public abstract class ExecutionOrchestration implements IExecutionOrchestration {
 
 	@XmlElement(name = "Name")

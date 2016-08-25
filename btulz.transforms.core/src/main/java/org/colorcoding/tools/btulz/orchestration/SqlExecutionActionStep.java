@@ -3,11 +3,10 @@ package org.colorcoding.tools.btulz.orchestration;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
@@ -26,7 +25,7 @@ public class SqlExecutionActionStep extends ExecutionActionStep implements ISqlE
 		this.statement = value;
 	}
 
-	@XmlElement(name = "RunValue")
+	@XmlAttribute(name = "RunValue")
 	private String runValue;
 
 	public String getRunValue() {
@@ -37,17 +36,15 @@ public class SqlExecutionActionStep extends ExecutionActionStep implements ISqlE
 		this.runValue = value;
 	}
 
-	private ArrayList<String> scripts = new ArrayList<>();
+	@XmlAttribute(name = "Script")
+	private String script;
 
-	public ArrayList<String> getScripts() {
-		if (this.scripts == null) {
-			this.scripts = new ArrayList<>();
-		}
-		return scripts;
+	public String getScript() {
+		return this.script;
 	}
 
-	public void setScripts(ArrayList<String> scripts) {
-		this.scripts = scripts;
+	public void setScript(String value) {
+		this.script = value;
 	}
 
 	@Override
@@ -57,12 +54,11 @@ public class SqlExecutionActionStep extends ExecutionActionStep implements ISqlE
 			throw new SQLException("database statement is not initialized.");
 		}
 		Object value = null;
-		for (String sql : this.getScripts()) {
-			ResultSet resultSet = statement.executeQuery(sql);
-			if (resultSet.next()) {
-				value = resultSet.getString(1);
-			}
+		ResultSet resultSet = statement.executeQuery(this.getScript());
+		if (resultSet.next()) {
+			value = resultSet.getString(1);
 		}
+
 		return value;
 	}
 

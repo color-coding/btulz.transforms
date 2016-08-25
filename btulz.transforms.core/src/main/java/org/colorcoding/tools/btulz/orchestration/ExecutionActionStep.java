@@ -1,10 +1,13 @@
 package org.colorcoding.tools.btulz.orchestration;
 
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 
+@XmlAccessorType(XmlAccessType.NONE)
 public abstract class ExecutionActionStep implements IExecutionActionStep {
 
-	@XmlElement(name = "Name")
+	@XmlAttribute(name = "Name")
 	private String name;
 
 	public String getName() {
@@ -15,7 +18,7 @@ public abstract class ExecutionActionStep implements IExecutionActionStep {
 		this.name = name;
 	}
 
-	@XmlElement(name = "Description")
+	@XmlAttribute(name = "Description")
 	private String description;
 
 	public String getDescription() {

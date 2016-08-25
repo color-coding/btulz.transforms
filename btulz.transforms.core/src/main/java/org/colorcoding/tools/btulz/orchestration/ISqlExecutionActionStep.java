@@ -1,7 +1,6 @@
 package org.colorcoding.tools.btulz.orchestration;
 
 import java.sql.Statement;
-import java.util.List;
 
 /**
  * SQL执行步骤
@@ -40,9 +39,16 @@ public interface ISqlExecutionActionStep extends IExecutionActionStep {
 	void setRunValue(String value);
 
 	/**
-	 * 运行的sql语句
+	 * 获取-运行sql语句
 	 * 
 	 * @return
 	 */
-	List<String> getScripts();
+	String getScript();
+
+	/**
+	 * 设置-运行sql语句
+	 * 
+	 * @param value
+	 */
+	void setScript(String value);
 }
