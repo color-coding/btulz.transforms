@@ -7,6 +7,7 @@ import java.sql.Statement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
@@ -36,7 +37,8 @@ public class SqlExecutionActionStep extends ExecutionActionStep implements ISqlE
 		this.runValue = value;
 	}
 
-	@XmlAttribute(name = "Script")
+	// @XmlAttribute(name = "Script")
+	@XmlElement(name = "Script")
 	private String script;
 
 	public String getScript() {

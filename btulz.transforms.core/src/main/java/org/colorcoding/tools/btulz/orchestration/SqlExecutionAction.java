@@ -5,6 +5,7 @@ import java.sql.Statement;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -43,7 +44,8 @@ public class SqlExecutionAction extends ExecutionAction implements ISqlExecution
 		this.execute();
 	}
 
-	private boolean keepStepResult = false;
+	@XmlAttribute(name = "KeepStepResult")
+	private boolean keepStepResult = true;
 
 	public boolean isKeepStepResult() {
 		return keepStepResult;
