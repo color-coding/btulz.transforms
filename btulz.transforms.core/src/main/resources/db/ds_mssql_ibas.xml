@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+$$适用于java平台下的ibas框架
 <ns2:SqlExecutionOrchestration
 	xmlns:ns2="http://colorcoding.org/btulz/orchestration">
 	<Name>ds_mssql_ibas</Name>
@@ -31,13 +32,13 @@ $BEGIN_MODEL$
 		<Step Name="create table" RunOnValue="0">
 			<Script>
 				create table "${Model.getMapped()}"(
-$BEGIN_PROPERTY$				
+$BEGIN_MODEL_PROPERTY$				
 				    "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getSeparator(,)}
-$END_PROPERTY$			    
+$END_MODEL_PROPERTY$			    
 				)
 			</Script>
 		</Step>
-$BEGIN_PROPERTY$
+$BEGIN_MODEL_PROPERTY$
 		<Step Name="check field exists">
 			<Script>
 				select count(0) from sys.syscolumns where object_name(id) = '${Model.getMapped()}' and name = '${Property.getMapped()}'
@@ -48,7 +49,8 @@ $BEGIN_PROPERTY$
 				 alter table "${Model.getMapped()}" add "${Property.getMapped()}" ${Property.getMappedType()}
 			</Script>
 		</Step>
-$END_PROPERTY$
+$END_MODEL_PROPERTY$
+$BEGIN_MODEL_HAS_PRIMARY$
 		<Step Name="check key field exists">
 			<Script>
 				select count(0) from sys.sysobjects where xtype = 'PK' AND object_name(id) = 'K${Model.getMapped().toUpperCase()}'
@@ -57,13 +59,15 @@ $END_PROPERTY$
 		<Step Name="create key field" RunOnValue="0">
 			<Script>
 				 alter table "${Model.getMapped()}" add constraint "K${Model.getMapped().toUpperCase()}" primary key (
-$BEGIN_PROPERTY_PRIMARY$
+$BEGIN_MODEL_PRIMARY_PROPERTY$
 				     "${Property.getMapped()}" ${Property.getSeparator(,)}
-$END_PROPERTY_PRIMARY$
+$END_MODEL_PRIMARY_PROPERTY$
 				 )
 			</Script>
 		</Step>
+$END_MODEL_HAS_PRIMARY$
 	</Action>
+$BEGIN_MODEL_HAS_UNIQUE$
 	<Action Name="create table unique index">
 		<Step Name="check table unique index exists">
 			<Script>
@@ -78,13 +82,14 @@ $END_PROPERTY_PRIMARY$
 		<Step Name="create table unique index" RunOnValue="1">
 			<Script>
 				create unique index "${Model.getMapped().toUpperCase()}_UNIQUE_INDEX" on "${Model.getMapped()}" (
-$BEGIN_PROPERTY_UNIQUE$
+$BEGIN_MODEL_UNIQUE_PROPERTY$
 				     "${Property.getMapped()}" ${Property.getSeparator(,)}
-$END_PROPERTY_UNIQUE$
+$END_MODEL_UNIQUE_PROPERTY$
 				)
 			</Script>
 		</Step>
 	</Action>
+$END_MODEL_HAS_UNIQUE$
 $END_MODEL$
 $BEGIN_BUSINESS_OBJECT$
 	<Action Name="register business object">
@@ -124,7 +129,7 @@ $BEGIN_BUSINESS_OBJECT_MODEL$
 				select count(0) from sys.sysobjects where name = '${Company}_SYS_BOI1' and type = 'u'
 			</Script>
 		</Step>
-$BEGIN_PROPERTY$
+$BEGIN_MODEL_PROPERTY$
 		<Step Name="delete business object informations" RunOnValue="1">
 			<Script>
 				delete from "${Company}_SYS_BOI1" where Name = N'${Model.getName()}' and Property = N'${Model.getName()}'
@@ -135,8 +140,8 @@ $BEGIN_PROPERTY$
 				insert into "AVA_SYS_BOI1" ("Name", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${Model.getName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isPrimaryKey()}', N'Y')
 			</Script>
 		</Step>
-$END_PROPERTY$
-$END_BUSINESS_OBJECT_MODEL$		
+$END_MODEL_PROPERTY$
+$END_BUSINESS_OBJECT_MODEL$
 	</Action>
 $END_BUSINESS_OBJECT$
 </ns2:SqlExecutionOrchestration>

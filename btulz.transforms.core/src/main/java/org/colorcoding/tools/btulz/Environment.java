@@ -89,4 +89,20 @@ public class Environment {
 	public static String getWorkingFolder() {
 		return getStartupFolder();
 	}
+
+	/**
+	 * 获取资源地址
+	 * 
+	 * @param type
+	 *            资源名称
+	 * @return 统一格式（此对象避免路径的中文问题）
+	 * @throws URISyntaxException
+	 */
+	public static URI getResource(String name) throws URISyntaxException {
+		URL url = Thread.currentThread().getContextClassLoader().getResource(name);
+		if (url == null) {
+			return null;
+		}
+		return url.toURI();
+	}
 }
