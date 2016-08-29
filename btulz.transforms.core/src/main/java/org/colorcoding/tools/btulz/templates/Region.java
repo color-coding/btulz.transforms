@@ -121,8 +121,11 @@ public abstract class Region {
 					break;
 				}
 				Region region = this.createRegion(readString.trim());
+
 				region.getParameters().addAll(this.getParameters());// 传递参数到子区域
+
 				region.parse(template, outPut);
+
 			} else {
 				// 处理变量
 				this.getTemplateLines().add(new String(readString));
