@@ -1,0 +1,134 @@
+package org.colorcoding.tools.btulz.templates;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 模板区域
+ * 
+ * @author Niuren.Zhu
+ *
+ */
+public abstract class TemplateRegion implements ITemplateData {
+	public TemplateRegion() {
+	}
+
+	public TemplateRegion(String beginDelimiter, String endDelimiter) {
+		this.setBeginDelimiter(beginDelimiter);
+		this.setEndDelimiter(endDelimiter);
+	}
+
+	public TemplateRegion(String delimiter) {
+		this(String.format("%sBEGIN_%s%s", REGION_SIGN, delimiter, REGION_SIGN),
+				String.format("%sEND_%s%s", REGION_SIGN, delimiter, REGION_SIGN));
+	}
+
+	public static final String REGION_SIGN = "$";
+
+	private String beginDelimiter;
+
+	/**
+	 * 获取-开始标识符
+	 * 
+	 * @return
+	 */
+	public String getBeginDelimiter() {
+		return beginDelimiter;
+	}
+
+	public void setBeginDelimiter(String beginDelimiter) {
+		this.beginDelimiter = beginDelimiter;
+	}
+
+	private String endDelimiter;
+
+	/**
+	 * 获取-结束标识符
+	 * 
+	 * @return
+	 */
+	public String getEndDelimiter() {
+		if (this.endDelimiter == null && this.beginDelimiter != null) {
+
+		}
+		return endDelimiter;
+	}
+
+	public void setEndDelimiter(String endDelimiter) {
+		this.endDelimiter = endDelimiter;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("TemplateRegion between %s and %s", this.getBeginDelimiter(), this.getEndDelimiter());
+	}
+
+	private ArrayList<ITemplateData> templateLines;
+
+	protected List<ITemplateData> getTemplateLines() {
+		if (this.templateLines == null) {
+			this.templateLines = new ArrayList<>();
+		}
+		return this.templateLines;
+	}
+
+	protected TemplateRegion createRegion(String beginDelimiter) throws InvalidRegionException {
+		if (beginDelimiter.startsWith("$$")) {
+			// 备注区域
+			return new RegionComment();
+		}
+		throw new InvalidRegionException(String.format("undefined region delimiter %s.", beginDelimiter));
+	}
+
+	void parse(BufferedReader template) throws Exception {
+		String readString = null;
+		while ((readString = template.readLine()) != null) {
+			if (readString.startsWith(REGION_SIGN)) {
+				// like $……$，发现区域，创建新的区域
+				if ((this.getEndDelimiter() != null && this.getEndDelimiter().length() > 0)
+						&& readString.indexOf(this.getEndDelimiter()) >= 0) {
+					// 自身的结束区域
+					break;
+				}
+				TemplateRegion region = this.createRegion(readString.trim());
+				region.parse(template);
+				this.getTemplateLines().add(region);
+				System.out.println(String.format("create region [%s].", region));
+			} else {
+				// 处理变量
+				this.getTemplateLines().add(new TemplateLine(readString));
+			}
+		}
+	}
+
+	public void export(BufferedWriter writer, List<Parameter> pars) throws Exception {
+		for (ITemplateData tpltLine : this.getTemplateLines()) {
+			if (tpltLine instanceof TemplateRegion) {
+				// 重复区域，需要循环输出
+				// 输出模板数据
+				Iterable<Parameter> regionParameters = this.getRegionParameters(pars);
+				if (regionParameters == null) {
+					throw new InvalidParameterException(String.format("invalid parameter between %s and %s.",
+							this.getBeginDelimiter(), this.getEndDelimiter()));
+				}
+				for (Parameter regionParameter : regionParameters) {
+					// 替换区域变量
+					ArrayList<Parameter> newPars = new ArrayList<Parameter>();
+					newPars.addAll(pars);
+					if (regionParameter != null) {
+						newPars.add(regionParameter);
+					}
+					tpltLine.export(writer, newPars);
+				}
+			} else {
+				tpltLine.export(writer, pars);
+			}
+
+		}
+		writer.flush();
+	}
+
+	protected abstract Iterable<Parameter> getRegionParameters(List<Parameter> pars) throws InvalidParameterException;
+}

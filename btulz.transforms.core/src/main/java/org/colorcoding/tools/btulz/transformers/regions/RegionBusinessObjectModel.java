@@ -2,6 +2,7 @@ package org.colorcoding.tools.btulz.transformers.regions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.colorcoding.tools.btulz.models.IBusinessObject;
 import org.colorcoding.tools.btulz.models.IDomain;
@@ -25,13 +26,13 @@ public class RegionBusinessObjectModel extends RegionBase {
 	}
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters() {
+	protected Iterable<Parameter> getRegionParameters(List<Parameter> pars) {
 		// 先获取领域，然后获取业务对象，再找业务对象的模型
-		Parameter parameter = this.getParameter(RegionDomain.REGION_DELIMITER);
+		Parameter parameter = this.getParameter(pars, RegionDomain.REGION_DELIMITER);
 		if (parameter != null) {
 			if (parameter.getValue() instanceof IDomain) {
 				IDomain domain = (IDomain) parameter.getValue();
-				parameter = this.getParameter(RegionBusinessObject.REGION_DELIMITER);
+				parameter = this.getParameter(pars, RegionBusinessObject.REGION_DELIMITER);
 				if (parameter != null) {
 					if (parameter.getValue() instanceof IBusinessObject) {
 						IBusinessObject bo = (IBusinessObject) parameter.getValue();
@@ -53,7 +54,7 @@ public class RegionBusinessObjectModel extends RegionBase {
 
 									@Override
 									public boolean hasNext() {
-										return curIndex < 1;
+										return curIndex < 1 && boModels.size() > 0;
 									}
 
 									@Override

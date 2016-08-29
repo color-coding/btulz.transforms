@@ -1,6 +1,6 @@
 package org.colorcoding.tools.btulz.transformers.regions;
 
-import org.colorcoding.tools.btulz.templates.Region;
+import org.colorcoding.tools.btulz.templates.TemplateRegion;
 
 /**
  * 区域工厂
@@ -23,7 +23,7 @@ public class RegionsFactory {
 
 	}
 
-	public Region createRegion(String delimiter) {
+	public TemplateRegion createRegion(String delimiter) {
 		if (delimiter != null) {
 			// 修正下标识符，原始的实例$BEGIN_MODEL$
 			delimiter = delimiter.substring("$BEGIN_".length(), delimiter.length() - 1);

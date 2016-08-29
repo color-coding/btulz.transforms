@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * 模板
@@ -16,7 +17,7 @@ import java.util.Iterator;
  * @author Niuren.Zhu
  *
  */
-public class RegionTemplate extends Region {
+public class Template extends TemplateRegion {
 
 	private String templateFile;
 
@@ -63,7 +64,7 @@ public class RegionTemplate extends Region {
 		this.encoding = encoding;
 	}
 
-	public void parse() throws Exception {
+	public void export(List<Parameter> parameters) throws Exception {
 		File tpltFile = new File(this.getTemplateFile());
 		if (!tpltFile.exists() || !tpltFile.isFile()) {
 			throw new FileNotFoundException(this.getTemplateFile());
@@ -78,7 +79,8 @@ public class RegionTemplate extends Region {
 		try {
 			reader = new BufferedReader(new InputStreamReader(new FileInputStream(tpltFile), this.getEncoding()));
 			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile), this.getEncoding()));
-			this.parse(reader, writer);
+			this.parse(reader);// 解析模板
+			this.export(writer, parameters);// 输出数据
 			reader.close();
 			writer.close();
 		} finally {
@@ -92,7 +94,7 @@ public class RegionTemplate extends Region {
 	}
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters() throws InvalidParameterException {
+	protected Iterable<Parameter> getRegionParameters(List<Parameter> pars) throws InvalidParameterException {
 		return new Iterable<Parameter>() {
 			@Override
 			public Iterator<Parameter> iterator() {

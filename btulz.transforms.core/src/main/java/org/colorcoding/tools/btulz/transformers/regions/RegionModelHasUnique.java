@@ -2,6 +2,7 @@ package org.colorcoding.tools.btulz.transformers.regions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.colorcoding.tools.btulz.models.IModel;
 import org.colorcoding.tools.btulz.models.IProperty;
@@ -25,8 +26,8 @@ public class RegionModelHasUnique extends RegionBase {
 	}
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters() {
-		Parameter parameter = this.getParameter(RegionModel.REGION_DELIMITER);
+	protected Iterable<Parameter> getRegionParameters(List<Parameter> pars) {
+		Parameter parameter = this.getParameter(pars, RegionModel.REGION_DELIMITER);
 		if (parameter != null) {
 			if (parameter.getValue() instanceof IModel) {
 				IModel model = (IModel) parameter.getValue();

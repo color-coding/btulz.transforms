@@ -1,7 +1,10 @@
 package org.colorcoding.tools.btulz.transformers.regions;
 
+import java.util.List;
+
 import org.colorcoding.tools.btulz.templates.InvalidRegionException;
-import org.colorcoding.tools.btulz.templates.Region;
+import org.colorcoding.tools.btulz.templates.Parameter;
+import org.colorcoding.tools.btulz.templates.TemplateRegion;
 
 /**
  * 领域模型的区域基类
@@ -9,7 +12,7 @@ import org.colorcoding.tools.btulz.templates.Region;
  * @author Niuren.Zhu
  *
  */
-public abstract class RegionBase extends Region {
+public abstract class RegionBase extends TemplateRegion {
 	public RegionBase() {
 		super();
 	}
@@ -23,12 +26,20 @@ public abstract class RegionBase extends Region {
 	}
 
 	@Override
-	protected Region createRegion(String beginDelimiter) throws InvalidRegionException {
-		Region region = RegionsFactory.create().createRegion(beginDelimiter);
+	protected TemplateRegion createRegion(String beginDelimiter) throws InvalidRegionException {
+		TemplateRegion region = RegionsFactory.create().createRegion(beginDelimiter);
 		if (region != null) {
 			return region;
 		}
 		return super.createRegion(beginDelimiter);
 	}
 
+	Parameter getParameter(List<Parameter> parameters, String name) {
+		for (Parameter parameter : parameters) {
+			if (parameter.getName().equals(name)) {
+				return parameter;
+			}
+		}
+		return null;
+	}
 }

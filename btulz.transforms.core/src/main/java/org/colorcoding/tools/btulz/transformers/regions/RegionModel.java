@@ -1,6 +1,7 @@
 package org.colorcoding.tools.btulz.transformers.regions;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.colorcoding.tools.btulz.models.IDomain;
 import org.colorcoding.tools.btulz.templates.Parameter;
@@ -22,8 +23,8 @@ public class RegionModel extends RegionBase {
 	}
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters() {
-		Parameter parameter = this.getParameter(RegionDomain.REGION_DELIMITER);
+	protected Iterable<Parameter> getRegionParameters(List<Parameter> pars) {
+		Parameter parameter = this.getParameter(pars, RegionDomain.REGION_DELIMITER);
 		if (parameter != null) {
 			if (parameter.getValue() instanceof IDomain) {
 				IDomain domain = (IDomain) parameter.getValue();

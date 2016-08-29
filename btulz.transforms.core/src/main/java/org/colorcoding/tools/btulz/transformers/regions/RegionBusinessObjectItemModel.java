@@ -1,5 +1,7 @@
 package org.colorcoding.tools.btulz.transformers.regions;
 
+import java.util.List;
+
 import org.colorcoding.tools.btulz.templates.Parameter;
 
 /**
@@ -19,7 +21,7 @@ public class RegionBusinessObjectItemModel extends RegionBase {
 	}
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters() {
+	protected Iterable<Parameter> getRegionParameters(List<Parameter> pars) {
 		// 先获取领域，然后获取业务对象，再找业务对象的模型
 		return null;
 	}
