@@ -20,6 +20,11 @@ public abstract class Region {
 		this.setEndDelimiter(endDelimiter);
 	}
 
+	public Region(String delimiter) {
+		this(String.format("%sBEGIN_%s%s", REGION_SIGN, delimiter, REGION_SIGN),
+				String.format("%sEND_%s%s", REGION_SIGN, delimiter, REGION_SIGN));
+	}
+
 	public static final String REGION_SIGN = "$";
 
 	private ArrayList<Parameter> parameters;
@@ -31,13 +36,23 @@ public abstract class Region {
 		return parameters;
 	}
 
-	protected Parameter getParameters(String name) {
+	protected Parameter getParameter(String name) {
 		for (Parameter parameter : this.getParameters()) {
 			if (parameter.getName().equals(name)) {
 				return parameter;
 			}
 		}
 		return null;
+	}
+
+	public void addParameter(String name, Object value) {
+		for (Parameter parameter : this.getParameters()) {
+			if (parameter.getName().equals(name)) {
+				parameter.setValue(value);
+				return;
+			}
+		}
+		this.getParameters().add(new Parameter(name, value));
 	}
 
 	private String beginDelimiter;
@@ -73,6 +88,11 @@ public abstract class Region {
 		this.endDelimiter = endDelimiter;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("region between %s and %s", this.getBeginDelimiter(), this.getEndDelimiter());
+	}
+
 	private ArrayList<String> templateLines;
 
 	protected List<String> getTemplateLines() {
@@ -95,8 +115,8 @@ public abstract class Region {
 		while ((readString = template.readLine()) != null) {
 			if (readString.startsWith(REGION_SIGN) && readString.endsWith(REGION_SIGN)) {
 				// like $……$，发现区域，创建新的区域
-				if (readString.indexOf(this.getEndDelimiter()) > 0 && this.getEndDelimiter() != null
-						&& this.getEndDelimiter().length() > 0) {
+				if ((this.getEndDelimiter() != null && this.getEndDelimiter().length() > 0)
+						&& readString.indexOf(this.getEndDelimiter()) >= 0) {
 					// 自身的结束区域
 					break;
 				}
@@ -109,15 +129,19 @@ public abstract class Region {
 			}
 		}
 		// 输出模板数据
-		for (Parameter regionParameter : this.getRegionParameters()) {
+		Iterable<Parameter> regionParameters = this.getRegionParameters();
+		if (regionParameters == null) {
+			throw new InvalidParameterException(String.format("invalid parameter between %s and %s.",
+					this.getBeginDelimiter(), this.getEndDelimiter()));
+		}
+		for (Parameter regionParameter : regionParameters) {
 			// 替换区域变量
-			if (regionParameter == null) {
-				continue;
-			}
-			for (int i = 0; i < this.getParameters().size(); i++) {
-				Parameter parameter = this.getParameters().get(i);
-				if (parameter.getName() == regionParameter.getName()) {
-					this.getParameters().set(i, parameter);
+			if (regionParameter != null) {
+				for (int i = 0; i < this.getParameters().size(); i++) {
+					Parameter parameter = this.getParameters().get(i);
+					if (parameter.getName() == regionParameter.getName()) {
+						this.getParameters().set(i, parameter);
+					}
 				}
 			}
 			// 重复区域变量内容，并输出
@@ -125,7 +149,7 @@ public abstract class Region {
 				Variable[] variables = Variable.discerning(tpltLine);
 				for (Variable variable : variables) {
 					if (variable.getName() != null) {
-						Parameter parameter = this.getParameters(variable.getName());
+						Parameter parameter = this.getParameter(variable.getName());
 						if (parameter != null) {
 							try {
 								Object value = parameter.getValue(variable.getValuePath());
@@ -147,5 +171,5 @@ public abstract class Region {
 		outPut.flush();
 	}
 
-	protected abstract Iterable<Parameter> getRegionParameters();
+	protected abstract Iterable<Parameter> getRegionParameters() throws InvalidParameterException;
 }

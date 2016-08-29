@@ -10,6 +10,15 @@ import java.lang.reflect.Method;
  *
  */
 public class Parameter {
+	public Parameter() {
+
+	}
+
+	public Parameter(String name, Object value) {
+		this.setName(name);
+		this.setValue(value);
+	}
+
 	private String name;
 
 	public String getName() {

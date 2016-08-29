@@ -48,7 +48,7 @@ public class RegionTemplate extends Region {
 		this.outPutFile = outPutFile;
 	}
 
-	private String encoding;
+	private String encoding = "utf-8";
 
 	/**
 	 * 文件编码
@@ -92,7 +92,7 @@ public class RegionTemplate extends Region {
 	}
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters() {
+	protected Iterable<Parameter> getRegionParameters() throws InvalidParameterException {
 		return new Iterable<Parameter>() {
 			@Override
 			public Iterator<Parameter> iterator() {
