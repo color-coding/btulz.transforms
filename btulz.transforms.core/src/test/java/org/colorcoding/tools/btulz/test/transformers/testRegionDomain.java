@@ -18,6 +18,12 @@ public class testRegionDomain extends TestCase {
 		template.setTemplateFile(tpltFile + File.separator + "ds_mssql_ibas.xml");
 		template.setOutPutFile(Environment.getWorkingFolder() + File.separator + "ds_mssql_ibas.out.xml");
 		ArrayList<Parameter> parameters = new ArrayList<>();
+		parameters.add(new Parameter("Company", "CC"));
+		parameters.add(new Parameter("DbServer", "localhost"));
+		parameters.add(new Parameter("DbName", "ibas_demo"));
+		parameters.add(new Parameter("AppName", "btulz"));
+		parameters.add(new Parameter("DbUser", "sa"));
+		parameters.add(new Parameter("DbPassword", "1q2w3e"));
 		parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, (new testModels()).createDomain()));
 		template.export(parameters);
 	}

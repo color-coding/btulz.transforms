@@ -5,6 +5,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 /**
  * 运行环境
  * 
@@ -31,6 +34,25 @@ public class Environment {
 	 * 命名空间-参数
 	 */
 	public static final String NAMESPACE_BTULZ_PARAMETERS = "http://colorcoding.org/btulz/parameters";
+
+	private volatile static Logger logger;
+
+	/**
+	 * 获取日志员
+	 * 
+	 * @return
+	 */
+	public synchronized static Logger getLogger() {
+		if (logger == null) {
+			try {
+				PropertyConfigurator.configure(getResource("log4j.properties").getPath());
+				logger = Logger.getLogger("console");
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+		}
+		return logger;
+	}
 
 	/**
 	 * 程序启动的目录（主要的配置文件目录）

@@ -10,8 +10,8 @@ import java.util.List;
  * @author Niuren.Zhu
  *
  */
-public class RegionComment extends TemplateRegion {
-	public RegionComment() {
+public class CommentRegion extends TemplateRegion {
+	public CommentRegion() {
 		super("$", "$");
 	}
 

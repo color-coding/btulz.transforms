@@ -20,6 +20,10 @@ public class RegionBusinessObjectModel extends RegionBase {
 	 * 此区域标记
 	 */
 	public static final String REGION_DELIMITER = "BUSINESS_OBJECT_MODEL";
+	/**
+	 * 此区域变量名称
+	 */
+	public static final String REGION_PARAMETER_NAME = "Model";
 
 	public RegionBusinessObjectModel() {
 		super(REGION_DELIMITER);
@@ -28,11 +32,11 @@ public class RegionBusinessObjectModel extends RegionBase {
 	@Override
 	protected Iterable<Parameter> getRegionParameters(List<Parameter> pars) {
 		// 先获取领域，然后获取业务对象，再找业务对象的模型
-		Parameter parameter = this.getParameter(pars, RegionDomain.REGION_DELIMITER);
+		Parameter parameter = this.getParameter(pars, RegionDomain.REGION_PARAMETER_NAME);
 		if (parameter != null) {
 			if (parameter.getValue() instanceof IDomain) {
 				IDomain domain = (IDomain) parameter.getValue();
-				parameter = this.getParameter(pars, RegionBusinessObject.REGION_DELIMITER);
+				parameter = this.getParameter(pars, RegionBusinessObject.REGION_PARAMETER_NAME);
 				if (parameter != null) {
 					if (parameter.getValue() instanceof IBusinessObject) {
 						IBusinessObject bo = (IBusinessObject) parameter.getValue();
@@ -60,7 +64,7 @@ public class RegionBusinessObjectModel extends RegionBase {
 									@Override
 									public Parameter next() {
 										Parameter parameter = new Parameter();
-										parameter.setName(REGION_DELIMITER);
+										parameter.setName(REGION_PARAMETER_NAME);
 										parameter.setValue(boModels.get(curIndex));
 										curIndex++;
 										return parameter;

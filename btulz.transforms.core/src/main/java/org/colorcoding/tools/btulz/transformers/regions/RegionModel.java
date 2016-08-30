@@ -17,6 +17,10 @@ public class RegionModel extends RegionBase {
 	 * 此区域标记
 	 */
 	public static final String REGION_DELIMITER = "MODEL";
+	/**
+	 * 此区域变量名称
+	 */
+	public static final String REGION_PARAMETER_NAME = "MODEL";
 
 	public RegionModel() {
 		super(REGION_DELIMITER);
@@ -24,7 +28,7 @@ public class RegionModel extends RegionBase {
 
 	@Override
 	protected Iterable<Parameter> getRegionParameters(List<Parameter> pars) {
-		Parameter parameter = this.getParameter(pars, RegionDomain.REGION_DELIMITER);
+		Parameter parameter = this.getParameter(pars, RegionDomain.REGION_PARAMETER_NAME);
 		if (parameter != null) {
 			if (parameter.getValue() instanceof IDomain) {
 				IDomain domain = (IDomain) parameter.getValue();
@@ -43,7 +47,7 @@ public class RegionModel extends RegionBase {
 							@Override
 							public Parameter next() {
 								Parameter parameter = new Parameter();
-								parameter.setName(REGION_DELIMITER);
+								parameter.setName(REGION_PARAMETER_NAME);
 								parameter.setValue(domain.getModels().get(curIndex));
 								curIndex++;
 								return parameter;

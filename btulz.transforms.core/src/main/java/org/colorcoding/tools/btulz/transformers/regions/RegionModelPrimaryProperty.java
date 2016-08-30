@@ -8,6 +8,7 @@ import org.colorcoding.tools.btulz.models.IModel;
 import org.colorcoding.tools.btulz.models.IProperty;
 import org.colorcoding.tools.btulz.models.data.emYesNo;
 import org.colorcoding.tools.btulz.templates.Parameter;
+import org.colorcoding.tools.btulz.transformers.regions.models.Property;
 
 /**
  * 区域-模型主键
@@ -21,13 +22,18 @@ public class RegionModelPrimaryProperty extends RegionBase {
 	 */
 	public static final String REGION_DELIMITER = "MODEL_PRIMARY_PROPERTY";
 
+	/**
+	 * 此区域变量名称
+	 */
+	public static final String REGION_PARAMETER_NAME = "Property";
+
 	public RegionModelPrimaryProperty() {
 		super(REGION_DELIMITER);
 	}
 
 	@Override
 	protected Iterable<Parameter> getRegionParameters(List<Parameter> pars) {
-		Parameter parameter = this.getParameter(pars, RegionModel.REGION_DELIMITER);
+		Parameter parameter = this.getParameter(pars, RegionModel.REGION_PARAMETER_NAME);
 		if (parameter != null) {
 			if (parameter.getValue() instanceof IModel) {
 				IModel model = (IModel) parameter.getValue();
@@ -51,9 +57,13 @@ public class RegionModelPrimaryProperty extends RegionBase {
 
 							@Override
 							public Parameter next() {
+								Property property = new Property(primaryProperty.get(curIndex));
+								if (curIndex >= primaryProperty.size() - 1) {
+									property.setLast(true);
+								}
 								Parameter parameter = new Parameter();
-								parameter.setName(REGION_DELIMITER);
-								parameter.setValue(primaryProperty.get(curIndex));
+								parameter.setName(REGION_PARAMETER_NAME);
+								parameter.setValue(property);
 								curIndex++;
 								return parameter;
 							}

@@ -10,18 +10,18 @@ import org.colorcoding.tools.btulz.templates.Parameter;
  * @author Niuren.Zhu
  *
  */
-public class RegionBusinessObjectItemModel extends RegionBase {
+public class RegionBusinessObjectItem extends RegionBase {
 	/**
 	 * 此区域标记
 	 */
-	public static final String REGION_DELIMITER = "BUSINESS_OBJECT_ITEM_MODEL";
+	public static final String REGION_DELIMITER = "BUSINESS_OBJECT_ITEM";
 
 	/**
 	 * 此区域变量名称
 	 */
-	public static final String REGION_PARAMETER_NAME = "Model";
+	public static final String REGION_PARAMETER_NAME = "BusinessObjectItem";
 
-	public RegionBusinessObjectItemModel() {
+	public RegionBusinessObjectItem() {
 		super(REGION_DELIMITER);
 	}
 

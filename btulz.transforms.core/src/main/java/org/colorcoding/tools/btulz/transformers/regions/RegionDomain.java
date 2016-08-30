@@ -15,6 +15,10 @@ public class RegionDomain extends Template {
 	 * 此区域标记
 	 */
 	public static final String REGION_DELIMITER = "DOMAIN";
+	/**
+	 * 此区域变量名称
+	 */
+	public static final String REGION_PARAMETER_NAME = "DOMAIN";
 
 	@Override
 	protected TemplateRegion createRegion(String beginDelimiter) throws InvalidRegionException {

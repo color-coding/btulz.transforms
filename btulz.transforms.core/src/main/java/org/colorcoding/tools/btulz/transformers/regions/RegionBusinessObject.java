@@ -18,13 +18,18 @@ public class RegionBusinessObject extends RegionBase {
 	 */
 	public static final String REGION_DELIMITER = "BUSINESS_OBJECT";
 
+	/**
+	 * 此区域变量名称
+	 */
+	public static final String REGION_PARAMETER_NAME = "BusinessObject";
+
 	public RegionBusinessObject() {
 		super(REGION_DELIMITER);
 	}
 
 	@Override
 	protected Iterable<Parameter> getRegionParameters(List<Parameter> pars) {
-		Parameter parameter = this.getParameter(pars, RegionDomain.REGION_DELIMITER);
+		Parameter parameter = this.getParameter(pars, RegionDomain.REGION_PARAMETER_NAME);
 		if (parameter != null) {
 			if (parameter.getValue() instanceof IDomain) {
 				IDomain domain = (IDomain) parameter.getValue();
@@ -43,7 +48,7 @@ public class RegionBusinessObject extends RegionBase {
 							@Override
 							public Parameter next() {
 								Parameter parameter = new Parameter();
-								parameter.setName(REGION_DELIMITER);
+								parameter.setName(REGION_PARAMETER_NAME);
 								parameter.setValue(domain.getBusinessObjects().get(curIndex));
 								curIndex++;
 								return parameter;

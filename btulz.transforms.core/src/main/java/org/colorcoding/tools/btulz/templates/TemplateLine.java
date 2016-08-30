@@ -3,6 +3,8 @@ package org.colorcoding.tools.btulz.templates;
 import java.io.BufferedWriter;
 import java.util.List;
 
+import org.colorcoding.tools.btulz.Environment;
+
 /**
  * 模板行
  * 
@@ -32,13 +34,13 @@ public class TemplateLine implements ITemplateData {
 
 	@Override
 	public void export(BufferedWriter writer, List<Parameter> pars) throws Exception {
-		String outLine = new String(this.getLine());
+		String outLine = this.getLine();
 		Variable[] variables = Variable.discerning(this.getLine());
 		for (Variable variable : variables) {
 			if (variable.getName() != null) {
 				Parameter parameter = null;
 				for (Parameter par : pars) {
-					if (par.getName().equals(variable.getName())) {
+					if (par.getName().equalsIgnoreCase(variable.getName())) {
 						parameter = par;
 						break;
 					}
@@ -48,16 +50,22 @@ public class TemplateLine implements ITemplateData {
 						Object value = parameter.getValue(variable.getValuePath());
 						if (value != null) {
 							variable.setValue(value);
-							outLine.replace(variable.getOriginal(), variable.getValue());
+							outLine = outLine.replace(variable.getOriginal(), variable.getValue());
 						}
 					} catch (Exception e) {
-						System.err.println(String.format("replace [%s]'value, error %s", variable.getOriginal(), e));
+						Environment.getLogger().error(
+								String.format("template: replace [%s]'value, error %s", variable.getOriginal(), e));
 					}
+				} else {
+					Environment.getLogger()
+							.warn(String.format("template: not found variable [%s]'s parameter.", variable.getName()));
 				}
 			}
 		}
-		writer.write(outLine);
-		writer.newLine();
+		if (outLine != null) {
+			writer.write(outLine);
+			writer.newLine();
+		}
 	}
 
 }

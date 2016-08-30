@@ -5,6 +5,8 @@ import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.colorcoding.tools.btulz.Environment;
+
 /**
  * 模板区域
  * 
@@ -77,7 +79,7 @@ public abstract class TemplateRegion implements ITemplateData {
 	protected TemplateRegion createRegion(String beginDelimiter) throws InvalidRegionException {
 		if (beginDelimiter.startsWith("$$")) {
 			// 备注区域
-			return new RegionComment();
+			return new CommentRegion();
 		}
 		throw new InvalidRegionException(String.format("undefined region delimiter %s.", beginDelimiter));
 	}
@@ -95,7 +97,7 @@ public abstract class TemplateRegion implements ITemplateData {
 				TemplateRegion region = this.createRegion(readString.trim());
 				region.parse(template);
 				this.getTemplateLines().add(region);
-				System.out.println(String.format("create region [%s].", region));
+				Environment.getLogger().debug(String.format("template: create region [%s].", region));
 			} else {
 				// 处理变量
 				this.getTemplateLines().add(new TemplateLine(readString));
@@ -104,28 +106,39 @@ public abstract class TemplateRegion implements ITemplateData {
 	}
 
 	public void export(BufferedWriter writer, List<Parameter> pars) throws Exception {
+		List<Parameter> newPars = pars;
 		for (ITemplateData tpltLine : this.getTemplateLines()) {
-			if (tpltLine instanceof TemplateRegion) {
+			if (tpltLine instanceof TemplateRegion && !(tpltLine instanceof CommentRegion)) {
 				// 重复区域，需要循环输出
 				// 输出模板数据
-				Iterable<Parameter> regionParameters = this.getRegionParameters(pars);
-				if (regionParameters == null) {
+				TemplateRegion region = (TemplateRegion) tpltLine;
+				Iterable<Parameter> regionPars = region.getRegionParameters(pars);
+				if (regionPars == null) {
 					throw new InvalidParameterException(String.format("invalid parameter between %s and %s.",
 							this.getBeginDelimiter(), this.getEndDelimiter()));
 				}
-				for (Parameter regionParameter : regionParameters) {
+				Environment.getLogger().debug(String.format("template: begin export region [%s].", region));
+				for (Parameter regionPar : regionPars) {
 					// 替换区域变量
-					ArrayList<Parameter> newPars = new ArrayList<Parameter>();
-					newPars.addAll(pars);
-					if (regionParameter != null) {
-						newPars.add(regionParameter);
+					if (regionPar != null) {
+						Environment.getLogger().debug(String.format("template: using region parameter [%s:%s].",
+								regionPar.getName(), regionPar.getValue()));
+						newPars = new ArrayList<Parameter>(pars);
+						boolean done = false;
+						for (int i = 0; i < newPars.size(); i++) {
+							if (regionPar.getName().equals(newPars.get(i).getName())) {
+								newPars.set(i, regionPar);
+							}
+						}
+						if (!done)
+							newPars.add(regionPar);
 					}
 					tpltLine.export(writer, newPars);
 				}
+				Environment.getLogger().debug(String.format("template: end export region [%s].", tpltLine));
 			} else {
-				tpltLine.export(writer, pars);
+				tpltLine.export(writer, newPars);
 			}
-
 		}
 		writer.flush();
 	}

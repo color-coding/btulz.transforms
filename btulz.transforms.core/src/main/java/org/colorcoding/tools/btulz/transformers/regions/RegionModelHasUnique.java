@@ -27,7 +27,7 @@ public class RegionModelHasUnique extends RegionBase {
 
 	@Override
 	protected Iterable<Parameter> getRegionParameters(List<Parameter> pars) {
-		Parameter parameter = this.getParameter(pars, RegionModel.REGION_DELIMITER);
+		Parameter parameter = this.getParameter(pars, RegionModel.REGION_PARAMETER_NAME);
 		if (parameter != null) {
 			if (parameter.getValue() instanceof IModel) {
 				IModel model = (IModel) parameter.getValue();
