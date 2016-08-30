@@ -74,6 +74,7 @@ public class testModels extends TestCase {
 		// 构建业务对象
 		IBusinessObject bo = domain.getBusinessObjects().create();
 		bo.setMappedModel(orderModel);
+		bo.setShortName("CC_ORDER");
 		IBusinessObjectItem boItem = bo.getRelatedBOs().create();
 		boItem.setMappedModel(userModel);// 1:1
 		boItem.setRelation(emBORelation.OneToOne);

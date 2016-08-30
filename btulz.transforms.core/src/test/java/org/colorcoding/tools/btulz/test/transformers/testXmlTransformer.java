@@ -20,7 +20,8 @@ import junit.framework.TestCase;
 
 public class testXmlTransformer extends TestCase {
 
-	public String old_xml_path = "\\org\\colorcoding\\tools\\btulz\\transformers\\test".replace("\\", File.separator);
+	public static String old_xml_path = "\\org\\colorcoding\\tools\\btulz\\test\\transformers".replace("\\",
+			File.separator);
 
 	public void testSaveReadXml()
 			throws ClassNotFoundException, TransformException, MultiTransformException, JAXBException {
@@ -56,7 +57,8 @@ public class testXmlTransformer extends TestCase {
 
 	public void testOldXml() throws JAXBException, TransformException, MultiTransformException {
 		XmlTransformer xmlTransformer = new XmlTransformer();
-		xmlTransformer.load(Environment.getStartupFolder() + "domain_models_old.xml", false);
+		xmlTransformer.load(Environment.getStartupFolder() + old_xml_path + File.separator + "domain_models_old.xml",
+				false);
 
 		JAXBContext context = JAXBContext.newInstance(Domain.class);
 		Marshaller marshaller = context.createMarshaller();
