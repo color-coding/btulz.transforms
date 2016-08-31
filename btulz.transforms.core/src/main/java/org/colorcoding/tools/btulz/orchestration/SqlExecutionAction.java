@@ -103,7 +103,7 @@ public class SqlExecutionAction extends ExecutionAction implements ISqlExecution
 		}
 		long endTime = System.currentTimeMillis();
 		float excTime = (float) (endTime - startTime) / 1000;
-		Environment.getLogger().info(String.format("end action [%s], used %s millisecond.", this.getName(), excTime));
+		Environment.getLogger().info(String.format("end action [%s], used %s second.", this.getName(), excTime));
 	}
 
 }

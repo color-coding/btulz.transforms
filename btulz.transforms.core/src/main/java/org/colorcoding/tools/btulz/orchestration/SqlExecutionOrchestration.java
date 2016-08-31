@@ -156,7 +156,7 @@ public class SqlExecutionOrchestration extends ExecutionOrchestration implements
 		long endTime = System.currentTimeMillis();
 		float excTime = (float) (endTime - startTime) / 1000;
 		Environment.getLogger()
-				.info(String.format("end execute orchestration [%s], used %s millisecond.", this.getName(), excTime));
+				.info(String.format("end execute orchestration [%s], used %s second.", this.getName(), excTime));
 	}
 
 }
