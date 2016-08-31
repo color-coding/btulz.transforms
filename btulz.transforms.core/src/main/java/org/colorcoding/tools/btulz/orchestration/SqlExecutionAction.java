@@ -44,9 +44,9 @@ public class SqlExecutionAction extends ExecutionAction implements ISqlExecution
 		this.execute();
 	}
 
-	@XmlAttribute(name = "KeepStepResult")
 	private boolean keepStepResult = true;
 
+	@XmlAttribute(name = "KeepStepResult")
 	public boolean isKeepStepResult() {
 		return keepStepResult;
 	}
@@ -55,12 +55,25 @@ public class SqlExecutionAction extends ExecutionAction implements ISqlExecution
 		this.keepStepResult = value;
 	}
 
+	private boolean isIsolated;
+
+	@XmlAttribute(name = "Isolated")
+	public boolean isIsolated() {
+		return isIsolated;
+	}
+
+	public void setIsolated(boolean value) {
+		this.isIsolated = value;
+	}
+
 	private int curStep = 0;// 当前步骤
 	private int lastStep = 0;// 上次运行的步骤
 	private Object curValue;// 当前的状态值
 
 	@Override
 	public void execute() throws Exception {
+		long startTime = System.currentTimeMillis();
+		Environment.getLogger().debug(String.format("begin action [%s].", this.getName()));
 		Statement statement = this.getStatement();
 		if (statement == null) {
 			throw new SQLException("database statement is not initialized.");
@@ -85,6 +98,9 @@ public class SqlExecutionAction extends ExecutionAction implements ISqlExecution
 			// 没有处理此错误，则抛出
 			throw e;
 		}
+		long endTime = System.currentTimeMillis();
+		float excTime = (float) (endTime - startTime) / 1000;
+		Environment.getLogger().debug(String.format("end action [%s], used %s millisecond.", this.getName(), excTime));
 	}
 
 }

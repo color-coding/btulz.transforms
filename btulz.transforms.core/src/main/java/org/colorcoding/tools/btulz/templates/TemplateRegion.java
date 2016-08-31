@@ -128,6 +128,7 @@ public abstract class TemplateRegion implements ITemplateData {
 						for (int i = 0; i < newPars.size(); i++) {
 							if (regionPar.getName().equals(newPars.get(i).getName())) {
 								newPars.set(i, regionPar);
+								done = true;
 							}
 						}
 						if (!done)

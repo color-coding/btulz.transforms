@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 $$适用于java平台下的ibas框架
-<ns2:SqlExecutionOrchestration
-	xmlns:ns2="http://colorcoding.org/btulz/orchestration">
+<ns2:DataStructureOrchestration
+	xmlns:ns2="http://colorcoding.org/btulz/transformers">
 	<Name>ds_mssql_ibas</Name>
 	<Description>基于MSSQL的结构映射说明</Description>
 	<Integrated>true</Integrated>
 	<DriverName>com.microsoft.sqlserver.jdbc.SQLServerDriver</DriverName>
-	<DbUrl>jdbc:sqlserver://${DbServer};DatabaseName=${DbName};ApplicationName=${AppName}
+$$因存在创建数据的可能，所以数据库连接默认库。
+	<DbUrl>jdbc:sqlserver://${DbServer};DatabaseName=master;ApplicationName=${AppName}
 	</DbUrl>
 	<DbUser>${DbUser}</DbUser>
 	<DbPassword>${DbPassword}</DbPassword>
-	<Action Name="create db">
+$$设置为隔离动作（Isolated = true），此动作独立数据库事务，若已存在事务，则提交。
+	<Action Name="create db" Isolated="true">
 		<Step Name="check db exists">
 			<Script>
 				select count(0) from sys.databases where name = '${DbName}'
@@ -26,14 +28,15 @@ $BEGIN_MODEL$
 	<Action Name="create table ${Model.getMapped().toLowerCase()}">
 		<Step Name="check table exists">
 			<Script>
-				select count(0) from sys.sysobjects where name = '${Model.getMapped()}' and type = 'u'
+				select count(0) from "${DbName}".sys.sysobjects where name = '${Model.getMapped()}' and type = 'u'
 			</Script>
 		</Step>
+$$上步返回0时运行（RunOnValue="0"）。
 		<Step Name="create table" RunOnValue="0">
 			<Script>
-				create table "${Model.getMapped()}"(
+				create table "${DbName}"."${DbSchema}"."${Model.getMapped()}"(
 $BEGIN_MODEL_PROPERTY$				
-				    "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getSeparator(,)}
+				    "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getNullType()} ${Property.getSeparator(,)}
 $END_MODEL_PROPERTY$			    
 				)
 			</Script>
@@ -41,24 +44,24 @@ $END_MODEL_PROPERTY$
 $BEGIN_MODEL_PROPERTY$
 		<Step Name="check field exists">
 			<Script>
-				select count(0) from sys.syscolumns where object_name(id) = '${Model.getMapped()}' and name = '${Property.getMapped()}'
+				select count(0) from "${DbName}".sys.syscolumns where object_name(id,db_id('${DbName}')) = '${Model.getMapped()}' and name = '${Property.getMapped()}'
 			</Script>
 		</Step>
 		<Step Name="create field" RunOnValue="0">
 			<Script>
-				 alter table "${Model.getMapped()}" add "${Property.getMapped()}" ${Property.getMappedType()}
+				 alter table "${DbName}"."${DbSchema}"."${Model.getMapped()}" add "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getNullType()}
 			</Script>
 		</Step>
 $END_MODEL_PROPERTY$
 $BEGIN_MODEL_HAS_PRIMARY$
 		<Step Name="check key field exists">
 			<Script>
-				select count(0) from sys.sysobjects where xtype = 'PK' AND object_name(id) = 'K${Model.getMapped().toUpperCase()}'
+				select count(0) from "${DbName}".sys.sysobjects where xtype = 'PK' AND object_name(id,db_id('${DbName}')) = 'K${Model.getMapped().toUpperCase()}'
 			</Script>
 		</Step>
 		<Step Name="create key field" RunOnValue="0">
 			<Script>
-				 alter table "${Model.getMapped()}" add constraint "K${Model.getMapped().toUpperCase()}" primary key (
+				 alter table "${DbName}"."${DbSchema}"."${Model.getMapped()}" add constraint "K${Model.getMapped().toUpperCase()}" primary key (
 $BEGIN_MODEL_PRIMARY_PROPERTY$
 				     "${Property.getMapped()}" ${Property.getSeparator(,)}
 $END_MODEL_PRIMARY_PROPERTY$
@@ -71,17 +74,17 @@ $BEGIN_MODEL_HAS_UNIQUE$
 	<Action Name="create table unique index">
 		<Step Name="check table unique index exists">
 			<Script>
-				select count(0) from sys.indexes where object_name(object_id)='${Model.getMapped()}' and name = '${Model.getMapped().toUpperCase()}_UNIQUE_INDEX'
+				select count(0) from "${DbName}".sys.indexes where object_name(object_id,db_id('${DbName}'))='${Model.getMapped()}' and name = '${Model.getMapped().toUpperCase()}_UNIQUE_INDEX'
 			</Script>
 		</Step>
 		<Step Name="delete table unique index" RunOnValue="1">
 			<Script>
-				drop index "${Model.getMapped()}"."${Model.getMapped().toUpperCase()}_UNIQUE_INDEX"
+				drop index "${Model.getMapped().toUpperCase()}_UNIQUE_INDEX" on "${DbName}"."${DbSchema}"."${Model.getMapped()}"
 			</Script>
 		</Step>
-		<Step Name="create table unique index" RunOnValue="1">
+		<Step Name="create table unique index">
 			<Script>
-				create unique index "${Model.getMapped().toUpperCase()}_UNIQUE_INDEX" on "${Model.getMapped()}" (
+				create unique index "${Model.getMapped().toUpperCase()}_UNIQUE_INDEX" on "${DbName}"."${DbSchema}"."${Model.getMapped()}" (
 $BEGIN_MODEL_UNIQUE_PROPERTY$
 				     "${Property.getMapped()}" ${Property.getSeparator(,)}
 $END_MODEL_UNIQUE_PROPERTY$
@@ -95,53 +98,53 @@ $BEGIN_BUSINESS_OBJECT$
 	<Action Name="register business object">
 		<Step Name="check number table exists">
 			<Script>
-				select count(0) from sys.sysobjects where name = '${Company}_SYS_ONNM' and type = 'u'
+				select count(0) from "${DbName}".sys.sysobjects where name = '${Company}_SYS_ONNM' and type = 'u'
 			</Script>
 		</Step>
 		<Step Name="check business object code exists" RunOnValue="1">
 			<Script>
-				select count(0) from "${Company}_SYS_ONNM" where ObjectCode = N'${BusinessObject.getShortName()}'
+				select count(0) from "${DbName}"."${DbSchema}"."${Company}_SYS_ONNM" where ObjectCode = N'${BusinessObject.getShortName()}'
 			</Script>
 		</Step>
-		<Step Name="create business object code" RunOnValue="1">
+		<Step Name="create business object code" RunOnValue="0">
 			<Script>
-				insert into "${Company}_SYS_ONNM" ("ObjectCode", "AutoKey", "DocSubType") values (N'${BusinessObject.getShortName()}', 1, '--')
+				insert into "${DbName}"."${DbSchema}"."${Company}_SYS_ONNM" ("ObjectCode", "AutoKey", "DocSubType") values (N'${BusinessObject.getShortName()}', 1, '--')
 			</Script>
 		</Step>
 $BEGIN_BUSINESS_OBJECT_MODEL$
 		<Step Name="check business object informations table exists">
 			<Script>
-				select count(0) from sys.sysobjects where name = '${Company}_SYS_OBOI' and type = 'u'
+				select count(0) from "${DbName}".sys.sysobjects where name = '${Company}_SYS_OBOI' and type = 'u'
 			</Script>
 		</Step>
 		<Step Name="delete business object informations" RunOnValue="1">
 			<Script>
-				delete from "${Company}_SYS_OBOI" where Name = N'${Model.getName()}'
+				delete from "${DbName}"."${DbSchema}"."${Company}_SYS_OBOI" where Name = N'${Model.getName()}'
 			</Script>
 		</Step>
 		<Step Name="create business object informations" RunOnValue="1">
 			<Script>
-				insert into "${Company}_SYS_OBOI"("Name", "Code", "Descrp", "Mapped", "ObjectType") values (N'${Model.getName()}',N'${BusinessObject.getShortName()}',N'${Model.getDescription()}',N'${Model.getMapped().toUpperCase()}',N'${Model.getModelType()}')
+				insert into "${DbName}"."${DbSchema}"."${Company}_SYS_OBOI"("Name", "Code", "Descrp", "Mapped", "ObjectType") values (N'${Model.getName()}',N'${BusinessObject.getShortName()}',N'${Model.getDescription()}',N'${Model.getMapped().toUpperCase()}',N'${Model.getModelType()}')
 			</Script>
 		</Step>
 		<Step Name="check business object informations table exists">
 			<Script>
-				select count(0) from sys.sysobjects where name = '${Company}_SYS_BOI1' and type = 'u'
+				select count(0) from "${DbName}".sys.sysobjects where name = '${Company}_SYS_BOI1' and type = 'u'
 			</Script>
 		</Step>
 $BEGIN_MODEL_PROPERTY$
 		<Step Name="delete business object informations" RunOnValue="1">
 			<Script>
-				delete from "${Company}_SYS_BOI1" where Name = N'${Model.getName()}' and Property = N'${Model.getName()}'
+				delete from "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" where Name = N'${Model.getName()}' and Property = N'${Model.getName()}'
 			</Script>
 		</Step>
 		<Step Name="delete business object informations" RunOnValue="1">
 			<Script>
-				insert into "AVA_SYS_BOI1" ("Name", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${Model.getName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isPrimaryKey()}', N'Y')
+				insert into "${DbName}"."${DbSchema}"."AVA_SYS_BOI1" ("Name", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${Model.getName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isPrimaryKey()}', N'Y')
 			</Script>
 		</Step>
 $END_MODEL_PROPERTY$
 $END_BUSINESS_OBJECT_MODEL$
 	</Action>
 $END_BUSINESS_OBJECT$
-</ns2:SqlExecutionOrchestration>
+</ns2:DataStructureOrchestration>

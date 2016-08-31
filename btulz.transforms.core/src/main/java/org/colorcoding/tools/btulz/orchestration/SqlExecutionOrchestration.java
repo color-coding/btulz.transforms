@@ -24,9 +24,9 @@ import org.colorcoding.tools.btulz.Environment;
 @XmlRootElement(name = "SqlExecutionOrchestration", namespace = Environment.NAMESPACE_BTULZ_ORCHESTRATION)
 public class SqlExecutionOrchestration extends ExecutionOrchestration implements ISqlExecutionOrchestration {
 
-	@XmlElement(name = "DriverName")
 	private String driverName;
 
+	@XmlElement(name = "DriverName")
 	public String getDriverName() {
 		return driverName;
 	}
@@ -35,9 +35,9 @@ public class SqlExecutionOrchestration extends ExecutionOrchestration implements
 		this.driverName = driverName;
 	}
 
-	@XmlElement(name = "DbUrl")
 	private String dbUrl;
 
+	@XmlElement(name = "DbUrl")
 	public String getDbUrl() {
 		return dbUrl;
 	}
@@ -46,9 +46,9 @@ public class SqlExecutionOrchestration extends ExecutionOrchestration implements
 		this.dbUrl = dbUrl;
 	}
 
-	@XmlElement(name = "DbUser")
 	private String dbUser;
 
+	@XmlElement(name = "DbUser")
 	public String getDbUser() {
 		return dbUser;
 	}
@@ -57,9 +57,9 @@ public class SqlExecutionOrchestration extends ExecutionOrchestration implements
 		this.dbUser = dbUser;
 	}
 
-	@XmlElement(name = "DbPassword")
 	private String dbPassword;
 
+	@XmlElement(name = "DbPassword")
 	public String getDbPassword() {
 		return dbPassword;
 	}
@@ -80,10 +80,10 @@ public class SqlExecutionOrchestration extends ExecutionOrchestration implements
 		return this.actions;
 	}
 
-	@XmlElement(name = "Integrated")
 	private boolean integrated = true;
 
 	@Override
+	@XmlElement(name = "Integrated")
 	public boolean isIntegrated() {
 		return this.integrated;
 	}
@@ -108,30 +108,54 @@ public class SqlExecutionOrchestration extends ExecutionOrchestration implements
 
 	@Override
 	public void execute() throws Exception {
+		long startTime = System.currentTimeMillis();
+		Environment.getLogger().debug(String.format("begin execution orchestration [%s].", this.getName()));
 		Connection connection = this.createConnection();
-		if (this.isIntegrated()) {
-			// 整体事务
-			connection.setAutoCommit(false);
-		}
-		Statement statement = connection.createStatement();
+		Statement statement = null;
+		boolean myTrans = false;// 自己创建的事务
 		try {
 			for (ISqlExecutionAction action : this.getActions()) {
+				if (action.isIsolated()) {
+					// 要求独立隔离
+					if (myTrans) {
+						// 已经存在事务，则提交
+						connection.commit();
+					}
+					if (statement != null) {
+						// 回收数据库资源
+						statement.close();
+						statement = null;
+					}
+					connection.setAutoCommit(true);
+					myTrans = false;
+				} else {
+					// 不要求隔离的动作
+					if (this.isIntegrated() && !myTrans) {
+						// 整体事务设置且尚未创建事务
+						connection.setAutoCommit(false);
+						myTrans = true;
+					}
+				}
+				if (statement == null) {
+					statement = connection.createStatement();
+				}
 				action.execute(statement);
 			}
-			if (this.isIntegrated()) {
+			if (myTrans) {
 				connection.commit();
 			}
 		} catch (Exception e) {
-			if (this.isIntegrated()) {
+			if (myTrans) {
 				connection.rollback();
 			}
 			throw e;
 		} finally {
-			if (this.isIntegrated()) {
-				// 整体事务
-				connection.setAutoCommit(true);
-			}
 		}
+		long endTime = System.currentTimeMillis();
+		float excTime = (float) (endTime - startTime) / 1000;
+
+		Environment.getLogger()
+				.debug(String.format("end execute orchestration [%s], used %s millisecond.", this.getName(), excTime));
 	}
 
 }

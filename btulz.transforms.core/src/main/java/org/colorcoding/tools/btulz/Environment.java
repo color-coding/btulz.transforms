@@ -30,10 +30,6 @@ public class Environment {
 	 * 命名空间-执行计划
 	 */
 	public static final String NAMESPACE_BTULZ_ORCHESTRATION = "http://colorcoding.org/btulz/orchestration";
-	/**
-	 * 命名空间-参数
-	 */
-	public static final String NAMESPACE_BTULZ_PARAMETERS = "http://colorcoding.org/btulz/parameters";
 
 	private volatile static Logger logger;
 
@@ -46,7 +42,7 @@ public class Environment {
 		if (logger == null) {
 			try {
 				PropertyConfigurator.configure(getResource("log4j.properties").getPath());
-				logger = Logger.getLogger("console");
+				logger = Logger.getLogger("btulz.transforms");
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}

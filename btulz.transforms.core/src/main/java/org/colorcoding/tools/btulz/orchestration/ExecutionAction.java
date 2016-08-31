@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 @XmlAccessorType(XmlAccessType.NONE)
 public abstract class ExecutionAction implements IExecutionAction {
 
-	@XmlAttribute(name = "Name")
 	private String name;
 
+	@XmlAttribute(name = "Name")
 	public String getName() {
 		return this.name;
 	}
@@ -18,9 +18,9 @@ public abstract class ExecutionAction implements IExecutionAction {
 		this.name = name;
 	}
 
-	@XmlAttribute(name = "Description")
 	private String description;
 
+	@XmlAttribute(name = "Description")
 	public String getDescription() {
 		return this.description;
 	}

@@ -123,7 +123,32 @@ public class Property implements IProperty {
 	}
 
 	public String getMappedType() {
+		switch (this.getDataType()) {
+		case Memo:
+			if (this.getDataSubType() == emDataSubType.Default)
+				return "ntext";
+		case Numeric:
+			return "int";
+		case Date:
+			if (this.getDataSubType() == emDataSubType.Default)
+				return "datetime";
+			else if (this.getDataSubType() == emDataSubType.Time)
+				return "smallint";
+		case Decimal:
+			return "numeric(19, 6)";
+		case Bytes:
+			return "bit";
+		default:
+			break;
+		}
 		return String.format("nvarchar(%s)", this.getEditSize());
+	}
+
+	public String getNullType() {
+		if (this.isPrimaryKey() == emYesNo.Yes) {
+			return "not null";
+		}
+		return "null";
 	}
 
 	public String getSeparator(String value) {

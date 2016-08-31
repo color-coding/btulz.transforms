@@ -28,6 +28,20 @@ public interface ISqlExecutionAction extends IExecutionAction {
 	void setKeepStepResult(boolean value);
 
 	/**
+	 * 是否独立事务
+	 * 
+	 * @return
+	 */
+	boolean isIsolated();
+
+	/**
+	 * 设置-独立事务
+	 * 
+	 * @param value
+	 */
+	void setIsolated(boolean value);
+
+	/**
 	 * 执行
 	 * 
 	 * @param statement

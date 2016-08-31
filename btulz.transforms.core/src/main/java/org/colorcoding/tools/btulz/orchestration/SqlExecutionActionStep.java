@@ -26,9 +26,9 @@ public class SqlExecutionActionStep extends ExecutionActionStep implements ISqlE
 		this.statement = value;
 	}
 
-	@XmlAttribute(name = "RunOnValue")
 	private String runValue;
 
+	@XmlAttribute(name = "RunOnValue")
 	public String getRunOnValue() {
 		return runValue;
 	}
@@ -37,16 +37,34 @@ public class SqlExecutionActionStep extends ExecutionActionStep implements ISqlE
 		this.runValue = value;
 	}
 
-	// @XmlAttribute(name = "Script")
-	@XmlElement(name = "Script")
 	private String script;
 
+	// @XmlAttribute(name = "Script")
+	@XmlElement(name = "Script")
 	public String getScript() {
 		return this.script;
 	}
 
 	public void setScript(String value) {
-		this.script = value;
+		if (value != null) {
+			this.script = value.trim();
+			if (this.script.toLowerCase().startsWith("select")) {
+				this.setQuery(true);
+			}
+		} else {
+			this.script = value;
+		}
+	}
+
+	private boolean isQuery;
+
+	@XmlAttribute(name = "Query")
+	public boolean isQuery() {
+		return isQuery;
+	}
+
+	public void setQuery(boolean isQuery) {
+		this.isQuery = isQuery;
 	}
 
 	@Override
@@ -56,11 +74,17 @@ public class SqlExecutionActionStep extends ExecutionActionStep implements ISqlE
 			throw new SQLException("database statement is not initialized.");
 		}
 		Object value = null;
-		ResultSet resultSet = statement.executeQuery(this.getScript());
-		if (resultSet.next()) {
-			value = resultSet.getString(1);
+		Environment.getLogger().debug(String.format("step [%s] execute [%s].", this.getName(), this.getScript()));
+		if (this.isQuery()) {
+			// 有结果的语句
+			ResultSet resultSet = statement.executeQuery(this.getScript());
+			if (resultSet.next()) {
+				value = resultSet.getString(1);
+			}
+		} else {
+			// 没有结果的语句
+			statement.execute(this.getScript());
 		}
-
 		return value;
 	}
 

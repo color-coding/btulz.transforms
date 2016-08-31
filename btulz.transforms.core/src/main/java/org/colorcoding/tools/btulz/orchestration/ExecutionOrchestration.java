@@ -13,9 +13,9 @@ import javax.xml.bind.annotation.XmlElement;
 @XmlAccessorType(XmlAccessType.NONE)
 public abstract class ExecutionOrchestration implements IExecutionOrchestration {
 
-	@XmlElement(name = "Name")
 	private String name;
 
+	@XmlElement(name = "Name")
 	public String getName() {
 		return this.name;
 	}
@@ -24,9 +24,9 @@ public abstract class ExecutionOrchestration implements IExecutionOrchestration 
 		this.name = name;
 	}
 
-	@XmlElement(name = "Description")
 	private String description;
 
+	@XmlElement(name = "Description")
 	public String getDescription() {
 		return this.description;
 	}
