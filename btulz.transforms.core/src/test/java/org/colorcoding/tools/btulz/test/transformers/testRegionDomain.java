@@ -17,6 +17,7 @@ import org.colorcoding.tools.btulz.transformers.DataStructureOrchestration;
 import org.colorcoding.tools.btulz.transformers.XmlTransformer;
 import org.colorcoding.tools.btulz.transformers.regions.RegionDomain;
 import org.colorcoding.tools.btulz.transformers.regions.models.DataTypeMapping;
+import org.colorcoding.tools.btulz.transformers.regions.models.DataTypeMappings;
 
 import junit.framework.TestCase;
 
@@ -69,15 +70,18 @@ public class testRegionDomain extends TestCase {
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
 		Unmarshaller unmarshaller = context.createUnmarshaller();
-		ArrayList<DataTypeMapping> dataTypeMappings = new ArrayList<>();
+		DataTypeMappings dataTypeMappings = new DataTypeMappings();
 		dataTypeMappings
-				.add(new DataTypeMapping(emDataType.Memo, emDataSubType.Default, "text(${!Property.getEditSize()})"));
+				.add(new DataTypeMapping(emDataType.Memo, emDataSubType.Default, "text(${Property.getEditSize()})"));
+		System.out.println(Serializer.toXmlString(dataTypeMappings, true));
 		// 测试MYSQL
 		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
 			String tpltFile = Environment.getResource("db").getPath();
 			RegionDomain template = new RegionDomain();
 			template.setTemplateFile(tpltFile + File.separator + "ds_mysql_ibas.xml");
 			template.setOutPutFile(Environment.getWorkingFolder() + File.separator + "ds_mysql_ibas.out.xml");
+			dataTypeMappings = DataTypeMappings
+					.create(template.getTemplateFile().replace("ds_mysql_ibas.xml", "dm_mysql_ibas.xml"));
 			ArrayList<Parameter> parameters = new ArrayList<>();
 			parameters.add(new Parameter("Company", "CC"));
 			parameters.add(new Parameter("DbServer", "ibas-dev-ubuntu"));
