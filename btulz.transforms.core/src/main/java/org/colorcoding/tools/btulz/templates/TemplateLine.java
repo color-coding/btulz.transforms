@@ -12,6 +12,10 @@ import org.colorcoding.tools.btulz.Environment;
  *
  */
 public class TemplateLine implements ITemplateData {
+	/**
+	 * 延迟解析标记
+	 */
+	public static final String DELAYED_MARK = "!";
 
 	public TemplateLine(String data) {
 		this.line = data;
@@ -37,7 +41,12 @@ public class TemplateLine implements ITemplateData {
 		String outLine = this.getLine();
 		Variable[] variables = Variable.discerning(this.getLine());
 		for (Variable variable : variables) {
-			if (variable.getName() != null) {
+			if (variable == null || variable.getName() == null) {
+				continue;
+			}
+			if (variable.getName().startsWith(DELAYED_MARK)) {
+				outLine = outLine.replace(variable.getOriginal(), variable.getOriginal().replace("${!", "${"));
+			} else {
 				Parameter parameter = null;
 				for (Parameter par : pars) {
 					if (par.getName().equalsIgnoreCase(variable.getName())) {

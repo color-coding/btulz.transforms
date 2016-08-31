@@ -24,7 +24,7 @@ public class Variable {
 		ArrayList<Variable> variables = new ArrayList<>();
 		if (string != null && !string.equals("")) {
 			// ${Model.getMapped()}
-			String pattern = "\\$\\{([a-zA-Z].*?)\\}";
+			String pattern = "\\$\\{([\\!a-zA-Z].*?)\\}";
 			Matcher matcher = Pattern.compile(pattern).matcher(string);
 			while (matcher.find()) {
 				Variable variable = new Variable();

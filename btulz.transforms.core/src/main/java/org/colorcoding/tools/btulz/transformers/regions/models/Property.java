@@ -1,9 +1,13 @@
 package org.colorcoding.tools.btulz.transformers.regions.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.colorcoding.tools.btulz.models.IProperty;
 import org.colorcoding.tools.btulz.models.data.emDataSubType;
 import org.colorcoding.tools.btulz.models.data.emDataType;
 import org.colorcoding.tools.btulz.models.data.emYesNo;
+import org.colorcoding.tools.btulz.templates.Parameter;
 
 public class Property implements IProperty {
 
@@ -122,7 +126,52 @@ public class Property implements IProperty {
 		return String.format("RegionProperty %s", this.getName());
 	}
 
-	public String getMappedType() {
+	private List<DataTypeMapping> dataTypeMappings;
+
+	public List<DataTypeMapping> getDataTypeMappings() {
+		if (this.dataTypeMappings == null) {
+			this.dataTypeMappings = new ArrayList<>();
+		}
+		return dataTypeMappings;
+	}
+
+	public void addDataTypeMappings(Iterable<?> value) {
+		this.getDataTypeMappings().clear();
+		if (value != null) {
+			for (Object item : value) {
+				if (item instanceof DataTypeMapping) {
+					this.getDataTypeMappings().add((DataTypeMapping) item);
+				}
+			}
+		}
+	}
+
+	public void addDataTypeMappings(Parameter par) {
+		if (par == null) {
+			return;
+		}
+		Object value = par.getValue();
+		if (Iterable.class.isInstance(value)) {
+			this.addDataTypeMappings((Iterable<?>) value);
+		}
+	}
+
+	public String getMappedType() throws Exception {
+		// 优先使用映射
+		for (DataTypeMapping mapping : this.getDataTypeMappings()) {
+			if (mapping == null) {
+				continue;
+			}
+			if (mapping.getDateType() != this.getDataType()) {
+				continue;
+			}
+			if (mapping.getSubType() != this.getDataSubType()) {
+				continue;
+			}
+			// 存在映射
+			return mapping.getMappedType(this);
+		}
+		// 默认类型
 		switch (this.getDataType()) {
 		case Memo:
 			if (this.getDataSubType() == emDataSubType.Default)

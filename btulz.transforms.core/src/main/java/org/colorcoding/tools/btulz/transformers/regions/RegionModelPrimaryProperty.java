@@ -8,6 +8,7 @@ import org.colorcoding.tools.btulz.models.IModel;
 import org.colorcoding.tools.btulz.models.IProperty;
 import org.colorcoding.tools.btulz.models.data.emYesNo;
 import org.colorcoding.tools.btulz.templates.Parameter;
+import org.colorcoding.tools.btulz.transformers.regions.models.DataTypeMapping;
 import org.colorcoding.tools.btulz.transformers.regions.models.Property;
 
 /**
@@ -58,6 +59,7 @@ public class RegionModelPrimaryProperty extends RegionBase {
 							@Override
 							public Parameter next() {
 								Property property = new Property(primaryProperty.get(curIndex));
+								property.addDataTypeMappings(getParameter(pars, DataTypeMapping.PARAMETER_NAME));
 								if (curIndex >= primaryProperty.size() - 1) {
 									property.setLast(true);
 								}
