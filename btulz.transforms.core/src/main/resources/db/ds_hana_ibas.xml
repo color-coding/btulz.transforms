@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+$$适用于java平台下的ibas框架
+<ns2:DataStructureOrchestration
+	xmlns:ns2="http://colorcoding.org/btulz/transformers">
+	<Name>ds_hana_ibas</Name>
+	<Description>基于HANA的结构映射说明</Description>
+	<Integrated>true</Integrated>
+	<DriverName>com.sap.db.jdbc.Driver</DriverName>
+$$因存在创建数据的可能，所以数据库连接默认库。
+	<DbUrl>jdbc:sap://${DbServer}:${DbPort}</DbUrl>
+	<DbUser>${DbUser}</DbUser>
+	<DbPassword>${DbPassword}</DbPassword>
+$$"!"表示延迟解析变量，例如${!Property.getEditSize()}
+$$设置为隔离动作（Isolated = true），此动作独立数据库事务，若已存在事务，则提交。
+	<Action Name="create db" Isolated="true">
+		<Step Name="check db exists">
+			<Script>
+				select count(0) from "SCHEMAS" where "SCHEMA_NAME" = '${DbName}'
+			</Script>
+		</Step>
+		<Step Name="create db" RunOnValue="0">
+			<Script>
+				 create schema "${DbName}"
+			</Script>
+		</Step>
+	</Action>
+$BEGIN_MODEL$
+	<Action Name="create table ${Model.getMapped().toLowerCase()}">
+		<Step Name="check table exists">
+			<Script>
+				select count(0) from "TABLES" where "SCHEMA_NAME" = '${DbName}' and "TABLE_NAME" = '${Model.getMapped()}'
+			</Script>
+		</Step>
+$$上步返回0时运行（RunOnValue="0"）。
+		<Step Name="create table" RunOnValue="0">
+			<Script>
+				create ${DbTableType} table "${DbName}"."${Model.getMapped()}"(
+$BEGIN_MODEL_PROPERTY$				
+				    "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getNullType()} ${Property.getSeparator(,)}
+$END_MODEL_PROPERTY$			    
+				)
+			</Script>
+		</Step>
+$BEGIN_MODEL_PROPERTY$
+		<Step Name="check field exists">
+			<Script>
+				select count(0) from "TABLE_COLUMNS" where "SCHEMA_NAME" = '${DbName}' and "TABLE_NAME" = '${Model.getMapped()}' AND "COLUMN_NAME" = '${Property.getMapped()}'
+			</Script>
+		</Step>
+		<Step Name="create field" RunOnValue="0">
+			<Script>
+				 alter table "${DbName}"."${Model.getMapped()}" add "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getNullType()}
+			</Script>
+		</Step>
+$END_MODEL_PROPERTY$
+$BEGIN_MODEL_HAS_PRIMARY$
+		<Step Name="check key field exists">
+			<Script>
+				select count(0) from "INDEXES" where "SCHEMA_NAME" = '${DbName}' and "TABLE_NAME" = '${Model.getMapped()}' and "CONSTRAINT" = 'PRIMARY KEY' and "INDEX_NAME" = 'K${Model.getMapped().toUpperCase()}'
+			</Script>
+		</Step>
+		<Step Name="create key field" RunOnValue="0">
+			<Script>
+				 alter table "${DbName}"."${Model.getMapped()}" add constraint "K${Model.getMapped().toUpperCase()}" primary key (
+$BEGIN_MODEL_PRIMARY_PROPERTY$
+				     "${Property.getMapped()}" ${Property.getSeparator(,)}
+$END_MODEL_PRIMARY_PROPERTY$
+				 )
+			</Script>
+		</Step>
+$END_MODEL_HAS_PRIMARY$
+	</Action>
+$BEGIN_MODEL_HAS_UNIQUE$
+	<Action Name="create table unique index">
+		<Step Name="check table unique index exists">
+			<Script>
+				select count(0) from "INDEXES" where "SCHEMA_NAME" = '${DbName}' and "TABLE_NAME" = '${Model.getMapped()}' and "INDEX_NAME" = '${Model.getMapped().toUpperCase()}_UNIQUE_INDEX'
+			</Script>
+		</Step>
+		<Step Name="delete table unique index" RunOnValue="1">
+			<Script>
+				drop index "${DbName}"."${Model.getMapped().toUpperCase()}_UNIQUE_INDEX"
+			</Script>
+		</Step>
+		<Step Name="create table unique index">
+			<Script>
+				create unique index "${Model.getMapped().toUpperCase()}_UNIQUE_INDEX" on "${DbName}"."${Model.getMapped()}" (
+$BEGIN_MODEL_UNIQUE_PROPERTY$
+				     "${Property.getMapped()}" ${Property.getSeparator(,)}
+$END_MODEL_UNIQUE_PROPERTY$
+				)
+			</Script>
+		</Step>
+	</Action>
+$END_MODEL_HAS_UNIQUE$
+$END_MODEL$
+$BEGIN_BUSINESS_OBJECT$
+	<Action Name="register business object">
+		<Step Name="check number table exists">
+			<Script>
+				select count(0) from "TABLES" where "SCHEMA_NAME" = '${DbName}' and "TABLE_NAME" = '${Company}_SYS_ONNM'
+			</Script>
+		</Step>
+		<Step Name="check business object code exists" RunOnValue="1">
+			<Script>
+				select count(0) from "${DbName}"."${Company}_SYS_ONNM" where "ObjectCode" = N'${BusinessObject.getShortName()}'
+			</Script>
+		</Step>
+		<Step Name="create business object code" RunOnValue="0">
+			<Script>
+				insert into "${DbName}"."${Company}_SYS_ONNM" ("ObjectCode", "AutoKey", "DocSubType") values (N'${BusinessObject.getShortName()}', 1, '--')
+			</Script>
+		</Step>
+$BEGIN_BUSINESS_OBJECT_MODEL$
+		<Step Name="check business object informations table exists">
+			<Script>
+				select count(0) from "TABLES" where "SCHEMA_NAME" = '${DbName}' and "TABLE_NAME" = '${Company}_SYS_OBOI'
+			</Script>
+		</Step>
+		<Step Name="delete business object informations" RunOnValue="1">
+			<Script>
+				delete from "${DbName}"."${Company}_SYS_OBOI" where "Name" = N'${Model.getName()}'
+			</Script>
+		</Step>
+		<Step Name="create business object informations" RunOnValue="1">
+			<Script>
+				insert into "${DbName}"."${Company}_SYS_OBOI"("Name", "Code", "Descrp", "Mapped", "ObjectType") values (N'${Model.getName()}',N'${BusinessObject.getShortName()}',N'${Model.getDescription()}',N'${Model.getMapped().toUpperCase()}',N'${Model.getModelType()}')
+			</Script>
+		</Step>
+		<Step Name="check business object informations table exists">
+			<Script>
+				select count(0) from "TABLES" where "SCHEMA_NAME" = '${DbName}' and "TABLE_NAME" = '${Company}_SYS_BOI1'
+			</Script>
+		</Step>
+$BEGIN_MODEL_PROPERTY$
+		<Step Name="delete business object informations" RunOnValue="1">
+			<Script>
+				delete from "${DbName}"."${Company}_SYS_BOI1" where "Name" = N'${Model.getName()}' and "Property" = N'${Model.getName()}'
+			</Script>
+		</Step>
+		<Step Name="delete business object informations" RunOnValue="1">
+			<Script>
+				insert into "${DbName}"."${Company}_SYS_BOI1" ("Name", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${Model.getName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isPrimaryKey()}', N'Y')
+			</Script>
+		</Step>
+$END_MODEL_PROPERTY$
+$END_BUSINESS_OBJECT_MODEL$
+	</Action>
+$END_BUSINESS_OBJECT$
+</ns2:DataStructureOrchestration>

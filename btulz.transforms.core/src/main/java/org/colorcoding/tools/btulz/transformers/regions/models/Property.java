@@ -165,7 +165,7 @@ public class Property implements IProperty {
 			if (mapping.getDateType() != this.getDataType()) {
 				continue;
 			}
-			if (mapping.getSubType() != this.getDataSubType()) {
+			if (mapping.getSubType() != null && mapping.getSubType() != this.getDataSubType()) {
 				continue;
 			}
 			// 存在映射

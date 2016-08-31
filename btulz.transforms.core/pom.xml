@@ -72,5 +72,15 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.38</version>
 		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.4.1207.jre7</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sap.hana</groupId>
+			<artifactId>ngdbc</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 </project>

@@ -85,9 +85,12 @@ public class SqlExecutionAction extends ExecutionAction implements ISqlExecution
 				if (step.check(this.curValue)) {
 					this.curValue = step.execute();
 					this.lastStep = i;
+					Environment.getLogger()
+							.info(String.format("status value changed to [%s].", this.curValue, step.getName()));
 				}
 				if (!this.isKeepStepResult() && this.curStep > this.lastStep) {
 					this.curValue = null;
+					Environment.getLogger().info(String.format("clear status value.", this.curValue, step.getName()));
 				}
 				this.curStep = i;
 			}

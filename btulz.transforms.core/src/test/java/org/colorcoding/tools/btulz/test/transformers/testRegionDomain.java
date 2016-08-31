@@ -100,4 +100,89 @@ public class testRegionDomain extends TestCase {
 			orchestration.execute();
 		}
 	}
+
+	public void testPGSQL() throws Exception {
+		XmlTransformer xmlTransformer = new XmlTransformer();
+		xmlTransformer.load(Environment.getWorkingFolder() + testXmlTransformer.old_xml_path, true);
+
+		JAXBContext context = JAXBContext.newInstance(DataStructureOrchestration.class);
+		Marshaller marshaller = context.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+		Unmarshaller unmarshaller = context.createUnmarshaller();
+		DataTypeMappings dataTypeMappings = new DataTypeMappings();
+		dataTypeMappings
+				.add(new DataTypeMapping(emDataType.Memo, emDataSubType.Default, "text(${Property.getEditSize()})"));
+		System.out.println(Serializer.toXmlString(dataTypeMappings, true));
+		// 测试PGSQL
+		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
+			String tpltFile = Environment.getResource("db").getPath();
+			RegionDomain template = new RegionDomain();
+			template.setTemplateFile(tpltFile + File.separator + "ds_pgsql_ibas.xml");
+			template.setOutPutFile(Environment.getWorkingFolder() + File.separator + "ds_pgsql_ibas.out.xml");
+			dataTypeMappings = DataTypeMappings
+					.create(template.getTemplateFile().replace("ds_pgsql_ibas.xml", "dm_pgsql_ibas.xml"));
+			ArrayList<Parameter> parameters = new ArrayList<>();
+			parameters.add(new Parameter("Company", "CC"));
+			parameters.add(new Parameter("DbServer", "ibas-dev-ubuntu"));
+			parameters.add(new Parameter("DbPort", "5432"));
+			// parameters.add(new Parameter("DbName", "ibas_demo" + "_" +
+			// domain.hashCode()));
+			parameters.add(new Parameter("DbName", "ibas_demo_1789447862"));
+			parameters.add(new Parameter("AppName", "btulz.transforms"));
+			parameters.add(new Parameter("DbUser", "postgres"));
+			parameters.add(new Parameter("DbPassword", "1q2w3e"));
+			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, domain));
+			parameters.add(new Parameter(DataTypeMapping.PARAMETER_NAME, dataTypeMappings));
+			template.export(parameters);
+			DataStructureOrchestration orchestration = (DataStructureOrchestration) unmarshaller
+					.unmarshal(new File(template.getOutPutFile()));
+			System.out.println("orchestration: ");
+			System.out.println(Serializer.toXmlString(orchestration, true));
+			orchestration.execute();
+		}
+	}
+
+	public void testHANA() throws Exception {
+		XmlTransformer xmlTransformer = new XmlTransformer();
+		xmlTransformer.load(Environment.getWorkingFolder() + testXmlTransformer.old_xml_path, true);
+
+		JAXBContext context = JAXBContext.newInstance(DataStructureOrchestration.class);
+		Marshaller marshaller = context.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+		Unmarshaller unmarshaller = context.createUnmarshaller();
+		DataTypeMappings dataTypeMappings = new DataTypeMappings();
+		dataTypeMappings
+				.add(new DataTypeMapping(emDataType.Memo, emDataSubType.Default, "text(${Property.getEditSize()})"));
+		System.out.println(Serializer.toXmlString(dataTypeMappings, true));
+		// 测试PGSQL
+		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
+			String tpltFile = Environment.getResource("db").getPath();
+			RegionDomain template = new RegionDomain();
+			template.setTemplateFile(tpltFile + File.separator + "ds_hana_ibas.xml");
+			template.setOutPutFile(Environment.getWorkingFolder() + File.separator + "ds_hana_ibas.out.xml");
+			dataTypeMappings = DataTypeMappings
+					.create(template.getTemplateFile().replace("ds_hana_ibas.xml", "dm_hana_ibas.xml"));
+			ArrayList<Parameter> parameters = new ArrayList<>();
+			parameters.add(new Parameter("Company", "CC"));
+			parameters.add(new Parameter("DbServer", "122.5.6.90"));
+			parameters.add(new Parameter("DbPort", "30015"));
+			parameters.add(new Parameter("DbName", "ibas_demo" + "_" + domain.hashCode()));
+			parameters.add(new Parameter("AppName", "btulz.transforms"));
+			parameters.add(new Parameter("DbUser", "SYSTEM"));
+			parameters.add(new Parameter("DbPassword", "AVAtech2015!"));
+			parameters.add(new Parameter("DbTableType", "ROW"));
+			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, domain));
+			parameters.add(new Parameter(DataTypeMapping.PARAMETER_NAME, dataTypeMappings));
+			template.export(parameters);
+			DataStructureOrchestration orchestration = (DataStructureOrchestration) unmarshaller
+					.unmarshal(new File(template.getOutPutFile()));
+			System.out.println("orchestration: ");
+			System.out.println(Serializer.toXmlString(orchestration, true));
+			orchestration.execute();
+		}
+	}
 }

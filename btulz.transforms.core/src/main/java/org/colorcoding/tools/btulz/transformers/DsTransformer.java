@@ -1,16 +1,15 @@
 package org.colorcoding.tools.btulz.transformers;
 
 /**
- * SQL语句的转换器
+ * 数据结构与模型的转换器
  * 
  * @author Niuren.Zhu
  *
  */
-public class SqlTransformer extends DbTransformer {
+public class DsTransformer extends DbTransformer {
 
 	@Override
 	public void transform() {
-		// TODO Auto-generated method stub
 
 	}
 
