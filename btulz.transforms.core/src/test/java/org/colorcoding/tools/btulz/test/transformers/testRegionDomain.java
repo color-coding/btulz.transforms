@@ -174,7 +174,7 @@ public class testRegionDomain extends TestCase {
 			parameters.add(new Parameter("AppName", "btulz.transforms"));
 			parameters.add(new Parameter("DbUser", "SYSTEM"));
 			parameters.add(new Parameter("DbPassword", "AVAtech2015!"));
-			parameters.add(new Parameter("DbTableType", "ROW"));
+			parameters.add(new Parameter("DbTableType", "COLUMN"));
 			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, domain));
 			parameters.add(new Parameter(DataTypeMapping.PARAMETER_NAME, dataTypeMappings));
 			template.export(parameters);
