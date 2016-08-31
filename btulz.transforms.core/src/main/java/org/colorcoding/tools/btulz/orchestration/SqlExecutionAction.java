@@ -73,7 +73,7 @@ public class SqlExecutionAction extends ExecutionAction implements ISqlExecution
 	@Override
 	public void execute() throws Exception {
 		long startTime = System.currentTimeMillis();
-		Environment.getLogger().debug(String.format("begin action [%s].", this.getName()));
+		Environment.getLogger().info(String.format("begin action [%s].", this.getName()));
 		Statement statement = this.getStatement();
 		if (statement == null) {
 			throw new SQLException("database statement is not initialized.");
@@ -100,7 +100,7 @@ public class SqlExecutionAction extends ExecutionAction implements ISqlExecution
 		}
 		long endTime = System.currentTimeMillis();
 		float excTime = (float) (endTime - startTime) / 1000;
-		Environment.getLogger().debug(String.format("end action [%s], used %s millisecond.", this.getName(), excTime));
+		Environment.getLogger().info(String.format("end action [%s], used %s millisecond.", this.getName(), excTime));
 	}
 
 }

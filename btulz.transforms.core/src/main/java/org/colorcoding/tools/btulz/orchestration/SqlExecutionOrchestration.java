@@ -102,14 +102,16 @@ public class SqlExecutionOrchestration extends ExecutionOrchestration implements
 	 */
 	protected Connection createConnection() throws ClassNotFoundException, SQLException {
 		Class.forName(this.getDriverName());
-		Connection connection = DriverManager.getConnection(getDbUrl(), this.getDbUser(), this.getDbPassword());
+		Environment.getLogger()
+				.info(String.format("connect to [%s], by user [%s].", this.getDbUrl(), this.getDbUser()));
+		Connection connection = DriverManager.getConnection(this.getDbUrl(), this.getDbUser(), this.getDbPassword());
 		return connection;
 	}
 
 	@Override
 	public void execute() throws Exception {
 		long startTime = System.currentTimeMillis();
-		Environment.getLogger().debug(String.format("begin execution orchestration [%s].", this.getName()));
+		Environment.getLogger().info(String.format("begin execution orchestration [%s].", this.getName()));
 		Connection connection = this.createConnection();
 		Statement statement = null;
 		boolean myTrans = false;// 自己创建的事务
@@ -153,9 +155,8 @@ public class SqlExecutionOrchestration extends ExecutionOrchestration implements
 		}
 		long endTime = System.currentTimeMillis();
 		float excTime = (float) (endTime - startTime) / 1000;
-
 		Environment.getLogger()
-				.debug(String.format("end execute orchestration [%s], used %s millisecond.", this.getName(), excTime));
+				.info(String.format("end execute orchestration [%s], used %s millisecond.", this.getName(), excTime));
 	}
 
 }

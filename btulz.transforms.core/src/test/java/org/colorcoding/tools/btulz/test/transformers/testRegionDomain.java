@@ -30,6 +30,7 @@ public class testRegionDomain extends TestCase {
 		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
 		Unmarshaller unmarshaller = context.createUnmarshaller();
 
+		// 测试MSSQL
 		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
 			String tpltFile = Environment.getResource("db").getPath();
 			RegionDomain template = new RegionDomain();
@@ -38,6 +39,7 @@ public class testRegionDomain extends TestCase {
 			ArrayList<Parameter> parameters = new ArrayList<>();
 			parameters.add(new Parameter("Company", "CC"));
 			parameters.add(new Parameter("DbServer", "localhost"));
+			parameters.add(new Parameter("DbPort", "1433"));
 			parameters.add(new Parameter("DbName", "ibas_demo" + "_" + domain.hashCode()));
 			parameters.add(new Parameter("DbSchema", "dbo"));
 			parameters.add(new Parameter("AppName", "btulz.transforms"));
@@ -51,6 +53,29 @@ public class testRegionDomain extends TestCase {
 			System.out.println(Serializer.toXmlString(orchestration, true));
 			orchestration.execute();
 		}
-
+		// 测试MYSQL
+		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
+			String tpltFile = Environment.getResource("db").getPath();
+			RegionDomain template = new RegionDomain();
+			template.setTemplateFile(tpltFile + File.separator + "ds_mysql_ibas.xml");
+			template.setOutPutFile(Environment.getWorkingFolder() + File.separator + "ds_mysql_ibas.out.xml");
+			ArrayList<Parameter> parameters = new ArrayList<>();
+			parameters.add(new Parameter("Company", "CC"));
+			parameters.add(new Parameter("DbServer", "localhost"));
+			parameters.add(new Parameter("DbPort", "3306"));
+			parameters.add(new Parameter("DbName", "ibas_demo" + "_" + domain.hashCode()));
+			parameters.add(new Parameter("DbSchema", "dbo"));
+			parameters.add(new Parameter("AppName", "btulz.transforms"));
+			parameters.add(new Parameter("DbUser", "root"));
+			parameters.add(new Parameter("DbPassword", "1q2w3e"));
+			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, domain));
+			template.export(parameters);
+			DataStructureOrchestration orchestration = (DataStructureOrchestration) unmarshaller
+					.unmarshal(new File(template.getOutPutFile()));
+			System.out.println("orchestration: ");
+			System.out.println(Serializer.toXmlString(orchestration, true));
+			orchestration.execute();
+		}
 	}
+
 }
