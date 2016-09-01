@@ -66,6 +66,17 @@ public class SqlExecutionAction extends ExecutionAction implements ISqlExecution
 		this.isIsolated = value;
 	}
 
+	private String dbUrl;
+
+	@XmlAttribute(name = "DbUrl")
+	public String getDbUrl() {
+		return dbUrl;
+	}
+
+	public void setDbUrl(String dbUrl) {
+		this.dbUrl = dbUrl;
+	}
+
 	private int curStep = 0;// 当前步骤
 	private int lastStep = 0;// 上次运行的步骤
 	private Object curValue;// 当前的状态值

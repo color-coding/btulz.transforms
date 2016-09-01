@@ -42,7 +42,7 @@ public class testRegionDomain extends TestCase {
 			template.setOutPutFile(Environment.getWorkingFolder() + File.separator + "ds_mssql_ibas.out.xml");
 			ArrayList<Parameter> parameters = new ArrayList<>();
 			parameters.add(new Parameter("Company", "CC"));
-			parameters.add(new Parameter("DbServer", "localhost"));
+			parameters.add(new Parameter("DbServer", "ibas-dev-mssql"));
 			parameters.add(new Parameter("DbPort", "1433"));
 			parameters.add(new Parameter("DbName", "ibas_demo" + "_" + domain.hashCode()));
 			parameters.add(new Parameter("DbSchema", "dbo"));
@@ -84,7 +84,7 @@ public class testRegionDomain extends TestCase {
 					.create(template.getTemplateFile().replace("ds_mysql_ibas.xml", "dm_mysql_ibas.xml"));
 			ArrayList<Parameter> parameters = new ArrayList<>();
 			parameters.add(new Parameter("Company", "CC"));
-			parameters.add(new Parameter("DbServer", "ibas-dev-ubuntu"));
+			parameters.add(new Parameter("DbServer", "ibas-dev-mysql"));
 			parameters.add(new Parameter("DbPort", "3306"));
 			parameters.add(new Parameter("DbName", "ibas_demo" + "_" + domain.hashCode()));
 			parameters.add(new Parameter("AppName", "btulz.transforms"));
@@ -125,11 +125,9 @@ public class testRegionDomain extends TestCase {
 					.create(template.getTemplateFile().replace("ds_pgsql_ibas.xml", "dm_pgsql_ibas.xml"));
 			ArrayList<Parameter> parameters = new ArrayList<>();
 			parameters.add(new Parameter("Company", "CC"));
-			parameters.add(new Parameter("DbServer", "ibas-dev-ubuntu"));
+			parameters.add(new Parameter("DbServer", "ibas-dev-pgsql"));
 			parameters.add(new Parameter("DbPort", "5432"));
-			// parameters.add(new Parameter("DbName", "ibas_demo" + "_" +
-			// domain.hashCode()));
-			parameters.add(new Parameter("DbName", "ibas_demo_1789447862"));
+			parameters.add(new Parameter("DbName", "ibas_demo" + "_" + domain.hashCode()));
 			parameters.add(new Parameter("AppName", "btulz.transforms"));
 			parameters.add(new Parameter("DbUser", "postgres"));
 			parameters.add(new Parameter("DbPassword", "1q2w3e"));
@@ -168,7 +166,7 @@ public class testRegionDomain extends TestCase {
 					.create(template.getTemplateFile().replace("ds_hana_ibas.xml", "dm_hana_ibas.xml"));
 			ArrayList<Parameter> parameters = new ArrayList<>();
 			parameters.add(new Parameter("Company", "CC"));
-			parameters.add(new Parameter("DbServer", "122.5.6.90"));
+			parameters.add(new Parameter("DbServer", "ibas-dev-hana"));
 			parameters.add(new Parameter("DbPort", "30015"));
 			parameters.add(new Parameter("DbName", "ibas_demo" + "_" + domain.hashCode()));
 			parameters.add(new Parameter("AppName", "btulz.transforms"));

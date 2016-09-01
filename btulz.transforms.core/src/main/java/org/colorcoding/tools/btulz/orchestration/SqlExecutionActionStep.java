@@ -74,7 +74,8 @@ public class SqlExecutionActionStep extends ExecutionActionStep implements ISqlE
 			throw new SQLException("database statement is not initialized.");
 		}
 		Object value = null;
-		Environment.getLogger().debug(String.format("step [%s] execute [%s].", this.getName(), this.getScript()));
+		Environment.getLogger().info(String.format("runnig step [%s].", this.getName()));
+		Environment.getLogger().debug(String.format("execute sql [%s].", this.getScript()));
 		if (this.isQuery()) {
 			// 有结果的语句
 			ResultSet resultSet = statement.executeQuery(this.getScript());

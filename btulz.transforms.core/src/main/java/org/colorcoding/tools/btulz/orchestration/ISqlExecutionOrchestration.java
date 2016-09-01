@@ -63,17 +63,4 @@ public interface ISqlExecutionOrchestration extends IExecutionOrchestration {
 	 */
 	void setDbPassword(String value);
 
-	/**
-	 * 是否一体化处理（一体化事务）
-	 * 
-	 * @return
-	 */
-	boolean isIntegrated();
-
-	/**
-	 * 设置-一体化处理
-	 * 
-	 * @param value
-	 */
-	void setIntegrated(boolean value);
 }

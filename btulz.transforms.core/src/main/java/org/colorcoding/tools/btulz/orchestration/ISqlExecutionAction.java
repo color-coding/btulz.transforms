@@ -42,6 +42,20 @@ public interface ISqlExecutionAction extends IExecutionAction {
 	void setIsolated(boolean value);
 
 	/**
+	 * 获取-数据库地址
+	 * 
+	 * @return
+	 */
+	String getDbUrl();
+
+	/**
+	 * 设置-数据库地址
+	 * 
+	 * @param description
+	 */
+	void setDbUrl(String value);
+
+	/**
 	 * 执行
 	 * 
 	 * @param statement
