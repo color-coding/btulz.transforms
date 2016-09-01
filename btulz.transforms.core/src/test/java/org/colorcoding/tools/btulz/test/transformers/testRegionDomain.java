@@ -23,9 +23,11 @@ import junit.framework.TestCase;
 
 public class testRegionDomain extends TestCase {
 
+	private static String domain_file = testXmlTransformer.old_xml_path + File.separator + "domain_models_old.xml";
+
 	public void testMSSQL() throws Exception {
 		XmlTransformer xmlTransformer = new XmlTransformer();
-		xmlTransformer.load(Environment.getWorkingFolder() + testXmlTransformer.old_xml_path, true);
+		xmlTransformer.load(Environment.getWorkingFolder() + domain_file, false);
 
 		JAXBContext context = JAXBContext.newInstance(DataStructureOrchestration.class);
 		Marshaller marshaller = context.createMarshaller();
@@ -36,10 +38,10 @@ public class testRegionDomain extends TestCase {
 
 		// 测试MSSQL
 		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
-			String tpltFile = Environment.getResource("db").getPath();
+			String tpltFile = Environment.getResource("ds").getPath();
 			RegionDomain template = new RegionDomain();
 			template.setTemplateFile(tpltFile + File.separator + "ds_mssql_ibas.xml");
-			template.setOutPutFile(Environment.getWorkingFolder() + File.separator + "ds_mssql_ibas.out.xml");
+			File outputFile = new File(Environment.getWorkingFolder() + File.separator + "ds_mssql_ibas.out.xml");
 			ArrayList<Parameter> parameters = new ArrayList<>();
 			parameters.add(new Parameter("Company", "CC"));
 			parameters.add(new Parameter("DbServer", "ibas-dev-mssql"));
@@ -50,9 +52,8 @@ public class testRegionDomain extends TestCase {
 			parameters.add(new Parameter("DbUser", "sa"));
 			parameters.add(new Parameter("DbPassword", "1q2w3e"));
 			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, domain));
-			template.export(parameters);
-			DataStructureOrchestration orchestration = (DataStructureOrchestration) unmarshaller
-					.unmarshal(new File(template.getOutPutFile()));
+			template.export(parameters, outputFile);
+			DataStructureOrchestration orchestration = (DataStructureOrchestration) unmarshaller.unmarshal(outputFile);
 			System.out.println("orchestration: ");
 			System.out.println(Serializer.toXmlString(orchestration, true));
 			orchestration.execute();
@@ -62,7 +63,7 @@ public class testRegionDomain extends TestCase {
 
 	public void testMYSQL() throws Exception {
 		XmlTransformer xmlTransformer = new XmlTransformer();
-		xmlTransformer.load(Environment.getWorkingFolder() + testXmlTransformer.old_xml_path, true);
+		xmlTransformer.load(Environment.getWorkingFolder() + domain_file, false);
 
 		JAXBContext context = JAXBContext.newInstance(DataStructureOrchestration.class);
 		Marshaller marshaller = context.createMarshaller();
@@ -76,10 +77,10 @@ public class testRegionDomain extends TestCase {
 		System.out.println(Serializer.toXmlString(dataTypeMappings, true));
 		// 测试MYSQL
 		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
-			String tpltFile = Environment.getResource("db").getPath();
+			String tpltFile = Environment.getResource("ds").getPath();
 			RegionDomain template = new RegionDomain();
 			template.setTemplateFile(tpltFile + File.separator + "ds_mysql_ibas.xml");
-			template.setOutPutFile(Environment.getWorkingFolder() + File.separator + "ds_mysql_ibas.out.xml");
+			File outputFile = new File(Environment.getWorkingFolder() + File.separator + "ds_mysql_ibas.out.xml");
 			dataTypeMappings = DataTypeMappings
 					.create(template.getTemplateFile().replace("ds_mysql_ibas.xml", "dm_mysql_ibas.xml"));
 			ArrayList<Parameter> parameters = new ArrayList<>();
@@ -92,9 +93,8 @@ public class testRegionDomain extends TestCase {
 			parameters.add(new Parameter("DbPassword", "1q2w3e"));
 			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, domain));
 			parameters.add(new Parameter(DataTypeMapping.PARAMETER_NAME, dataTypeMappings));
-			template.export(parameters);
-			DataStructureOrchestration orchestration = (DataStructureOrchestration) unmarshaller
-					.unmarshal(new File(template.getOutPutFile()));
+			template.export(parameters, outputFile);
+			DataStructureOrchestration orchestration = (DataStructureOrchestration) unmarshaller.unmarshal(outputFile);
 			System.out.println("orchestration: ");
 			System.out.println(Serializer.toXmlString(orchestration, true));
 			orchestration.execute();
@@ -103,7 +103,7 @@ public class testRegionDomain extends TestCase {
 
 	public void testPGSQL() throws Exception {
 		XmlTransformer xmlTransformer = new XmlTransformer();
-		xmlTransformer.load(Environment.getWorkingFolder() + testXmlTransformer.old_xml_path, true);
+		xmlTransformer.load(Environment.getWorkingFolder() + domain_file, false);
 
 		JAXBContext context = JAXBContext.newInstance(DataStructureOrchestration.class);
 		Marshaller marshaller = context.createMarshaller();
@@ -117,10 +117,10 @@ public class testRegionDomain extends TestCase {
 		System.out.println(Serializer.toXmlString(dataTypeMappings, true));
 		// 测试PGSQL
 		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
-			String tpltFile = Environment.getResource("db").getPath();
+			String tpltFile = Environment.getResource("ds").getPath();
 			RegionDomain template = new RegionDomain();
 			template.setTemplateFile(tpltFile + File.separator + "ds_pgsql_ibas.xml");
-			template.setOutPutFile(Environment.getWorkingFolder() + File.separator + "ds_pgsql_ibas.out.xml");
+			File outputFile = new File(Environment.getWorkingFolder() + File.separator + "ds_pgsql_ibas.out.xml");
 			dataTypeMappings = DataTypeMappings
 					.create(template.getTemplateFile().replace("ds_pgsql_ibas.xml", "dm_pgsql_ibas.xml"));
 			ArrayList<Parameter> parameters = new ArrayList<>();
@@ -133,9 +133,8 @@ public class testRegionDomain extends TestCase {
 			parameters.add(new Parameter("DbPassword", "1q2w3e"));
 			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, domain));
 			parameters.add(new Parameter(DataTypeMapping.PARAMETER_NAME, dataTypeMappings));
-			template.export(parameters);
-			DataStructureOrchestration orchestration = (DataStructureOrchestration) unmarshaller
-					.unmarshal(new File(template.getOutPutFile()));
+			template.export(parameters, outputFile);
+			DataStructureOrchestration orchestration = (DataStructureOrchestration) unmarshaller.unmarshal(outputFile);
 			System.out.println("orchestration: ");
 			System.out.println(Serializer.toXmlString(orchestration, true));
 			orchestration.execute();
@@ -144,7 +143,7 @@ public class testRegionDomain extends TestCase {
 
 	public void testHANA() throws Exception {
 		XmlTransformer xmlTransformer = new XmlTransformer();
-		xmlTransformer.load(Environment.getWorkingFolder() + testXmlTransformer.old_xml_path, true);
+		xmlTransformer.load(Environment.getWorkingFolder() + domain_file, false);
 
 		JAXBContext context = JAXBContext.newInstance(DataStructureOrchestration.class);
 		Marshaller marshaller = context.createMarshaller();
@@ -158,10 +157,10 @@ public class testRegionDomain extends TestCase {
 		System.out.println(Serializer.toXmlString(dataTypeMappings, true));
 		// 测试PGSQL
 		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
-			String tpltFile = Environment.getResource("db").getPath();
+			String tpltFile = Environment.getResource("ds").getPath();
 			RegionDomain template = new RegionDomain();
 			template.setTemplateFile(tpltFile + File.separator + "ds_hana_ibas.xml");
-			template.setOutPutFile(Environment.getWorkingFolder() + File.separator + "ds_hana_ibas.out.xml");
+			File outputFile = new File(Environment.getWorkingFolder() + File.separator + "ds_hana_ibas.out.xml");
 			dataTypeMappings = DataTypeMappings
 					.create(template.getTemplateFile().replace("ds_hana_ibas.xml", "dm_hana_ibas.xml"));
 			ArrayList<Parameter> parameters = new ArrayList<>();
@@ -175,9 +174,8 @@ public class testRegionDomain extends TestCase {
 			parameters.add(new Parameter("DbTableType", "COLUMN"));
 			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, domain));
 			parameters.add(new Parameter(DataTypeMapping.PARAMETER_NAME, dataTypeMappings));
-			template.export(parameters);
-			DataStructureOrchestration orchestration = (DataStructureOrchestration) unmarshaller
-					.unmarshal(new File(template.getOutPutFile()));
+			template.export(parameters, outputFile);
+			DataStructureOrchestration orchestration = (DataStructureOrchestration) unmarshaller.unmarshal(outputFile);
 			System.out.println("orchestration: ");
 			System.out.println(Serializer.toXmlString(orchestration, true));
 			orchestration.execute();

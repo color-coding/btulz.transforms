@@ -39,6 +39,8 @@ public interface ITransformer {
 
 	/**
 	 * 转换
+	 * 
+	 * @throws Exception
 	 */
-	void transform();
+	void transform() throws Exception;
 }

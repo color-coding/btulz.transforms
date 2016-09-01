@@ -41,7 +41,12 @@ public class Environment {
 	public synchronized static Logger getLogger() {
 		if (logger == null) {
 			try {
-				PropertyConfigurator.configure(getResource("log4j.properties").getPath());
+				File file = new File(getStartupFolder() + File.separator + "log4j.properties");
+				if (file.exists() && file.isFile()) {
+					PropertyConfigurator.configure(file.getPath());
+				} else {
+					PropertyConfigurator.configure(getResource("log4j.properties").getPath());
+				}
 				logger = Logger.getLogger("btulz.transforms");
 			} catch (URISyntaxException e) {
 				e.printStackTrace();

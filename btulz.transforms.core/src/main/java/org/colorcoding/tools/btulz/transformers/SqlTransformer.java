@@ -8,10 +8,4 @@ package org.colorcoding.tools.btulz.transformers;
  */
 public class SqlTransformer extends DbTransformer {
 
-	@Override
-	public void transform() {
-		// TODO Auto-generated method stub
-
-	}
-
 }

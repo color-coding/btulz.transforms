@@ -34,21 +34,6 @@ public class Template extends TemplateRegion {
 		this.templateFile = templateFile;
 	}
 
-	private String outPutFile;
-
-	/**
-	 * 输出的文件
-	 * 
-	 * @return
-	 */
-	public String getOutPutFile() {
-		return outPutFile;
-	}
-
-	public void setOutPutFile(String outPutFile) {
-		this.outPutFile = outPutFile;
-	}
-
 	private String encoding = "utf-8";
 
 	/**
@@ -64,21 +49,55 @@ public class Template extends TemplateRegion {
 		this.encoding = encoding;
 	}
 
-	public void export(List<Parameter> parameters) throws Exception {
+	/**
+	 * 根据模板输出
+	 * 
+	 * @param parameters
+	 *            参数
+	 * @param outputFile
+	 *            输出文件
+	 * @throws Exception
+	 */
+	public void export(List<Parameter> parameters, String outputFile) throws Exception {
+		File outFile = new File(outputFile);
+		export(parameters, outFile);
+	}
+
+	/**
+	 * 根据模板输出
+	 * 
+	 * @param parameters
+	 *            参数
+	 * @param outputFile
+	 *            输出文件
+	 * @throws Exception
+	 */
+	public void export(List<Parameter> parameters, File outputFile) throws Exception {
+		if (!outputFile.exists()) {
+			outputFile.getParentFile().mkdirs();
+			outputFile.createNewFile();
+		}
+		export(parameters,
+				new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), this.getEncoding())));
+	}
+
+	/**
+	 * 根据模板输出
+	 * 
+	 * @param parameters
+	 *            参数
+	 * @param writer
+	 *            输出文件
+	 * @throws Exception
+	 */
+	public void export(List<Parameter> parameters, BufferedWriter writer) throws Exception {
 		File tpltFile = new File(this.getTemplateFile());
 		if (!tpltFile.exists() || !tpltFile.isFile()) {
 			throw new FileNotFoundException(this.getTemplateFile());
 		}
-		File outFile = new File(this.getOutPutFile());
-		if (!outFile.exists()) {
-			outFile.getParentFile().mkdirs();
-			outFile.createNewFile();
-		}
 		BufferedReader reader = null;
-		BufferedWriter writer = null;
 		try {
 			reader = new BufferedReader(new InputStreamReader(new FileInputStream(tpltFile), this.getEncoding()));
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile), this.getEncoding()));
 			this.parse(reader);// 解析模板
 			this.export(writer, parameters);// 输出数据
 			reader.close();

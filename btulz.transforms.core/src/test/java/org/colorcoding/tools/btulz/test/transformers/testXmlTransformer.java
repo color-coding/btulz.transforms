@@ -22,6 +22,7 @@ public class testXmlTransformer extends TestCase {
 
 	public static String old_xml_path = "\\org\\colorcoding\\tools\\btulz\\test\\transformers".replace("\\",
 			File.separator);
+	private static String domain_file = testXmlTransformer.old_xml_path + File.separator + "domain_models_old.xml";
 
 	public void testSaveReadXml()
 			throws ClassNotFoundException, TransformException, MultiTransformException, JAXBException {
@@ -31,7 +32,7 @@ public class testXmlTransformer extends TestCase {
 		xmlTransformer.setInterruptOnError(true);
 		xmlTransformer.save();
 		xmlTransformer.setKeepResults(false);
-		xmlTransformer.load(Environment.getWorkingFolder() + old_xml_path, false);
+		xmlTransformer.load(Environment.getWorkingFolder() + domain_file, false);
 		xmlTransformer.save();
 		JAXBContext context = JAXBContext.newInstance(Domain.class);
 		Marshaller marshaller = context.createMarshaller();
@@ -50,7 +51,7 @@ public class testXmlTransformer extends TestCase {
 		domain = (new testModels()).createDomain();
 		xmlTransformer = new XmlTransformerDom4j();
 		// xmlTransformer.setInterruptOnError(true);
-		xmlTransformer.load(Environment.getWorkingFolder() + old_xml_path, false);
+		xmlTransformer.load(Environment.getWorkingFolder() + domain_file, false);
 		xmlTransformer.setInterruptOnError(true);
 		xmlTransformer.save(Environment.getWorkingFolder() + File.separator + "dom4j");
 	}
