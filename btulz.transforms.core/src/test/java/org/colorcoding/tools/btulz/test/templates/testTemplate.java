@@ -19,7 +19,7 @@ import junit.framework.TestCase;
 public class testTemplate extends TestCase {
 
 	private static String domain_file = testXmlTransformer.old_xml_path + File.separator + "domain_models_old.xml";
-	private static String template_file = "/eclipse/ibas_classic/{artifactid}.{domain.getname.tolowercase}/src/main/java/{groupid}/{artifactid}/{domain.getname.tolowercase}/bo/Template_Model.{Model.getName}.java.txt";
+	private static String template_file = "/eclipse/ibas_classic/{artifactid}.{domain.name}/src/main/java/{groupid}/{artifactid}/{domain.name}/bo/Template_Model.{Model.Name}.java.txt";
 
 	public void testJudgmentRegion() throws Exception {
 		XmlTransformer xmlTransformer = new XmlTransformer();
