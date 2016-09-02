@@ -23,12 +23,12 @@ public abstract class TemplateRegion implements ITemplateData {
 	}
 
 	public TemplateRegion(String delimiter) {
-		this(String.format("%sBEGIN_%s%s", REGION_SIGN, delimiter, REGION_SIGN),
-				String.format("%sEND_%s%s", REGION_SIGN, delimiter, REGION_SIGN));
+		this((REGION_SIGN_BEGIN + delimiter + REGION_SIGN), (REGION_SIGN_END + delimiter + REGION_SIGN));
 	}
 
 	public static final String REGION_SIGN = "$";
-
+	public static final String REGION_SIGN_BEGIN = REGION_SIGN + "BEGIN_";
+	public static final String REGION_SIGN_END = REGION_SIGN + "END_";
 	private String beginDelimiter;
 
 	/**
@@ -76,12 +76,18 @@ public abstract class TemplateRegion implements ITemplateData {
 		return this.templateLines;
 	}
 
-	protected TemplateRegion createRegion(String beginDelimiter) throws InvalidRegionException {
-		if (beginDelimiter.startsWith("$$")) {
+	protected TemplateRegion createRegion(String delimiter) throws InvalidRegionException {
+		if (delimiter.startsWith(REGION_SIGN_BEGIN)) {
+			delimiter = delimiter.substring(REGION_SIGN_BEGIN.length(), delimiter.length() - 1);
+		}
+		if (delimiter.startsWith("$$")) {
 			// 备注区域
 			return new CommentRegion();
+		} else if (delimiter.indexOf(JudgmentRegion.REGION_DELIMITER) > 0) {
+			// 判断区域
+			return new JudgmentRegion(delimiter);
 		}
-		throw new InvalidRegionException(String.format("undefined region delimiter %s.", beginDelimiter));
+		throw new InvalidRegionException(String.format("undefined region delimiter %s.", delimiter));
 	}
 
 	void parse(BufferedReader template) throws Exception {
@@ -115,7 +121,7 @@ public abstract class TemplateRegion implements ITemplateData {
 				Iterable<Parameter> regionPars = region.getRegionParameters(pars);
 				if (regionPars == null) {
 					throw new InvalidParameterException(String.format("invalid parameter between %s and %s.",
-							this.getBeginDelimiter(), this.getEndDelimiter()));
+							region.getBeginDelimiter(), region.getEndDelimiter()));
 				}
 				Environment.getLogger().debug(String.format("template: begin export region [%s].", region));
 				for (Parameter regionPar : regionPars) {
@@ -142,6 +148,15 @@ public abstract class TemplateRegion implements ITemplateData {
 			}
 		}
 		writer.flush();
+	}
+
+	protected Parameter getParameter(List<Parameter> parameters, String name) {
+		for (Parameter parameter : parameters) {
+			if (parameter.getName().equalsIgnoreCase(name)) {
+				return parameter;
+			}
+		}
+		return null;
 	}
 
 	protected abstract Iterable<Parameter> getRegionParameters(List<Parameter> pars) throws InvalidParameterException;

@@ -13,12 +13,12 @@ public class testDbTransformer extends TestCase {
 	private static String domain_file = testXmlTransformer.old_xml_path + File.separator + "domain_models_old.xml";
 
 	private static String initialization_file = testXmlTransformer.old_xml_path + File.separator
-			+ "ds_mssql_ibas_tt_initialization.xml";
+			+ "ds_mssql_ibas_initialization.xml";
 
 	public void testDS() throws Exception {
 		System.err.println("运行请清理test-classes目录的历史文件。");
 		DsTransformer dsTransformer = new DsTransformer();
-		dsTransformer.setTemplateFile("ds_mysql_ibas.xml");
+		dsTransformer.setTemplateFile("ds_mysql_ibas_classic.xml");
 		dsTransformer.addDomains(Environment.getWorkingFolder() + domain_file);
 		dsTransformer.setCompany("CC");
 		dsTransformer.setDbServer("ibas-dev-mysql");

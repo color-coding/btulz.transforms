@@ -1,0 +1,54 @@
+package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.<%BusinessObject.PropertyName.ToLower()%>;
+
+import javax.xml.bind.annotation.*;
+import org.colorcoding.ibas.bobas.bo.*;
+import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.MyConsts;
+
+/**
+* ${BusinessObjectItem.getDescription()} 集合
+*/
+@XmlType(name = "${BusinessObjectItem.getName()}s", namespace = MyConsts.NAMESPACE_BO)
+@XmlSeeAlso({ ${BusinessObjectItem.getName()}.class })
+public class ${BusinessObjectItem.getName()}s extends BusinessObjects<I${BusinessObjectItem.getName()}, I${Model.getName()}> implements I${BusinessObjectItem.getName()}s {
+
+    /**
+     * 序列化版本标记
+     */
+    private static final long serialVersionUID = ${ID.newLong()}L;
+
+    /**
+     * 构造方法
+     */
+    public ${BusinessObjectItem.getName()}s() {
+        super();
+    }
+
+    /**
+     * 构造方法
+     * @param parent 父项对象
+     */
+    public ${BusinessObjectItem.getName()}s(I${Model.getName()} parent) {
+        super(parent);
+    }
+
+    /**
+     * 元素类型
+     */
+    public Class<?> getElementType() {
+        return ${BusinessObjectItem.getName()}.class;
+    }
+
+    /**
+    * 创建${BusinessObjectItem.getDescription()}
+    * 
+    * @return ${BusinessObjectItem.getDescription()}
+    */
+    public I${BusinessObjectItem.getName()} create() {
+        I${BusinessObjectItem.getName()} item = new ${BusinessObjectItem.getName()}();
+        if (this.add(item)) {
+            return item;
+        }
+        return null;
+    }
+
+}

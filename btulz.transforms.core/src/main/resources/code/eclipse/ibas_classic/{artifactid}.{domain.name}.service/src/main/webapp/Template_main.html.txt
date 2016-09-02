@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>${Domain.getName().toLowerCase()} module</title>
+    <script type="text/javascript" src="/basis/jquery.js"></script>
+    <script type="text/javascript" src="/basis/jquery.i18n.properties.js"></script>
+    <script type="text/javascript" src="/basis/bobas.businessobjectscommon.js"></script>
+    <script type="text/javascript" src="/basis/bsbas.businesssystemcommon.js"></script>
+    <script type="text/javascript" src="/borep/<%Domain.ShortName.ToLower()%>BORepository.js"></script>
+<&&&&&>
+    <script type="text/javascript" src="/bsapp/<%BusinessObject.PropertyName.ToLower()%>/${BusinessObject.getName()}DataFunc.js"></script>
+    <script type="text/javascript" src="/bsapp/<%BusinessObject.PropertyName.ToLower()%>/${BusinessObject.getName()}DataChooseListApp.js"></script>
+    <script type="text/javascript" src="/bsapp/<%BusinessObject.PropertyName.ToLower()%>/${BusinessObject.getName()}DataDetailApp.js"></script>
+    <script type="text/javascript" src="/bsapp/<%BusinessObject.PropertyName.ToLower()%>/${BusinessObject.getName()}DataListApp.js"></script>
+<&&&&&>
+    <script type="text/javascript" src="/bsapp/<%Domain.ShortName.ToLower()%>ModuleConsole.js"></script>
+    <script entry="true">
+        bsbas.runtime.console.register(<%Domain.ShortName.ToLower()%>bsapp.ModuleConsole.createNew());
+    </script>
+</head>
+<body>
+</body>
+</html>

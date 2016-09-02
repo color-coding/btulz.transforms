@@ -40,8 +40,9 @@ public class testRegionDomain extends TestCase {
 		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
 			String tpltFile = Environment.getResource("ds").getPath();
 			RegionDomain template = new RegionDomain();
-			template.setTemplateFile(tpltFile + File.separator + "ds_mssql_ibas.xml");
-			File outputFile = new File(Environment.getWorkingFolder() + File.separator + "ds_mssql_ibas.out.xml");
+			template.setTemplateFile(tpltFile + File.separator + "ds_mssql_ibas_classic.xml");
+			File outputFile = new File(
+					Environment.getWorkingFolder() + File.separator + "ds_mssql_ibas_classic.out.xml");
 			ArrayList<Parameter> parameters = new ArrayList<>();
 			parameters.add(new Parameter("Company", "CC"));
 			parameters.add(new Parameter("DbServer", "ibas-dev-mssql"));
@@ -79,10 +80,11 @@ public class testRegionDomain extends TestCase {
 		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
 			String tpltFile = Environment.getResource("ds").getPath();
 			RegionDomain template = new RegionDomain();
-			template.setTemplateFile(tpltFile + File.separator + "ds_mysql_ibas.xml");
-			File outputFile = new File(Environment.getWorkingFolder() + File.separator + "ds_mysql_ibas.out.xml");
-			dataTypeMappings = DataTypeMappings
-					.create(template.getTemplateFile().replace("ds_mysql_ibas.xml", "dm_mysql_ibas.xml"));
+			template.setTemplateFile(tpltFile + File.separator + "ds_mysql_ibas_classic.xml");
+			File outputFile = new File(
+					Environment.getWorkingFolder() + File.separator + "ds_mysql_ibas_classic.out.xml");
+			dataTypeMappings = DataTypeMappings.create(
+					template.getTemplateFile().replace("ds_mysql_ibas_classic.xml", "dm_mysql_ibas_classic.xml"));
 			ArrayList<Parameter> parameters = new ArrayList<>();
 			parameters.add(new Parameter("Company", "CC"));
 			parameters.add(new Parameter("DbServer", "ibas-dev-mysql"));
@@ -119,10 +121,11 @@ public class testRegionDomain extends TestCase {
 		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
 			String tpltFile = Environment.getResource("ds").getPath();
 			RegionDomain template = new RegionDomain();
-			template.setTemplateFile(tpltFile + File.separator + "ds_pgsql_ibas.xml");
-			File outputFile = new File(Environment.getWorkingFolder() + File.separator + "ds_pgsql_ibas.out.xml");
-			dataTypeMappings = DataTypeMappings
-					.create(template.getTemplateFile().replace("ds_pgsql_ibas.xml", "dm_pgsql_ibas.xml"));
+			template.setTemplateFile(tpltFile + File.separator + "ds_pgsql_ibas_classic.xml");
+			File outputFile = new File(
+					Environment.getWorkingFolder() + File.separator + "ds_pgsql_ibas_classic.out.xml");
+			dataTypeMappings = DataTypeMappings.create(
+					template.getTemplateFile().replace("ds_pgsql_ibas_classic.xml", "dm_pgsql_ibas_classic.xml"));
 			ArrayList<Parameter> parameters = new ArrayList<>();
 			parameters.add(new Parameter("Company", "CC"));
 			parameters.add(new Parameter("DbServer", "ibas-dev-pgsql"));
@@ -159,10 +162,11 @@ public class testRegionDomain extends TestCase {
 		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
 			String tpltFile = Environment.getResource("ds").getPath();
 			RegionDomain template = new RegionDomain();
-			template.setTemplateFile(tpltFile + File.separator + "ds_hana_ibas.xml");
-			File outputFile = new File(Environment.getWorkingFolder() + File.separator + "ds_hana_ibas.out.xml");
+			template.setTemplateFile(tpltFile + File.separator + "ds_hana_ibas_classic.xml");
+			File outputFile = new File(
+					Environment.getWorkingFolder() + File.separator + "ds_hana_ibas_classic.out.xml");
 			dataTypeMappings = DataTypeMappings
-					.create(template.getTemplateFile().replace("ds_hana_ibas.xml", "dm_hana_ibas.xml"));
+					.create(template.getTemplateFile().replace("ds_hana_ibas_classic.xml", "dm_hana_ibas_classic.xml"));
 			ArrayList<Parameter> parameters = new ArrayList<>();
 			parameters.add(new Parameter("Company", "CC"));
 			parameters.add(new Parameter("DbServer", "ibas-dev-hana"));
@@ -180,5 +184,6 @@ public class testRegionDomain extends TestCase {
 			System.out.println(Serializer.toXmlString(orchestration, true));
 			orchestration.execute();
 		}
+
 	}
 }

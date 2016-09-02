@@ -1,0 +1,2 @@
+${ArtifactId}.${Domain.getName().toLowerCase()}
+${ArtifactId}.${Domain.getName().toLowerCase()}.service

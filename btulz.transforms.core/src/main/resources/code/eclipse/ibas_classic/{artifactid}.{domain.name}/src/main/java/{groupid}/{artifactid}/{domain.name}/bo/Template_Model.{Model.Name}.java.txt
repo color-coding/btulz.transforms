@@ -1,0 +1,167 @@
+package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.<%BusinessObject.PropertyName.ToLower()%>;
+
+import javax.xml.bind.annotation.*;
+
+import org.colorcoding.ibas.bobas.core.*;
+import org.colorcoding.ibas.bobas.mapping.*;
+import org.colorcoding.ibas.bobas.bo.*;
+import org.colorcoding.ibas.bobas.data.*;
+import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.MyConsts;
+import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.data.*;
+
+/**
+* 获取-${Model.getDescription()}
+* 
+*/
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlType(name = "${Model.getName()}", namespace = MyConsts.NAMESPACE_BO)
+$BEGIN_MODEL_MODELTYPE_IS_DOCUMENT$
+@XmlRootElement(name = "${Model.getName()}", namespace = MyConsts.NAMESPACE_BO)
+@BOCode(BUSINESS_OBJECT_CODE)
+$END_MODEL_MODELTYPE_IS_DOCUMENT$
+$BEGIN_MODEL_MODELTYPE_IS_MASTERDATA$
+@XmlRootElement(name = "${Model.getName()}", namespace = MyConsts.NAMESPACE_BO)
+@BOCode(BUSINESS_OBJECT_CODE)
+$END_MODEL_MODELTYPE_IS_MASTERDATA$
+$BEGIN_MODEL_MODELTYPE_IS_SIMPLE$
+@XmlRootElement(name = "${Model.getName()}", namespace = MyConsts.NAMESPACE_BO)
+@BOCode(BUSINESS_OBJECT_CODE)
+$END_MODEL_MODELTYPE_IS_SIMPLE$
+public class ${Model.getName()} extends BusinessObject<${Model.getName()}> implements I${Model.getName()} {
+
+    /**
+     * 序列化版本标记
+     */
+    private static final long serialVersionUID = ${ID.newLong()}L;
+
+    /**
+    * 当前类型
+    */
+    private final static Class<?> MY_CLASS = ${Model.getName()}.class;
+
+    /**
+    * 数据库表
+    */
+    public final static String DB_TABLE_NAME = "${Model.getMapped()}";
+
+    /**
+    * 业务对象编码
+    */
+    public final static String BUSINESS_OBJECT_CODE = "${BusinessObject.getShortCode()}";
+
+$BEGIN_MODEL_PROPERTY$
+    /**
+    * ${Property.getDescription()} 属性
+    */
+    @DbField(name = "${Property.getMapped()}", type = DbFieldType.${Property.getAnnotatedType()}, table = DB_TABLE_NAME, primaryKey = emYesNo.${Property.isPrimaryKey()})
+    public final static IPropertyInfo<${Property.getDeclaredType()}> ${Property.getName()}Property = registerProperty("${Property.getName()}", ${Property.getDeclaredType()}.class, MY_CLASS);
+
+    /**
+    * 获取-${Property.getDescription()}
+    * 
+    * @return 值
+    */
+    @XmlElement(name = "${Property.getName()}")
+    public final ${Property.getDeclaredType()} get${Property.getName()}() {
+        return this.getProperty(${Property.getName()}Property);
+    }
+
+    /**
+    * 设置-${Property.getDescription()}
+    * 
+    * @param value 值
+    */
+    public final void set${Property.getName()}(${Property.getDeclaredType()} value) {
+        this.setProperty(${Property.getName()}Property, value);
+    }
+
+$BEGIN_PROPERTY_DECLAREDTYPE_IS_DECIMAL$
+    /**
+    * 设置-${Property.getDescription()}
+    * 
+    * @param value 值
+    */
+    public final void set${Property.getName()}(String value) {
+        this.set${Property.getName()}(new Decimal(value));
+    }
+
+    /**
+    * 设置-${Property.getDescription()}
+    * 
+    * @param value 值
+    */
+    public final void set${Property.getName()}(int value) {
+        this.set${Property.getName()}(new Decimal(value));
+    }
+
+    /**
+    * 设置-${Property.getDescription()}
+    * 
+    * @param value 值
+    */
+    public final void set${Property.getName()}(double value) {
+        this.set${Property.getName()}(new Decimal(value));
+    }
+$END_PROPERTY_DECLAREDTYPE_IS_DECIMAL$
+
+$END_MODEL_PROPERTY$
+
+$BEGIN_BUSINESS_OBJECT_HAS_ITEM$
+$BEGIN_BUSINESS_OBJECT_ITEM$
+    /**
+    * ${BusinessObjectItem.getDescription()}的集合属性
+    * 
+    */ 
+    public final static IPropertyInfo<I${BusinessObjectItem.getName()}s> ${BusinessObjectItem.getName()}sProperty = registerProperty("${BusinessObjectItem.getName()}s", I${BusinessObjectItem.getName()}s.class, MY_CLASS);
+    /**
+    * 获取-${BusinessObjectItem.getDescription()}集合
+    * 
+    * @return 值
+    */
+    @XmlElementWrapper(name = "${BusinessObjectItem.getName()}s")
+    @XmlElement(name = "${BusinessObjectItem.getName()}", type = ${BusinessObjectItem.getName()}.class)
+    public final I${BusinessObjectItem.getName()}s get${BusinessObjectItem.getName()}s() {
+        return this.getProperty(${BusinessObjectItem.getName()}sProperty);
+    }
+
+    /**
+    * 设置-${BusinessObjectItem.getDescription()}集合
+    * 
+    * @param value 值
+    */
+    public final void set${BusinessObjectItem.getName()}s(I${BusinessObjectItem.getName()}s value) {
+        this.setProperty(${BusinessObjectItem.getName()}sProperty, value);
+    }
+
+$END_BUSINESS_OBJECT_ITEM$
+$END_BUSINESS_OBJECT_HAS_ITEM$
+
+    /**
+    * 初始化数据
+    */
+    @Override
+    protected void initialize() {
+        super.initialize();// 基类初始化，不可去除
+$BEGIN_BUSINESS_OBJECT_HAS_ITEM$
+$BEGIN_BUSINESS_OBJECT_ITEM$
+        this.set${BusinessObjectItem.getName()}s(new ${BusinessObjectItem.getName()}s(this));
+$END_BUSINESS_OBJECT_ITEM$
+$END_BUSINESS_OBJECT_HAS_ITEM$
+        this.setObjectCode(BUSINESS_OBJECT_CODE);
+        // TODO: 初始化数据，默认的不需要可以删除
+$BEGIN_MODEL_MODELTYPE_IS_DOCUMENT$
+        this.setPostingDate(DateTime.getToday());
+        this.setDocumentDate(DateTime.getToday());
+        this.setDeliveryDate(DateTime.getToday());
+        this.setDocumentStatus(emDocumentStatus.Released);
+$END_MODEL_MODELTYPE_IS_DOCUMENT$
+$BEGIN_MODEL_MODELTYPE_IS_SIMPLE$
+        this.setActivated(emYesNo.Yes);
+$END_MODEL_MODELTYPE_IS_SIMPLE$
+$BEGIN_MODEL_MODELTYPE_IS_MASTERDATA$
+        this.setActivated(emYesNo.Yes);
+$END_MODEL_MODELTYPE_IS_MASTERDATA$
+
+    }
+
+}

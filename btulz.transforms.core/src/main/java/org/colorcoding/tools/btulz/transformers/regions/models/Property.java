@@ -38,11 +38,6 @@ public class Property implements IProperty {
 	}
 
 	@Override
-	public String getDeclaredType() {
-		return this.property.getDeclaredType();
-	}
-
-	@Override
 	public void setDeclaredType(String declaredType) {
 		this.property.setDeclaredType(declaredType);
 	}
@@ -156,6 +151,34 @@ public class Property implements IProperty {
 		}
 	}
 
+	@Override
+	public String getDeclaredType() {
+		if (this.property.getDeclaredType() != null) {
+			return this.property.getDeclaredType();
+		}
+		switch (this.getDataType()) {
+		case Alphanumeric:
+			return "String";
+		case Memo:
+			return "String";
+		case Numeric:
+			return "Integer";
+		case Date:
+			if (this.getDataSubType() == emDataSubType.Default)
+				return "DateTime";
+			else if (this.getDataSubType() == emDataSubType.Time)
+				return "Short";
+			break;
+		case Decimal:
+			return "Decimal";
+		case Bytes:
+			return "byte[]";
+		default:
+			return "String";
+		}
+		return null;
+	}
+
 	public String getMappedType() throws Exception {
 		// 优先使用映射
 		for (DataTypeMapping mapping : this.getDataTypeMappings()) {
@@ -198,6 +221,44 @@ public class Property implements IProperty {
 			return "not null";
 		}
 		return "null";
+	}
+
+	private String annotatedType;
+
+	public String getAnnotatedType() {
+		if (this.annotatedType == null) {
+			switch (this.getDataType()) {
+			case Alphanumeric:
+				this.annotatedType = "db_Alphanumeric";
+				break;
+			case Memo:
+				this.annotatedType = "db_Memo";
+				break;
+			case Numeric:
+				this.annotatedType = "db_Numeric";
+				break;
+			case Date:
+				if (this.getDataSubType() == emDataSubType.Default)
+					this.annotatedType = "db_Date";
+				else if (this.getDataSubType() == emDataSubType.Time)
+					this.annotatedType = "db_Numeric";
+				break;
+			case Decimal:
+				this.annotatedType = "db_Decimal";
+				break;
+			case Bytes:
+				this.annotatedType = "db_Bytes";
+				break;
+			default:
+				this.annotatedType = "db_Unknown";
+				break;
+			}
+		}
+		return annotatedType;
+	}
+
+	public void setAnnotatedType(String annotatedType) {
+		this.annotatedType = annotatedType;
 	}
 
 	public String getSeparator(String value) {

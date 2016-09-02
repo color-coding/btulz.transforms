@@ -1,9 +1,6 @@
 package org.colorcoding.tools.btulz.transformers.regions;
 
-import java.util.List;
-
 import org.colorcoding.tools.btulz.templates.InvalidRegionException;
-import org.colorcoding.tools.btulz.templates.Parameter;
 import org.colorcoding.tools.btulz.templates.TemplateRegion;
 
 /**
@@ -34,12 +31,4 @@ public abstract class RegionBase extends TemplateRegion {
 		return super.createRegion(beginDelimiter);
 	}
 
-	Parameter getParameter(List<Parameter> parameters, String name) {
-		for (Parameter parameter : parameters) {
-			if (parameter.getName().equals(name)) {
-				return parameter;
-			}
-		}
-		return null;
-	}
 }

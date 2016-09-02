@@ -1,0 +1,85 @@
+package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.<%BusinessObject.PropertyName.ToLower()%>;
+
+import org.colorcoding.ibas.bobas.bo.*;
+import org.colorcoding.ibas.bobas.data.*;
+import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.data.*;
+
+/**
+* ${Model.getDescription()} 接口
+* 
+*/
+public interface I${Model.getName()} extends I${Model.getModelType()} {
+
+$BEGIN_MODEL_PROPERTY$
+    /**
+    * 获取-${Property.getDescription()}
+    * 
+    * @return 值
+    */
+    ${Property.getDeclaredType()} get${Property.getName()}();
+
+    /**
+    * 设置-${Property.getDescription()}
+    * 
+    * @param value 值
+    */
+    void set${Property.getName()}(${Property.getDeclaredType()} value);
+
+$BEGIN_PROPERTY_DECLAREDTYPE_IS_DECIMAL$
+    /**
+    * 获取-${Property.getDescription()}
+    * 
+    * @return 值
+    */
+    ${Property.getDeclaredType()} get${Property.getName()}();
+
+    /**
+    * 设置-${Property.getDescription()}
+    * 
+    * @param value 值
+    */
+    void set${Property.getName()}(${Property.getDeclaredType()} value);
+
+    /**
+    * 设置-${Property.getDescription()}
+    * 
+    * @param value 值
+    */
+    void set${Property.getName()}(String value);
+
+    /**
+    * 设置-${Property.getDescription()}
+    * 
+    * @param value 值
+    */
+    void set${Property.getName()}(int value);
+
+    /**
+    * 设置-${Property.getDescription()}
+    * 
+    * @param value 值
+    */
+    void set${Property.getName()}(double value);
+$END_PROPERTY_DECLAREDTYPE_IS_DECIMAL$
+
+$END_MODEL_PROPERTY$
+
+$BEGIN_BUSINESS_OBJECT_HAS_ITEM$
+$BEGIN_BUSINESS_OBJECT_ITEM$
+     /**
+    * 获取-${BusinessObjectItem.getDescription()}集合
+    * 
+    * @return 值
+    */
+    I${BusinessObjectItem.getName()}s get${BusinessObjectItem.getName()}s();
+
+    /**
+    * 设置-${BusinessObjectItem.getDescription()}集合
+    * 
+    * @param value 值
+    */
+    void set${BusinessObjectItem.getName()}s(I${BusinessObjectItem.getName()}s value);
+
+$END_BUSINESS_OBJECT_ITEM$
+$END_BUSINESS_OBJECT_HAS_ITEM$
+}

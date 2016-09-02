@@ -26,7 +26,9 @@ public class RegionsFactory {
 	public TemplateRegion createRegion(String delimiter) {
 		if (delimiter != null) {
 			// 修正下标识符，原始的实例$BEGIN_MODEL$
-			delimiter = delimiter.substring("$BEGIN_".length(), delimiter.length() - 1);
+			if (delimiter.startsWith(TemplateRegion.REGION_SIGN_BEGIN)) {
+				delimiter = delimiter.substring(TemplateRegion.REGION_SIGN_BEGIN.length(), delimiter.length() - 1);
+			}
 			if (RegionModel.REGION_DELIMITER.equals(delimiter)) {
 				return new RegionModel();
 			} else if (RegionModelProperty.REGION_DELIMITER.equals(delimiter)) {
@@ -43,6 +45,12 @@ public class RegionsFactory {
 				return new RegionBusinessObject();
 			} else if (RegionBusinessObjectModel.REGION_DELIMITER.equals(delimiter)) {
 				return new RegionBusinessObjectModel();
+			} else if (RegionBusinessObjectHasItem.REGION_DELIMITER.equals(delimiter)) {
+				return new RegionBusinessObjectHasItem();
+			} else if (RegionBusinessObjectItem.REGION_DELIMITER.equals(delimiter)) {
+				return new RegionBusinessObjectItem();
+			} else if (RegionBusinessObjectItemModel.REGION_DELIMITER.equals(delimiter)) {
+				return new RegionBusinessObjectItemModel();
 			}
 		}
 		return null;

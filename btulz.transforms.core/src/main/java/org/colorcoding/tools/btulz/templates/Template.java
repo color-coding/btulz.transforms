@@ -11,6 +11,8 @@ import java.io.OutputStreamWriter;
 import java.util.Iterator;
 import java.util.List;
 
+import org.colorcoding.tools.btulz.Environment;
+
 /**
  * 模板
  * 
@@ -34,7 +36,7 @@ public class Template extends TemplateRegion {
 		this.templateFile = templateFile;
 	}
 
-	private String encoding = "utf-8";
+	private String encoding = null;// "utf-8";
 
 	/**
 	 * 文件编码
@@ -42,6 +44,9 @@ public class Template extends TemplateRegion {
 	 * @return
 	 */
 	public String getEncoding() {
+		if (this.encoding == null) {
+			this.encoding = Environment.getEncoding(this.getTemplateFile());
+		}
 		return encoding;
 	}
 
@@ -76,10 +81,18 @@ public class Template extends TemplateRegion {
 		if (!outputFile.exists()) {
 			outputFile.getParentFile().mkdirs();
 			outputFile.createNewFile();
+		} else {
+			outputFile.delete();
+			outputFile.createNewFile();
 		}
 		export(parameters,
 				new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), this.getEncoding())));
 	}
+
+	/**
+	 * 模板已初始化标记
+	 */
+	private boolean initialized = false;
 
 	/**
 	 * 根据模板输出
@@ -97,10 +110,13 @@ public class Template extends TemplateRegion {
 		}
 		BufferedReader reader = null;
 		try {
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream(tpltFile), this.getEncoding()));
-			this.parse(reader);// 解析模板
+			if (!initialized) {
+				reader = new BufferedReader(new InputStreamReader(new FileInputStream(tpltFile), this.getEncoding()));
+				this.parse(reader);// 解析模板
+				initialized = true;
+				reader.close();
+			}
 			this.export(writer, parameters);// 输出数据
-			reader.close();
 			writer.close();
 		} finally {
 			if (reader != null) {

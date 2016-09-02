@@ -20,7 +20,7 @@ public class RegionModel extends RegionBase {
 	/**
 	 * 此区域变量名称
 	 */
-	public static final String REGION_PARAMETER_NAME = "MODEL";
+	public static final String REGION_PARAMETER_NAME = "Model";
 
 	public RegionModel() {
 		super(REGION_DELIMITER);

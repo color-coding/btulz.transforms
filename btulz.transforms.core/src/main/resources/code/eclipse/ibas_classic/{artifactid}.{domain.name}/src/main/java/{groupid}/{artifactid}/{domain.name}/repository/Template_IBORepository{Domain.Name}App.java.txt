@@ -1,0 +1,33 @@
+package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.repository;
+
+import org.colorcoding.ibas.bobas.common.*;
+import org.colorcoding.ibas.bobas.repository.*;
+$BEGIN_BUSINESS_OBJECT$
+import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.<%BusinessObject.PropertyName.ToLower()%>.*;
+$END_BUSINESS_OBJECT$
+
+/**
+* ${Domain.getName()}仓库应用
+*/
+public interface IBORepository${Domain.getName()}App extends IBORepositoryApplication {
+
+    //--------------------------------------------------------------------------------------------//
+$BEGIN_BUSINESS_OBJECT$
+    /**
+     * 查询-<%BusinessObject.Name%>
+     * @param criteria 查询
+     * @return 操作结果
+     */
+    IOperationResult<I${BusinessObject.getName()}> fetch${BusinessObject.getName()}(ICriteria criteria);
+
+    /**
+     * 保存-<%BusinessObject.Name%>
+     * @param bo 对象实例
+     * @return 操作结果
+     */
+    IOperationResult<I${BusinessObject.getName()}> save${BusinessObject.getName()}(I${BusinessObject.getName()} bo);
+
+    //--------------------------------------------------------------------------------------------//
+$END_BUSINESS_OBJECT$
+
+}
