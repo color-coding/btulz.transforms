@@ -13,10 +13,9 @@ public class testCodeTransformer extends TestCase {
 
 	public void testEclipseCode() throws Exception {
 		CodeTransformer codeTransformer = new CodeTransformer();
-		codeTransformer.setTemplateFolder(
-				"E:\\MyWorks\\ColorCoding\\btulz.transforms\\btulz.transforms.core\\src\\main\\resources\\code"
-						+ File.separator + "eclipse/ibas_classic");
-		codeTransformer.setOutputFolder(System.getProperty("ibasWorkSpace"));
+		String tpltFolder = Environment.getResource("code/eclipse/ibas_classic").getPath();
+		codeTransformer.setTemplateFolder("eclipse/ibas_classic");
+		codeTransformer.setOutputFolder(System.getenv("TEMP"));
 		codeTransformer.addDomains(Environment.getWorkingFolder() + domain_file);
 
 		codeTransformer.transform();

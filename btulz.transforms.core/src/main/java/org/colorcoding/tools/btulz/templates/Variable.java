@@ -98,6 +98,27 @@ public class Variable {
 		this.valuePath = valuePath;
 	}
 
+	/**
+	 * 原始数据，全部小写
+	 * 
+	 * @return
+	 */
+	public boolean isLowerCase() {
+		if (this.getValuePath() == null) {
+			return false;
+		}
+		for (int i = 0; i < this.getValuePath().length(); i++) {
+			char c = this.getValuePath().charAt(i);
+			if (c == '.') {
+				continue;
+			}
+			if (!Character.isLowerCase(c)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public String toString() {
 		if (this.getValuePath() != null) {
 			return String.format("Variable %s %s", this.getName(), this.getValuePath());

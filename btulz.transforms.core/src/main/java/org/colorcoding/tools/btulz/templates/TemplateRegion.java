@@ -80,7 +80,7 @@ public abstract class TemplateRegion implements ITemplateData {
 		if (delimiter.startsWith(REGION_SIGN_BEGIN)) {
 			delimiter = delimiter.substring(REGION_SIGN_BEGIN.length(), delimiter.length() - 1);
 		}
-		if (delimiter.startsWith("$$")) {
+		if (delimiter.startsWith(REGION_SIGN + REGION_SIGN)) {
 			// 备注区域
 			return new CommentRegion();
 		} else if (delimiter.indexOf(JudgmentRegion.REGION_DELIMITER) > 0) {
@@ -93,7 +93,8 @@ public abstract class TemplateRegion implements ITemplateData {
 	void parse(BufferedReader template) throws Exception {
 		String readString = null;
 		while ((readString = template.readLine()) != null) {
-			if (readString.startsWith(REGION_SIGN)) {
+			if ((readString.startsWith(REGION_SIGN) && readString.endsWith(REGION_SIGN))
+					|| readString.startsWith(REGION_SIGN + REGION_SIGN)) {
 				// like $……$，发现区域，创建新的区域
 				if ((this.getEndDelimiter() != null && this.getEndDelimiter().length() > 0)
 						&& readString.indexOf(this.getEndDelimiter()) >= 0) {

@@ -24,7 +24,7 @@ public class DataTypeMapping {
 	/**
 	 * 变量名称
 	 */
-	public static final String PARAMETER_NAME = "DataTypeMapping";
+	// public static final String PARAMETER_NAME = "DataTypeMapping";
 
 	public DataTypeMapping() {
 

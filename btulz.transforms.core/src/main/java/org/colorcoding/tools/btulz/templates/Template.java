@@ -111,6 +111,7 @@ public class Template extends TemplateRegion {
 		BufferedReader reader = null;
 		try {
 			if (!initialized) {
+				Environment.getLogger().info(String.format("start to parse template file [%s].", tpltFile.getName()));
 				reader = new BufferedReader(new InputStreamReader(new FileInputStream(tpltFile), this.getEncoding()));
 				this.parse(reader);// 解析模板
 				initialized = true;

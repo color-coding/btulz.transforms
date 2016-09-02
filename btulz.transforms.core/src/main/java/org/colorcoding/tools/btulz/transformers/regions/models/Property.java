@@ -3,6 +3,7 @@ package org.colorcoding.tools.btulz.transformers.regions.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.models.IProperty;
 import org.colorcoding.tools.btulz.models.data.emDataSubType;
 import org.colorcoding.tools.btulz.models.data.emDataType;
@@ -10,6 +11,14 @@ import org.colorcoding.tools.btulz.models.data.emYesNo;
 import org.colorcoding.tools.btulz.templates.Parameter;
 
 public class Property implements IProperty {
+	/**
+	 * 数据库字段映射类型
+	 */
+	public static final String PARAMETER_NAME_MAPPED_TYPE = "MappedType";
+	/**
+	 * 开发语言属性映射类型
+	 */
+	public static final String PARAMETER_NAME_DECLARED_TYPE = "DeclaredType";
 
 	public Property(org.colorcoding.tools.btulz.models.IProperty property) {
 		this.property = property;
@@ -121,21 +130,78 @@ public class Property implements IProperty {
 		return String.format("RegionProperty %s", this.getName());
 	}
 
-	private List<DataTypeMapping> dataTypeMappings;
+	private List<DataTypeMapping> declaredTypeMappings;
 
-	public List<DataTypeMapping> getDataTypeMappings() {
-		if (this.dataTypeMappings == null) {
-			this.dataTypeMappings = new ArrayList<>();
+	public List<DataTypeMapping> getDeclaredTypeMappings() {
+		if (this.declaredTypeMappings == null) {
+			this.declaredTypeMappings = new ArrayList<>();
 		}
-		return dataTypeMappings;
+		return declaredTypeMappings;
 	}
 
-	public void addDataTypeMappings(Iterable<?> value) {
-		this.getDataTypeMappings().clear();
+	public void addDeclaredTypeMappings(Iterable<?> value) {
+		this.getDeclaredTypeMappings().clear();
 		if (value != null) {
 			for (Object item : value) {
 				if (item instanceof DataTypeMapping) {
-					this.getDataTypeMappings().add((DataTypeMapping) item);
+					this.getDeclaredTypeMappings().add((DataTypeMapping) item);
+				}
+			}
+		}
+	}
+
+	public void addDeclaredTypeMappings(Parameter par) {
+		if (par == null) {
+			return;
+		}
+		Object value = par.getValue();
+		if (Iterable.class.isInstance(value)) {
+			this.addDeclaredTypeMappings((Iterable<?>) value);
+		}
+	}
+
+	@Override
+	public String getDeclaredType() {
+		// 优先定义
+		if (this.property.getDeclaredType() != null) {
+			return this.property.getDeclaredType();
+		}
+		// 未发现定义使用映射
+		for (DataTypeMapping mapping : this.getMappedTypeMappings()) {
+			if (mapping == null) {
+				continue;
+			}
+			if (mapping.getDateType() != this.getDataType()) {
+				continue;
+			}
+			if (mapping.getSubType() != null && mapping.getSubType() != this.getDataSubType()) {
+				continue;
+			}
+			// 存在映射
+			try {
+				return mapping.getMappedType(this);
+			} catch (Exception e) {
+				Environment.getLogger().error(e);
+			}
+		}
+		return this.property.getDeclaredType();
+	}
+
+	private List<DataTypeMapping> mappedTypeMappings;
+
+	public List<DataTypeMapping> getMappedTypeMappings() {
+		if (this.mappedTypeMappings == null) {
+			this.mappedTypeMappings = new ArrayList<>();
+		}
+		return mappedTypeMappings;
+	}
+
+	public void addMappedTypeMappings(Iterable<?> value) {
+		this.getMappedTypeMappings().clear();
+		if (value != null) {
+			for (Object item : value) {
+				if (item instanceof DataTypeMapping) {
+					this.getMappedTypeMappings().add((DataTypeMapping) item);
 				}
 			}
 		}
@@ -147,41 +213,13 @@ public class Property implements IProperty {
 		}
 		Object value = par.getValue();
 		if (Iterable.class.isInstance(value)) {
-			this.addDataTypeMappings((Iterable<?>) value);
+			this.addMappedTypeMappings((Iterable<?>) value);
 		}
-	}
-
-	@Override
-	public String getDeclaredType() {
-		if (this.property.getDeclaredType() != null) {
-			return this.property.getDeclaredType();
-		}
-		switch (this.getDataType()) {
-		case Alphanumeric:
-			return "String";
-		case Memo:
-			return "String";
-		case Numeric:
-			return "Integer";
-		case Date:
-			if (this.getDataSubType() == emDataSubType.Default)
-				return "DateTime";
-			else if (this.getDataSubType() == emDataSubType.Time)
-				return "Short";
-			break;
-		case Decimal:
-			return "Decimal";
-		case Bytes:
-			return "byte[]";
-		default:
-			return "String";
-		}
-		return null;
 	}
 
 	public String getMappedType() throws Exception {
 		// 优先使用映射
-		for (DataTypeMapping mapping : this.getDataTypeMappings()) {
+		for (DataTypeMapping mapping : this.getMappedTypeMappings()) {
 			if (mapping == null) {
 				continue;
 			}

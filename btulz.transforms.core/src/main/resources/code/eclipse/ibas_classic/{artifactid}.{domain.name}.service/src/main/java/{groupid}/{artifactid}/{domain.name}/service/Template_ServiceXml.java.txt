@@ -5,7 +5,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.colorcoding.ibas.bobas.common.*;
 import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.repository.*;
-<$BEGIN_BUSINESS_OBJECT$
+$BEGIN_BUSINESS_OBJECT$
 import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.<%BusinessObject.PropertyName.ToLower()%>.*;
 $END_BUSINESS_OBJECT$
 

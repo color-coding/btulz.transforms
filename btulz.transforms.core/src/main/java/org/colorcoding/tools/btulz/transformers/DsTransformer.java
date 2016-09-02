@@ -10,8 +10,8 @@ import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.models.IDomain;
 import org.colorcoding.tools.btulz.templates.Parameter;
 import org.colorcoding.tools.btulz.transformers.regions.RegionDomain;
-import org.colorcoding.tools.btulz.transformers.regions.models.DataTypeMapping;
 import org.colorcoding.tools.btulz.transformers.regions.models.DataTypeMappings;
+import org.colorcoding.tools.btulz.transformers.regions.models.Property;
 
 /**
  * 数据结构与模型的转换器
@@ -134,7 +134,7 @@ public class DsTransformer extends DbTransformer {
 		if (currentDomain != null) {
 			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, currentDomain));
 		}
-		parameters.add(new Parameter(DataTypeMapping.PARAMETER_NAME, this.getDataTypeMappings()));
+		parameters.add(new Parameter(Property.PARAMETER_NAME_MAPPED_TYPE, this.getDataTypeMappings()));
 		return parameters;
 	}
 

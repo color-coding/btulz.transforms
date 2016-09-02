@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.colorcoding.tools.btulz.models.IModel;
 import org.colorcoding.tools.btulz.templates.Parameter;
-import org.colorcoding.tools.btulz.transformers.regions.models.DataTypeMapping;
 import org.colorcoding.tools.btulz.transformers.regions.models.Property;
 
 /**
@@ -50,7 +49,8 @@ public class RegionModelProperty extends RegionBase {
 							@Override
 							public Parameter next() {
 								Property property = new Property(model.getProperties().get(curIndex));
-								property.addDataTypeMappings(getParameter(pars, DataTypeMapping.PARAMETER_NAME));
+								property.addDataTypeMappings(getParameter(pars, Property.PARAMETER_NAME_MAPPED_TYPE));
+								property.addDataTypeMappings(getParameter(pars, Property.PARAMETER_NAME_DECLARED_TYPE));
 								if (curIndex >= model.getProperties().size() - 1) {
 									property.setLast(true);
 								}
