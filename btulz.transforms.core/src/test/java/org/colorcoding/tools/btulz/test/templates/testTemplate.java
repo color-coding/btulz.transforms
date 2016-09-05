@@ -1,13 +1,13 @@
 package org.colorcoding.tools.btulz.test.templates;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.models.IBusinessObject;
 import org.colorcoding.tools.btulz.models.IDomain;
 import org.colorcoding.tools.btulz.models.IModel;
 import org.colorcoding.tools.btulz.templates.Parameter;
+import org.colorcoding.tools.btulz.templates.Parameters;
 import org.colorcoding.tools.btulz.test.transformers.testXmlTransformer;
 import org.colorcoding.tools.btulz.transformers.XmlTransformer;
 import org.colorcoding.tools.btulz.transformers.regions.RegionBusinessObject;
@@ -35,7 +35,7 @@ public class testTemplate extends TestCase {
 					}
 					File outputFile = new File(Environment.getWorkingFolder() + File.separator
 							+ String.format("%s.%s.out.txt", domain.getName(), model.getName()));
-					ArrayList<Parameter> parameters = new ArrayList<>();
+					Parameters parameters = new Parameters();
 					parameters.add(new Parameter(RegionDomain.REGION_PARAMETER_NAME, domain));
 					parameters.add(new Parameter(RegionBusinessObject.REGION_PARAMETER_NAME, businessObject));
 					parameters.add(new Parameter(RegionModel.REGION_PARAMETER_NAME, model));

@@ -1,7 +1,6 @@
 package org.colorcoding.tools.btulz.templates;
 
 import java.io.BufferedWriter;
-import java.util.List;
 
 /**
  * 模板数据
@@ -19,5 +18,5 @@ public interface ITemplateData {
 	 *            参数
 	 * @throws Exception
 	 */
-	void export(BufferedWriter writer, List<Parameter> pars) throws Exception;
+	void export(BufferedWriter writer, Parameters pars) throws Exception;
 }

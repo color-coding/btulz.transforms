@@ -13,7 +13,8 @@ public class testCodeTransformer extends TestCase {
 
 	public void testEclipseCode() throws Exception {
 		CodeTransformer codeTransformer = new CodeTransformer();
-		String tpltFolder = Environment.getResource("code/eclipse/ibas_classic").getPath();
+		// String tpltFolder =
+		// Environment.getResource("code/eclipse/ibas_classic").getPath();
 		codeTransformer.setTemplateFolder("eclipse/ibas_classic");
 		codeTransformer.setOutputFolder(System.getenv("TEMP"));
 		codeTransformer.addDomains(Environment.getWorkingFolder() + domain_file);

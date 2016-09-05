@@ -21,6 +21,7 @@ import org.colorcoding.tools.btulz.models.IBusinessObjectItem;
 import org.colorcoding.tools.btulz.models.IDomain;
 import org.colorcoding.tools.btulz.models.IModel;
 import org.colorcoding.tools.btulz.templates.Parameter;
+import org.colorcoding.tools.btulz.templates.Parameters;
 import org.colorcoding.tools.btulz.templates.Variable;
 import org.colorcoding.tools.btulz.transformers.regions.RegionBusinessObject;
 import org.colorcoding.tools.btulz.transformers.regions.RegionBusinessObjectItem;
@@ -111,8 +112,8 @@ public class CodeTransformer extends Transformer {
 	 * 
 	 * @return
 	 */
-	protected List<Parameter> getRuntimeParameters() {
-		ArrayList<Parameter> parameters = new ArrayList<>();
+	protected Parameters getRuntimeParameters() {
+		Parameters parameters = new Parameters();
 		parameters.add(new Parameter("AppName", "btulz.transforms"));
 
 		return parameters;
@@ -123,7 +124,7 @@ public class CodeTransformer extends Transformer {
 		for (IDomain domain : this.getDomains()) {
 			Environment.getLogger().info(String.format("begin transform domain [%s].", domain.getName()));
 			File outFolder = new File(this.getOutputFolder() + File.separator + domain.getName());
-			List<Parameter> parameters = this.getRuntimeParameters();
+			Parameters parameters = this.getRuntimeParameters();
 			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, domain));
 			this.transform(new File(this.getTemplateFolder()), outFolder, parameters);
 			Environment.getLogger().info(String.format("end transform domain [%s].", domain.getName()));
@@ -185,7 +186,7 @@ public class CodeTransformer extends Transformer {
 	 *            模板文件夹
 	 * @throws Exception
 	 */
-	private final void transform(File tpltFolder, File rootFolder, List<Parameter> parameters) throws Exception {
+	private final void transform(File tpltFolder, File rootFolder, Parameters parameters) throws Exception {
 		if (tpltFolder == null || !tpltFolder.exists()) {
 			return;
 		}
@@ -200,24 +201,11 @@ public class CodeTransformer extends Transformer {
 		for (File file : tpltFolder.listFiles()) {
 			if (file.isDirectory()) {
 				// 子文件夹处理，每个文件夹一组变量避免冲突
-				this.transform(file, rootFolder, new ArrayList<>(parameters));
+				this.transform(file, rootFolder, new Parameters(parameters));
 			} else if (file.isFile()) {
 				if (file.getName().startsWith("~")) {
 					// ~ 开始文件，为参数文件
-					Parameter newParameter = this.loadParameters(file);
-					if (newParameter != null) {
-						boolean done = false;
-						for (int i = 0; i < parameters.size(); i++) {
-							if (parameters.get(i).getName().equals(newParameter.getName())) {
-								parameters.set(i, newParameter);
-								done = true;
-								break;
-							}
-						}
-						if (!done) {
-							parameters.add(newParameter);
-						}
-					}
+					parameters.add(this.loadParameters(file));
 				} else if (file.getName().equalsIgnoreCase("putout_domain_models.txt")) {
 					// 输出数据结构在此
 					for (Parameter parameter : parameters) {
@@ -281,15 +269,8 @@ public class CodeTransformer extends Transformer {
 	 * @param output
 	 * @throws Exception
 	 */
-	protected void transformFile(File source, File output, List<Parameter> parameters) throws Exception {
-		IDomain domain = null;
-		for (Parameter parameter : parameters) {
-			if (parameter.getName().equalsIgnoreCase(RegionDomain.REGION_PARAMETER_NAME)) {
-				if (parameter.getValue() instanceof IDomain) {
-					domain = (IDomain) parameter.getValue();
-				}
-			}
-		}
+	protected void transformFile(File source, File output, Parameters parameters) throws Exception {
+		IDomain domain = parameters.getValue(RegionDomain.REGION_PARAMETER_NAME, IDomain.class);
 		if (domain == null) {
 			return;
 		}
@@ -297,21 +278,11 @@ public class CodeTransformer extends Transformer {
 				|| source.getName().startsWith("Template_Model_")) {
 			// 和业务对象输出相关的
 			for (IBusinessObject businessObject : domain.getBusinessObjects()) {
-				boolean done = false;
-				for (int i = 0; i < parameters.size(); i++) {
-					if (parameters.get(i).getName().equalsIgnoreCase(RegionBusinessObject.REGION_PARAMETER_NAME)) {
-						parameters.set(i, new Parameter(RegionBusinessObject.REGION_PARAMETER_NAME, businessObject));
-						done = true;
-					}
-				}
-				if (!done) {
-					parameters.add(new Parameter(RegionBusinessObject.REGION_PARAMETER_NAME, businessObject));
-				}
+				parameters.add(new Parameter(RegionBusinessObject.REGION_PARAMETER_NAME, businessObject));
 				if (source.getName().startsWith("Template_BO_")) {
-					String name = source.getName().replace("Template_BO_", "");
-					name = this.replaceVariables(name, parameters);
 					RegionDomain template = new RegionDomain();
 					template.setTemplateFile(source.getPath());
+					String name = this.replaceVariables(source.getName().replace("Template_BO_", ""), parameters);
 					template.export(parameters, output.getPath() + File.separator + name);
 
 				} else if (source.getName().startsWith("Template_BOItem_")) {
@@ -319,82 +290,50 @@ public class CodeTransformer extends Transformer {
 				} else if (source.getName().startsWith("Template_Model_")) {
 					for (IModel model : domain.getModels()) {
 						if (businessObject.getMappedModel().equals(model.getName())) {
-							done = false;
-							for (int i = 0; i < parameters.size(); i++) {
-								if (parameters.get(i).getName()
-										.equalsIgnoreCase(RegionBusinessObjectModel.REGION_PARAMETER_NAME)) {
-									parameters.set(i, new Parameter(RegionBusinessObjectModel.REGION_PARAMETER_NAME,
-											businessObject));
-									done = true;
-								}
-							}
-							if (!done) {
-								parameters.add(
-										new Parameter(RegionBusinessObjectModel.REGION_PARAMETER_NAME, businessObject));
-							}
-							String name = source.getName().replace("Template_Model_", "");
-							name = this.replaceVariables(name, parameters);
+							parameters.add(
+									new Parameter(RegionBusinessObjectModel.REGION_PARAMETER_NAME, businessObject));
 							RegionDomain template = new RegionDomain();
 							template.setTemplateFile(source.getPath());
+							String name = this.replaceVariables(source.getName().replace("Template_Model_", ""),
+									parameters);
 							template.export(parameters, output.getPath() + File.separator + name);
 						}
 					}
 				}
 			}
 		} else {
-			String name = source.getName();
-			name = this.replaceVariables(name, parameters);
 			RegionDomain template = new RegionDomain();
 			template.setTemplateFile(source.getPath());
+			String name = this.replaceVariables(source.getName(), parameters);
 			template.export(parameters, output.getPath() + File.separator + name);
 		}
 	}
 
-	protected void transformFile(File source, File output, List<Parameter> parameters, IBusinessObject businessObject)
+	protected void transformFile(File source, File output, Parameters parameters, IBusinessObject businessObject)
 			throws Exception {
-		IDomain domain = null;
-		for (Parameter parameter : parameters) {
-			if (parameter.getName().equalsIgnoreCase(RegionDomain.REGION_PARAMETER_NAME)) {
-				if (parameter.getValue() instanceof IDomain) {
-					domain = (IDomain) parameter.getValue();
-				}
-			}
-		}
+		IDomain domain = parameters.getValue(RegionDomain.REGION_PARAMETER_NAME, IDomain.class);
 		if (domain == null) {
 			return;
 		}
 		for (IBusinessObjectItem businessObjectItem : businessObject.getRelatedBOs()) {
-			boolean doneBO = false;
-			boolean doneItem = false;
-			for (int i = 0; i < parameters.size(); i++) {
-				if (parameters.get(i).getName().equalsIgnoreCase(RegionBusinessObject.REGION_PARAMETER_NAME)) {
-					parameters.set(i, new Parameter(RegionBusinessObject.REGION_PARAMETER_NAME, businessObject));
-					doneBO = true;
-				} else if (parameters.get(i).getName()
-						.equalsIgnoreCase(RegionBusinessObjectItem.REGION_PARAMETER_NAME)) {
-					parameters.set(i,
-							new Parameter(RegionBusinessObjectItem.REGION_PARAMETER_NAME, businessObjectItem));
-					doneItem = true;
-				} else {
-					parameters.add(parameters.get(i));
-				}
-			}
-			if (!doneBO) {
-				parameters.add(new Parameter(RegionBusinessObject.REGION_PARAMETER_NAME, businessObject));
-			}
-			if (!doneItem) {
-				parameters.add(new Parameter(RegionBusinessObjectItem.REGION_PARAMETER_NAME, businessObjectItem));
-			}
-			String name = source.getName().replace("Template_BOItem_", "");
-			name = this.replaceVariables(name, parameters);
+			parameters.add(new Parameter(RegionBusinessObject.REGION_PARAMETER_NAME, businessObject));
+			parameters.add(new Parameter(RegionBusinessObjectItem.REGION_PARAMETER_NAME, businessObjectItem));
 			RegionDomain template = new RegionDomain();
 			template.setTemplateFile(source.getPath());
+			String name = this.replaceVariables(source.getName().replace("Template_BOItem_", ""), parameters);
 			template.export(parameters, output.getPath() + File.separator + name);
 		}
 	}
 
+	/**
+	 * 加载额外的参数
+	 * 
+	 * @param source
+	 * @return
+	 */
 	protected Parameter loadParameters(File source) {
-		if (source.getName().equals("~parameter_declared_type.xml")) {
+		if (source.getName().equals("~parameter_property_declared_type.xml")) {
+			// 属性的定义类型说明
 			try {
 				return new Parameter(Property.PARAMETER_NAME_DECLARED_TYPE,
 						(DataTypeMappings.create(this.getTemplateFolder() + File.separator + "")));

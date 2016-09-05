@@ -1,7 +1,6 @@
 package org.colorcoding.tools.btulz.templates;
 
 import java.io.BufferedWriter;
-import java.util.List;
 
 import org.colorcoding.tools.btulz.Environment;
 
@@ -37,7 +36,7 @@ public class TemplateLine implements ITemplateData {
 	}
 
 	@Override
-	public void export(BufferedWriter writer, List<Parameter> pars) throws Exception {
+	public void export(BufferedWriter writer, Parameters parameters) throws Exception {
 		String outLine = this.getLine();
 		Variable[] variables = Variable.discerning(this.getLine());
 		for (Variable variable : variables) {
@@ -47,13 +46,7 @@ public class TemplateLine implements ITemplateData {
 			if (variable.getName().startsWith(DELAYED_MARK)) {
 				outLine = outLine.replace(variable.getOriginal(), variable.getOriginal().replace("${!", "${"));
 			} else {
-				Parameter parameter = null;
-				for (Parameter par : pars) {
-					if (par.getName().equalsIgnoreCase(variable.getName())) {
-						parameter = par;
-						break;
-					}
-				}
+				Parameter parameter = parameters.get(variable.getName());
 				if (parameter != null) {
 					try {
 						Object value = parameter.getValue(variable.getValuePath());

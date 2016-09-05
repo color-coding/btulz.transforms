@@ -2,7 +2,6 @@ package org.colorcoding.tools.btulz.templates;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.util.List;
 
 /**
  * 注释区域
@@ -25,11 +24,11 @@ public class CommentRegion extends TemplateRegion {
 	}
 
 	@Override
-	public void export(BufferedWriter writer, List<Parameter> pars) throws Exception {
+	public void export(BufferedWriter writer, Parameters pars) throws Exception {
 	}
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters(List<Parameter> pars) {
+	protected Iterable<Parameter> getRegionParameters(Parameters pars) {
 		return null;
 	}
 }

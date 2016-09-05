@@ -9,7 +9,6 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Iterator;
-import java.util.List;
 
 import org.colorcoding.tools.btulz.Environment;
 
@@ -63,9 +62,8 @@ public class Template extends TemplateRegion {
 	 *            输出文件
 	 * @throws Exception
 	 */
-	public void export(List<Parameter> parameters, String outputFile) throws Exception {
-		File outFile = new File(outputFile);
-		export(parameters, outFile);
+	public void export(Parameters parameters, String outputFile) throws Exception {
+		this.export(parameters, new File(outputFile));
 	}
 
 	/**
@@ -77,7 +75,7 @@ public class Template extends TemplateRegion {
 	 *            输出文件
 	 * @throws Exception
 	 */
-	public void export(List<Parameter> parameters, File outputFile) throws Exception {
+	public void export(Parameters parameters, File outputFile) throws Exception {
 		if (!outputFile.exists()) {
 			outputFile.getParentFile().mkdirs();
 			outputFile.createNewFile();
@@ -85,7 +83,7 @@ public class Template extends TemplateRegion {
 			outputFile.delete();
 			outputFile.createNewFile();
 		}
-		export(parameters,
+		this.export(parameters,
 				new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), this.getEncoding())));
 	}
 
@@ -103,7 +101,7 @@ public class Template extends TemplateRegion {
 	 *            输出文件
 	 * @throws Exception
 	 */
-	public void export(List<Parameter> parameters, BufferedWriter writer) throws Exception {
+	public void export(Parameters parameters, BufferedWriter writer) throws Exception {
 		File tpltFile = new File(this.getTemplateFile());
 		if (!tpltFile.exists() || !tpltFile.isFile()) {
 			throw new FileNotFoundException(this.getTemplateFile());
@@ -130,7 +128,7 @@ public class Template extends TemplateRegion {
 	}
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters(List<Parameter> pars) throws InvalidParameterException {
+	protected Iterable<Parameter> getRegionParameters(Parameters pars) throws InvalidParameterException {
 		return new Iterable<Parameter>() {
 			@Override
 			public Iterator<Parameter> iterator() {
@@ -153,4 +151,5 @@ public class Template extends TemplateRegion {
 
 		};
 	}
+
 }

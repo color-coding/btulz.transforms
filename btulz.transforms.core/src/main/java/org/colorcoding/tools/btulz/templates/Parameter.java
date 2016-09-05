@@ -10,6 +10,22 @@ import java.lang.reflect.Method;
  *
  */
 public class Parameter {
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj != null && obj instanceof Parameter) {
+			return this.equals((Parameter) obj);
+		}
+		return super.equals(obj);
+	}
+
+	public boolean equals(Parameter obj) {
+		if (obj != null) {
+			return this.getName().equals(obj.getName());
+		}
+		return false;
+	}
+
 	public Parameter() {
 
 	}

@@ -2,7 +2,6 @@ package org.colorcoding.tools.btulz.templates;
 
 import java.lang.reflect.Method;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * 区域-判断（根据区域名称，判断条件是否成立）
@@ -22,12 +21,12 @@ public class JudgmentRegion extends TemplateRegion {
 	public static final String REGION_DELIMITER = "_IS_";
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters(List<Parameter> pars) {
+	protected Iterable<Parameter> getRegionParameters(Parameters parameters) {
 		String[] regionValues = this.getBeginDelimiter().replace(REGION_SIGN_BEGIN, "").replace(REGION_SIGN, "")
 				.split("_");
 		if (regionValues != null && regionValues.length > 1) {
 			String parName = regionValues[0];
-			Parameter parameter = this.getParameter(pars, parName);
+			Parameter parameter = parameters.get(parName);
 			if (parameter != null && parameter.getValue() != null) {
 				Object value = parameter.getValue();
 				int index = 0;

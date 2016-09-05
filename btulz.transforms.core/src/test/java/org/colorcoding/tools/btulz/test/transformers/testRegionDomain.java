@@ -1,7 +1,6 @@
 package org.colorcoding.tools.btulz.test.transformers;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -13,6 +12,7 @@ import org.colorcoding.tools.btulz.models.IDomain;
 import org.colorcoding.tools.btulz.models.data.emDataSubType;
 import org.colorcoding.tools.btulz.models.data.emDataType;
 import org.colorcoding.tools.btulz.templates.Parameter;
+import org.colorcoding.tools.btulz.templates.Parameters;
 import org.colorcoding.tools.btulz.transformers.DataStructureOrchestration;
 import org.colorcoding.tools.btulz.transformers.XmlTransformer;
 import org.colorcoding.tools.btulz.transformers.regions.RegionDomain;
@@ -44,7 +44,7 @@ public class testRegionDomain extends TestCase {
 			template.setTemplateFile(tpltFile + File.separator + "ds_mssql_ibas_classic.xml");
 			File outputFile = new File(
 					Environment.getWorkingFolder() + File.separator + "ds_mssql_ibas_classic.out.xml");
-			ArrayList<Parameter> parameters = new ArrayList<>();
+			Parameters parameters = new Parameters();
 			parameters.add(new Parameter("Company", "CC"));
 			parameters.add(new Parameter("DbServer", "ibas-dev-mssql"));
 			parameters.add(new Parameter("DbPort", "1433"));
@@ -86,7 +86,7 @@ public class testRegionDomain extends TestCase {
 					Environment.getWorkingFolder() + File.separator + "ds_mysql_ibas_classic.out.xml");
 			dataTypeMappings = DataTypeMappings.create(
 					template.getTemplateFile().replace("ds_mysql_ibas_classic.xml", "dm_mysql_ibas_classic.xml"));
-			ArrayList<Parameter> parameters = new ArrayList<>();
+			Parameters parameters = new Parameters();
 			parameters.add(new Parameter("Company", "CC"));
 			parameters.add(new Parameter("DbServer", "ibas-dev-mysql"));
 			parameters.add(new Parameter("DbPort", "3306"));
@@ -127,7 +127,7 @@ public class testRegionDomain extends TestCase {
 					Environment.getWorkingFolder() + File.separator + "ds_pgsql_ibas_classic.out.xml");
 			dataTypeMappings = DataTypeMappings.create(
 					template.getTemplateFile().replace("ds_pgsql_ibas_classic.xml", "dm_pgsql_ibas_classic.xml"));
-			ArrayList<Parameter> parameters = new ArrayList<>();
+			Parameters parameters = new Parameters();
 			parameters.add(new Parameter("Company", "CC"));
 			parameters.add(new Parameter("DbServer", "ibas-dev-pgsql"));
 			parameters.add(new Parameter("DbPort", "5432"));
@@ -168,7 +168,7 @@ public class testRegionDomain extends TestCase {
 					Environment.getWorkingFolder() + File.separator + "ds_hana_ibas_classic.out.xml");
 			dataTypeMappings = DataTypeMappings
 					.create(template.getTemplateFile().replace("ds_hana_ibas_classic.xml", "dm_hana_ibas_classic.xml"));
-			ArrayList<Parameter> parameters = new ArrayList<>();
+			Parameters parameters = new Parameters();
 			parameters.add(new Parameter("Company", "CC"));
 			parameters.add(new Parameter("DbServer", "ibas-dev-hana"));
 			parameters.add(new Parameter("DbPort", "30015"));

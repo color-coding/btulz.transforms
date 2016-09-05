@@ -34,9 +34,9 @@ $BEGIN_MODEL$
 		<Step Name="create table" RunOnValue="0">
 			<Script>
 				create table "${Model.getMapped()}"(
-$BEGIN_MODEL_PROPERTY$				
+$BEGIN_MODEL_PROPERTY$
 				    "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getNullType()} ${Property.getSeparator(,)}
-$END_MODEL_PROPERTY$			    
+$END_MODEL_PROPERTY$
 				)
 			</Script>
 		</Step>

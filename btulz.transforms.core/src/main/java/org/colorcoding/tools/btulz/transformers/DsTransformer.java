@@ -9,6 +9,7 @@ import java.util.List;
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.models.IDomain;
 import org.colorcoding.tools.btulz.templates.Parameter;
+import org.colorcoding.tools.btulz.templates.Parameters;
 import org.colorcoding.tools.btulz.transformers.regions.RegionDomain;
 import org.colorcoding.tools.btulz.transformers.regions.models.DataTypeMappings;
 import org.colorcoding.tools.btulz.transformers.regions.models.Property;
@@ -129,8 +130,8 @@ public class DsTransformer extends DbTransformer {
 	}
 
 	@Override
-	protected List<Parameter> getRuntimeParameters() {
-		List<Parameter> parameters = super.getRuntimeParameters();
+	protected Parameters getRuntimeParameters() {
+		Parameters parameters = super.getRuntimeParameters();
 		if (currentDomain != null) {
 			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, currentDomain));
 		}

@@ -112,14 +112,13 @@ public abstract class TemplateRegion implements ITemplateData {
 		}
 	}
 
-	public void export(BufferedWriter writer, List<Parameter> pars) throws Exception {
-		List<Parameter> newPars = pars;
+	public void export(BufferedWriter writer, Parameters parameters) throws Exception {
 		for (ITemplateData tpltLine : this.getTemplateLines()) {
 			if (tpltLine instanceof TemplateRegion && !(tpltLine instanceof CommentRegion)) {
 				// 重复区域，需要循环输出
 				// 输出模板数据
 				TemplateRegion region = (TemplateRegion) tpltLine;
-				Iterable<Parameter> regionPars = region.getRegionParameters(pars);
+				Iterable<Parameter> regionPars = region.getRegionParameters(parameters);
 				if (regionPars == null) {
 					throw new InvalidParameterException(String.format("invalid parameter between %s and %s.",
 							region.getBeginDelimiter(), region.getEndDelimiter()));
@@ -130,35 +129,18 @@ public abstract class TemplateRegion implements ITemplateData {
 					if (regionPar != null) {
 						Environment.getLogger().debug(String.format("template: using region parameter [%s:%s].",
 								regionPar.getName(), regionPar.getValue()));
-						newPars = new ArrayList<Parameter>(pars);
-						boolean done = false;
-						for (int i = 0; i < newPars.size(); i++) {
-							if (regionPar.getName().equals(newPars.get(i).getName())) {
-								newPars.set(i, regionPar);
-								done = true;
-							}
-						}
-						if (!done)
-							newPars.add(regionPar);
+						Parameters newParameters = new Parameters(parameters);
+						newParameters.add(regionPar);
+						tpltLine.export(writer, newParameters);
 					}
-					tpltLine.export(writer, newPars);
 				}
 				Environment.getLogger().debug(String.format("template: end export region [%s].", tpltLine));
 			} else {
-				tpltLine.export(writer, newPars);
+				tpltLine.export(writer, parameters);
 			}
 		}
 		writer.flush();
 	}
 
-	protected Parameter getParameter(List<Parameter> parameters, String name) {
-		for (Parameter parameter : parameters) {
-			if (parameter.getName().equalsIgnoreCase(name)) {
-				return parameter;
-			}
-		}
-		return null;
-	}
-
-	protected abstract Iterable<Parameter> getRegionParameters(List<Parameter> pars) throws InvalidParameterException;
+	protected abstract Iterable<Parameter> getRegionParameters(Parameters pars) throws InvalidParameterException;
 }

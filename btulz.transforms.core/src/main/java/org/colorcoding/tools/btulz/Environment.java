@@ -163,6 +163,7 @@ public class Environment {
 			}
 			bin.reset();
 			if (!checked) {
+				@SuppressWarnings("unused")
 				int loc = 0;
 				while ((read = bin.read()) != -1) {
 					loc++;

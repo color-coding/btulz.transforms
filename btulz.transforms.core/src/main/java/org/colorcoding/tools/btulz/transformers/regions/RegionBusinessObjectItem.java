@@ -1,10 +1,10 @@
 package org.colorcoding.tools.btulz.transformers.regions;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.colorcoding.tools.btulz.models.IBusinessObject;
 import org.colorcoding.tools.btulz.templates.Parameter;
+import org.colorcoding.tools.btulz.templates.Parameters;
 
 /**
  * 区域-业务对象模型
@@ -28,36 +28,36 @@ public class RegionBusinessObjectItem extends RegionBase {
 	}
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters(List<Parameter> pars) {
-		Parameter parameter = this.getParameter(pars, RegionBusinessObject.REGION_PARAMETER_NAME);
-		if (parameter != null) {
-			if (parameter.getValue() instanceof IBusinessObject) {
-				IBusinessObject businessObject = (IBusinessObject) parameter.getValue();
-				return new Iterable<Parameter>() {
-					@Override
-					public Iterator<Parameter> iterator() {
+	protected Iterable<Parameter> getRegionParameters(Parameters parameters) {
 
-						return new Iterator<Parameter>() {
-							int curIndex = 0;
+		IBusinessObject businessObject = parameters.getValue(RegionBusinessObject.REGION_PARAMETER_NAME,
+				IBusinessObject.class);
+		if (businessObject != null) {
 
-							@Override
-							public boolean hasNext() {
-								return curIndex < businessObject.getRelatedBOs().size() ? true : false;
-							}
+			return new Iterable<Parameter>() {
+				@Override
+				public Iterator<Parameter> iterator() {
 
-							@Override
-							public Parameter next() {
-								Parameter parameter = new Parameter();
-								parameter.setName(REGION_PARAMETER_NAME);
-								parameter.setValue(businessObject.getRelatedBOs().get(curIndex));
-								curIndex++;
-								return parameter;
-							}
-						};
-					}
+					return new Iterator<Parameter>() {
+						int curIndex = 0;
 
-				};
-			}
+						@Override
+						public boolean hasNext() {
+							return curIndex < businessObject.getRelatedBOs().size() ? true : false;
+						}
+
+						@Override
+						public Parameter next() {
+							Parameter parameter = new Parameter();
+							parameter.setName(REGION_PARAMETER_NAME);
+							parameter.setValue(businessObject.getRelatedBOs().get(curIndex));
+							curIndex++;
+							return parameter;
+						}
+					};
+				}
+
+			};
 		}
 		return null;
 	}

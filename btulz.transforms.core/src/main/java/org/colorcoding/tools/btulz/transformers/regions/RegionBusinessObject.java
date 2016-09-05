@@ -1,10 +1,10 @@
 package org.colorcoding.tools.btulz.transformers.regions;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.colorcoding.tools.btulz.models.IDomain;
 import org.colorcoding.tools.btulz.templates.Parameter;
+import org.colorcoding.tools.btulz.templates.Parameters;
 
 /**
  * 区域-业务对象
@@ -28,36 +28,33 @@ public class RegionBusinessObject extends RegionBase {
 	}
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters(List<Parameter> pars) {
-		Parameter parameter = this.getParameter(pars, RegionDomain.REGION_PARAMETER_NAME);
-		if (parameter != null) {
-			if (parameter.getValue() instanceof IDomain) {
-				IDomain domain = (IDomain) parameter.getValue();
-				return new Iterable<Parameter>() {
-					@Override
-					public Iterator<Parameter> iterator() {
+	protected Iterable<Parameter> getRegionParameters(Parameters parameters) {
+		IDomain domain = parameters.getValue(RegionDomain.REGION_PARAMETER_NAME, IDomain.class);
+		if (domain != null) {
+			return new Iterable<Parameter>() {
+				@Override
+				public Iterator<Parameter> iterator() {
 
-						return new Iterator<Parameter>() {
-							int curIndex = 0;
+					return new Iterator<Parameter>() {
+						int curIndex = 0;
 
-							@Override
-							public boolean hasNext() {
-								return curIndex < domain.getBusinessObjects().size() ? true : false;
-							}
+						@Override
+						public boolean hasNext() {
+							return curIndex < domain.getBusinessObjects().size() ? true : false;
+						}
 
-							@Override
-							public Parameter next() {
-								Parameter parameter = new Parameter();
-								parameter.setName(REGION_PARAMETER_NAME);
-								parameter.setValue(domain.getBusinessObjects().get(curIndex));
-								curIndex++;
-								return parameter;
-							}
-						};
-					}
+						@Override
+						public Parameter next() {
+							Parameter parameter = new Parameter();
+							parameter.setName(REGION_PARAMETER_NAME);
+							parameter.setValue(domain.getBusinessObjects().get(curIndex));
+							curIndex++;
+							return parameter;
+						}
+					};
+				}
 
-				};
-			}
+			};
 		}
 		return null;
 	}

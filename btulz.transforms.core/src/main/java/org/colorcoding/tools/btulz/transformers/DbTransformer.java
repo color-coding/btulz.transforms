@@ -2,9 +2,7 @@ package org.colorcoding.tools.btulz.transformers;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -12,6 +10,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.templates.Parameter;
+import org.colorcoding.tools.btulz.templates.Parameters;
 import org.colorcoding.tools.btulz.transformers.regions.RegionDomain;
 
 /**
@@ -105,8 +104,8 @@ public abstract class DbTransformer extends Transformer {
 	 * 
 	 * @return
 	 */
-	protected List<Parameter> getRuntimeParameters() {
-		ArrayList<Parameter> parameters = new ArrayList<>();
+	protected Parameters getRuntimeParameters() {
+		Parameters parameters = new Parameters();
 		parameters.add(new Parameter("AppName", "btulz.transforms"));
 		parameters.add(new Parameter("DbServer", this.getDbServer()));
 		parameters.add(new Parameter("DbPort", this.getDbPort()));
