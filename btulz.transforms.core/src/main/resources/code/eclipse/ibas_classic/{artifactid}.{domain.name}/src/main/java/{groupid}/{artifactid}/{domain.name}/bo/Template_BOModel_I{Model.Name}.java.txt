@@ -1,4 +1,4 @@
-package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.<%BusinessObject.PropertyName.ToLower()%>;
+package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${BusinessObject.getName().toLowerCase()};
 
 import org.colorcoding.ibas.bobas.bo.*;
 import org.colorcoding.ibas.bobas.data.*;

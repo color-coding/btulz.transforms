@@ -22,6 +22,7 @@ import org.colorcoding.tools.btulz.transformers.regions.models.Property;
  */
 public class DsTransformer extends DbTransformer {
 
+	public static final String TEMPLATE_FOLDER_DATA_STRUCTURES = "ds";
 	private List<IDomain> domains;
 
 	public List<IDomain> getDomains() {
@@ -74,8 +75,8 @@ public class DsTransformer extends DbTransformer {
 			// 不是完整的路径，补充目录到路径
 			try {
 				// 优先使用工作目录的模板
-				File file = new File(
-						Environment.getWorkingFolder() + File.separator + "ds" + File.separator + templateFile);
+				File file = new File(Environment.getWorkingFolder() + File.separator + TEMPLATE_FOLDER_DATA_STRUCTURES
+						+ File.separator + templateFile);
 				if (file.exists() && file.isFile()) {
 					super.setTemplateFile(file.getPath());
 					return;
@@ -103,8 +104,9 @@ public class DsTransformer extends DbTransformer {
 					stream = Thread.currentThread().getContextClassLoader()
 							.getResourceAsStream(resName.replace("ds/ds_", "ds/dm_"));
 					if (stream != null) {
-						file = new File(Environment.getWorkingFolder() + File.separator + "ds" + File.separator
-								+ templateFile.replace("ds_", "dm_"));
+						file = new File(
+								Environment.getWorkingFolder() + File.separator + TEMPLATE_FOLDER_DATA_STRUCTURES
+										+ File.separator + templateFile.replace("ds_", "dm_"));
 						fos = null;
 						len = -1;
 						b = new byte[1024];

@@ -9,6 +9,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,6 +40,12 @@ import org.colorcoding.tools.btulz.transformers.regions.models.Property;
  *
  */
 public class CodeTransformer extends Transformer {
+	public static final String TEMPLATE_FOLDER_CODE = "code";
+	public static final String TEMPLATE_FILE = "Template_";
+	public static final String TEMPLATE_FILE_BO = TEMPLATE_FILE + "BO_";
+	public static final String TEMPLATE_FILE_BO_ITEM = TEMPLATE_FILE + "BOItem_";
+	public static final String TEMPLATE_FILE_BO_MODEL = TEMPLATE_FILE + "BOModel_";
+	public static final String TEMPLATE_FILE_PARAMETER = "~";
 
 	private String templateFolder;
 
@@ -49,13 +58,13 @@ public class CodeTransformer extends Transformer {
 			// 不是完整的路径，补充目录到路径
 			try {
 				// 优先使用工作目录的模板
-				File file = new File(
-						Environment.getWorkingFolder() + File.separator + "code" + File.separator + templateFolder);
+				File file = new File(Environment.getWorkingFolder() + File.separator + TEMPLATE_FOLDER_CODE
+						+ File.separator + templateFolder);
 				if (file.exists() && file.isDirectory()) {
 					this.templateFolder = file.getPath();
 					return;
 				}
-				URI uri = Environment.getResource("code" + File.separator + templateFolder);
+				URI uri = Environment.getResource(TEMPLATE_FOLDER_CODE + File.separator + templateFolder);
 				if (uri != null) {
 					file = new File(uri.getPath());
 					if (file.exists() && file.isDirectory()) {
@@ -115,7 +124,7 @@ public class CodeTransformer extends Transformer {
 	protected Parameters getRuntimeParameters() {
 		Parameters parameters = new Parameters();
 		parameters.add(new Parameter("AppName", "btulz.transforms"));
-
+		parameters.add(new Parameter("ID", new RuntimeParameter()));
 		return parameters;
 	}
 
@@ -198,12 +207,31 @@ public class CodeTransformer extends Transformer {
 		if (!outFolder.exists()) {
 			outFolder.mkdirs();
 		}
-		for (File file : tpltFolder.listFiles()) {
+		// 文件排序，先文件后目录
+		List<File> files = Arrays.asList(tpltFolder.listFiles());
+		Collections.sort(files, new Comparator<File>() {
+			@Override
+			public int compare(File o1, File o2) {
+				if (o1.isDirectory() && o2.isFile())
+					return 1;
+				if (o1.isFile() && o2.isDirectory())
+					return -1;
+				if (o1.getName().startsWith(TEMPLATE_FILE_PARAMETER)
+						&& !o2.getName().startsWith(TEMPLATE_FILE_PARAMETER))
+					return -1;
+				if (!o1.getName().startsWith(TEMPLATE_FILE_PARAMETER)
+						&& o2.getName().startsWith(TEMPLATE_FILE_PARAMETER))
+					return 1;
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+		// 遍历处理文件清单
+		for (File file : files) {
 			if (file.isDirectory()) {
 				// 子文件夹处理，每个文件夹一组变量避免冲突
 				this.transform(file, rootFolder, new Parameters(parameters));
 			} else if (file.isFile()) {
-				if (file.getName().startsWith("~")) {
+				if (file.getName().startsWith(TEMPLATE_FILE_PARAMETER)) {
 					// ~ 开始文件，为参数文件
 					parameters.add(this.loadParameters(file));
 				} else if (file.getName().equalsIgnoreCase("putout_domain_models.txt")) {
@@ -219,7 +247,7 @@ public class CodeTransformer extends Transformer {
 							}
 						}
 					}
-				} else if (file.getName().startsWith("Template_")) {
+				} else if (file.getName().startsWith(TEMPLATE_FILE)) {
 					// 转换文件
 					this.transformFile(file, outFolder, parameters);
 				} else {
@@ -274,27 +302,25 @@ public class CodeTransformer extends Transformer {
 		if (domain == null) {
 			return;
 		}
-		if (source.getName().startsWith("Template_BO_") || source.getName().startsWith("Template_BOItem_")
-				|| source.getName().startsWith("Template_Model_")) {
+		if (source.getName().startsWith(TEMPLATE_FILE_BO) || source.getName().startsWith(TEMPLATE_FILE_BO_ITEM)
+				|| source.getName().startsWith(TEMPLATE_FILE_BO_MODEL)) {
 			// 和业务对象输出相关的
 			for (IBusinessObject businessObject : domain.getBusinessObjects()) {
 				parameters.add(new Parameter(RegionBusinessObject.REGION_PARAMETER_NAME, businessObject));
-				if (source.getName().startsWith("Template_BO_")) {
+				if (source.getName().startsWith(TEMPLATE_FILE_BO)) {
 					RegionDomain template = new RegionDomain();
 					template.setTemplateFile(source.getPath());
-					String name = this.replaceVariables(source.getName().replace("Template_BO_", ""), parameters);
+					String name = this.replaceVariables(source.getName().replace(TEMPLATE_FILE_BO, ""), parameters);
 					template.export(parameters, output.getPath() + File.separator + name);
-
-				} else if (source.getName().startsWith("Template_BOItem_")) {
+				} else if (source.getName().startsWith(TEMPLATE_FILE_BO_ITEM)) {
 					this.transformFile(source, output, parameters, businessObject);
-				} else if (source.getName().startsWith("Template_Model_")) {
+				} else if (source.getName().startsWith(TEMPLATE_FILE_BO_MODEL)) {
 					for (IModel model : domain.getModels()) {
 						if (businessObject.getMappedModel().equals(model.getName())) {
-							parameters.add(
-									new Parameter(RegionBusinessObjectModel.REGION_PARAMETER_NAME, businessObject));
+							parameters.add(new Parameter(RegionBusinessObjectModel.REGION_PARAMETER_NAME, model));
 							RegionDomain template = new RegionDomain();
 							template.setTemplateFile(source.getPath());
-							String name = this.replaceVariables(source.getName().replace("Template_Model_", ""),
+							String name = this.replaceVariables(source.getName().replace(TEMPLATE_FILE_BO_MODEL, ""),
 									parameters);
 							template.export(parameters, output.getPath() + File.separator + name);
 						}
@@ -304,7 +330,7 @@ public class CodeTransformer extends Transformer {
 		} else {
 			RegionDomain template = new RegionDomain();
 			template.setTemplateFile(source.getPath());
-			String name = this.replaceVariables(source.getName(), parameters);
+			String name = this.replaceVariables(source.getName().replace(TEMPLATE_FILE, ""), parameters);
 			template.export(parameters, output.getPath() + File.separator + name);
 		}
 	}
@@ -320,7 +346,7 @@ public class CodeTransformer extends Transformer {
 			parameters.add(new Parameter(RegionBusinessObjectItem.REGION_PARAMETER_NAME, businessObjectItem));
 			RegionDomain template = new RegionDomain();
 			template.setTemplateFile(source.getPath());
-			String name = this.replaceVariables(source.getName().replace("Template_BOItem_", ""), parameters);
+			String name = this.replaceVariables(source.getName().replace(TEMPLATE_FILE_BO_ITEM, ""), parameters);
 			template.export(parameters, output.getPath() + File.separator + name);
 		}
 	}
@@ -335,12 +361,12 @@ public class CodeTransformer extends Transformer {
 		if (source.getName().equals("~parameter_property_declared_type.xml")) {
 			// 属性的定义类型说明
 			try {
-				return new Parameter(Property.PARAMETER_NAME_DECLARED_TYPE,
-						(DataTypeMappings.create(this.getTemplateFolder() + File.separator + "")));
+				return new Parameter(Property.PARAMETER_NAME_DECLARED_TYPE, DataTypeMappings.create(source));
 			} catch (JAXBException e) {
 				Environment.getLogger().error(e);
 			}
 		}
 		return null;
 	}
+
 }

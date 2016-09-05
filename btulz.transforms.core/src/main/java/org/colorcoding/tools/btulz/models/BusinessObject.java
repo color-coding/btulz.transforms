@@ -80,6 +80,9 @@ public class BusinessObject implements IBusinessObject {
 	@Override
 	public void setMappedModel(String name) {
 		this.mappedModel = name;
+		if (this.getName() == null) {
+			this.setName(name);
+		}
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import javax.ws.rs.core.MediaType;
 import org.colorcoding.ibas.bobas.common.*;
 import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.repository.*;
 $BEGIN_BUSINESS_OBJECT$
-import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.<%BusinessObject.PropertyName.ToLower()%>.*;
+import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${BusinessObject.getName().toLowerCase()}.*;
 $END_BUSINESS_OBJECT$
 
 /**
@@ -18,7 +18,7 @@ public class ServiceXml extends BORepository${Domain.getName()} {
     //--------------------------------------------------------------------------------------------//
 $BEGIN_BUSINESS_OBJECT$
     /**
-     * 查询-<%BusinessObject.Name%>
+     * 查询-${BusinessObject.getDescription()}
      * @param criteria 查询
      * @param token 口令
      * @return 操作结果
@@ -32,7 +32,7 @@ $BEGIN_BUSINESS_OBJECT$
     }
 
     /**
-     * 保存-<%BusinessObject.Name%>
+     * 保存-${BusinessObject.getDescription()}
      * @param bo 对象实例
      * @param token 口令
      * @return 操作结果

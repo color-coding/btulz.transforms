@@ -87,7 +87,7 @@ public class Parameter {
 					}
 				}
 			}
-			for (Method method : type.getDeclaredMethods()) {
+			for (Method method : type.getMethods()) {
 				if (method.getParameterCount() == pathArgs.length
 						&& (method.getName().equals(mName) || method.getName().equalsIgnoreCase("get" + mName))) {
 					tmpValue = method.invoke(value, pathArgs);
