@@ -116,6 +116,26 @@ public class CodeTransformer extends Transformer {
 		}
 	}
 
+	private String groupId;
+
+	public String getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
+	}
+
+	private String artifactId;
+
+	public String getArtifactId() {
+		return artifactId;
+	}
+
+	public void setArtifactId(String artifactId) {
+		this.artifactId = artifactId;
+	}
+
 	/**
 	 * 获取运行时参数，可重载添加新的
 	 * 
@@ -124,6 +144,8 @@ public class CodeTransformer extends Transformer {
 	protected Parameters getRuntimeParameters() {
 		Parameters parameters = new Parameters();
 		parameters.add(new Parameter("AppName", "btulz.transforms"));
+		parameters.add(new Parameter("GroupId", this.getGroupId()));
+		parameters.add(new Parameter("ArtifactId", this.getArtifactId()));
 		parameters.add(new Parameter("ID", new RuntimeParameter()));
 		return parameters;
 	}

@@ -17,6 +17,8 @@ public class testCodeTransformer extends TestCase {
 		// Environment.getResource("code/eclipse/ibas_classic").getPath();
 		codeTransformer.setTemplateFolder("eclipse/ibas_classic");
 		codeTransformer.setOutputFolder(System.getenv("TEMP"));
+		codeTransformer.setGroupId("org.colorcoding");
+		codeTransformer.setArtifactId("ibas");
 		codeTransformer.addDomains(Environment.getWorkingFolder() + domain_file);
 
 		codeTransformer.transform();
