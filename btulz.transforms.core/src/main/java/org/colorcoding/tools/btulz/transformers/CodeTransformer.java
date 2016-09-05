@@ -313,18 +313,9 @@ public class CodeTransformer extends Transformer {
 					String name = this.replaceVariables(source.getName().replace(TEMPLATE_FILE_BO, ""), parameters);
 					template.export(parameters, output.getPath() + File.separator + name);
 				} else if (source.getName().startsWith(TEMPLATE_FILE_BO_ITEM)) {
-					this.transformFile(source, output, parameters, businessObject);
+					this.transformFileBOItems(source, output, parameters, businessObject);
 				} else if (source.getName().startsWith(TEMPLATE_FILE_BO_MODEL)) {
-					for (IModel model : domain.getModels()) {
-						if (businessObject.getMappedModel().equals(model.getName())) {
-							parameters.add(new Parameter(RegionBusinessObjectModel.REGION_PARAMETER_NAME, model));
-							RegionDomain template = new RegionDomain();
-							template.setTemplateFile(source.getPath());
-							String name = this.replaceVariables(source.getName().replace(TEMPLATE_FILE_BO_MODEL, ""),
-									parameters);
-							template.export(parameters, output.getPath() + File.separator + name);
-						}
-					}
+					this.transformFileBOModels(source, output, parameters, businessObject);
 				}
 			}
 		} else {
@@ -335,7 +326,7 @@ public class CodeTransformer extends Transformer {
 		}
 	}
 
-	protected void transformFile(File source, File output, Parameters parameters, IBusinessObject businessObject)
+	protected void transformFileBOItems(File source, File output, Parameters parameters, IBusinessObject businessObject)
 			throws Exception {
 		IDomain domain = parameters.getValue(RegionDomain.REGION_PARAMETER_NAME, IDomain.class);
 		if (domain == null) {
@@ -353,8 +344,31 @@ public class CodeTransformer extends Transformer {
 				String name = this.replaceVariables(source.getName().replace(TEMPLATE_FILE_BO_ITEM, ""), parameters);
 				template.export(parameters, output.getPath() + File.separator + name);
 				// 如果有子项继续
-				this.transformFile(source, output, new Parameters(parameters), businessObjectItem);
+				this.transformFileBOItems(source, output, new Parameters(parameters), businessObjectItem);
 			}
+		}
+	}
+
+	protected void transformFileBOModels(File source, File output, Parameters parameters,
+			IBusinessObject businessObject) throws Exception {
+		IDomain domain = parameters.getValue(RegionDomain.REGION_PARAMETER_NAME, IDomain.class);
+		if (domain == null) {
+			return;
+		}
+		for (IModel model : domain.getModels()) {
+			if (businessObject.getMappedModel().equals(model.getName())) {
+				parameters.add(new Parameter(RegionBusinessObjectModel.REGION_PARAMETER_NAME, model));
+				RegionDomain template = new RegionDomain();
+				template.setTemplateFile(source.getPath());
+				String name = this.replaceVariables(source.getName().replace(TEMPLATE_FILE_BO_MODEL, ""), parameters);
+				template.export(parameters, output.getPath() + File.separator + name);
+			}
+		}
+		for (IBusinessObjectItem businessObjectItem : businessObject.getRelatedBOs()) {
+			// 如果有子项继续
+			parameters = new Parameters(parameters);
+			parameters.add(new Parameter(RegionBusinessObject.REGION_PARAMETER_NAME, businessObjectItem));
+			this.transformFileBOModels(source, output, parameters, businessObjectItem);
 		}
 	}
 

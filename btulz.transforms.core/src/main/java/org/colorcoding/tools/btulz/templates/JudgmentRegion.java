@@ -58,7 +58,7 @@ public class JudgmentRegion extends TemplateRegion {
 				String valueString = String.valueOf(value).toUpperCase();
 				for (int i = index + 1; i < regionValues.length; i++) {
 					// 跳过is比较直
-					if (valueString.indexOf(regionValues[i]) < 0) {
+					if (!valueString.equals(regionValues[i])) {
 						done = false;
 						break;
 					}
