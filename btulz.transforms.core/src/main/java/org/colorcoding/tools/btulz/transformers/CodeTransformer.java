@@ -342,12 +342,19 @@ public class CodeTransformer extends Transformer {
 			return;
 		}
 		for (IBusinessObjectItem businessObjectItem : businessObject.getRelatedBOs()) {
-			parameters.add(new Parameter(RegionBusinessObject.REGION_PARAMETER_NAME, businessObject));
 			parameters.add(new Parameter(RegionBusinessObjectItem.REGION_PARAMETER_NAME, businessObjectItem));
-			RegionDomain template = new RegionDomain();
-			template.setTemplateFile(source.getPath());
-			String name = this.replaceVariables(source.getName().replace(TEMPLATE_FILE_BO_ITEM, ""), parameters);
-			template.export(parameters, output.getPath() + File.separator + name);
+			for (IModel model : domain.getModels()) {
+				if (!businessObjectItem.getMappedModel().equals(model.getName())) {
+					continue;
+				}
+				parameters.add(new Parameter(RegionBusinessObjectModel.REGION_PARAMETER_NAME, model));
+				RegionDomain template = new RegionDomain();
+				template.setTemplateFile(source.getPath());
+				String name = this.replaceVariables(source.getName().replace(TEMPLATE_FILE_BO_ITEM, ""), parameters);
+				template.export(parameters, output.getPath() + File.separator + name);
+				// 如果有子项继续
+				this.transformFile(source, output, new Parameters(parameters), businessObjectItem);
+			}
 		}
 	}
 

@@ -9,7 +9,7 @@ import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.MyConsts;
 */
 @XmlType(name = "${BusinessObjectItem.getName()}s", namespace = MyConsts.NAMESPACE_BO)
 @XmlSeeAlso({ ${BusinessObjectItem.getName()}.class })
-public class ${BusinessObjectItem.getName()}s extends BusinessObjects<I${BusinessObjectItem.getName()}, I${Model.getName()}> implements I${BusinessObjectItem.getName()}s {
+public class ${BusinessObjectItem.getName()}s extends BusinessObjects<I${BusinessObjectItem.getName()}, I${BusinessObject.getName()}> implements I${BusinessObjectItem.getName()}s {
 
     /**
      * 序列化版本标记
@@ -27,7 +27,7 @@ public class ${BusinessObjectItem.getName()}s extends BusinessObjects<I${Busines
      * 构造方法
      * @param parent 父项对象
      */
-    public ${BusinessObjectItem.getName()}s(I${Model.getName()} parent) {
+    public ${BusinessObjectItem.getName()}s(I${BusinessObject.getName()} parent) {
         super(parent);
     }
 

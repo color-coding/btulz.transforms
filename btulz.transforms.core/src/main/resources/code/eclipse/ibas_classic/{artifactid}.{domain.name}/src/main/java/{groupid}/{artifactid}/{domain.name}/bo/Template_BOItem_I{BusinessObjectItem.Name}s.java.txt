@@ -5,7 +5,7 @@ import org.colorcoding.ibas.bobas.bo.IBusinessObjects;
 /**
 * ${BusinessObjectItem.getDescription()} 集合
 */
-public interface I${BusinessObjectItem.getName()}s extends IBusinessObjects<I${BusinessObjectItem.getName()}, I${Model.getName()}> {
+public interface I${BusinessObjectItem.getName()}s extends IBusinessObjects<I${BusinessObjectItem.getName()}, I${BusinessObject.getName()}> {
 
 
 

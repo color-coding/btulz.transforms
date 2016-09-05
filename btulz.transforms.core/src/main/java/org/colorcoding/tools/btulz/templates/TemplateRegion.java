@@ -126,13 +126,13 @@ public abstract class TemplateRegion implements ITemplateData {
 				Environment.getLogger().debug(String.format("template: begin export region [%s].", region));
 				for (Parameter regionPar : regionPars) {
 					// 替换区域变量
+					Parameters newParameters = new Parameters(parameters);
 					if (regionPar != null) {
 						Environment.getLogger().debug(String.format("template: using region parameter [%s:%s].",
 								regionPar.getName(), regionPar.getValue()));
-						Parameters newParameters = new Parameters(parameters);
 						newParameters.add(regionPar);
-						tpltLine.export(writer, newParameters);
 					}
+					tpltLine.export(writer, newParameters);
 				}
 				Environment.getLogger().debug(String.format("template: end export region [%s].", tpltLine));
 			} else {
