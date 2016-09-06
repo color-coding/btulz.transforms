@@ -17,15 +17,15 @@ import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.data.*;
 @XmlType(name = "${Model.getName()}", namespace = MyConsts.NAMESPACE_BO)
 $BEGIN_MODEL_MODELTYPE_IS_DOCUMENT$
 @XmlRootElement(name = "${Model.getName()}", namespace = MyConsts.NAMESPACE_BO)
-@BOCode(BUSINESS_OBJECT_CODE)
+@BOCode(${Model.getName()}.BUSINESS_OBJECT_CODE)
 $END_MODEL_MODELTYPE_IS_DOCUMENT$
 $BEGIN_MODEL_MODELTYPE_IS_MASTERDATA$
 @XmlRootElement(name = "${Model.getName()}", namespace = MyConsts.NAMESPACE_BO)
-@BOCode(BUSINESS_OBJECT_CODE)
+@BOCode(${Model.getName()}.BUSINESS_OBJECT_CODE)
 $END_MODEL_MODELTYPE_IS_MASTERDATA$
 $BEGIN_MODEL_MODELTYPE_IS_SIMPLE$
 @XmlRootElement(name = "${Model.getName()}", namespace = MyConsts.NAMESPACE_BO)
-@BOCode(BUSINESS_OBJECT_CODE)
+@BOCode(${Model.getName()}.BUSINESS_OBJECT_CODE)
 $END_MODEL_MODELTYPE_IS_SIMPLE$
 public class ${Model.getName()} extends BusinessObject<${Model.getName()}> implements I${Model.getName()} {
 
@@ -53,7 +53,7 @@ $BEGIN_MODEL_PROPERTY$
     /**
     * ${Property.getDescription()} 属性
     */
-    @DbField(name = "${Property.getMapped()}", type = DbFieldType.${Property.getAnnotatedType()}, table = DB_TABLE_NAME, primaryKey = emYesNo.${Property.isPrimaryKey()})
+    @DbField(name = "${Property.getMapped()}", type = DbFieldType.${Property.getAnnotatedType()}, table = DB_TABLE_NAME, primaryKey = ${Property.isPrimaryKey()})
     public final static IPropertyInfo<${Property.getDeclaredType()}> ${Property.getName()}Property = registerProperty("${Property.getName()}", ${Property.getDeclaredType()}.class, MY_CLASS);
 
     /**
