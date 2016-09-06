@@ -146,7 +146,7 @@ public class XmlTransformer extends FileTransformer {
 		element.setAttribute("Description", model.getDescription());
 		element.setAttribute("ModelType", String.valueOf(model.getModelType()));
 		element.setAttribute("Mapped", model.getMapped());
-		if (model.isEntity()) {
+		if (!model.isEntity()) {
 			element.setAttribute("Entity", String.valueOf(emYesNo.valueOf(model.isEntity())));
 		}
 	}

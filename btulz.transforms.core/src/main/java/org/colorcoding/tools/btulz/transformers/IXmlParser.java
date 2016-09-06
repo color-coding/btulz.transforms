@@ -40,6 +40,11 @@ public interface IXmlParser {
 		} else if (type == int.class) {
 			return (P) Integer.valueOf(value);
 		} else if (type == boolean.class) {
+			if (value.equals("Yes")) {
+				return (P) Boolean.TRUE;
+			} else if (value.equals("No")) {
+				return (P) Boolean.FALSE;
+			}
 			return (P) Boolean.valueOf(value);
 		}
 		return (P) value;

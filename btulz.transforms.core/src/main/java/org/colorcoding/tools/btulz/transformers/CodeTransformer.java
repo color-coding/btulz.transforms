@@ -23,6 +23,7 @@ import org.colorcoding.tools.btulz.models.IBusinessObject;
 import org.colorcoding.tools.btulz.models.IBusinessObjectItem;
 import org.colorcoding.tools.btulz.models.IDomain;
 import org.colorcoding.tools.btulz.models.IModel;
+import org.colorcoding.tools.btulz.models.data.emBORelation;
 import org.colorcoding.tools.btulz.templates.Parameter;
 import org.colorcoding.tools.btulz.templates.Parameters;
 import org.colorcoding.tools.btulz.templates.Variable;
@@ -163,14 +164,26 @@ public class CodeTransformer extends Transformer {
 		this.projectUrl = projectUrl;
 	}
 
-	private String ibasVersion;
+	private List<Parameter> parameters;
 
-	public String getIbasVersion() {
-		return ibasVersion;
+	public List<Parameter> getParameters() {
+		if (this.parameters == null) {
+			this.parameters = new ArrayList<Parameter>();
+		}
+		return this.parameters;
 	}
 
-	public void setIbasVersion(String ibasVersion) {
-		this.ibasVersion = ibasVersion;
+	public void addParameters(Parameter parameter) {
+		if (parameter == null) {
+			return;
+		}
+		this.getParameters().add(parameter);
+	}
+
+	public void addParameters(Iterable<Parameter> parameters) {
+		for (Parameter parameter : parameters) {
+			this.addParameters(parameter);
+		}
 	}
 
 	/**
@@ -185,8 +198,8 @@ public class CodeTransformer extends Transformer {
 		parameters.add(new Parameter("ArtifactId", this.getArtifactId()));
 		parameters.add(new Parameter("ProjectVersion", this.getProjectVersion()));
 		parameters.add(new Parameter("ProjectUrl", this.getProjectUrl()));
-		parameters.add(new Parameter("ibasVersion", this.getIbasVersion()));
 		parameters.add(new Parameter("ID", new RuntimeParameter()));
+		parameters.addAll(this.getParameters());
 		return parameters;
 	}
 
@@ -235,9 +248,9 @@ public class CodeTransformer extends Transformer {
 					for (Parameter parameter : parameters) {
 						if (parameter.getName().equalsIgnoreCase(variable.getName())) {
 							Object value = null;
-							if (variable.getValuePath() != null && variable.getValuePath().endsWith("nsfolder")) {
-								value = parameter.getValue(
-										variable.getValuePath().replace(".nsfolder", "").replace("nsfolder", ""));
+							if (variable.getValuePath() != null && variable.getValuePath().endsWith("folder")) {
+								value = parameter
+										.getValue(variable.getValuePath().replace(".folder", "").replace("folder", ""));
 								if (value != null) {
 									value = this.nsfolder(value.toString());
 								}
@@ -317,7 +330,7 @@ public class CodeTransformer extends Transformer {
 						if (parameter.getName().equalsIgnoreCase(RegionDomain.REGION_PARAMETER_NAME)) {
 							if (parameter.getValue() instanceof IDomain) {
 								IDomain domain = (IDomain) parameter.getValue();
-								XmlTransformer xmlTransformer = new XmlTransformer();
+								XmlTransformer xmlTransformer = new XmlTransformerDom4j();
 								xmlTransformer.setInterruptOnError(true);
 								xmlTransformer.load(domain);
 								xmlTransformer.save(outFolder.getPath());
@@ -368,9 +381,15 @@ public class CodeTransformer extends Transformer {
 	}
 
 	private String getFilePath(File folder, String name, Parameters parameters) throws Exception {
-		String folderPath = this.replaceVariables(folder.getPath(), parameters);
-		name = this.replaceVariables(name, parameters);
-		return folderPath + File.separator + name;
+		StringBuilder stringBuilder = new StringBuilder();
+		if (folder != null && folder.getPath() != null) {
+			stringBuilder.append(this.replaceVariables(folder.getPath(), parameters));
+		}
+		if (name != null) {
+			stringBuilder.append(File.separator);
+			stringBuilder.append(this.replaceVariables(name, parameters));
+		}
+		return stringBuilder.toString();
 	}
 
 	/**
@@ -390,6 +409,8 @@ public class CodeTransformer extends Transformer {
 			// 和业务对象输出相关的
 			for (IBusinessObject businessObject : domain.getBusinessObjects()) {
 				parameters.add(new Parameter(RegionBusinessObject.REGION_PARAMETER_NAME, businessObject));
+				parameters.add(new Parameter("Master" + RegionBusinessObject.REGION_PARAMETER_NAME, businessObject));
+				File boFolder = new File(this.getFilePath(output, null, parameters));
 				if (source.getName().startsWith(TEMPLATE_FILE_BO)) {
 					RegionDomain template = new RegionDomain();
 					template.setTemplateFile(source.getPath());
@@ -416,6 +437,10 @@ public class CodeTransformer extends Transformer {
 			return;
 		}
 		for (IBusinessObjectItem businessObjectItem : businessObject.getRelatedBOs()) {
+			if (businessObjectItem.getRelation() != emBORelation.OneToMany) {
+				// 非1：n关系不生产
+				continue;
+			}
 			parameters.add(new Parameter(RegionBusinessObjectItem.REGION_PARAMETER_NAME, businessObjectItem));
 			for (IModel model : domain.getModels()) {
 				if (!businessObjectItem.getMappedModel().equals(model.getName())) {

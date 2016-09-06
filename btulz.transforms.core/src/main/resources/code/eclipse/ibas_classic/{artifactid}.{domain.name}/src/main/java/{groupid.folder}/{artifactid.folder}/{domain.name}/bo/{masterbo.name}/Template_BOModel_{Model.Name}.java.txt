@@ -1,4 +1,4 @@
-package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${BO.getName().toLowerCase()};
+package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${MasterBO.getName().toLowerCase()};
 
 import javax.xml.bind.annotation.*;
 
@@ -47,7 +47,7 @@ public class ${Model.getName()} extends BusinessObject<${Model.getName()}> imple
     /**
     * 业务对象编码
     */
-    public final static String BUSINESS_OBJECT_CODE = "${BO.getShortCode()}";
+    public final static String BUSINESS_OBJECT_CODE = "${MasterBO.getShortName()}";
 
 $BEGIN_MODEL_PROPERTY$
     /**

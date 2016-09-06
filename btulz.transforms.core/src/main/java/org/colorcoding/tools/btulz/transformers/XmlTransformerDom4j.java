@@ -72,7 +72,7 @@ public class XmlTransformerDom4j extends XmlTransformer {
 		element.addAttribute("Description", model.getDescription());
 		element.addAttribute("ModelType", String.valueOf(model.getModelType()));
 		element.addAttribute("Mapped", model.getMapped());
-		if (model.isEntity()) {
+		if (!model.isEntity()) {
 			element.addAttribute("Entity", String.valueOf(emYesNo.valueOf(model.isEntity())));
 		}
 	}

@@ -11,7 +11,7 @@ public class JsonConfig implements ContextResolver<MoxyJsonConfig> {
 
     private final MoxyJsonConfig config;
 
-    public MoxyJsonConfigResolver() {
+    public JsonConfig() {
         this.config = new MoxyJsonConfig().property(JAXBContextProperties.JSON_WRAPPER_AS_ARRAY_NAME, true);
     }
 

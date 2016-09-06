@@ -2,7 +2,8 @@ package org.colorcoding.tools.btulz.test.transformers;
 
 import java.io.File;
 
-import org.colorcoding.tools.btulz.test.models.testModels;
+import org.colorcoding.tools.btulz.Environment;
+import org.colorcoding.tools.btulz.templates.Parameter;
 import org.colorcoding.tools.btulz.transformers.CodeTransformer;
 
 import junit.framework.TestCase;
@@ -21,10 +22,10 @@ public class testCodeTransformer extends TestCase {
 		codeTransformer.setArtifactId("ibas");
 		codeTransformer.setProjectVersion("0.0.1");
 		codeTransformer.setProjectUrl("http://colorcoding.org");
-		codeTransformer.setIbasVersion("0.1.1");
-		// codeTransformer.addDomains(Environment.getWorkingFolder() +
-		// domain_file);
-		codeTransformer.addDomain((new testModels()).createDomain());
+		codeTransformer.addParameters(new Parameter("ibasVersion", "0.1.1"));
+		codeTransformer.addParameters(new Parameter("jerseyVersion", "2.22.1"));
+		codeTransformer.addDomains(Environment.getWorkingFolder() + domain_file);
+		// codeTransformer.addDomain((new testModels()).createDomain());
 
 		codeTransformer.transform();
 	}
