@@ -276,13 +276,6 @@ public class CodeTransformer extends Transformer {
 			return;
 		}
 		Environment.getLogger().info(String.format("transform folder [%s].", tpltFolder.getName()));
-		String tmpFolder = tpltFolder.getPath().replace(this.getTemplateFolder(), "");
-		tmpFolder = this.replaceVariables(tmpFolder, parameters);
-		File outFolder = new File(
-				tmpFolder == null ? rootFolder.getPath() : rootFolder.getPath() + File.separator + tmpFolder);
-		if (!outFolder.exists()) {
-			outFolder.mkdirs();
-		}
 		// 文件排序，先文件后目录
 		List<File> files = Arrays.asList(tpltFolder.listFiles());
 		Collections.sort(files, new Comparator<File>() {
@@ -301,6 +294,14 @@ public class CodeTransformer extends Transformer {
 				return o1.getName().compareTo(o2.getName());
 			}
 		});
+		String tmpFolder = tpltFolder.getPath().replace(this.getTemplateFolder(), "");
+		tmpFolder = this.replaceVariables(tmpFolder, parameters);
+		File outFolder = new File(
+				tmpFolder == null ? rootFolder.getPath() : rootFolder.getPath() + File.separator + tmpFolder);
+		if (!outFolder.exists() && outFolder.getPath().indexOf("{") < 0) {
+			// 输出文件夹不存在，且不存在变量是创建文件夹。
+			outFolder.mkdirs();
+		}
 		// 遍历处理文件清单
 		for (File file : files) {
 			if (file.isDirectory()) {
@@ -366,6 +367,12 @@ public class CodeTransformer extends Transformer {
 		writer.close();
 	}
 
+	private String getFilePath(File folder, String name, Parameters parameters) throws Exception {
+		String folderPath = this.replaceVariables(folder.getPath(), parameters);
+		name = this.replaceVariables(name, parameters);
+		return folderPath + File.separator + name;
+	}
+
 	/**
 	 * 转换文件
 	 * 
@@ -386,8 +393,8 @@ public class CodeTransformer extends Transformer {
 				if (source.getName().startsWith(TEMPLATE_FILE_BO)) {
 					RegionDomain template = new RegionDomain();
 					template.setTemplateFile(source.getPath());
-					String name = this.replaceVariables(source.getName().replace(TEMPLATE_FILE_BO, ""), parameters);
-					template.export(parameters, output.getPath() + File.separator + name);
+					template.export(parameters,
+							this.getFilePath(output, source.getName().replace(TEMPLATE_FILE_BO, ""), parameters));
 				} else if (source.getName().startsWith(TEMPLATE_FILE_BO_ITEM)) {
 					this.transformFileBOItems(source, output, parameters, businessObject);
 				} else if (source.getName().startsWith(TEMPLATE_FILE_BO_MODEL)) {
@@ -397,8 +404,8 @@ public class CodeTransformer extends Transformer {
 		} else {
 			RegionDomain template = new RegionDomain();
 			template.setTemplateFile(source.getPath());
-			String name = this.replaceVariables(source.getName().replace(TEMPLATE_FILE, ""), parameters);
-			template.export(parameters, output.getPath() + File.separator + name);
+			template.export(parameters,
+					this.getFilePath(output, source.getName().replace(TEMPLATE_FILE, ""), parameters));
 		}
 	}
 
@@ -417,8 +424,8 @@ public class CodeTransformer extends Transformer {
 				parameters.add(new Parameter(RegionBusinessObjectModel.REGION_PARAMETER_NAME, model));
 				RegionDomain template = new RegionDomain();
 				template.setTemplateFile(source.getPath());
-				String name = this.replaceVariables(source.getName().replace(TEMPLATE_FILE_BO_ITEM, ""), parameters);
-				template.export(parameters, output.getPath() + File.separator + name);
+				template.export(parameters,
+						this.getFilePath(output, source.getName().replace(TEMPLATE_FILE_BO_ITEM, ""), parameters));
 				// 如果有子项继续
 				this.transformFileBOItems(source, output, new Parameters(parameters), businessObjectItem);
 			}
@@ -436,8 +443,8 @@ public class CodeTransformer extends Transformer {
 				parameters.add(new Parameter(RegionBusinessObjectModel.REGION_PARAMETER_NAME, model));
 				RegionDomain template = new RegionDomain();
 				template.setTemplateFile(source.getPath());
-				String name = this.replaceVariables(source.getName().replace(TEMPLATE_FILE_BO_MODEL, ""), parameters);
-				template.export(parameters, output.getPath() + File.separator + name);
+				template.export(parameters,
+						this.getFilePath(output, source.getName().replace(TEMPLATE_FILE_BO_MODEL, ""), parameters));
 			}
 		}
 		for (IBusinessObjectItem businessObjectItem : businessObject.getRelatedBOs()) {

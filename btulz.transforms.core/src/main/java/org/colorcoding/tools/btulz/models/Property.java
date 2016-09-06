@@ -10,7 +10,6 @@ import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.Serializer;
 import org.colorcoding.tools.btulz.models.data.emDataSubType;
 import org.colorcoding.tools.btulz.models.data.emDataType;
-import org.colorcoding.tools.btulz.models.data.emYesNo;
 
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "Property", namespace = Environment.NAMESPACE_BTULZ_MODELS)
@@ -33,8 +32,8 @@ public class Property implements IProperty {
 		this.setDataType(emDataType.Alphanumeric);
 		this.setDataSubType(emDataSubType.Default);
 		this.setEditSize(8);
-		this.setPrimaryKey(emYesNo.No);
-		this.setUniqueKey(emYesNo.No);
+		this.setPrimaryKey(false);
+		this.setUniqueKey(false);
 	}
 
 	@XmlAttribute(name = "Name")
@@ -71,30 +70,24 @@ public class Property implements IProperty {
 	}
 
 	@XmlAttribute(name = "PrimaryKey")
-	private emYesNo primaryKey;
+	private boolean primaryKey;
 
-	public emYesNo isPrimaryKey() {
-		if (this.primaryKey == null) {
-			this.primaryKey = emYesNo.No;
-		}
+	public boolean isPrimaryKey() {
 		return this.primaryKey;
 	}
 
-	public void setPrimaryKey(emYesNo value) {
+	public void setPrimaryKey(boolean value) {
 		this.primaryKey = value;
 	}
 
 	@XmlAttribute(name = "UniqueKey")
-	private emYesNo uniqueKey;
+	private boolean uniqueKey;
 
-	public emYesNo isUniqueKey() {
-		if (this.uniqueKey == null) {
-			this.uniqueKey = emYesNo.No;
-		}
+	public boolean isUniqueKey() {
 		return this.uniqueKey;
 	}
 
-	public void setUniqueKey(emYesNo value) {
+	public void setUniqueKey(boolean value) {
 		this.uniqueKey = value;
 	}
 

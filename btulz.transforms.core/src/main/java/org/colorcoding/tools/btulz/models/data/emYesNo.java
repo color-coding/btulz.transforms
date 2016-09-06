@@ -20,4 +20,10 @@ public enum emYesNo {
 	 * 是
 	 */
 	Yes;
+	public static emYesNo valueOf(boolean value) {
+		if (value) {
+			return emYesNo.Yes;
+		}
+		return emYesNo.No;
+	}
 }

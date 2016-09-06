@@ -5,7 +5,6 @@ import java.util.Iterator;
 
 import org.colorcoding.tools.btulz.models.IModel;
 import org.colorcoding.tools.btulz.models.IProperty;
-import org.colorcoding.tools.btulz.models.data.emYesNo;
 import org.colorcoding.tools.btulz.templates.Parameter;
 import org.colorcoding.tools.btulz.templates.Parameters;
 
@@ -31,7 +30,7 @@ public class RegionModelHasPrimary extends RegionBase {
 		if (model != null) {
 			ArrayList<IProperty> primaryProperty = new ArrayList<>();
 			for (IProperty iProperty : model.getProperties()) {
-				if (iProperty.isPrimaryKey() == emYesNo.Yes) {
+				if (iProperty.isPrimaryKey()) {
 					primaryProperty.add(iProperty);
 				}
 			}

@@ -39,6 +39,8 @@ public interface IXmlParser {
 			}
 		} else if (type == int.class) {
 			return (P) Integer.valueOf(value);
+		} else if (type == boolean.class) {
+			return (P) Boolean.valueOf(value);
 		}
 		return (P) value;
 

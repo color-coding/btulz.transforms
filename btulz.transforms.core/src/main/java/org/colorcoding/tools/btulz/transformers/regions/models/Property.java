@@ -7,7 +7,6 @@ import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.models.IProperty;
 import org.colorcoding.tools.btulz.models.data.emDataSubType;
 import org.colorcoding.tools.btulz.models.data.emDataType;
-import org.colorcoding.tools.btulz.models.data.emYesNo;
 import org.colorcoding.tools.btulz.templates.Parameter;
 
 public class Property implements IProperty {
@@ -52,22 +51,22 @@ public class Property implements IProperty {
 	}
 
 	@Override
-	public emYesNo isPrimaryKey() {
+	public boolean isPrimaryKey() {
 		return this.property.isPrimaryKey();
 	}
 
 	@Override
-	public void setPrimaryKey(emYesNo value) {
+	public void setPrimaryKey(boolean value) {
 		this.property.setPrimaryKey(value);
 	}
 
 	@Override
-	public emYesNo isUniqueKey() {
+	public boolean isUniqueKey() {
 		return this.property.isUniqueKey();
 	}
 
 	@Override
-	public void setUniqueKey(emYesNo value) {
+	public void setUniqueKey(boolean value) {
 		this.property.setUniqueKey(value);
 	}
 
@@ -255,7 +254,7 @@ public class Property implements IProperty {
 	}
 
 	public String getNullType() {
-		if (this.isPrimaryKey() == emYesNo.Yes) {
+		if (this.isPrimaryKey()) {
 			return "not null";
 		}
 		return "null";

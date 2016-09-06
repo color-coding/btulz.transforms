@@ -72,8 +72,8 @@ public class XmlTransformerDom4j extends XmlTransformer {
 		element.addAttribute("Description", model.getDescription());
 		element.addAttribute("ModelType", String.valueOf(model.getModelType()));
 		element.addAttribute("Mapped", model.getMapped());
-		if (model.isEntity() == emYesNo.No) {
-			element.addAttribute("Entity", String.valueOf(model.isEntity()));
+		if (model.isEntity()) {
+			element.addAttribute("Entity", String.valueOf(emYesNo.valueOf(model.isEntity())));
 		}
 	}
 
@@ -84,11 +84,11 @@ public class XmlTransformerDom4j extends XmlTransformer {
 		element.addAttribute("DataSubType", String.valueOf(property.getDataSubType()));
 		element.addAttribute("EditSize", String.valueOf(property.getEditSize()));
 		element.addAttribute("Mapped", property.getMapped());
-		if (property.isPrimaryKey() == emYesNo.Yes) {
-			element.addAttribute("PrimaryKey", String.valueOf(property.isPrimaryKey()));
+		if (property.isPrimaryKey()) {
+			element.addAttribute("PrimaryKey", String.valueOf(emYesNo.valueOf(property.isPrimaryKey())));
 		}
-		if (property.isUniqueKey() == emYesNo.Yes) {
-			element.addAttribute("UniqueKey", String.valueOf(property.isUniqueKey()));
+		if (property.isUniqueKey()) {
+			element.addAttribute("UniqueKey", String.valueOf(emYesNo.valueOf(property.isUniqueKey())));
 		}
 	}
 

@@ -12,7 +12,6 @@ import org.colorcoding.tools.btulz.models.data.emBORelation;
 import org.colorcoding.tools.btulz.models.data.emDataSubType;
 import org.colorcoding.tools.btulz.models.data.emDataType;
 import org.colorcoding.tools.btulz.models.data.emModelType;
-import org.colorcoding.tools.btulz.models.data.emYesNo;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -287,9 +286,9 @@ class XmlParser1 extends XmlParser {
 			} else if (node.getNodeName().equals("EditSize")) {
 				object.setEditSize(this.convert(int.class, node.getNodeValue()));
 			} else if (node.getNodeName().equals("IsPrimaryKey")) {
-				object.setPrimaryKey(this.convert(emYesNo.class, node.getNodeValue()));
+				object.setPrimaryKey(this.convert(boolean.class, node.getNodeValue()));
 			} else if (node.getNodeName().equals("IsUnique")) {
-				object.setUniqueKey(this.convert(emYesNo.class, node.getNodeValue()));
+				object.setUniqueKey(this.convert(boolean.class, node.getNodeValue()));
 			}
 		}
 	}

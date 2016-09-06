@@ -15,7 +15,6 @@ import org.colorcoding.tools.btulz.models.IProperty;
 import org.colorcoding.tools.btulz.models.data.emBORelation;
 import org.colorcoding.tools.btulz.models.data.emDataType;
 import org.colorcoding.tools.btulz.models.data.emModelType;
-import org.colorcoding.tools.btulz.models.data.emYesNo;
 
 import junit.framework.TestCase;
 
@@ -38,7 +37,7 @@ public class testModels extends TestCase {
 		propertyData.setName("DocumentEntry");
 		propertyData.setDescription("单据编号");
 		propertyData.setDataType(emDataType.Numeric);
-		propertyData.setPrimaryKey(emYesNo.Yes);
+		propertyData.setPrimaryKey(true);
 		propertyData.setMapped("DocEntry");
 
 		IModel userModel = domain.getModels().create();
@@ -50,7 +49,7 @@ public class testModels extends TestCase {
 		propertyData.setName("UserCode");
 		propertyData.setDescription("用户编码");
 		propertyData.setDataType(emDataType.Alphanumeric);
-		propertyData.setPrimaryKey(emYesNo.Yes);
+		propertyData.setPrimaryKey(true);
 		propertyData.setMapped("Code");
 
 		IModel modelLine = domain.getModels().create();
@@ -62,13 +61,13 @@ public class testModels extends TestCase {
 		propertyData.setName("DocumentEntry");
 		propertyData.setDescription("单据编号");
 		propertyData.setDataType(emDataType.Numeric);
-		propertyData.setPrimaryKey(emYesNo.Yes);
+		propertyData.setPrimaryKey(true);
 		propertyData.setMapped("DocEntry");
 		propertyData = modelLine.getProperties().create();
 		propertyData.setName("DocumentLine");
 		propertyData.setDescription("单据行号");
 		propertyData.setDataType(emDataType.Numeric);
-		propertyData.setPrimaryKey(emYesNo.Yes);
+		propertyData.setPrimaryKey(true);
 		propertyData.setMapped("LineId");
 
 		// 构建业务对象

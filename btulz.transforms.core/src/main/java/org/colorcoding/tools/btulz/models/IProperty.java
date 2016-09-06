@@ -2,7 +2,6 @@ package org.colorcoding.tools.btulz.models;
 
 import org.colorcoding.tools.btulz.models.data.emDataSubType;
 import org.colorcoding.tools.btulz.models.data.emDataType;
-import org.colorcoding.tools.btulz.models.data.emYesNo;
 
 /**
  * 基本属性
@@ -58,28 +57,28 @@ public interface IProperty {
 	 * 
 	 * @return
 	 */
-	emYesNo isPrimaryKey();
+	boolean isPrimaryKey();
 
 	/**
 	 * 设置-主键
 	 * 
 	 * @param dataType
 	 */
-	void setPrimaryKey(emYesNo value);
+	void setPrimaryKey(boolean value);
 
 	/**
 	 * 是否唯一
 	 * 
 	 * @return
 	 */
-	emYesNo isUniqueKey();
+	boolean isUniqueKey();
 
 	/**
 	 * 设置-唯一键
 	 * 
 	 * @param dataType
 	 */
-	void setUniqueKey(emYesNo value);
+	void setUniqueKey(boolean value);
 
 	/**
 	 * 获取-数据类型

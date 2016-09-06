@@ -146,8 +146,8 @@ public class XmlTransformer extends FileTransformer {
 		element.setAttribute("Description", model.getDescription());
 		element.setAttribute("ModelType", String.valueOf(model.getModelType()));
 		element.setAttribute("Mapped", model.getMapped());
-		if (model.isEntity() == emYesNo.No) {
-			element.setAttribute("Entity", String.valueOf(model.isEntity()));
+		if (model.isEntity()) {
+			element.setAttribute("Entity", String.valueOf(emYesNo.valueOf(model.isEntity())));
 		}
 	}
 
@@ -158,11 +158,11 @@ public class XmlTransformer extends FileTransformer {
 		element.setAttribute("DataSubType", String.valueOf(property.getDataSubType()));
 		element.setAttribute("EditSize", String.valueOf(property.getEditSize()));
 		element.setAttribute("Mapped", property.getMapped());
-		if (property.isPrimaryKey() == emYesNo.Yes) {
-			element.setAttribute("PrimaryKey", String.valueOf(property.isPrimaryKey()));
+		if (property.isPrimaryKey()) {
+			element.setAttribute("PrimaryKey", String.valueOf(emYesNo.valueOf(property.isPrimaryKey())));
 		}
-		if (property.isUniqueKey() == emYesNo.Yes) {
-			element.setAttribute("UniqueKey", String.valueOf(property.isUniqueKey()));
+		if (property.isUniqueKey()) {
+			element.setAttribute("UniqueKey", String.valueOf(emYesNo.valueOf(property.isUniqueKey())));
 		}
 	}
 
