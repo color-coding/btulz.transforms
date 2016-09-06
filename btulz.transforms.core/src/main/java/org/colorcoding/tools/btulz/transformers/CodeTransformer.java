@@ -143,6 +143,36 @@ public class CodeTransformer extends Transformer {
 		this.artifactId = artifactId;
 	}
 
+	private String projectVersion;
+
+	public String getProjectVersion() {
+		return projectVersion;
+	}
+
+	public void setProjectVersion(String projectVersion) {
+		this.projectVersion = projectVersion;
+	}
+
+	private String projectUrl;
+
+	public String getProjectUrl() {
+		return projectUrl;
+	}
+
+	public void setProjectUrl(String projectUrl) {
+		this.projectUrl = projectUrl;
+	}
+
+	private String ibasVersion;
+
+	public String getIbasVersion() {
+		return ibasVersion;
+	}
+
+	public void setIbasVersion(String ibasVersion) {
+		this.ibasVersion = ibasVersion;
+	}
+
 	/**
 	 * 获取运行时参数，可重载添加新的
 	 * 
@@ -153,6 +183,9 @@ public class CodeTransformer extends Transformer {
 		parameters.add(new Parameter("AppName", "btulz.transforms"));
 		parameters.add(new Parameter("GroupId", this.getGroupId()));
 		parameters.add(new Parameter("ArtifactId", this.getArtifactId()));
+		parameters.add(new Parameter("ProjectVersion", this.getProjectVersion()));
+		parameters.add(new Parameter("ProjectUrl", this.getProjectUrl()));
+		parameters.add(new Parameter("ibasVersion", this.getIbasVersion()));
 		parameters.add(new Parameter("ID", new RuntimeParameter()));
 		return parameters;
 	}
@@ -201,11 +234,21 @@ public class CodeTransformer extends Transformer {
 				for (Variable variable : variables) {
 					for (Parameter parameter : parameters) {
 						if (parameter.getName().equalsIgnoreCase(variable.getName())) {
-							Object value = parameter.getValue(variable.getValuePath());
+							Object value = null;
+							if (variable.getValuePath() != null && variable.getValuePath().endsWith("nsfolder")) {
+								value = parameter.getValue(
+										variable.getValuePath().replace(".nsfolder", "").replace("nsfolder", ""));
+								if (value != null) {
+									value = this.nsfolder(value.toString());
+								}
+							} else {
+								value = parameter.getValue(variable.getValuePath());
+							}
 							if (value != null) {
 								string = string.replace(variable.getOriginal(),
 										variable.isLowerCase() ? value.toString().toLowerCase() : value.toString());
 							}
+							break;
 						}
 					}
 				}
@@ -215,6 +258,10 @@ public class CodeTransformer extends Transformer {
 			}
 		}
 		return string;
+	}
+
+	protected String nsfolder(String value) {
+		return value.replace(".", File.separator);
 	}
 
 	/**

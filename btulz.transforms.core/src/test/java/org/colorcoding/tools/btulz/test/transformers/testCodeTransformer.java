@@ -19,6 +19,9 @@ public class testCodeTransformer extends TestCase {
 		codeTransformer.setOutputFolder(System.getenv("TEMP"));
 		codeTransformer.setGroupId("org.colorcoding");
 		codeTransformer.setArtifactId("ibas");
+		codeTransformer.setProjectVersion("0.0.1");
+		codeTransformer.setProjectUrl("http://colorcoding.org");
+		codeTransformer.setIbasVersion("0.1.1");
 		// codeTransformer.addDomains(Environment.getWorkingFolder() +
 		// domain_file);
 		codeTransformer.addDomain((new testModels()).createDomain());

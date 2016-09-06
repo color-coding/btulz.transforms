@@ -8,7 +8,7 @@ import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.data.*;
 * ${Model.getDescription()} 接口
 * 
 */
-public interface I${Model.getName()} extends I${Model.getModelType()} {
+public interface I${Model.getName()} extends IBO${Model.getModelType()} {
 
 $BEGIN_MODEL_PROPERTY$
     /**
