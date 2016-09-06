@@ -83,7 +83,7 @@ $END_MODEL_UNIQUE_PROPERTY$
 	</Action>
 $END_MODEL_HAS_UNIQUE$
 $END_MODEL$
-$BEGIN_BUSINESS_OBJECT$
+$BEGIN_BO$
 	<Action Name="register business object">
 		<Step Name="check number table exists">
 			<Script>
@@ -92,15 +92,15 @@ $BEGIN_BUSINESS_OBJECT$
 		</Step>
 		<Step Name="check business object code exists" RunOnValue="1">
 			<Script>
-				select count(0) from `${DbName}`.`${Company}_SYS_ONNM` where `ObjectCode` = N'${BusinessObject.getShortName()}'
+				select count(0) from `${DbName}`.`${Company}_SYS_ONNM` where `ObjectCode` = N'${BO.getShortName()}'
 			</Script>
 		</Step>
 		<Step Name="create business object code" RunOnValue="0">
 			<Script>
-				insert into `${DbName}`.`${Company}_SYS_ONNM` (`ObjectCode`, `AutoKey`, `DocSubType`) values (N'${BusinessObject.getShortName()}', 1, '--')
+				insert into `${DbName}`.`${Company}_SYS_ONNM` (`ObjectCode`, `AutoKey`, `DocSubType`) values (N'${BO.getShortName()}', 1, '--')
 			</Script>
 		</Step>
-$BEGIN_BUSINESS_OBJECT_MODEL$
+$BEGIN_BO_MODEL$
 		<Step Name="check business object informations table exists">
 			<Script>
 				select count(0) from information_schema.tables where `TABLE_SCHEMA` = '${DbName}' and `TABLE_NAME` = '${Company}_SYS_OBOI'
@@ -113,7 +113,7 @@ $BEGIN_BUSINESS_OBJECT_MODEL$
 		</Step>
 		<Step Name="create business object informations" RunOnValue="1">
 			<Script>
-				insert into `${DbName}`.`${Company}_SYS_OBOI`("Name", "Code", "Descrp", "Mapped", "ObjectType") values (N'${Model.getName()}',N'${BusinessObject.getShortName()}',N'${Model.getDescription()}',N'${Model.getMapped().toUpperCase()}',N'${Model.getModelType()}')
+				insert into `${DbName}`.`${Company}_SYS_OBOI`("Name", "Code", "Descrp", "Mapped", "ObjectType") values (N'${Model.getName()}',N'${BO.getShortName()}',N'${Model.getDescription()}',N'${Model.getMapped().toUpperCase()}',N'${Model.getModelType()}')
 			</Script>
 		</Step>
 		<Step Name="check business object informations table exists">
@@ -133,7 +133,7 @@ $BEGIN_MODEL_PROPERTY$
 			</Script>
 		</Step>
 $END_MODEL_PROPERTY$
-$END_BUSINESS_OBJECT_MODEL$
+$END_BO_MODEL$
 	</Action>
-$END_BUSINESS_OBJECT$
+$END_BO$
 </ns2:DataStructureOrchestration>

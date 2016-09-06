@@ -19,7 +19,7 @@ public class RegionBusinessObjectItemModel extends RegionBase {
 	/**
 	 * 此区域标记
 	 */
-	public static final String REGION_DELIMITER = "BUSINESS_OBJECT_ITEM_MODEL";
+	public static final String REGION_DELIMITER = "BOITEM_MODEL";
 
 	/**
 	 * 此区域变量名称

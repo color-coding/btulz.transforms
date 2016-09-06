@@ -8,9 +8,9 @@ import javax.xml.bind.JAXBException;
 
 import org.colorcoding.ibas.bobas.bo.*;
 import org.colorcoding.ibas.bobas.common.*;
-$BEGIN_BUSINESS_OBJECT$
-import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${BusinessObject.getName().toLowerCase()}.*;
-$END_BUSINESS_OBJECT$
+$BEGIN_BO$
+import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${BO.getName().toLowerCase()}.*;
+$END_BO$
 
 /**
  * 序列化解释器
@@ -26,9 +26,9 @@ public class Resolver implements ContextResolver<JAXBContext> {
             if (jaxbContext == null) {
                 jaxbContext = JAXBContext.newInstance(Criteria.class, OperationResult.class
                     , UserFieldProxy.class
-$BEGIN_BUSINESS_OBJECT$
-                    , ${BusinessObject.getName()}.class
-$END_BUSINESS_OBJECT$
+$BEGIN_BO$
+                    , ${BO.getName()}.class
+$END_BO$
                 );
             }
         } catch (JAXBException e) {

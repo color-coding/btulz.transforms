@@ -16,12 +16,12 @@ public class RegionBusinessObjectItem extends RegionBase {
 	/**
 	 * 此区域标记
 	 */
-	public static final String REGION_DELIMITER = "BUSINESS_OBJECT_ITEM";
+	public static final String REGION_DELIMITER = "BOITEM";
 
 	/**
 	 * 此区域变量名称
 	 */
-	public static final String REGION_PARAMETER_NAME = "BusinessObjectItem";
+	public static final String REGION_PARAMETER_NAME = "BOItem";
 
 	public RegionBusinessObjectItem() {
 		super(REGION_DELIMITER);

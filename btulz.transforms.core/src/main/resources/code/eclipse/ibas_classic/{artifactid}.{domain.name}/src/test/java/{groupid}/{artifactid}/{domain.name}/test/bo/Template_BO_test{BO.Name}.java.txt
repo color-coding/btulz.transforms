@@ -7,14 +7,14 @@ import org.colorcoding.ibas.bobas.data.*;
 import org.colorcoding.ibas.bobas.common.*;
 import org.colorcoding.ibas.bobas.repository.*;
 import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.data.*;
-import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${BusinessObject.getName().toLowerCase()}.*;
+import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${BO.getName().toLowerCase()}.*;
 import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.repository.*;
 
 /**
-* ${BusinessObject.getDescription()} 测试
+* ${BO.getDescription()} 测试
 * 
 */
-public class test${BusinessObject.getName()} extends TestCase {
+public class test${BO.getName()} extends TestCase {
     /**
      * 获取连接口令
     */
@@ -27,21 +27,28 @@ public class test${BusinessObject.getName()} extends TestCase {
      * @throws Exception 
     */
     public void testBasicItems() throws Exception {
-        ${BusinessObject.getName()} bo = new ${BusinessObject.getName()}();
+        ${BO.getName()} bo = new ${BO.getName()}();
         // 测试属性赋值
 
-$BEGIN_BUSINESS_OBJECT_HAS_ITEM$
-$BEGIN_BUSINESS_OBJECT_ITEM$
-        // 测试${BusinessObjectItem.getDescription()}
-        I${BusinessObjectItem.getName()} ${BusinessObjectItem.getName().toLowerCase()} = bo.get${BusinessObjectItem.getName()}s().create();
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+        // 测试${BOItem.getDescription()}
+        I${BOItem.getName()} ${BOItem.getName().toLowerCase()} = bo.get${BOItem.getName()}s().create();
         // 测试属性赋值
+        
+$END_BOITEM_RELATION_IS_ONETOMANY$
 
-$END_BUSINESS_OBJECT_ITEM$
-$END_BUSINESS_OBJECT_HAS_ITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOONE$
+        // 测试${BOItem.getDescription()}
+        I${BOItem.getName()} ${BOItem.getName().toLowerCase()} = bo.get${BOItem.getName()}();
+        // 测试属性赋值
+        
+$END_BOITEM_RELATION_IS_ONETOONE$
+$END_BOITEM$
 
         // 测试序列化及反序列化
         System.out.println("序列化输出：");
-        JAXBContext context = JAXBContext.newInstance(${BusinessObject.getName()}.class);
+        JAXBContext context = JAXBContext.newInstance(${BO.getName()}.class);
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -52,7 +59,7 @@ $END_BUSINESS_OBJECT_HAS_ITEM$
         System.out.println(oldXML);
 
         System.out.println("反序列化输出：");
-        I${BusinessObject.getName()} boCloned = bo.clone();
+        I${BO.getName()} boCloned = bo.clone();
         writer = new StringWriter();
         marshaller.marshal(boCloned, writer);
         String newXML = writer.toString();
@@ -68,15 +75,15 @@ $END_BUSINESS_OBJECT_HAS_ITEM$
         boRepository.setUserToken(this.getToken());
 
         // 测试保存
-        operationResult = boRepository.save${BusinessObject.getName()}(bo);
+        operationResult = boRepository.save${BO.getName()}(bo);
         assertEquals(operationResult.getMessage(), operationResult.getResultCode(), 0);
-        ${BusinessObject.getName()} boSaved = (${BusinessObject.getName()})operationResult.getResultObjects().firstOrDefault();
+        ${BO.getName()} boSaved = (${BO.getName()})operationResult.getResultObjects().firstOrDefault();
 
 
         // 测试查询
         criteria = boSaved.getCriteria();
         criteria.setResultCount(10);
-        operationResult = boRepository.fetch${BusinessObject.getName()}(criteria);
+        operationResult = boRepository.fetch${BO.getName()}(criteria);
         assertEquals(operationResult.getMessage(), operationResult.getResultCode(), 0);
 
 

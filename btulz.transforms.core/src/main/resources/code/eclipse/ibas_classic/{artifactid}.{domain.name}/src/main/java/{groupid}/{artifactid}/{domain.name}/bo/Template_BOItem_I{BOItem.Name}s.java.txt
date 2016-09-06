@@ -1,0 +1,12 @@
+package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${BO.getName().toLowerCase()};
+
+import org.colorcoding.ibas.bobas.bo.IBusinessObjects;
+
+/**
+* ${BOItem.getDescription()} 集合
+*/
+public interface I${BOItem.getName()}s extends IBusinessObjects<I${BOItem.getName()}, I${BO.getName()}> {
+
+
+
+}

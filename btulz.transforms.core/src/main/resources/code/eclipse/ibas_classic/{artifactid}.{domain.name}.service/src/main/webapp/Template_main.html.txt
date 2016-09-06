@@ -10,10 +10,10 @@
     <script type="text/javascript" src="/basis/bsbas.businesssystemcommon.js"></script>
     <script type="text/javascript" src="/borep/<%Domain.ShortName.ToLower()%>BORepository.js"></script>
 <&&&&&>
-    <script type="text/javascript" src="/bsapp/${BusinessObject.getName().toLowerCase()}/${BusinessObject.getName()}DataFunc.js"></script>
-    <script type="text/javascript" src="/bsapp/${BusinessObject.getName().toLowerCase()}/${BusinessObject.getName()}DataChooseListApp.js"></script>
-    <script type="text/javascript" src="/bsapp/${BusinessObject.getName().toLowerCase()}/${BusinessObject.getName()}DataDetailApp.js"></script>
-    <script type="text/javascript" src="/bsapp/${BusinessObject.getName().toLowerCase()}/${BusinessObject.getName()}DataListApp.js"></script>
+    <script type="text/javascript" src="/bsapp/${BO.getName().toLowerCase()}/${BO.getName()}DataFunc.js"></script>
+    <script type="text/javascript" src="/bsapp/${BO.getName().toLowerCase()}/${BO.getName()}DataChooseListApp.js"></script>
+    <script type="text/javascript" src="/bsapp/${BO.getName().toLowerCase()}/${BO.getName()}DataDetailApp.js"></script>
+    <script type="text/javascript" src="/bsapp/${BO.getName().toLowerCase()}/${BO.getName()}DataListApp.js"></script>
 <&&&&&>
     <script type="text/javascript" src="/bsapp/<%Domain.ShortName.ToLower()%>ModuleConsole.js"></script>
     <script entry="true">

@@ -1,4 +1,4 @@
-package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${BusinessObject.getName().toLowerCase()};
+package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${BO.getName().toLowerCase()};
 
 import javax.xml.bind.annotation.*;
 
@@ -47,7 +47,7 @@ public class ${Model.getName()} extends BusinessObject<${Model.getName()}> imple
     /**
     * 业务对象编码
     */
-    public final static String BUSINESS_OBJECT_CODE = "${BusinessObject.getShortCode()}";
+    public final static String BUSINESS_OBJECT_CODE = "${BO.getShortCode()}";
 
 $BEGIN_MODEL_PROPERTY$
     /**
@@ -106,35 +106,61 @@ $END_PROPERTY_DECLAREDTYPE_IS_DECIMAL$
 
 $END_MODEL_PROPERTY$
 
-$BEGIN_BUSINESS_OBJECT_HAS_ITEM$
-$BEGIN_BUSINESS_OBJECT_ITEM$
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
     /**
-    * ${BusinessObjectItem.getDescription()}的集合属性
+    * ${BOItem.getDescription()}的集合属性
     * 
     */ 
-    public final static IPropertyInfo<I${BusinessObjectItem.getName()}s> ${BusinessObjectItem.getName()}sProperty = registerProperty("${BusinessObjectItem.getName()}s", I${BusinessObjectItem.getName()}s.class, MY_CLASS);
+    public final static IPropertyInfo<I${BOItem.getName()}s> ${BOItem.getName()}sProperty = registerProperty("${BOItem.getName()}s", I${BOItem.getName()}s.class, MY_CLASS);
     /**
-    * 获取-${BusinessObjectItem.getDescription()}集合
+    * 获取-${BOItem.getDescription()}集合
     * 
     * @return 值
     */
-    @XmlElementWrapper(name = "${BusinessObjectItem.getName()}s")
-    @XmlElement(name = "${BusinessObjectItem.getName()}", type = ${BusinessObjectItem.getName()}.class)
-    public final I${BusinessObjectItem.getName()}s get${BusinessObjectItem.getName()}s() {
-        return this.getProperty(${BusinessObjectItem.getName()}sProperty);
+    @XmlElementWrapper(name = "${BOItem.getName()}s")
+    @XmlElement(name = "${BOItem.getName()}", type = ${BOItem.getName()}.class)
+    public final I${BOItem.getName()}s get${BOItem.getName()}s() {
+        return this.getProperty(${BOItem.getName()}sProperty);
     }
 
     /**
-    * 设置-${BusinessObjectItem.getDescription()}集合
+    * 设置-${BOItem.getDescription()}集合
     * 
     * @param value 值
     */
-    public final void set${BusinessObjectItem.getName()}s(I${BusinessObjectItem.getName()}s value) {
-        this.setProperty(${BusinessObjectItem.getName()}sProperty, value);
+    public final void set${BOItem.getName()}s(I${BOItem.getName()}s value) {
+        this.setProperty(${BOItem.getName()}sProperty, value);
     }
 
-$END_BUSINESS_OBJECT_ITEM$
-$END_BUSINESS_OBJECT_HAS_ITEM$
+$END_BOITEM_RELATION_IS_ONETOMANY$
+
+$BEGIN_BOITEM_RELATION_IS_ONETOONE$
+    /**
+    * ${BOItem.getDescription()}属性
+    * 
+    */ 
+    public final static IPropertyInfo<I${BOItem.getName()}> ${BOItem.getName()}Property = registerProperty("${BOItem.getName()}", I${BOItem.getName()}.class, MY_CLASS);
+    /**
+    * 获取-${BOItem.getDescription()}
+    * 
+    * @return 值
+    */
+    @XmlElement(name = "${BOItem.getName()}", type = ${BOItem.getName()}.class)
+    public final I${BOItem.getName()} get${BOItem.getName()}() {
+        return this.getProperty(${BOItem.getName()}Property);
+    }
+
+    /**
+    * 设置-${BOItem.getDescription()}
+    * 
+    * @param value 值
+    */
+    public final void set${BOItem.getName()}(I${BOItem.getName()} value) {
+        this.setProperty(${BOItem.getName()}Property, value);
+    }
+$END_BOITEM_RELATION_IS_ONETOONE$
+$END_BOITEM$
 
     /**
     * 初始化数据
@@ -142,11 +168,14 @@ $END_BUSINESS_OBJECT_HAS_ITEM$
     @Override
     protected void initialize() {
         super.initialize();// 基类初始化，不可去除
-$BEGIN_BUSINESS_OBJECT_HAS_ITEM$
-$BEGIN_BUSINESS_OBJECT_ITEM$
-        this.set${BusinessObjectItem.getName()}s(new ${BusinessObjectItem.getName()}s(this));
-$END_BUSINESS_OBJECT_ITEM$
-$END_BUSINESS_OBJECT_HAS_ITEM$
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+        this.set${BOItem.getName()}s(new ${BOItem.getName()}s(this));
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$BEGIN_BOITEM_RELATION_IS_ONETOONE$
+        this.set${BOItem.getName()}(new ${BOItem.getName()}());
+$END_BOITEM_RELATION_IS_ONETOONE$
+$END_BOITEM$
         this.setObjectCode(BUSINESS_OBJECT_CODE);
         // TODO: 初始化数据，默认的不需要可以删除
 $BEGIN_MODEL_MODELTYPE_IS_DOCUMENT$

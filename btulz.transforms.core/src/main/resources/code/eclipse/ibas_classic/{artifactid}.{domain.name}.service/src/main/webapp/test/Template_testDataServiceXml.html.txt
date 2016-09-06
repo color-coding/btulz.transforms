@@ -66,14 +66,14 @@
             }
         }
         var token = '';
-$BEGIN_BUSINESS_OBJECT$
-        var testCreate${BusinessObject.getName()} = function () {
+$BEGIN_BO$
+        var testCreate${BO.getName()} = function () {
             var bo = {};
             showResult(bo);
             return bo;
         }
-        var testFetch${BusinessObject.getName()} = function () {
-            var url = address + '/fetch${BusinessObject.getName()}?token=' + token;
+        var testFetch${BO.getName()} = function () {
+            var url = address + '/fetch${BO.getName()}?token=' + token;
             var criteria = {};
             $.ajax({
                 type: 'POST',
@@ -88,9 +88,9 @@ $BEGIN_BUSINESS_OBJECT$
                 }
             });
         }
-        var testSave${BusinessObject.getName()} = function () {
-            var url = address + '/save${BusinessObject.getName()}?token=' + token;
-            var data = testCreate${BusinessObject.getName()}();
+        var testSave${BO.getName()} = function () {
+            var url = address + '/save${BO.getName()}?token=' + token;
+            var data = testCreate${BO.getName()}();
             $.ajax({
                 type: 'POST',
                 contentType: "application/x-www-form-urlencoded",
@@ -105,7 +105,7 @@ $BEGIN_BUSINESS_OBJECT$
             });
         };
 
-$END_BUSINESS_OBJECT$
+$END_BO$
     </script>
 </head>
 <body>
@@ -114,22 +114,22 @@ $END_BUSINESS_OBJECT$
     <br />
     <div>
         <table>
-$BEGIN_BUSINESS_OBJECT$
+$BEGIN_BO$
             <tr>
                 <td>
-                    <label>${BusinessObject.getName()}</label>
+                    <label>${BO.getName()}</label>
                 </td>
                 <td>
-                    <input type="button" value="create" onclick="testCreate${BusinessObject.getName()}();" />
+                    <input type="button" value="create" onclick="testCreate${BO.getName()}();" />
                 </td>
                 <td>
-                    <input type="button" value="fetch" onclick="testFetch${BusinessObject.getName()}();" />
+                    <input type="button" value="fetch" onclick="testFetch${BO.getName()}();" />
                 </td>
                 <td>
-                    <input type="button" value="save" onclick="testSave${BusinessObject.getName()}();" />
+                    <input type="button" value="save" onclick="testSave${BO.getName()}();" />
                 </td>
             </tr>
-$END_BUSINESS_OBJECT$
+$END_BO$
         </table>
     </div>
     <br />

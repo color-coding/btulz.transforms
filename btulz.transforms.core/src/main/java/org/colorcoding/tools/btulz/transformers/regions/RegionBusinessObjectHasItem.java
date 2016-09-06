@@ -16,7 +16,7 @@ public class RegionBusinessObjectHasItem extends RegionBase {
 	/**
 	 * 此区域标记
 	 */
-	public static final String REGION_DELIMITER = "BUSINESS_OBJECT_HAS_ITEM";
+	public static final String REGION_DELIMITER = "BO_HAS_ITEM";
 
 	public RegionBusinessObjectHasItem() {
 		super(REGION_DELIMITER);

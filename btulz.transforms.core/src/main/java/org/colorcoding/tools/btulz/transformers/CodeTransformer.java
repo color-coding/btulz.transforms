@@ -107,6 +107,13 @@ public class CodeTransformer extends Transformer {
 		}
 	}
 
+	public void addDomain(IDomain domain) {
+		if (domain == null) {
+			return;
+		}
+		this.getDomains().add(domain);
+	}
+
 	public void addDomains(String file) throws TransformException, MultiTransformException {
 		XmlTransformer xmlTransformer = new XmlTransformer();
 		xmlTransformer.setInterruptOnError(true);
