@@ -48,7 +48,11 @@ public class DsTransformer extends DbTransformer {
 		}
 	}
 
-	public void addDomains(String file) throws TransformException, MultiTransformException {
+	public void addDomains(String file) throws Exception {
+		this.addDomains(new File(file));
+	}
+
+	public void addDomains(File file) throws Exception {
 		XmlTransformer xmlTransformer = new XmlTransformer();
 		xmlTransformer.setInterruptOnError(true);
 		xmlTransformer.load(file, false);
@@ -146,16 +150,6 @@ public class DsTransformer extends DbTransformer {
 		}
 		parameters.add(new Parameter(Property.PARAMETER_NAME_MAPPED_TYPE, this.getDataTypeMappings()));
 		return parameters;
-	}
-
-	protected String getOutputFile() {
-		if (this.currentDomain != null && this.currentDomain.getName() != null
-				&& !this.currentDomain.getName().equals("")) {
-			String tmp = String.format("-%s", this.getDbName());
-			String outputFile = super.getOutputFile();
-			return outputFile.replace(tmp, tmp + "-" + this.currentDomain.getName());
-		}
-		return super.getOutputFile();
 	}
 
 	private IDomain currentDomain;

@@ -1,8 +1,7 @@
 package org.colorcoding.tools.btulz.transformers;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.UUID;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -145,13 +144,15 @@ public abstract class DbTransformer extends Transformer {
 		if (tpltName.indexOf(".") > 0) {
 			stringBuilder.append(tpltName.substring(0, tpltName.lastIndexOf(".")));
 		}
-		stringBuilder.append("_");
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMdd_HHmmss");
-		stringBuilder.append(dateFormat.format(new Date()));
+		// stringBuilder.append("_");
+		// SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMdd_HHmmsss");
+		// stringBuilder.append(dateFormat.format(new Date()));
 		// stringBuilder.append("_");
 		// stringBuilder.append(this.getDbServer());
-		stringBuilder.append("-");
+		stringBuilder.append("_");
 		stringBuilder.append(this.getDbName());
+		stringBuilder.append("-");
+		stringBuilder.append(UUID.randomUUID().toString());
 		if (tpltName.indexOf(".") > 0) {
 			stringBuilder.append(tpltName.substring(tpltName.lastIndexOf(".")));
 		}

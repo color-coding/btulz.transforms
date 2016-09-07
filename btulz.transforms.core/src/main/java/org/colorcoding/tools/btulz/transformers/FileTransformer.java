@@ -57,8 +57,13 @@ public abstract class FileTransformer extends Transformer implements IFileTransf
 		if (filePath == null) {
 			return;
 		}
+		this.load(new File(filePath), includingSubFolder);
+	}
+
+	@Override
+	public final void load(File file, boolean includingSubFolder) throws TransformException, MultiTransformException {
 		this.clearResults();
-		this.loadFile(filePath, includingSubFolder);
+		this.loadFile(file, includingSubFolder);
 		// 如果有错误，则抛出错误
 		if (!this.isInterruptOnError() && this.getErrors().length > 0) {
 			throw new MultiTransformException(this.getErrors());
@@ -73,7 +78,7 @@ public abstract class FileTransformer extends Transformer implements IFileTransf
 			return;
 		}
 		for (String filepath : filePathes) {
-			this.loadFile(filepath, includingSubFolder);
+			this.load(filepath, includingSubFolder);
 		}
 		// 如果有错误，则抛出错误
 		if (!this.isInterruptOnError() && this.getErrors().length > 0) {
@@ -91,8 +96,7 @@ public abstract class FileTransformer extends Transformer implements IFileTransf
 	 * @param clear
 	 *            是否清除历史数据
 	 */
-	private void loadFile(String filePath, boolean includingSubFolder) throws TransformException {
-		File file = new File(filePath);
+	private void loadFile(File file, boolean includingSubFolder) throws TransformException {
 		IDomain[] tmpDomains = null;
 		if (file.isFile()) {
 			try {
@@ -114,10 +118,10 @@ public abstract class FileTransformer extends Transformer implements IFileTransf
 		} else if (file.isDirectory()) {
 			for (File subFile : file.listFiles()) {
 				if (subFile.isFile()) {
-					this.loadFile(subFile.getPath(), false);
+					this.loadFile(subFile, false);
 				} else if (subFile.isDirectory()) {
 					if (includingSubFolder) {
-						this.loadFile(subFile.getPath(), true);
+						this.loadFile(subFile, true);
 					}
 				}
 			}

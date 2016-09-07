@@ -410,7 +410,6 @@ public class CodeTransformer extends Transformer {
 			for (IBusinessObject businessObject : domain.getBusinessObjects()) {
 				parameters.add(new Parameter(RegionBusinessObject.REGION_PARAMETER_NAME, businessObject));
 				parameters.add(new Parameter("Master" + RegionBusinessObject.REGION_PARAMETER_NAME, businessObject));
-				File boFolder = new File(this.getFilePath(output, null, parameters));
 				if (source.getName().startsWith(TEMPLATE_FILE_BO)) {
 					RegionDomain template = new RegionDomain();
 					template.setTemplateFile(source.getPath());

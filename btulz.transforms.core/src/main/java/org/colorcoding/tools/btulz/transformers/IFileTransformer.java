@@ -1,5 +1,7 @@
 package org.colorcoding.tools.btulz.transformers;
 
+import java.io.File;
+
 import org.colorcoding.tools.btulz.models.IDomain;
 
 /**
@@ -36,6 +38,18 @@ public interface IFileTransformer {
 	 *             包含子项文件夹
 	 */
 	void load(String filePath, boolean includingSubFolder) throws TransformException, MultiTransformException;
+
+	/**
+	 * 输入文件
+	 * 
+	 * @param file
+	 *            文件
+	 * @param includingSubFolder
+	 * @throws TransformException
+	 * @throws MultiTransformException
+	 *             包含子项文件夹
+	 */
+	void load(File file, boolean includingSubFolder) throws TransformException, MultiTransformException;
 
 	/**
 	 * 输入文件数组

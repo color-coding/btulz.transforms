@@ -39,9 +39,9 @@ public class testRegionDomain extends TestCase {
 
 		// 测试MSSQL
 		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
-			String tpltFile = Environment.getResource("ds").getPath();
+			String tpltFile = Environment.getResource("ds/ds_mssql_ibas_classic.xml").getPath();
 			RegionDomain template = new RegionDomain();
-			template.setTemplateFile(tpltFile + File.separator + "ds_mssql_ibas_classic.xml");
+			template.setTemplateFile(tpltFile);
 			File outputFile = new File(
 					Environment.getWorkingFolder() + File.separator + "ds_mssql_ibas_classic.out.xml");
 			Parameters parameters = new Parameters();
@@ -79,9 +79,9 @@ public class testRegionDomain extends TestCase {
 		System.out.println(Serializer.toXmlString(dataTypeMappings, true));
 		// 测试MYSQL
 		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
-			String tpltFile = Environment.getResource("ds").getPath();
+			String tpltFile = Environment.getResource("ds/ds_mysql_ibas_classic.xml").getPath();
 			RegionDomain template = new RegionDomain();
-			template.setTemplateFile(tpltFile + File.separator + "ds_mysql_ibas_classic.xml");
+			template.setTemplateFile(tpltFile);
 			File outputFile = new File(
 					Environment.getWorkingFolder() + File.separator + "ds_mysql_ibas_classic.out.xml");
 			dataTypeMappings = DataTypeMappings.create(
@@ -120,9 +120,9 @@ public class testRegionDomain extends TestCase {
 		System.out.println(Serializer.toXmlString(dataTypeMappings, true));
 		// 测试PGSQL
 		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
-			String tpltFile = Environment.getResource("ds").getPath();
+			String tpltFile = Environment.getResource("ds/ds_pgsql_ibas_classic.xml").getPath();
 			RegionDomain template = new RegionDomain();
-			template.setTemplateFile(tpltFile + File.separator + "ds_pgsql_ibas_classic.xml");
+			template.setTemplateFile(tpltFile);
 			File outputFile = new File(
 					Environment.getWorkingFolder() + File.separator + "ds_pgsql_ibas_classic.out.xml");
 			dataTypeMappings = DataTypeMappings.create(
@@ -161,9 +161,9 @@ public class testRegionDomain extends TestCase {
 		System.out.println(Serializer.toXmlString(dataTypeMappings, true));
 		// 测试PGSQL
 		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
-			String tpltFile = Environment.getResource("ds").getPath();
+			String tpltFile = Environment.getResource("ds/ds_hana_ibas_classic.xml").getPath();
 			RegionDomain template = new RegionDomain();
-			template.setTemplateFile(tpltFile + File.separator + "ds_hana_ibas_classic.xml");
+			template.setTemplateFile(tpltFile);
 			File outputFile = new File(
 					Environment.getWorkingFolder() + File.separator + "ds_hana_ibas_classic.out.xml");
 			dataTypeMappings = DataTypeMappings
