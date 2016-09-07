@@ -95,7 +95,7 @@ $END_MODEL_UNIQUE_PROPERTY$
 $END_MODEL_HAS_UNIQUE$
 $END_MODEL$
 $BEGIN_BO$
-    <Action Name="register business object">
+    <Action Name="register business object" KeepStepResult="false">
         <Step Name="check number table exists">
             <Script>
                 select count(0) from "${DbName}".sys.sysobjects where name = '${Company}_SYS_ONNM' and type = 'u'

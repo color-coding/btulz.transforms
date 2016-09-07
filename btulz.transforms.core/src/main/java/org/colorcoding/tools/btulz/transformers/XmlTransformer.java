@@ -2,6 +2,7 @@ package org.colorcoding.tools.btulz.transformers;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -44,25 +45,47 @@ public class XmlTransformer extends FileTransformer {
 		return null;
 	}
 
+	public final void load(InputStream inputStream) throws Exception {
+		if (inputStream == null) {
+			return;
+		}
+		this.clearResults();
+		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream);
+		IDomain[] tmpDomains = this.load(document);
+		if (tmpDomains != null) {
+			for (IDomain domain : tmpDomains) {
+				this.getDomainModels().add(domain);
+			}
+		}
+		// 如果有错误，则抛出错误
+		if (!this.isInterruptOnError() && this.getErrors().length > 0) {
+			throw new MultiTransformException(this.getErrors());
+		}
+	}
+
 	@Override
 	protected IDomain[] load(File file) throws Exception {
-		ArrayList<IDomain> domains = new ArrayList<>();
 		if (file != null && file.isFile() && file.getName().endsWith(XML_FILE_EXTENSION)) {
 			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
-			IXmlParser xmlParser = null;
-			for (int i = 0; i < document.getChildNodes().getLength(); i++) {
-				Node firstNode = document.getChildNodes().item(i);
-				if (firstNode != null && firstNode.getNodeType() == Node.ELEMENT_NODE) {
-					xmlParser = this.createXmlParser(firstNode.getNodeName());
-					if (xmlParser != null) {
-						IDomain domain = xmlParser.parse(firstNode);
-						if (domain != null) {
-							domains.add(domain);
-						}
+			return this.load(document);
+		}
+		return new IDomain[] {};
+	}
+
+	protected IDomain[] load(Document document) throws Exception {
+		ArrayList<IDomain> domains = new ArrayList<>();
+		IXmlParser xmlParser = null;
+		for (int i = 0; i < document.getChildNodes().getLength(); i++) {
+			Node firstNode = document.getChildNodes().item(i);
+			if (firstNode != null && firstNode.getNodeType() == Node.ELEMENT_NODE) {
+				xmlParser = this.createXmlParser(firstNode.getNodeName());
+				if (xmlParser != null) {
+					IDomain domain = xmlParser.parse(firstNode);
+					if (domain != null) {
+						domains.add(domain);
 					}
 				}
 			}
-
 		}
 		return domains.toArray(new IDomain[] {});
 	}

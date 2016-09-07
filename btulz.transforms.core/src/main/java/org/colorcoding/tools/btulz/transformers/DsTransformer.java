@@ -32,6 +32,13 @@ public class DsTransformer extends DbTransformer {
 		return domains;
 	}
 
+	public void addDomains(IDomain domain) {
+		if (domain == null) {
+			return;
+		}
+		this.getDomains().add(domain);
+	}
+
 	public void addDomains(Iterable<IDomain> domains) {
 		if (domains == null) {
 			return;

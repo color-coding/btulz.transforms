@@ -93,6 +93,7 @@ public class SqlExecutionAction extends ExecutionAction implements ISqlExecution
 			for (int i = curStep; i < this.getSteps().size(); i++) {
 				ISqlExecutionActionStep step = this.getSteps().get(i);
 				step.setStatement(this.getStatement());
+				this.curStep = i;
 				if (step.check(this.curValue)) {
 					this.curValue = step.execute();
 					this.lastStep = i;
@@ -103,7 +104,6 @@ public class SqlExecutionAction extends ExecutionAction implements ISqlExecution
 					this.curValue = null;
 					Environment.getLogger().info(String.format("clear status value.", this.curValue, step.getName()));
 				}
-				this.curStep = i;
 			}
 		} catch (Exception e) {
 			// 检查后续步骤，是否有对此错误的处理

@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.transformers.DsTransformer;
+import org.colorcoding.tools.btulz.transformers.JarTransformer;
 import org.colorcoding.tools.btulz.transformers.SqlTransformer;
 
 import junit.framework.TestCase;
@@ -28,6 +29,24 @@ public class testDbTransformer extends TestCase {
 		dsTransformer.setDbUser("root");
 		dsTransformer.setDbPassword("1q2w3e");
 		dsTransformer.transform();
+	}
+
+	public void testDsJar() throws Exception {
+		System.err.println("运行请清理test-classes目录的历史文件。");
+		File folder = new File(workspace + File.separator + "initialization");
+		for (File file : folder.listFiles()) {
+			JarTransformer dsTransformer = new JarTransformer();
+			dsTransformer.setTemplateFile("ds_mssql_ibas_classic.xml");
+			dsTransformer.addDomains(file);
+			dsTransformer.setCompany("CC");
+			dsTransformer.setDbServer("ibas-dev-mssql");
+			dsTransformer.setDbPort("1433");
+			dsTransformer.setDbSchema("dbo");
+			dsTransformer.setDbName("ibas_demo" + "_" + dsTransformer.hashCode());
+			dsTransformer.setDbUser("sa");
+			dsTransformer.setDbPassword("1q2w3e");
+			dsTransformer.transform();
+		}
 	}
 
 	private String workspace = System.getenv("ibasWorkspace");
