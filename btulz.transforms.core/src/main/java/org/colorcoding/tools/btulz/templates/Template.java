@@ -6,8 +6,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 
 import org.colorcoding.tools.btulz.Environment;
@@ -40,11 +42,15 @@ public class Template extends TemplateRegion {
 	/**
 	 * 文件编码
 	 * 
+	 * 以模板文件为准，不存则为utf-8
+	 * 
 	 * @return
+	 * @throws UnsupportedEncodingException
 	 */
-	public String getEncoding() {
+	public String getEncoding() throws UnsupportedEncodingException {
 		if (this.encoding == null) {
-			this.encoding = Environment.getEncoding(this.getTemplateFile());
+			if (this.getTemplateFile() != null)
+				this.encoding = Environment.getEncoding(this.getTemplateFile());
 		}
 		return encoding;
 	}
@@ -92,6 +98,46 @@ public class Template extends TemplateRegion {
 	 */
 	private boolean initialized = false;
 
+	private void parse() throws UnsupportedEncodingException, Exception {
+		File tpltFile = new File(this.getTemplateFile());
+		if (!tpltFile.exists() || !tpltFile.isFile()) {
+			throw new FileNotFoundException(this.getTemplateFile());
+		}
+		this.parse(new FileInputStream(tpltFile));// 解析模板
+	}
+
+	/**
+	 * 解析模板
+	 * 
+	 * @param template
+	 *            模板流，注意编码方式
+	 * @throws Exception
+	 */
+	public void parse(InputStream template) throws Exception {
+		this.parse(new InputStreamReader(template, this.getEncoding()));// 解析模板
+	}
+
+	/**
+	 * 解析模板
+	 * 
+	 * @param template
+	 *            模板
+	 * @throws Exception
+	 */
+	public void parse(InputStreamReader template) throws Exception {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(template);
+			this.parse(reader);// 解析模板
+			initialized = true;
+			reader.close();
+		} finally {
+			if (reader != null) {
+				reader.close();
+			}
+		}
+	}
+
 	/**
 	 * 根据模板输出
 	 * 
@@ -102,25 +148,13 @@ public class Template extends TemplateRegion {
 	 * @throws Exception
 	 */
 	public void export(Parameters parameters, BufferedWriter writer) throws Exception {
-		File tpltFile = new File(this.getTemplateFile());
-		if (!tpltFile.exists() || !tpltFile.isFile()) {
-			throw new FileNotFoundException(this.getTemplateFile());
-		}
-		BufferedReader reader = null;
 		try {
 			if (!initialized) {
-				Environment.getLogger().info(String.format("start to parse template file [%s].", tpltFile.getName()));
-				reader = new BufferedReader(new InputStreamReader(new FileInputStream(tpltFile), this.getEncoding()));
-				this.parse(reader);// 解析模板
-				initialized = true;
-				reader.close();
+				this.parse();
 			}
 			this.export(writer, parameters);// 输出数据
 			writer.close();
 		} finally {
-			if (reader != null) {
-				reader.close();
-			}
 			if (writer != null) {
 				writer.close();
 			}

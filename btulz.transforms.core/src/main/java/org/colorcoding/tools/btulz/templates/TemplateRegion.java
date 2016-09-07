@@ -76,6 +76,14 @@ public abstract class TemplateRegion implements ITemplateData {
 		return this.templateLines;
 	}
 
+	/**
+	 * 创建一个区域
+	 * 
+	 * @param delimiter
+	 *            区域标记
+	 * @return
+	 * @throws InvalidRegionException
+	 */
 	protected TemplateRegion createRegion(String delimiter) throws InvalidRegionException {
 		if (delimiter.startsWith(REGION_SIGN_BEGIN)) {
 			delimiter = delimiter.substring(REGION_SIGN_BEGIN.length(), delimiter.length() - 1);
@@ -90,6 +98,13 @@ public abstract class TemplateRegion implements ITemplateData {
 		throw new InvalidRegionException(String.format("undefined region delimiter %s.", delimiter));
 	}
 
+	/**
+	 * 解析模板
+	 * 
+	 * @param template
+	 *            模板流
+	 * @throws Exception
+	 */
 	void parse(BufferedReader template) throws Exception {
 		String readString = null;
 		while ((readString = template.readLine()) != null) {
@@ -142,5 +157,13 @@ public abstract class TemplateRegion implements ITemplateData {
 		writer.flush();
 	}
 
+	/**
+	 * 获取区域参数
+	 * 
+	 * @param pars
+	 *            继承的参数
+	 * @return 本区域参数迭代器
+	 * @throws InvalidParameterException
+	 */
 	protected abstract Iterable<Parameter> getRegionParameters(Parameters pars) throws InvalidParameterException;
 }

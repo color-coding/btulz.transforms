@@ -29,7 +29,7 @@ public class DsTransformer4Jar extends DsTransformer {
 				while (jarEntries.hasMoreElements()) {
 					JarEntry jarEntry = (JarEntry) jarEntries.nextElement();
 					String name = jarEntry.getName().toLowerCase();
-					if (name.startsWith("datastructures/ds") && name.endsWith(".xml")) {
+					if (name.startsWith("datastructures/ds_") && name.endsWith(".xml")) {
 						try {
 							InputStream inputStream = jarFile.getInputStream(jarEntry);
 							XmlTransformer xmlTransformer = new XmlTransformer();

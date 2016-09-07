@@ -135,7 +135,7 @@ public class Environment {
 	 * 判断文件的编码格式
 	 * 
 	 * @param fileName
-	 *            :file
+	 *            文件路径
 	 * @return 文件编码格式
 	 * @throws Exception
 	 */

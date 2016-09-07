@@ -132,8 +132,10 @@ public abstract class DbTransformer extends Transformer {
 	 * @return
 	 */
 	protected String getOutputFile() {
-		File tpltFile = new File(this.getTemplateFile());
-		String tpltName = tpltFile.getName();
+		return this.getOutputFile((new File(this.getTemplateFile())).getName());
+	}
+
+	protected String getOutputFile(String tpltName) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(Environment.getWorkingFolder());
 		stringBuilder.append(File.separator);
