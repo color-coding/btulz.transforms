@@ -30,17 +30,70 @@ public class testDbTransformer extends TestCase {
 		dsTransformer.transform();
 	}
 
-	public void testSQL() throws Exception {
-		SqlTransformer sqlTransformer = new SqlTransformer();
-		sqlTransformer.setTemplateFile(Environment.getWorkingFolder() + initialization_file);
-		sqlTransformer.setCompany("CC");
-		sqlTransformer.setDbServer("ibas-dev-mssql");
-		sqlTransformer.setDbPort("1433");
-		sqlTransformer.setDbSchema("dbo");
-		sqlTransformer.setDbName("ibas_demo");
-		sqlTransformer.setDbSchema("dbo");
-		sqlTransformer.setDbUser("sa");
-		sqlTransformer.setDbPassword("1q2w3e");
-		sqlTransformer.transform();
+	private String workspace = System.getenv("ibasWorkspace");
+
+	public void testInitMSSQL() throws Exception {
+		File file = new File(
+				workspace + File.separator + "initialization" + File.separator + "ds_mssql_ibas_initialization.xml");
+		if (file.exists() && file.isFile()) {
+			SqlTransformer sqlTransformer = new SqlTransformer();
+			sqlTransformer.setTemplateFile(file.getPath());
+			sqlTransformer.setCompany("CC");
+			sqlTransformer.setDbServer("ibas-dev-mssql");
+			sqlTransformer.setDbPort("1433");
+			sqlTransformer.setDbName("ibas_demo" + String.format("_%s", this.hashCode()));
+			sqlTransformer.setDbSchema("dbo");
+			sqlTransformer.setDbUser("sa");
+			sqlTransformer.setDbPassword("1q2w3e");
+			sqlTransformer.transform();
+		}
+	}
+
+	public void testInitMYSQL() throws Exception {
+		File file = new File(
+				workspace + File.separator + "initialization" + File.separator + "ds_mysql_ibas_initialization.xml");
+		if (file.exists() && file.isFile()) {
+			SqlTransformer sqlTransformer = new SqlTransformer();
+			sqlTransformer.setTemplateFile(file.getPath());
+			sqlTransformer.setCompany("CC");
+			sqlTransformer.setDbServer("ibas-dev-mysql");
+			sqlTransformer.setDbPort("3306");
+			sqlTransformer.setDbName("ibas_demo" + String.format("_%s", this.hashCode()));
+			sqlTransformer.setDbUser("root");
+			sqlTransformer.setDbPassword("1q2w3e");
+			sqlTransformer.transform();
+		}
+	}
+
+	public void testInitPGSQL() throws Exception {
+		File file = new File(
+				workspace + File.separator + "initialization" + File.separator + "ds_pgsql_ibas_initialization.xml");
+		if (file.exists() && file.isFile()) {
+			SqlTransformer sqlTransformer = new SqlTransformer();
+			sqlTransformer.setTemplateFile(file.getPath());
+			sqlTransformer.setCompany("CC");
+			sqlTransformer.setDbServer("ibas-dev-pgsql");
+			sqlTransformer.setDbPort("5432");
+			sqlTransformer.setDbName("ibas_demo" + String.format("_%s", this.hashCode()));
+			sqlTransformer.setDbUser("postgres");
+			sqlTransformer.setDbPassword("1q2w3e");
+			sqlTransformer.transform();
+		}
+	}
+
+	public void testInitHANA() throws Exception {
+		File file = new File(
+				workspace + File.separator + "initialization" + File.separator + "ds_hana_ibas_initialization.xml");
+		if (file.exists() && file.isFile()) {
+			SqlTransformer sqlTransformer = new SqlTransformer();
+			sqlTransformer.setTemplateFile(file.getPath());
+			sqlTransformer.setCompany("CC");
+			sqlTransformer.setDbServer("ibas-dev-hana");
+			sqlTransformer.setDbPort("30015");
+			sqlTransformer.setDbName("ibas_demo" + String.format("_%s", this.hashCode()));
+			sqlTransformer.setDbUser("SYSTEM");
+			sqlTransformer.setDbPassword("AVAtech2015!");
+			sqlTransformer.transform();
+		}
 	}
 }
