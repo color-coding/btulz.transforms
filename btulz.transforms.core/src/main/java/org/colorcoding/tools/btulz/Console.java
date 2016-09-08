@@ -7,8 +7,6 @@ import org.colorcoding.tools.btulz.commands.CommandsManager;
 /**
  * 命令控制台
  * 
- * code -{template=eclipse/ibas_classic} -{output=d:\temp} -{output=d:\temp}
- * 
  * @author Niuren.Zhu
  *
  */

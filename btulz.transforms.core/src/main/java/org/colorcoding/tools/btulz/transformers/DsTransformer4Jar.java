@@ -28,6 +28,9 @@ public class DsTransformer4Jar extends DsTransformer {
 			if (jarEntries != null) {
 				while (jarEntries.hasMoreElements()) {
 					JarEntry jarEntry = (JarEntry) jarEntries.nextElement();
+					if (jarEntry.isDirectory()) {
+						continue;
+					}
 					String name = jarEntry.getName().toLowerCase();
 					if (name.startsWith("datastructures/ds_") && name.endsWith(".xml")) {
 						try {

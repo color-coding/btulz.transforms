@@ -52,6 +52,9 @@ public class SqlTransformer4Jar extends SqlTransformer {
 			if (jarEntries != null) {
 				while (jarEntries.hasMoreElements()) {
 					JarEntry jarEntry = (JarEntry) jarEntries.nextElement();
+					if (jarEntry.isDirectory()) {
+						continue;
+					}
 					String name = jarEntry.getName().toLowerCase();
 					if (name.startsWith("datastructures/sql_") && name.endsWith(".xml")) {
 						if (this.getSqlFilter() != null) {

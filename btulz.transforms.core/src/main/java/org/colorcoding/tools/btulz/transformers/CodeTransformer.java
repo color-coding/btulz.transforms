@@ -61,32 +61,34 @@ public class CodeTransformer extends Transformer {
 	 * @return true，模板存在；false，模板不存在
 	 */
 	public boolean setTemplateFolder(String templateFolder) {
-		if (templateFolder.indexOf(File.separator) < 0) {
-			// 不是完整的路径，补充目录到路径
-			try {
-				// 优先使用工作目录的模板
-				File file = new File(Environment.getWorkingFolder() + File.separator + TEMPLATE_FOLDER_CODE
-						+ File.separator + templateFolder);
-				if (file.exists() && file.isDirectory()) {
-					this.templateFolder = file.getPath();
-					return true;
-				}
-				URI uri = Environment.getResource(TEMPLATE_FOLDER_CODE + "/" + templateFolder);
-				if (uri != null) {
-					file = new File(uri.getPath());
+		if (templateFolder != null) {
+			if (templateFolder.indexOf(File.separator) < 0) {
+				// 不是完整的路径，补充目录到路径
+				try {
+					// 优先使用工作目录的模板
+					File file = new File(Environment.getWorkingFolder() + File.separator + TEMPLATE_FOLDER_CODE
+							+ File.separator + templateFolder);
 					if (file.exists() && file.isDirectory()) {
 						this.templateFolder = file.getPath();
 						return true;
 					}
+					URI uri = Environment.getResource(TEMPLATE_FOLDER_CODE + "/" + templateFolder);
+					if (uri != null && uri.getPath() != null) {
+						file = new File(uri.getPath());
+						if (file.exists() && file.isDirectory()) {
+							this.templateFolder = file.getPath();
+							return true;
+						}
+					}
+				} catch (Exception e) {
+					throw new RuntimeException(e);
 				}
-			} catch (Exception e) {
-				throw new RuntimeException(e);
 			}
-		}
-		File file = new File(templateFolder);
-		if (file.exists() && file.isDirectory()) {
-			this.templateFolder = file.getPath();
-			return true;
+			File file = new File(templateFolder);
+			if (file.exists() && file.isDirectory()) {
+				this.templateFolder = file.getPath();
+				return true;
+			}
 		}
 		this.templateFolder = templateFolder;
 		return false;
@@ -229,12 +231,12 @@ public class CodeTransformer extends Transformer {
 	@Override
 	public final void transform() throws Exception {
 		for (IDomain domain : this.getDomains()) {
-			Environment.getLogger().info(String.format("begin transform domain [%s].", domain.getName()));
+			Environment.getLogger().info(String.format("begin transform domain [%s] to codes.", domain.getName()));
 			File outFolder = new File(this.getOutputFolder() + File.separator + domain.getName());
 			Parameters parameters = this.getRuntimeParameters();
 			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, domain));
 			this.transform(new File(this.getTemplateFolder()), outFolder, parameters);
-			Environment.getLogger().info(String.format("end transform domain [%s].", domain.getName()));
+			Environment.getLogger().info(String.format("end transform codes."));
 		}
 	}
 

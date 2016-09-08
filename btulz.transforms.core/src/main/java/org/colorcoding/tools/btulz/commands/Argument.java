@@ -56,8 +56,19 @@ public class Argument {
 		return original;
 	}
 
+	private boolean isInputed;
+
+	public boolean isInputed() {
+		return isInputed;
+	}
+
+	public void setInputed(boolean isInputed) {
+		this.isInputed = isInputed;
+	}
+
 	public void setOriginal(String original) {
 		this.original = original;
+		this.setInputed(true);
 		if (this.original != null && !this.original.isEmpty()) {
 			String[] tmps = this.original.split("=");
 			if (tmps.length >= 1) {

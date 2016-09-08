@@ -12,6 +12,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.models.IBusinessObject;
 import org.colorcoding.tools.btulz.models.IBusinessObjectItem;
 import org.colorcoding.tools.btulz.models.IDomain;
@@ -66,6 +67,7 @@ public class XmlTransformer extends FileTransformer {
 	@Override
 	protected IDomain[] load(File file) throws Exception {
 		if (file != null && file.isFile() && file.getName().endsWith(XML_FILE_EXTENSION)) {
+			Environment.getLogger().info(String.format("load file [%s]'s data.", file.getName()));
 			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
 			return this.load(document);
 		}
@@ -75,6 +77,7 @@ public class XmlTransformer extends FileTransformer {
 	protected IDomain[] load(Document document) throws Exception {
 		ArrayList<IDomain> domains = new ArrayList<>();
 		IXmlParser xmlParser = null;
+		Environment.getLogger().info(String.format("begin transform xml document to domain."));
 		for (int i = 0; i < document.getChildNodes().getLength(); i++) {
 			Node firstNode = document.getChildNodes().item(i);
 			if (firstNode != null && firstNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -87,6 +90,7 @@ public class XmlTransformer extends FileTransformer {
 				}
 			}
 		}
+		Environment.getLogger().info(String.format("end transform domain."));
 		return domains.toArray(new IDomain[] {});
 	}
 
@@ -118,6 +122,7 @@ public class XmlTransformer extends FileTransformer {
 	@Override
 	protected void save(File outFolder, IDomain domain) throws Exception {
 		String fileName = this.getSaveFilePath(outFolder.getPath(), domain);
+		Environment.getLogger().info(String.format("begin transform domain to file [%s].", fileName));
 		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 		// 领域模型
 		Element root = document.createElement("Domain");
@@ -157,6 +162,8 @@ public class XmlTransformer extends FileTransformer {
 		PrintWriter pw = new PrintWriter(new FileOutputStream(fileName));
 		StreamResult result = new StreamResult(pw);
 		transformer.transform(source, result);
+
+		Environment.getLogger().info(String.format("end transform domain to file."));
 	}
 
 	protected void writeElement(IDomain domain, Element element) {

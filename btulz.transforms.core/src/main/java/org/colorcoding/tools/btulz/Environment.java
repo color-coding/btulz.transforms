@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -83,14 +84,11 @@ public class Environment {
 					path = uri.getPath();
 				}
 				if (path == null) {
-					// 此处存在中文路径识别异常风险
 					path = url.getPath();
 					if (path != null)
-						path = path.replace("%20", " ");// 处理空格
+						path = java.net.URLDecoder.decode(path, "UTF-8");
 				}
 			}
-			// file:/E:/WorkTemp/ibas/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/ibcp.systemcenter.service/WEB-INF/classes/
-			// 取到的值如上
 			if (path != null) {
 				if (path.split(":").length > 2) {
 					path = path.substring(path.indexOf(":") + 1, path.length());
@@ -111,7 +109,7 @@ public class Environment {
 				file = file.getParentFile();
 			}
 			return file.getPath();
-		} catch (URISyntaxException e) {
+		} catch (URISyntaxException | UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 	}

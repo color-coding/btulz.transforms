@@ -1,5 +1,6 @@
 package org.colorcoding.tools.btulz.commands;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -58,6 +59,24 @@ public abstract class Command<C> {
 	}
 
 	/**
+	 * 打印异常
+	 * 
+	 * @param error
+	 *            异常
+	 */
+	protected void print(Throwable error) {
+		try {
+			ByteArrayOutputStream buf = new java.io.ByteArrayOutputStream();
+			error.printStackTrace(new java.io.PrintWriter(buf, true));
+			String message = buf.toString();
+			buf.close();
+			this.print(message);
+		} catch (Exception e) {
+			System.err.println(e);
+		}
+	}
+
+	/**
 	 * 创建我的参数
 	 * 
 	 * @return
@@ -72,28 +91,35 @@ public abstract class Command<C> {
 	 * @return
 	 */
 	public final int run(String[] args) {
+		// 包含帮助命名，打印帮助信息后退出
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].toLowerCase().startsWith(ARGUMENT_NAME_HELP)) {
+				this.printHelps();
+				return 0;
+			}
+		}
 		Argument[] arguments = this.createArguments();
 		if (arguments != null) {
 			for (int i = 0; i < args.length; i++) {
-				if (args[i].toLowerCase().startsWith(ARGUMENT_NAME_HELP)) {
-					// 包含帮助命名，打印帮助信息后退出
-					this.printHelps(arguments);
-					return 0;
-				}
+				boolean done = false;
 				for (Argument argument : arguments) {
 					if (argument.check(args[i])) {
 						// 匹配的参数
 						argument.setOriginal(args[i]);
+						done = true;
 					}
+				}
+				if (!done) {
+					// 未能识别的参数
+					this.print("invalid argument [%s].", args[i]);
+					return -1;
 				}
 			}
 		}
 		if (arguments == null) {
 			arguments = new Argument[] {};
 		}
-		this.print("begin to run.");
 		this.run(arguments);
-		this.print("end run.");
 		return 0;
 	}
 
@@ -102,7 +128,8 @@ public abstract class Command<C> {
 	 * 
 	 * @param arguments
 	 */
-	private void printHelps(Argument[] arguments) {
+	protected void printHelps() {
+		Argument[] arguments = this.createArguments();
 		StringBuilder stringBuilder = new StringBuilder();
 		if (this.getDescription() != null && !this.getDescription().isEmpty())
 			stringBuilder.append(this.getDescription());
