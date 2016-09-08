@@ -57,7 +57,7 @@ public class Parameter {
 
 	protected Object getValue(Object value, String path)
 			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		if (path != null && !path.equals("") && value != null) {
+		if (path != null && !path.isEmpty() && value != null) {
 			String curPath = path;
 			String nextPath = null;
 			int indexPath = path.indexOf(").");// 仅支持方法，所以为此
@@ -95,7 +95,7 @@ public class Parameter {
 				}
 			}
 			// 处理下级路径
-			if (nextPath != null && !nextPath.equals("")) {
+			if (nextPath != null && !nextPath.isEmpty()) {
 				return this.getValue(tmpValue, nextPath);
 			}
 			// 路径值未找到

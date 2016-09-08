@@ -227,7 +227,7 @@ public class CodeTransformer extends Transformer {
 	 */
 	protected String replaceVariables(String string, List<Parameter> parameters) throws Exception {
 		ArrayList<Variable> variables = new ArrayList<>();
-		if (string != null && !string.equals("")) {
+		if (string != null && !string.isEmpty()) {
 			if (parameters != null) {
 				String pattern = "\\{([a-zA-Z].*?)\\}";
 				Matcher matcher = Pattern.compile(pattern).matcher(string);

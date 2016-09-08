@@ -94,20 +94,20 @@ public class XmlTransformer extends FileTransformer {
 		// 生成文件名称 DS_DN_DataInputTemplate.xml
 		String name = null;
 		String shortName = null;
-		if (domain.getShortName() != null && !domain.getShortName().equals("")) {
+		if (domain.getShortName() != null && !domain.getShortName().isEmpty()) {
 			shortName = domain.getShortName();
 		}
 		if (this.isGroupingFile() && domain.getBusinessObjects().size() == 1) {
 			name = domain.getBusinessObjects().get(0).getName();
-			if (name == null || name.equals("")) {
+			if (name == null || name.isEmpty()) {
 				name = domain.getBusinessObjects().get(0).getMappedModel();
 			}
 		}
-		if ((name == null || name.equals("") || name.equals("null")) && domain.getName() != null
-				&& !domain.getName().equals("")) {
+		if ((name == null || name.isEmpty() || name.equals("null")) && domain.getName() != null
+				&& !domain.getName().isEmpty()) {
 			name = domain.getName();
 		}
-		if (name == null || name.equals("") || name.equals("null")) {
+		if (name == null || name.isEmpty() || name.equals("null")) {
 			name = "unspecified";
 		}
 		String fileName = outFolder + File.separator + String
@@ -206,13 +206,13 @@ public class XmlTransformer extends FileTransformer {
 		element.setAttribute("Relation", String.valueOf(boItem.getRelation()));
 		if (boItem.getName() != null && boItem.getName().equals(boItem.getMappedModel())) {
 			element.setAttribute("MappedModel", boItem.getMappedModel());
-			if (boItem.getShortName() != null && !boItem.getShortName().equals("")) {
+			if (boItem.getShortName() != null && !boItem.getShortName().isEmpty()) {
 				element.setAttribute("ShortName", boItem.getShortName());
 			}
 		} else {
 			element.setAttribute("Name", boItem.getName());
 			element.setAttribute("Description", boItem.getDescription());
-			if (boItem.getShortName() != null && !boItem.getShortName().equals("")) {
+			if (boItem.getShortName() != null && !boItem.getShortName().isEmpty()) {
 				element.setAttribute("ShortName", boItem.getShortName());
 			}
 			element.setAttribute("MappedModel", boItem.getMappedModel());

@@ -65,7 +65,7 @@ public class DsTransformer extends DbTransformer {
 
 	public DataTypeMappings getDataTypeMappings() {
 		if (dataTypeMappings == null) {
-			if (this.getTemplateFile() != null && !this.getTemplateFile().equals("")) {
+			if (this.getTemplateFile() != null && !this.getTemplateFile().isEmpty()) {
 				try {
 					dataTypeMappings = DataTypeMappings.create(
 							this.getTemplateFile().replace(File.separatorChar + "ds_", File.separatorChar + "dm_"));

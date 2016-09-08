@@ -91,7 +91,7 @@ public class SqlExecutionOrchestration extends ExecutionOrchestration implements
 	 */
 	protected Connection createConnection(String dbUrl) throws ClassNotFoundException, SQLException {
 		Class.forName(this.getDriverName());
-		if (dbUrl == null || dbUrl.equals("")) {
+		if (dbUrl == null || dbUrl.isEmpty()) {
 			dbUrl = this.getDbUrl();
 		}
 		Environment.getLogger().info(String.format("connect to [%s], by user [%s].", dbUrl, this.getDbUser()));
@@ -123,7 +123,7 @@ public class SqlExecutionOrchestration extends ExecutionOrchestration implements
 						statement.close();
 						statement = null;
 					}
-					if (action.getDbUrl() != null && !action.getDbUrl().equals("")) {
+					if (action.getDbUrl() != null && !action.getDbUrl().isEmpty()) {
 						// 要求隔离且需要新的数据库连接
 						usingConnection = this.createConnection(action.getDbUrl());
 						usingConnection.setAutoCommit(true);

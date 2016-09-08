@@ -64,7 +64,7 @@ public class Domain implements IDomain {
 	}
 
 	private String getShortName(String name) {
-		if (name == null || name.equals("")) {
+		if (name == null || name.isEmpty()) {
 			return null;
 		}
 		String[] tmps = name.split(FILE_NAME_SEPARATOR);

@@ -109,13 +109,13 @@ public class XmlTransformerDom4j extends XmlTransformer {
 		element.addAttribute("Relation", String.valueOf(boItem.getRelation()));
 		if (boItem.getName() != null && boItem.getName().equals(boItem.getMappedModel())) {
 			element.addAttribute("MappedModel", boItem.getMappedModel());
-			if (boItem.getShortName() != null && !boItem.getShortName().equals("")) {
+			if (boItem.getShortName() != null && !boItem.getShortName().isEmpty()) {
 				element.addAttribute("ShortName", boItem.getShortName());
 			}
 		} else {
 			element.addAttribute("Name", boItem.getName());
 			element.addAttribute("Description", boItem.getDescription());
-			if (boItem.getShortName() != null && !boItem.getShortName().equals("")) {
+			if (boItem.getShortName() != null && !boItem.getShortName().isEmpty()) {
 				element.addAttribute("ShortName", boItem.getShortName());
 			}
 			element.addAttribute("MappedModel", boItem.getMappedModel());

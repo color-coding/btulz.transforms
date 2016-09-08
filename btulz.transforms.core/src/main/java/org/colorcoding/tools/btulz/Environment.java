@@ -3,6 +3,7 @@ package org.colorcoding.tools.btulz;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -47,7 +48,16 @@ public class Environment {
 				if (file.exists() && file.isFile()) {
 					PropertyConfigurator.configure(file.getPath());
 				} else {
-					PropertyConfigurator.configure(getResource("log4j.properties").getPath());
+					URI path = getResource("log4j.properties");
+					if (path != null && path.getPath() != null) {
+						PropertyConfigurator.configure(path.getPath());
+					} else {
+						InputStream stream = Thread.currentThread().getContextClassLoader()
+								.getResourceAsStream("log4j.properties");
+						if (stream != null) {
+							PropertyConfigurator.configure(stream);
+						}
+					}
 				}
 				logger = Logger.getLogger("btulz.transforms");
 			} catch (URISyntaxException e) {

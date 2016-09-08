@@ -22,7 +22,7 @@ public class Variable {
 	 */
 	public static Variable[] discerning(String string) {
 		ArrayList<Variable> variables = new ArrayList<>();
-		if (string != null && !string.equals("")) {
+		if (string != null && !string.isEmpty()) {
 			// ${Model.getMapped()}
 			String pattern = "\\$\\{([\\!a-zA-Z].*?)\\}";
 			Matcher matcher = Pattern.compile(pattern).matcher(string);

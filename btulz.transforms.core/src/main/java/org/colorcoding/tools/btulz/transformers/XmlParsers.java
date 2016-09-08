@@ -345,8 +345,8 @@ class XmlParser1 extends XmlParser {
 			// 修正业务对象子项
 			for (IBusinessObject bo : domain.getBusinessObjects()) {
 				for (IBusinessObjectItem boItem : bo.getRelatedBOs()) {
-					if ((boItem.getMappedModel() == null || boItem.getMappedModel().equals(""))
-							&& boItem.getShortName() != null && !boItem.getShortName().equals("")) {
+					if ((boItem.getMappedModel() == null || boItem.getMappedModel().isEmpty())
+							&& boItem.getShortName() != null && !boItem.getShortName().isEmpty()) {
 						for (IModel model : domain.getModels()) {
 							if (model.getMapped() != null && model.getMapped().equals(boItem.getShortName())) {
 								boItem.setShortName(null);

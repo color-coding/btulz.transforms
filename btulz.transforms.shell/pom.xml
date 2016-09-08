@@ -32,7 +32,10 @@
 				<version>2.6</version>
 				<configuration>
 					<archive>
-						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>org.colorcoding.tools.btulz.shell.Console</mainClass>
+						</manifest>
 					</archive>
 				</configuration>
 			</plugin>
