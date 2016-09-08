@@ -1,5 +1,10 @@
 package org.colorcoding.tools.btulz.commands;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.colorcoding.tools.btulz.templates.Parameter;
+
 /**
  * 命令
  * 
@@ -133,4 +138,46 @@ public abstract class Command<C> {
 	 * @return
 	 */
 	protected abstract int run(Argument[] arguments);
+
+	/**
+	 * 创建参数
+	 * 
+	 * @param values
+	 *            参数字符串
+	 * @return
+	 */
+	protected Collection<Parameter> createParameters(String values) {
+		ArrayList<Parameter> parameters = new ArrayList<>();
+		if (values != null && !values.isEmpty()) {
+			if (values.startsWith("[") && values.endsWith("]")) {
+				ArrayList<String> tmpValues = new ArrayList<>();
+				StringBuilder stringBuilder = null;
+				char[] charValues = values.toCharArray();
+				for (int i = 1; i < charValues.length - 1; i++) {
+					if (charValues[i] == '{') {
+						stringBuilder = new StringBuilder();
+					}
+					if (stringBuilder != null) {
+						stringBuilder.append(charValues[i]);
+					}
+					if (charValues[i] == '}') {
+						tmpValues.add(stringBuilder.toString());
+						stringBuilder = null;
+					}
+				}
+				for (String string : tmpValues) {
+					Parameter parameter = Parameter.create(string);
+					if (parameter != null) {
+						parameters.add(parameter);
+					}
+				}
+			} else if (values.startsWith("{") && values.endsWith("}")) {
+				Parameter parameter = Parameter.create(values);
+				if (parameter != null) {
+					parameters.add(parameter);
+				}
+			}
+		}
+		return parameters;
+	}
 }

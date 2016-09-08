@@ -30,6 +30,16 @@ public class Argument {
 		this.name = name;
 	}
 
+	private String type;
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	private String value;
 
 	public String getValue() {
@@ -48,6 +58,19 @@ public class Argument {
 
 	public void setOriginal(String original) {
 		this.original = original;
+		if (this.original != null && !this.original.isEmpty()) {
+			String[] tmps = this.original.split("=");
+			if (tmps.length >= 1) {
+				String tmp = tmps[0];
+				if (tmp.indexOf(":") > 0) {
+					this.setType(tmp.split(":")[1]);
+				}
+			}
+			if (tmps.length >= 2) {
+				String tmp = tmps[1];
+				this.setValue(tmp);
+			}
+		}
 	}
 
 	private String description;
@@ -58,6 +81,10 @@ public class Argument {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String toString() {
+		return String.format("Argument %s %s", this.getName(), this.getValue());
 	}
 
 	/**
@@ -71,7 +98,10 @@ public class Argument {
 		if (string == null || string.isEmpty()) {
 			return false;
 		}
-
+		String tmpName = string.split("=")[0].split(":")[0];
+		if (this.getName().equalsIgnoreCase(tmpName)) {
+			return true;
+		}
 		return false;
 	}
 }

@@ -10,6 +10,30 @@ import java.lang.reflect.Method;
  *
  */
 public class Parameter {
+	public static Parameter create(String string) {
+		// {"name":"ibasVersion","value":"0.1.1"}
+		if (string == null || string.isEmpty()) {
+			return null;
+		}
+		String name = null;
+		String value = null;
+		String[] tmps = string.replace("{", "").replace("}", "").split(",");
+		for (String tmp : tmps) {
+			String[] items = tmp.replace("\"", "").split(":");
+			if (items.length == 2) {
+				if (items[0].equalsIgnoreCase("name")) {
+					name = items[1];
+				}
+				if (items[0].equalsIgnoreCase("value")) {
+					value = items[1];
+				}
+			}
+		}
+		if (name != null && value != null) {
+			return new Parameter(name, value);
+		}
+		return null;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

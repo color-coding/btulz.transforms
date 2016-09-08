@@ -1,6 +1,7 @@
 package org.colorcoding.tools.btulz.test.transformers;
 
 import java.io.File;
+import java.util.UUID;
 
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.templates.Parameter;
@@ -20,6 +21,7 @@ public class testCodeTransformer extends TestCase {
 		codeTransformer.setOutputFolder(System.getenv("TEMP"));
 		codeTransformer.setGroupId("org.colorcoding");
 		codeTransformer.setArtifactId("ibas");
+		codeTransformer.setProjectId(UUID.randomUUID().toString());
 		codeTransformer.setProjectVersion("0.0.1");
 		codeTransformer.setProjectUrl("http://colorcoding.org");
 		codeTransformer.addParameters(new Parameter("ibasVersion", "0.1.1"));

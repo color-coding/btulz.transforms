@@ -22,6 +22,8 @@ public class testCommands extends TestCase {
 		args.add(String.format("-OutputFolder=%s", System.getenv("ibasWorkspace") + File.separator + "temp")); // 输出目录
 		args.add(String.format("-GroupId=%s", "org.colorcoding"));// 组标记
 		args.add(String.format("-ArtifactId=%s", "ibas"));// 项目标记
+		// args.add(String.format("-ProjectId=%s",
+		// UUID.randomUUID().toString()));// 项目版本
 		args.add(String.format("-ProjectVersion=%s", "0.0.1"));// 项目版本
 		args.add(String.format("-ProjectUrl=%s", "http://colorcoding.org"));// 项目地址
 		args.add(String.format("-Domains=%s", System.getenv("ibasWorkspace") + File.separator + "initialization")); // 模型文件
