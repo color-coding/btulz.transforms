@@ -122,8 +122,9 @@ public abstract class DbTransformer extends Transformer {
 		return templateFile;
 	}
 
-	public void setTemplateFile(String templateFile) {
+	public boolean setTemplateFile(String templateFile) {
 		this.templateFile = templateFile;
+		return true;
 	}
 
 	/**

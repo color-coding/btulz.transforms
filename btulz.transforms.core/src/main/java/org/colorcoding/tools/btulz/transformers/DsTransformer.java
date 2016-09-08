@@ -81,7 +81,7 @@ public class DsTransformer extends DbTransformer {
 	 * 设置模板文件，若文件不含路径自动补齐，文件不存在则在资源文件中查询并释放到工作目录
 	 */
 	@Override
-	public void setTemplateFile(String templateFile) {
+	public boolean setTemplateFile(String templateFile) {
 		if (templateFile.indexOf(File.separator) < 0 && templateFile.startsWith("ds")) {
 			// 不是完整的路径，补充目录到路径
 			try {
@@ -90,7 +90,7 @@ public class DsTransformer extends DbTransformer {
 						+ File.separator + templateFile);
 				if (file.exists() && file.isFile()) {
 					super.setTemplateFile(file.getPath());
-					return;
+					return true;
 				}
 				// 其次使用资源文件模板
 				String resName = String.format("ds/%s", templateFile);
@@ -133,13 +133,14 @@ public class DsTransformer extends DbTransformer {
 						fos.close();
 						stream.close();
 					}
-					return;
+					return true;
 				}
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}
 		super.setTemplateFile(templateFile);
+		return false;
 	}
 
 	@Override

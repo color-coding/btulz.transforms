@@ -1,7 +1,15 @@
 package org.colorcoding.tools.btulz.commands;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
+import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.transformers.CodeTransformer;
 
 /**
@@ -70,7 +78,13 @@ public class Command4Code extends Command<Command4Code> {
 			CodeTransformer codeTransformer = new CodeTransformer();
 			for (Argument argument : arguments) {
 				if (argument.getName().equalsIgnoreCase("-TemplateFolder")) {
-					codeTransformer.setTemplateFolder(argument.getValue());
+					boolean done = codeTransformer.setTemplateFolder(argument.getValue());
+					if (!done) {
+						// 模板文件夹设置不成功，可能是文件不存在
+						// 尝试保存jar包资源到启动文件夹
+						this.writeCodeResources();
+						codeTransformer.setTemplateFolder(argument.getValue());
+					}
 				} else if (argument.getName().equalsIgnoreCase("-OutputFolder")) {
 					codeTransformer.setOutputFolder(argument.getValue());
 				} else if (argument.getName().equalsIgnoreCase("-GroupId")) {
@@ -97,6 +111,40 @@ public class Command4Code extends Command<Command4Code> {
 		} catch (Exception e) {
 			this.print(e.toString());
 			return -1;
+		}
+	}
+
+	private void writeCodeResources() throws IOException {
+		String jarFilePath = Command4Code.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+		File file = new File(java.net.URLDecoder.decode(jarFilePath, "UTF-8"));
+		if (file.getName().toLowerCase().endsWith(".jar")) {
+			JarFile jarFile = new JarFile(file);
+			Enumeration<JarEntry> jarEntries = jarFile.entries();
+			if (jarEntries != null) {
+				while (jarEntries.hasMoreElements()) {
+					JarEntry jarEntry = (JarEntry) jarEntries.nextElement();
+					String name = jarEntry.getName().toLowerCase();
+					if (name.startsWith("code/")) {
+						File writeFile = new File(Environment.getWorkingFolder() + File.separator + jarEntry.getName());
+						Environment.getLogger().debug((String.format("release resources [%s]. ", jarEntry.getName())));
+						InputStream inputStream = jarFile.getInputStream(jarEntry);
+						FileOutputStream fos = new FileOutputStream(writeFile);
+						int len = -1;
+						byte[] b = new byte[1024];
+						while ((len = inputStream.read(b)) != -1) {
+							if (fos == null) {
+								file.getParentFile().mkdirs();
+								file.createNewFile();
+							}
+							fos.write(b, 0, len);
+						}
+						fos.flush();
+						fos.close();
+						inputStream.close();
+					}
+				}
+			}
+			jarFile.close();
 		}
 	}
 }

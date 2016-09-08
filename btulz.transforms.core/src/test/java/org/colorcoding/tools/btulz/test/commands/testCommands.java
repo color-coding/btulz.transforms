@@ -15,6 +15,13 @@ public class testCommands extends TestCase {
 		Console.main(new String[] {});
 	}
 
+	/*
+	 * code -TemplateFolder=eclipse/ibas_classic -OutputFolder=D:\WorkTemp\temp
+	 * -GroupId=org.colorcoding -ArtifactId=ibas -ProjectVersion=0.0.1
+	 * -ProjectUrl=http://colorcoding.org -Domains=D:\WorkTemp\initialization
+	 * -Parameters=[{"name":"ibasVersion","value":"0.1.1"},{"name":
+	 * "jerseyVersion","value":"2.22.1"}]
+	 */
 	public void testCommandCode() {
 		ArrayList<String> args = new ArrayList<>();
 		args.add(String.format(Command4Code.COMMAND_PROMPT)); // 命令
