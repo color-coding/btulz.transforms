@@ -91,14 +91,14 @@ public class CommandsManager {
 				stringBuilder.append(name);
 			}
 			this.print("you can use the command [%s].", stringBuilder);
-			return -1;
+			return Command.RETURN_VALUE_NO_COMMAND_EXECUTION;
 		}
 		String prompt = args[0].trim();
 		Class<? extends Command<?>> commandType = this.getCommands(prompt);
 		if (commandType == null) {
 			// 没有找到命令
 			this.print("not found command [%s].", prompt);
-			return -1;
+			return Command.RETURN_VALUE_NOT_FOUND_COMMAND_PROMPT;
 		}
 		try {
 			Command<?> command = commandType.newInstance();
@@ -110,7 +110,7 @@ public class CommandsManager {
 		} catch (InstantiationException | IllegalAccessException e) {
 			this.print("call command [%s] faild.", prompt);
 			this.print(e.toString());
-			return -1;
+			return Command.RETURN_VALUE_COMMAND_EXECUTION_FAILD;
 		}
 	}
 

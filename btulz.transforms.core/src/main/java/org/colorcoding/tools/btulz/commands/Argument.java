@@ -19,6 +19,11 @@ public class Argument {
 
 	private String name;
 
+	/**
+	 * 参数名称
+	 * 
+	 * @return
+	 */
 	public String getName() {
 		return name;
 	}
@@ -32,6 +37,11 @@ public class Argument {
 
 	private String type;
 
+	/**
+	 * 参数的类型（:type）
+	 * 
+	 * @return
+	 */
 	public String getType() {
 		return type;
 	}
@@ -42,6 +52,11 @@ public class Argument {
 
 	private String value;
 
+	/**
+	 * 参数的值
+	 * 
+	 * @return
+	 */
 	public String getValue() {
 		return value;
 	}
@@ -52,12 +67,22 @@ public class Argument {
 
 	private String original;
 
+	/**
+	 * 参数的原始命令符
+	 * 
+	 * @return
+	 */
 	public String getOriginal() {
 		return original;
 	}
 
 	private boolean isInputed;
 
+	/**
+	 * 是否输入了此参数
+	 * 
+	 * @return
+	 */
 	public boolean isInputed() {
 		return isInputed;
 	}
@@ -86,6 +111,11 @@ public class Argument {
 
 	private String description;
 
+	/**
+	 * 参数的描述
+	 * 
+	 * @return
+	 */
 	public String getDescription() {
 		return description;
 	}

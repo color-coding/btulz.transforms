@@ -19,6 +19,26 @@ public abstract class Command<C> {
 	 */
 	public static final String ARGUMENT_NAME_HELP = "-help";
 	/**
+	 * 返回值，-10，没有错误，但未找到对应的命令符
+	 */
+	public static final int RETURN_VALUE_NOT_FOUND_COMMAND_PROMPT = -10;
+	/**
+	 * 返回值，-1，没有错误，但核心命令未执行
+	 */
+	public static final int RETURN_VALUE_NO_COMMAND_EXECUTION = -1;
+	/**
+	 * 返回值，0，没有错误，核心命令执行
+	 */
+	public static final int RETURN_VALUE_SUCCESS = 0;
+	/**
+	 * 返回值，22，错误，无效的参数
+	 */
+	public static final int RETURN_VALUE_INVALID_ARGUMENT = 22;
+	/**
+	 * 返回值，1，错误，运行命令失败
+	 */
+	public static final int RETURN_VALUE_COMMAND_EXECUTION_FAILD = 1;
+	/**
 	 * 新行字符
 	 */
 	public static final String NEW_LINE = System.getProperty("line.separator", "\r\n");
@@ -77,9 +97,9 @@ public abstract class Command<C> {
 	}
 
 	/**
-	 * 创建我的参数
+	 * 创建此命令的参数
 	 * 
-	 * @return
+	 * @return 此命令所有参数的实例数组
 	 */
 	protected abstract Argument[] createArguments();
 
@@ -95,7 +115,7 @@ public abstract class Command<C> {
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].toLowerCase().startsWith(ARGUMENT_NAME_HELP)) {
 				this.printHelps();
-				return 0;
+				return RETURN_VALUE_NO_COMMAND_EXECUTION;
 			}
 		}
 		Argument[] arguments = this.createArguments();
@@ -112,15 +132,29 @@ public abstract class Command<C> {
 				if (!done) {
 					// 未能识别的参数
 					this.print("invalid argument [%s].", args[i]);
-					return -1;
+					return RETURN_VALUE_INVALID_ARGUMENT;
 				}
 			}
 		}
 		if (arguments == null) {
 			arguments = new Argument[] {};
 		}
-		this.run(arguments);
-		return 0;
+		if (this.isRequiredArguments()) {
+			// 要求输出参数，有则运行，没有则显示帮助
+			boolean done = false;// 是否输出了参数
+			for (Argument argument : arguments) {
+				if (argument.isInputed()) {
+					done = true;
+					break;
+				}
+			}
+			if (done) {
+				return this.run(arguments);
+			}
+			this.printHelps();
+			return RETURN_VALUE_NO_COMMAND_EXECUTION;
+		}
+		return this.run(arguments);
 	}
 
 	/**
@@ -156,6 +190,15 @@ public abstract class Command<C> {
 	protected void moreHelps(StringBuilder stringBuilder) {
 
 	}
+
+	/**
+	 * 是否要求提供参数
+	 * 
+	 * true：没参数自动显示帮助；false：没参数也运行（run）
+	 * 
+	 * @return
+	 */
+	protected abstract boolean isRequiredArguments();
 
 	/**
 	 * 运行
