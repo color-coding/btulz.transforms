@@ -2,6 +2,7 @@ package org.colorcoding.tools.btulz;
 
 import org.colorcoding.tools.btulz.commands.Command4Code;
 import org.colorcoding.tools.btulz.commands.Command4Ds;
+import org.colorcoding.tools.btulz.commands.Command4Sql;
 import org.colorcoding.tools.btulz.commands.CommandsManager;
 
 /**
@@ -21,6 +22,7 @@ public class Console {
 					// 注册发布的命令
 					commandsManager.register(Command4Code.class);
 					commandsManager.register(Command4Ds.class);
+					commandsManager.register(Command4Sql.class);
 				}
 			}
 		}

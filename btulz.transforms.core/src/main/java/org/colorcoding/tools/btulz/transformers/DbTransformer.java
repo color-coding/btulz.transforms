@@ -115,27 +115,6 @@ public abstract class DbTransformer extends Transformer {
 		return parameters;
 	}
 
-	private String templateFile;
-
-	public String getTemplateFile() {
-		return templateFile;
-	}
-
-	public boolean setTemplateFile(String templateFile) {
-		this.templateFile = templateFile;
-		return true;
-	}
-
-	/**
-	 * 获取输出文件名称
-	 * 
-	 * @return
-	 */
-	protected String getOutputFile() {
-		File file = new File(this.getTemplateFile());
-		return this.getOutputFile(file.isFile() ? file.getName() : this.getTemplateFile());
-	}
-
 	protected String getOutputFile(String tpltName) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append(Environment.getWorkingFolder());

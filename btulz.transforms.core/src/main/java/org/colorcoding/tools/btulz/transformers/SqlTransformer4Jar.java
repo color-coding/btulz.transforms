@@ -6,10 +6,6 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.transformers.regions.RegionDomain;
 
@@ -20,29 +16,10 @@ import org.colorcoding.tools.btulz.transformers.regions.RegionDomain;
  *
  */
 public class SqlTransformer4Jar extends SqlTransformer {
-	private Unmarshaller unmarshaller = null;
-
-	private Unmarshaller createUnmarshaller() throws JAXBException {
-		if (unmarshaller == null) {
-			JAXBContext context = JAXBContext.newInstance(DataStructureOrchestration.class);
-			unmarshaller = context.createUnmarshaller();
-		}
-		return this.unmarshaller;
-	}
-
-	private String sqlFilter;
-
-	public String getSqlFilter() {
-		return sqlFilter;
-	}
-
-	public void setSqlFilter(String sqlFilter) {
-		this.sqlFilter = sqlFilter;
-	}
 
 	@Override
 	public void transform() throws Exception {
-		File file = new File(this.getTemplateFile());
+		File file = new File(this.getSqlFile());
 		if (!file.isFile() || !file.exists()) {
 			return;
 		}
@@ -70,11 +47,7 @@ public class SqlTransformer4Jar extends SqlTransformer {
 							template.parse(inputStream);
 							File outputFile = new File(this.getOutputFile(name.replace("datastructures/sql_", "sql_")));
 							template.export(this.getRuntimeParameters(), outputFile);
-							Environment.getLogger().info(
-									String.format("try to execute orchestration file [%s].", outputFile.getPath()));
-							DataStructureOrchestration orchestration = (DataStructureOrchestration) this
-									.createUnmarshaller().unmarshal(outputFile);
-							orchestration.execute();
+							this.execute(outputFile);
 						} catch (Exception e) {
 							Environment.getLogger().error(e);
 						}

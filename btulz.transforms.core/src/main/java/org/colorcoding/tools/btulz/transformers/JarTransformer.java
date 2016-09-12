@@ -30,9 +30,19 @@ public class JarTransformer extends DbTransformer {
 		this.dsTemplate = dsTemplate;
 	}
 
+	private String jarFile;
+
+	public String getJarFile() {
+		return jarFile;
+	}
+
+	public void setJarFile(String jarFile) {
+		this.jarFile = jarFile;
+	}
+
 	@Override
 	public void transform() throws Exception {
-		File file = new File(this.getTemplateFile());
+		File file = new File(this.getJarFile());
 		if (!file.isFile() || !file.exists()) {
 			return;
 		}
@@ -50,7 +60,7 @@ public class JarTransformer extends DbTransformer {
 		dsTransformer.transform();
 		// 执行初始化语句
 		SqlTransformer4Jar sqlTransformer = new SqlTransformer4Jar();
-		sqlTransformer.setTemplateFile(this.getTemplateFile());
+		sqlTransformer.setSqlFile(this.getJarFile());
 		sqlTransformer.setSqlFilter(this.getSqlFilter());
 		sqlTransformer.setCompany(this.getCompany());
 		sqlTransformer.setDbServer(this.getDbServer());

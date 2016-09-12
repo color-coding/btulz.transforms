@@ -60,6 +60,38 @@ public class DsTransformer extends DbTransformer {
 		}
 	}
 
+	private String templateFile;
+
+	public String getTemplateFile() {
+		return templateFile;
+	}
+
+	public void setTemplateFile(String templateFile) {
+		if (templateFile != null && !templateFile.isEmpty()) {
+			if (templateFile.indexOf(File.separator) < 0) {
+				// 不包含路径，用工作目录补全
+				File file = new File(
+						Environment.getWorkingFolder() + File.separator + "ds" + File.separatorChar + templateFile);
+				if (file.isFile() && file.exists()) {
+					// 工作目录存在文件
+					this.templateFile = file.getPath();
+					return;
+				}
+			}
+		}
+		this.templateFile = templateFile;
+	}
+
+	/**
+	 * 获取输出文件名称
+	 * 
+	 * @return
+	 */
+	protected String getOutputFile() {
+		File file = new File(this.getTemplateFile());
+		return this.getOutputFile(file.isFile() ? file.getName() : this.getTemplateFile());
+	}
+
 	private DataTypeMappings dataTypeMappings;
 
 	public DataTypeMappings getDataTypeMappings() {

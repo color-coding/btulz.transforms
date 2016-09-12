@@ -40,10 +40,10 @@ public class testDbTransformer extends TestCase {
 
 	public void testInitMSSQL() throws Exception {
 		File file = new File(
-				workspace + File.separator + "initialization" + File.separator + "ds_mssql_ibas_initialization.xml");
+				workspace + File.separator + "initialization" + File.separator + "sql_mssql_ibas_initialization.xml");
 		if (file.exists() && file.isFile()) {
 			SqlTransformer sqlTransformer = new SqlTransformer();
-			sqlTransformer.setTemplateFile(file.getPath());
+			sqlTransformer.setSqlFile(file.getPath());
 			sqlTransformer.setCompany("CC");
 			sqlTransformer.setDbServer("ibas-dev-mssql");
 			sqlTransformer.setDbPort("1433");
@@ -57,10 +57,10 @@ public class testDbTransformer extends TestCase {
 
 	public void testInitMYSQL() throws Exception {
 		File file = new File(
-				workspace + File.separator + "initialization" + File.separator + "ds_mysql_ibas_initialization.xml");
+				workspace + File.separator + "initialization" + File.separator + "sql_mysql_ibas_initialization.xml");
 		if (file.exists() && file.isFile()) {
 			SqlTransformer sqlTransformer = new SqlTransformer();
-			sqlTransformer.setTemplateFile(file.getPath());
+			sqlTransformer.setSqlFile(file.getPath());
 			sqlTransformer.setCompany("CC");
 			sqlTransformer.setDbServer("ibas-dev-mysql");
 			sqlTransformer.setDbPort("3306");
@@ -73,10 +73,10 @@ public class testDbTransformer extends TestCase {
 
 	public void testInitPGSQL() throws Exception {
 		File file = new File(
-				workspace + File.separator + "initialization" + File.separator + "ds_pgsql_ibas_initialization.xml");
+				workspace + File.separator + "initialization" + File.separator + "sql_pgsql_ibas_initialization.xml");
 		if (file.exists() && file.isFile()) {
 			SqlTransformer sqlTransformer = new SqlTransformer();
-			sqlTransformer.setTemplateFile(file.getPath());
+			sqlTransformer.setSqlFile(file.getPath());
 			sqlTransformer.setCompany("CC");
 			sqlTransformer.setDbServer("ibas-dev-pgsql");
 			sqlTransformer.setDbPort("5432");
@@ -89,10 +89,10 @@ public class testDbTransformer extends TestCase {
 
 	public void testInitHANA() throws Exception {
 		File file = new File(
-				workspace + File.separator + "initialization" + File.separator + "ds_hana_ibas_initialization.xml");
+				workspace + File.separator + "initialization" + File.separator + "sql_hana_ibas_initialization.xml");
 		if (file.exists() && file.isFile()) {
 			SqlTransformer sqlTransformer = new SqlTransformer();
-			sqlTransformer.setTemplateFile(file.getPath());
+			sqlTransformer.setSqlFile(file.getPath());
 			sqlTransformer.setCompany("CC");
 			sqlTransformer.setDbServer("ibas-dev-hana");
 			sqlTransformer.setDbPort("30015");
@@ -137,7 +137,7 @@ public class testDbTransformer extends TestCase {
 		for (File file : folder.listFiles()) {
 			SqlTransformer4Jar sqlTransformer = new SqlTransformer4Jar();
 			sqlTransformer.setSqlFilter("sql_mssql");
-			sqlTransformer.setTemplateFile(file.getPath());
+			sqlTransformer.setSqlFile(file.getPath());
 			sqlTransformer.setCompany("CC");
 			sqlTransformer.setDbServer("ibas-dev-mssql");
 			sqlTransformer.setDbPort("1433");
@@ -162,7 +162,7 @@ public class testDbTransformer extends TestCase {
 				JarTransformer jarTransformer = new JarTransformer();
 				jarTransformer.setDsTemplate("ds_mssql_ibas_classic.xml");
 				jarTransformer.setSqlFilter("sql_mssql");
-				jarTransformer.setTemplateFile(file.getPath());
+				jarTransformer.setJarFile(file.getPath());
 				jarTransformer.setCompany("CC");
 				jarTransformer.setDbServer("ibas-dev-mssql");
 				jarTransformer.setDbPort("1433");
