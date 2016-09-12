@@ -1,7 +1,6 @@
 package org.colorcoding.tools.btulz.transformers;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,80 +66,25 @@ public class DsTransformer extends DbTransformer {
 		if (dataTypeMappings == null) {
 			if (this.getTemplateFile() != null && !this.getTemplateFile().isEmpty()) {
 				try {
-					dataTypeMappings = DataTypeMappings.create(
-							this.getTemplateFile().replace(File.separatorChar + "ds_", File.separatorChar + "dm_"));
+					if (this.getTemplateFile().indexOf(File.separator) > 0) {
+						// 有路径符，表示使用的是物理文件
+						dataTypeMappings = DataTypeMappings.create(
+								this.getTemplateFile().replace(File.separatorChar + "ds_", File.separatorChar + "dm_"));
+					} else {
+						// 无路径符，尝试使用资源流
+						String resName = String.format("ds/%s", this.getTemplateFile().replace("ds_", "dm_"));
+						InputStream inputStream = Thread.currentThread().getContextClassLoader()
+								.getResourceAsStream(resName);
+						if (inputStream != null) {
+							dataTypeMappings = DataTypeMappings.create(inputStream);
+						}
+					}
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
 			}
 		}
 		return dataTypeMappings;
-	}
-
-	/**
-	 * 设置模板文件，若文件不含路径自动补齐，文件不存在则在资源文件中查询并释放到工作目录
-	 */
-	@Override
-	public boolean setTemplateFile(String templateFile) {
-		if (templateFile.indexOf(File.separator) < 0 && templateFile.startsWith("ds")) {
-			// 不是完整的路径，补充目录到路径
-			try {
-				// 优先使用工作目录的模板
-				File file = new File(Environment.getWorkingFolder() + File.separator + TEMPLATE_FOLDER_DATA_STRUCTURES
-						+ File.separator + templateFile);
-				if (file.exists() && file.isFile()) {
-					super.setTemplateFile(file.getPath());
-					return true;
-				}
-				// 其次使用资源文件模板
-				String resName = String.format("ds/%s", templateFile);
-				InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resName);
-				if (stream != null) {
-					FileOutputStream fos = null;
-					int len = -1;
-					byte[] b = new byte[1024];
-					while ((len = stream.read(b)) != -1) {
-						if (fos == null) {
-							file.getParentFile().mkdirs();
-							file.createNewFile();
-							fos = new FileOutputStream(file);
-						}
-						fos.write(b, 0, len);
-					}
-					fos.flush();
-					fos.close();
-					stream.close();
-					super.setTemplateFile(file.getPath());
-					// 输出数据类型转换文件
-					stream = Thread.currentThread().getContextClassLoader()
-							.getResourceAsStream(resName.replace("ds/ds_", "ds/dm_"));
-					if (stream != null) {
-						file = new File(
-								Environment.getWorkingFolder() + File.separator + TEMPLATE_FOLDER_DATA_STRUCTURES
-										+ File.separator + templateFile.replace("ds_", "dm_"));
-						fos = null;
-						len = -1;
-						b = new byte[1024];
-						while ((len = stream.read(b)) != -1) {
-							if (fos == null) {
-								file.getParentFile().mkdirs();
-								file.createNewFile();
-								fos = new FileOutputStream(file);
-							}
-							fos.write(b, 0, len);
-						}
-						fos.flush();
-						fos.close();
-						stream.close();
-					}
-					return true;
-				}
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		}
-		super.setTemplateFile(templateFile);
-		return false;
 	}
 
 	@Override
@@ -157,13 +101,34 @@ public class DsTransformer extends DbTransformer {
 
 	@Override
 	public void transform() throws Exception {
+		if (this.getTemplateFile() == null || this.getTemplateFile().isEmpty()) {
+			throw new Exception("no template file specified.");
+		}
 		long startTime = System.currentTimeMillis();
 		Environment.getLogger().info(String.format("begin transform data structures."));
 		for (IDomain domain : this.getDomains()) {
 			this.currentDomain = domain;
 			Environment.getLogger()
 					.info(String.format("changed working domain to [%s].", this.currentDomain.getName()));
-			super.transform();
+			File dsFile = new File(this.getOutputFile());
+			RegionDomain template = new RegionDomain();
+			if (this.getTemplateFile().indexOf(File.separator) > 0) {
+				// 有路径符，表示使用的是物理文件
+				template.setTemplateFile(this.getTemplateFile());
+			} else {
+				// 无路径符，尝试使用资源流
+				String resName = String.format("ds/%s", this.getTemplateFile());
+				InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resName);
+				if (inputStream == null) {
+					throw new Exception(String.format("not found template file [%s].", resName));
+				}
+				template.setEncoding("utf-8");
+				template.parse(inputStream);
+			}
+
+			template.export(this.getRuntimeParameters(), dsFile);
+			// 调用基类的结构编排调用
+			super.execute(dsFile);
 		}
 		long endTime = System.currentTimeMillis();
 		float excTime = (float) (endTime - startTime) / 1000;

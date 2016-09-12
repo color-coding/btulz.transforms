@@ -1,6 +1,7 @@
 package org.colorcoding.tools.btulz.transformers.regions.models;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import javax.xml.bind.JAXBContext;
@@ -42,6 +43,24 @@ public class DataTypeMappings extends ArrayList<DataTypeMapping> {
 			JAXBContext context = JAXBContext.newInstance(DataTypeMappings.class, DataTypeMapping.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			DataTypeMappings mappings = (DataTypeMappings) unmarshaller.unmarshal(file);
+			return mappings;
+		}
+		return null;
+	}
+
+	/**
+	 * 创建数据映射集合
+	 * 
+	 * @param file
+	 *            数据文件
+	 * @return
+	 * @throws JAXBException
+	 */
+	public static DataTypeMappings create(InputStream inputStream) throws JAXBException {
+		if (inputStream != null) {
+			JAXBContext context = JAXBContext.newInstance(DataTypeMappings.class, DataTypeMapping.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			DataTypeMappings mappings = (DataTypeMappings) unmarshaller.unmarshal(inputStream);
 			return mappings;
 		}
 		return null;

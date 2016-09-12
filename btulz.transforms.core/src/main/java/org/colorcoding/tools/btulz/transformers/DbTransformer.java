@@ -10,7 +10,6 @@ import javax.xml.bind.Unmarshaller;
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.templates.Parameter;
 import org.colorcoding.tools.btulz.templates.Parameters;
-import org.colorcoding.tools.btulz.transformers.regions.RegionDomain;
 
 /**
  * 数据库相关的转换器
@@ -133,7 +132,8 @@ public abstract class DbTransformer extends Transformer {
 	 * @return
 	 */
 	protected String getOutputFile() {
-		return this.getOutputFile((new File(this.getTemplateFile())).getName());
+		File file = new File(this.getTemplateFile());
+		return this.getOutputFile(file.isFile() ? file.getName() : this.getTemplateFile());
 	}
 
 	protected String getOutputFile(String tpltName) {
@@ -172,15 +172,20 @@ public abstract class DbTransformer extends Transformer {
 		return this.unmarshaller;
 	}
 
-	@Override
-	public void transform() throws Exception {
-		File outputFile = new File(this.getOutputFile());
-		RegionDomain template = new RegionDomain();
-		template.setTemplateFile(this.getTemplateFile());
-		template.export(this.getRuntimeParameters(), outputFile);
-		Environment.getLogger().info(String.format("try to execute orchestration file [%s].", outputFile.getPath()));
+	/**
+	 * 执行编排
+	 * 
+	 * @param dsFile
+	 *            数据文件
+	 * @throws Exception
+	 */
+	public void execute(File dsFile) throws Exception {
+		if (dsFile == null || !dsFile.isFile() || !dsFile.exists()) {
+			throw new Exception("data structure orchestration file is not exists.");
+		}
+		Environment.getLogger().info(String.format("try to execute orchestration file [%s].", dsFile.getPath()));
 		DataStructureOrchestration orchestration = (DataStructureOrchestration) this.createUnmarshaller()
-				.unmarshal(outputFile);
+				.unmarshal(dsFile);
 		orchestration.execute();
 	}
 
