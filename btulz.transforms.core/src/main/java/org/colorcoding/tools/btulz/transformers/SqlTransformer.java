@@ -25,6 +25,9 @@ public class SqlTransformer extends DbTransformer {
 	private String sqlFilter;
 
 	public String getSqlFilter() {
+		if (this.sqlFilter == null) {
+			this.sqlFilter = "";
+		}
 		return sqlFilter;
 	}
 
@@ -47,13 +50,13 @@ public class SqlTransformer extends DbTransformer {
 		File sqlFile = new File(this.getSqlFile());
 		if (sqlFile.isFile()) {
 			String fileName = sqlFile.getName().toLowerCase();
-			if (fileName.indexOf(this.getSqlFilter()) > 0 && fileName.endsWith(".xml")) {
+			if (fileName.indexOf(this.getSqlFilter()) >= 0 && fileName.endsWith(".xml")) {
 				this.transform(sqlFile);
 			}
 		} else if (sqlFile.isDirectory()) {
 			for (File file : sqlFile.listFiles()) {
 				String fileName = file.getName().toLowerCase();
-				if (fileName.indexOf(this.getSqlFilter()) > 0 && fileName.endsWith(".xml")) {
+				if (fileName.indexOf(this.getSqlFilter()) >= 0 && fileName.endsWith(".xml")) {
 					this.transform(file);
 				}
 			}
