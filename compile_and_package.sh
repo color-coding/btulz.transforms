@@ -71,7 +71,10 @@ do
       # 复制lib目录
       if [ -e target/lib/*.* ]
       then
-        mkdir ${WORK_FOLDER}/release/lib
+        if [ ! -e ${WORK_FOLDER}/release/lib ]
+        then
+          mkdir ${WORK_FOLDER}/release/lib
+        fi
         cp -r target/lib/*.* ${WORK_FOLDER}/release/lib >>$LOGFILE
       fi
     fi
