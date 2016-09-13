@@ -13,10 +13,10 @@
 ### 使用说明 | instructions
 #### 命令符调用
 支持的命令详见：
-java -jar btulz.transforms.core-0.1.0.jar code -help
-java -jar btulz.transforms.core-0.1.0.jar ds -help
-##### 根据数据结构说明创建代码示例：
-java -jar btulz.transforms.core-0.1.0.jar code -TemplateFolder=eclipse/ibas_classic -OutputFolder=%ibasWorkspace%\temp -GroupId=org.colorcoding -ArtifactId=ibas -ProjectVersion=0.0.1 -ProjectUrl=http://colorcoding.org -Domains=%ibasWorkspace%\initialization -Parameters=[{"name":"ibasVersion","value":"0.1.1"},{"name":"jerseyVersion","value":"2.22.1"}] -release
+* java -jar btulz.transforms.core-0.1.0.jar code -help
+* java -jar btulz.transforms.core-0.1.0.jar ds -help
+* java -jar btulz.transforms.core-0.1.0.jar sql -help
+* java -jar btulz.transforms.core-0.1.0.jar dsJar -help
 
 
 ### 鸣谢 | thanks
