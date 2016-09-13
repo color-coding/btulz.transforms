@@ -13,10 +13,10 @@
 ### 使用说明 | instructions
 #### 命令符调用
 支持的命令详见：
-* java -jar btulz.transforms.core-0.1.0.jar code -help
-* java -jar btulz.transforms.core-0.1.0.jar ds -help
-* java -jar btulz.transforms.core-0.1.0.jar sql -help
-* java -jar btulz.transforms.core-0.1.0.jar dsJar -help
+* java -Djava.ext.dirs=./lib -jar btulz.transforms.core-0.1.0.jar code -help
+* java -Djava.ext.dirs=./lib -jar btulz.transforms.core-0.1.0.jar ds -help
+* java -Djava.ext.dirs=./lib -jar btulz.transforms.core-0.1.0.jar sql -help
+* java -Djava.ext.dirs=./lib -jar btulz.transforms.core-0.1.0.jar dsJar -help
 
 
 ### 鸣谢 | thanks

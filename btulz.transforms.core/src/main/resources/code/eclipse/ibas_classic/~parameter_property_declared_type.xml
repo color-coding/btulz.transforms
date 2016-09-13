@@ -2,11 +2,11 @@
 <!-- 此模板的定义类型额外映射说明 -->
 <ns2:DataTypeMappings xmlns:ns2="http://colorcoding.org/btulz/transformers">
     <!-- SubType未指定则忽略子项类型 -->
-    <Mapping DateType="Alphanumeric" Mapped="String"/>
-    <Mapping DateType="Memo" Mapped="varchar"/>
-    <Mapping DateType="Numeric" Mapped="Integer"/>
-    <Mapping DateType="Decimal" Mapped="Decimal"/>
-    <Mapping DateType="Date" SubType="Default" Mapped="DateTime"/>
-    <Mapping DateType="Date" SubType="Time" Mapped="Short"/>
-    <Mapping DateType="Bytes" Mapped="byte[]"/>
+    <Mapping DataType="Alphanumeric" Mapped="String"/>
+    <Mapping DataType="Memo" Mapped="String"/>
+    <Mapping DataType="Numeric" Mapped="Integer"/>
+    <Mapping DataType="Decimal" Mapped="Decimal"/>
+    <Mapping DataType="Date" SubType="Default" Mapped="DateTime"/>
+    <Mapping DataType="Date" SubType="Time" Mapped="Short"/>
+    <Mapping DataType="Bytes" Mapped="byte[]"/>
 </ns2:DataTypeMappings>

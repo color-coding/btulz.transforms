@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlType;
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.models.IProperty;
 import org.colorcoding.tools.btulz.models.data.emDataSubType;
-import org.colorcoding.tools.btulz.models.data.emDataType;
 import org.colorcoding.tools.btulz.templates.Parameter;
 import org.colorcoding.tools.btulz.templates.Variable;
 
@@ -19,43 +18,30 @@ import org.colorcoding.tools.btulz.templates.Variable;
  *
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name = "DataTypeMapping", namespace = Environment.NAMESPACE_BTULZ_TRANSFORMERS)
-public class DataTypeMapping {
+@XmlType(name = "TypeValueMapping", namespace = Environment.NAMESPACE_BTULZ_TRANSFORMERS)
+public class TypeValueMapping {
 	/**
 	 * 变量名称
 	 */
-	// public static final String PARAMETER_NAME = "DataTypeMapping";
 
-	public DataTypeMapping() {
+	public TypeValueMapping() {
 
 	}
 
-	public DataTypeMapping(emDataType type, emDataSubType subType, String mapped) {
+	public TypeValueMapping(String type, emDataSubType subType, String mapped) {
 		this.setDataType(type);
-		this.setSubType(subType);
 		this.setMapped(mapped);
 	}
 
-	private emDataType DataType;
+	private String DataType;
 
 	@XmlAttribute(name = "DataType")
-	public emDataType getDataType() {
+	public String getDataType() {
 		return DataType;
 	}
 
-	public void setDataType(emDataType DataType) {
+	public void setDataType(String DataType) {
 		this.DataType = DataType;
-	}
-
-	private emDataSubType subType;
-
-	@XmlAttribute(name = "SubType")
-	public emDataSubType getSubType() {
-		return subType;
-	}
-
-	public void setSubType(emDataSubType subType) {
-		this.subType = subType;
 	}
 
 	private String mapped;

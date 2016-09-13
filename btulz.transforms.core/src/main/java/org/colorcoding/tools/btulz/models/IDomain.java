@@ -78,4 +78,5 @@ public interface IDomain {
 	 * @return
 	 */
 	IDomain clone(boolean noChilds);
+
 }

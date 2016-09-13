@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!-- ds_pgsql_ibas.xml的数据类型额外映射说明 -->
 <ns2:DataTypeMappings xmlns:ns2="http://colorcoding.org/btulz/transformers">
-    <Mapping DateType="Memo" SubType="Default" Mapped="text"/>
-    <Mapping DateType="Numeric" SubType="Default" Mapped="integer"/>
-    <Mapping DateType="Date" SubType="Default" Mapped="date"/>
+    <Mapping DataType="Memo" SubType="Default" Mapped="text"/>
+    <Mapping DataType="Numeric" SubType="Default" Mapped="integer"/>
+    <Mapping DataType="Date" SubType="Default" Mapped="date"/>
     <!-- SubType未指定则忽略子项类型 -->
-    <Mapping DateType="Alphanumeric" Mapped="varchar"/>
-    <Mapping DateType="Unknown" Mapped="varchar"/>
+    <Mapping DataType="Alphanumeric" Mapped="varchar"/>
+    <Mapping DataType="Unknown" Mapped="varchar"/>
 </ns2:DataTypeMappings>

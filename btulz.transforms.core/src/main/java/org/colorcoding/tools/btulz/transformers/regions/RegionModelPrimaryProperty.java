@@ -55,8 +55,9 @@ public class RegionModelPrimaryProperty extends RegionBase {
 						@Override
 						public Parameter next() {
 							Property property = new Property(primaryProperty.get(curIndex));
-							property.addDataTypeMappings(parameters.get(Property.PARAMETER_NAME_MAPPED_TYPE));
-							property.addDataTypeMappings(parameters.get(Property.PARAMETER_NAME_DECLARED_TYPE));
+							property.addMappedTypeMappings(parameters.get(Property.PARAMETER_NAME_MAPPED_TYPE));
+							property.addDeclaredTypeMappings(parameters.get(Property.PARAMETER_NAME_DECLARED_TYPE));
+							property.addDefaultValueMappings(parameters.get(Property.PARAMETER_NAME_DEFAULT_VALUE));
 							if (curIndex >= primaryProperty.size() - 1) {
 								property.setLast(true);
 							}

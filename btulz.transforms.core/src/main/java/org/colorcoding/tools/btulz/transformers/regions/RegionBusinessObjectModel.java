@@ -41,7 +41,7 @@ public class RegionBusinessObjectModel extends RegionBase {
 					if (iModel.getMapped() == null || bo.getMappedModel() == null) {
 						continue;
 					}
-					if (iModel.getMapped().equals(bo.getMappedModel())) {
+					if (iModel.getName().equals(bo.getMappedModel())) {
 						boModels.add(iModel);
 					}
 				}

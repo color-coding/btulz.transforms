@@ -33,6 +33,7 @@ import org.colorcoding.tools.btulz.transformers.regions.RegionBusinessObjectMode
 import org.colorcoding.tools.btulz.transformers.regions.RegionDomain;
 import org.colorcoding.tools.btulz.transformers.regions.models.DataTypeMappings;
 import org.colorcoding.tools.btulz.transformers.regions.models.Property;
+import org.colorcoding.tools.btulz.transformers.regions.models.TypeValueMappings;
 
 /**
  * 代码的转换器
@@ -229,7 +230,25 @@ public class CodeTransformer extends Transformer {
 
 	@Override
 	public final void transform() throws Exception {
+		// 组合同名模型
+		ArrayList<IDomain> domains = new ArrayList<>();
 		for (IDomain domain : this.getDomains()) {
+			IDomain newDomain = null;
+			for (IDomain tmpDomain : domains) {
+				if (tmpDomain.getName() != null && tmpDomain.getName().equals(domain.getName())) {
+					newDomain = tmpDomain;
+					break;
+				}
+			}
+			if (newDomain == null) {
+				domains.add(domain.clone());
+			} else {
+				IDomain tmpDomian = domain.clone();
+				newDomain.getBusinessObjects().addAll(tmpDomian.getBusinessObjects());
+				newDomain.getModels().addAll(tmpDomian.getModels());
+			}
+		}
+		for (IDomain domain : domains) {
 			Environment.getLogger().info(String.format("begin transform domain [%s] to codes.", domain.getName()));
 			File outFolder = new File(this.getOutputFolder() + File.separator + domain.getName());
 			Parameters parameters = this.getRuntimeParameters();
@@ -514,6 +533,13 @@ public class CodeTransformer extends Transformer {
 			// 属性的定义类型说明
 			try {
 				return new Parameter(Property.PARAMETER_NAME_DECLARED_TYPE, DataTypeMappings.create(source));
+			} catch (JAXBException e) {
+				Environment.getLogger().error(e);
+			}
+		} else if (source.getName().equals("~parameter_property_default_value.xml")) {
+			// 属性的定义类型说明
+			try {
+				return new Parameter(Property.PARAMETER_NAME_DEFAULT_VALUE, TypeValueMappings.create(source));
 			} catch (JAXBException e) {
 				Environment.getLogger().error(e);
 			}

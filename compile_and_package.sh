@@ -62,12 +62,18 @@ do
     else
       # 非网站，编译jar包并安装到本地
       echo --开始编译[${line}]+安装
-      mvn clean package install -Dmaven.test.skip=true >>$LOGFILE
-    
+      mvn clean package install -Dmaven.test.skip=true >>$LOGFILE    
+      # 复制编译的jar包
       if [ -e target/*.jar ]
       then
         cp -r target/*.jar ${WORK_FOLDER}/release >>$LOGFILE
-      fi    
+      fi
+      # 复制lib目录
+      if [ -e target/lib/*.* ]
+      then
+        mkdir ${WORK_FOLDER}/release/lib
+        cp -r target/lib/*.* ${WORK_FOLDER}/release/lib >>$LOGFILE
+      fi
     fi
     # 回到脚本目录
     cd ..

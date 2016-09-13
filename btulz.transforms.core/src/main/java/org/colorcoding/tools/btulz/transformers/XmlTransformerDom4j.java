@@ -83,6 +83,9 @@ public class XmlTransformerDom4j extends XmlTransformer {
 		element.addAttribute("DataType", String.valueOf(property.getDataType()));
 		element.addAttribute("DataSubType", String.valueOf(property.getDataSubType()));
 		element.addAttribute("EditSize", String.valueOf(property.getEditSize()));
+		if (property.getDeclaredType() != null) {
+			element.addAttribute("DeclaredType", String.valueOf(property.getDeclaredType()));
+		}
 		element.addAttribute("Mapped", property.getMapped());
 		if (property.isPrimaryKey()) {
 			element.addAttribute("PrimaryKey", String.valueOf(emYesNo.valueOf(property.isPrimaryKey())));

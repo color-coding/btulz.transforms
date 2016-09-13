@@ -18,6 +18,10 @@ public class Property implements IProperty {
 	 * 开发语言属性映射类型
 	 */
 	public static final String PARAMETER_NAME_DECLARED_TYPE = "DeclaredType";
+	/**
+	 * 默认值映射
+	 */
+	public static final String PARAMETER_NAME_DEFAULT_VALUE = "DefaultValue";
 
 	public Property(org.colorcoding.tools.btulz.models.IProperty property) {
 		this.property = property;
@@ -166,11 +170,11 @@ public class Property implements IProperty {
 			return this.property.getDeclaredType();
 		}
 		// 未发现定义使用映射
-		for (DataTypeMapping mapping : this.getMappedTypeMappings()) {
+		for (DataTypeMapping mapping : this.getDeclaredTypeMappings()) {
 			if (mapping == null) {
 				continue;
 			}
-			if (mapping.getDateType() != this.getDataType()) {
+			if (mapping.getDataType() != this.getDataType()) {
 				continue;
 			}
 			if (mapping.getSubType() != null && mapping.getSubType() != this.getDataSubType()) {
@@ -178,7 +182,7 @@ public class Property implements IProperty {
 			}
 			// 存在映射
 			try {
-				return mapping.getMappedType(this);
+				return mapping.getMapped(this);
 			} catch (Exception e) {
 				Environment.getLogger().error(e);
 			}
@@ -206,7 +210,7 @@ public class Property implements IProperty {
 		}
 	}
 
-	public void addDataTypeMappings(Parameter par) {
+	public void addMappedTypeMappings(Parameter par) {
 		if (par == null) {
 			return;
 		}
@@ -222,14 +226,14 @@ public class Property implements IProperty {
 			if (mapping == null) {
 				continue;
 			}
-			if (mapping.getDateType() != this.getDataType()) {
+			if (mapping.getDataType() != this.getDataType()) {
 				continue;
 			}
 			if (mapping.getSubType() != null && mapping.getSubType() != this.getDataSubType()) {
 				continue;
 			}
 			// 存在映射
-			return mapping.getMappedType(this);
+			return mapping.getMapped(this);
 		}
 		// 默认类型
 		switch (this.getDataType()) {
@@ -301,4 +305,49 @@ public class Property implements IProperty {
 	public String getSeparator(String value) {
 		return this.isLast() ? "" : value;
 	}
+
+	private String defaultValue;
+
+	public String getDefaultValue() throws Exception {
+		for (TypeValueMapping typeValueMapping : this.getDefaultValueMappings()) {
+			if (typeValueMapping.getDataType() == null) {
+				continue;
+			}
+			if (typeValueMapping.getDataType().equals(this.getDeclaredType())) {
+				return typeValueMapping.getMapped(this);
+			}
+		}
+		return defaultValue;
+	}
+
+	private List<TypeValueMapping> defaultValueMappings;
+
+	public List<TypeValueMapping> getDefaultValueMappings() {
+		if (this.defaultValueMappings == null) {
+			this.defaultValueMappings = new ArrayList<>();
+		}
+		return defaultValueMappings;
+	}
+
+	public void addDefaultValueMappings(Iterable<?> value) {
+		this.getDefaultValueMappings().clear();
+		if (value != null) {
+			for (Object item : value) {
+				if (item instanceof TypeValueMapping) {
+					this.getDefaultValueMappings().add((TypeValueMapping) item);
+				}
+			}
+		}
+	}
+
+	public void addDefaultValueMappings(Parameter par) {
+		if (par == null) {
+			return;
+		}
+		Object value = par.getValue();
+		if (Iterable.class.isInstance(value)) {
+			this.addDefaultValueMappings((Iterable<?>) value);
+		}
+	}
+
 }

@@ -187,6 +187,9 @@ public class XmlTransformer extends FileTransformer {
 		element.setAttribute("DataType", String.valueOf(property.getDataType()));
 		element.setAttribute("DataSubType", String.valueOf(property.getDataSubType()));
 		element.setAttribute("EditSize", String.valueOf(property.getEditSize()));
+		if (property.getDeclaredType() != null) {
+			element.setAttribute("DeclaredType", String.valueOf(property.getDeclaredType()));
+		}
 		element.setAttribute("Mapped", property.getMapped());
 		if (property.isPrimaryKey()) {
 			element.setAttribute("PrimaryKey", String.valueOf(emYesNo.valueOf(property.isPrimaryKey())));

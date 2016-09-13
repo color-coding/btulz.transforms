@@ -12,11 +12,11 @@ import org.colorcoding.tools.btulz.commands.Command4Sql;
 import junit.framework.TestCase;
 
 public class testCommands extends TestCase {
-
 	public void testConsole() {
 		Console.main(new String[] {});
 	}
 
+	// java -Djava.ext.dirs=./lib -jar
 	// code -TemplateFolder=eclipse/ibas_classic
 	// -OutputFolder=%ibasWorkspace%\temp -GroupId=org.colorcoding
 	// -ArtifactId=ibas -ProjectVersion=0.0.1 -ProjectUrl=http://colorcoding.org
@@ -43,6 +43,7 @@ public class testCommands extends TestCase {
 		Console.main(args.toArray(new String[] {}));
 	}
 
+	// java -Djava.ext.dirs=./lib -jar
 	// ds -TemplateFile=ds_mysql_ibas_classic.xml -Company=CC
 	// -DbServer=ibas-dev-mysql -DbPort=3306 -DbSchema= -DbName=ibas_demo
 	// -DbUser=root -DbPassword=1q2w3e -Domains=%ibasWorkspace%\initialization
@@ -66,6 +67,7 @@ public class testCommands extends TestCase {
 		Console.main(args.toArray(new String[] {}));
 	}
 
+	// java -Djava.ext.dirs=./lib -jar
 	// sql
 	// -TemplateFile=%ibasWorkspace%\initialization\sql_mysql_ibas_initialization.xml
 	// -Company=CC -DbServer=ibas-dev-mysql -DbPort=3306 -DbSchema=
@@ -88,8 +90,9 @@ public class testCommands extends TestCase {
 		System.out.println("开始运行：");
 		Console.main(args.toArray(new String[] {}));
 	}
+	// java -Djava.ext.dirs=./lib -jar
 	// dsJar -DsTemplate=ds_mysql_ibas_classic.xml
-	// -JarFile=%ibasWorkspace%\initialization\sql_mysql_ibas_initialization.xml
+	// -JarFile=%ibasWorkspace%\initialization\ibas.trainingtesting-0.0.1.jar
 	// -SqlFilter=sql_mysql
 	// -Company=CC -DbServer=ibas-dev-mysql -DbPort=3306 -DbSchema=
 	// -DbName=ibas_demo

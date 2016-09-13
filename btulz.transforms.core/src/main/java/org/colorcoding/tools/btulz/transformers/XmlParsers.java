@@ -290,7 +290,18 @@ class XmlParser1 extends XmlParser {
 			} else if (node.getNodeName().equals("IsUnique")) {
 				object.setUniqueKey(this.convert(boolean.class, node.getNodeValue()));
 			} else if (node.getNodeName().equals("FixedDataType")) {
-				object.setDeclaredType(this.convert(String.class, node.getNodeValue()));
+				if (node.getNodeValue() != null) {
+					String value = node.getNodeValue();
+					if (value.indexOf(".") > 0) {
+						// 去除前缀
+						String[] tmps = value.split(".");
+						value = tmps[tmps.length - 1];
+					}
+					if (value.startsWith("em")) {
+						// 仅枚举类型时赋值
+						object.setDeclaredType(this.convert(String.class, node.getNodeValue()));
+					}
+				}
 			}
 		}
 	}

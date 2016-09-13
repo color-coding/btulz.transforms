@@ -14,10 +14,15 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
 
-@XmlRootElement(name = "DataTypeMappings", namespace = Environment.NAMESPACE_BTULZ_TRANSFORMERS)
-@XmlType(name = "DataTypeMappings", namespace = Environment.NAMESPACE_BTULZ_TRANSFORMERS)
-@XmlSeeAlso({ DataTypeMapping.class })
-public class DataTypeMappings extends ArrayList<DataTypeMapping> {
+@XmlRootElement(name = "TypeValueMappings", namespace = Environment.NAMESPACE_BTULZ_TRANSFORMERS)
+@XmlType(name = "TypeValueMappings", namespace = Environment.NAMESPACE_BTULZ_TRANSFORMERS)
+@XmlSeeAlso({ TypeValueMapping.class })
+public class TypeValueMappings extends ArrayList<TypeValueMapping> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1588608213800837521L;
+
 	/**
 	 * 创建数据映射集合
 	 * 
@@ -26,7 +31,7 @@ public class DataTypeMappings extends ArrayList<DataTypeMapping> {
 	 * @return
 	 * @throws JAXBException
 	 */
-	public static DataTypeMappings create(String fileName) throws JAXBException {
+	public static TypeValueMappings create(String fileName) throws JAXBException {
 		return create(new File(fileName));
 	}
 
@@ -38,11 +43,11 @@ public class DataTypeMappings extends ArrayList<DataTypeMapping> {
 	 * @return
 	 * @throws JAXBException
 	 */
-	public static DataTypeMappings create(File file) throws JAXBException {
+	public static TypeValueMappings create(File file) throws JAXBException {
 		if (file.exists() && file.isFile()) {
-			JAXBContext context = JAXBContext.newInstance(DataTypeMappings.class, DataTypeMapping.class);
+			JAXBContext context = JAXBContext.newInstance(TypeValueMappings.class, TypeValueMapping.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
-			DataTypeMappings mappings = (DataTypeMappings) unmarshaller.unmarshal(file);
+			TypeValueMappings mappings = (TypeValueMappings) unmarshaller.unmarshal(file);
 			return mappings;
 		}
 		return null;
@@ -56,30 +61,25 @@ public class DataTypeMappings extends ArrayList<DataTypeMapping> {
 	 * @return
 	 * @throws JAXBException
 	 */
-	public static DataTypeMappings create(InputStream inputStream) throws JAXBException {
+	public static TypeValueMappings create(InputStream inputStream) throws JAXBException {
 		if (inputStream != null) {
-			JAXBContext context = JAXBContext.newInstance(DataTypeMappings.class, DataTypeMapping.class);
+			JAXBContext context = JAXBContext.newInstance(TypeValueMappings.class, TypeValueMapping.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
-			DataTypeMappings mappings = (DataTypeMappings) unmarshaller.unmarshal(inputStream);
+			TypeValueMappings mappings = (TypeValueMappings) unmarshaller.unmarshal(inputStream);
 			return mappings;
 		}
 		return null;
 	}
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -424849332351253868L;
-
 	@XmlElement(name = "Mapping")
-	protected DataTypeMapping[] getValues() {
-		return this.toArray(new DataTypeMapping[] {});
+	protected TypeValueMapping[] getValues() {
+		return this.toArray(new TypeValueMapping[] {});
 	}
 
-	protected void setValues(DataTypeMapping[] value) {
+	protected void setValues(TypeValueMapping[] value) {
 		this.clear();
 		if (value != null) {
-			for (DataTypeMapping item : value) {
+			for (TypeValueMapping item : value) {
 				this.add(item);
 			}
 		}

@@ -1,8 +1,0 @@
-basis\jquery.js
-basis\jquery.i18n.properties.js
-basis\bobas.businessobjectscommon.js
-basis\bsbas.businesssystemcommon.js
-basis\bsbas.businesssystemuielements*.js
-borep\*.js
-bsapp\*.js
-bsui\*.js
