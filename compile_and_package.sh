@@ -69,13 +69,13 @@ do
         cp -r target/*.jar ${WORK_FOLDER}/release >>$LOGFILE
       fi
       # 复制lib目录
-      if [ -e target/lib/*.* ]
+      if [ -e target/lib/ ]
       then
         if [ ! -e ${WORK_FOLDER}/release/lib ]
         then
           mkdir ${WORK_FOLDER}/release/lib
         fi
-        cp -r target/lib/*.* ${WORK_FOLDER}/release/lib >>$LOGFILE
+        cp -r target/lib/* ${WORK_FOLDER}/release/lib >>$LOGFILE
       fi
     fi
     # 回到脚本目录
