@@ -13,25 +13,25 @@ $$此数据库不支持跨库操作，所以需要先创建数据库。
 $$"!"表示延迟解析变量，例如${!Property.getEditSize()}
 $$设置为隔离动作（Isolated = true），此动作独立数据库事务，若已存在事务，则提交。提供了数据库地址则创建连接。
     <Action Name="create db" Isolated="true" DbUrl="jdbc:postgresql://${DbServer}:${DbPort}/postgres">
-        <Step Name="check db exists">
+        <Step Name="check db ${DbName} exists">
             <Script>
                 select count(0) from pg_database where datname = '${DbName}'
             </Script>
         </Step>
-        <Step Name="create db" RunOnValue="0">
+        <Step Name="create db ${DbName}" RunOnValue="0">
             <Script>
                  create database "${DbName}"
             </Script>
         </Step>
     </Action>
 $BEGIN_MODEL$
-    <Action Name="create table ${Model.getMapped().toLowerCase()}">
-        <Step Name="check table exists">
+    <Action Name="create table">
+        <Step Name="check table ${Model.getMapped()} exists">
             <Script>
                 select count(0) from information_schema.tables where "table_catalog" = '${DbName}' and "table_name" = '${Model.getMapped()}'
             </Script>
         </Step>
-        <Step Name="create table" RunOnValue="0">
+        <Step Name="create table ${Model.getMapped()}" RunOnValue="0">
             <Script>
                 create table "${Model.getMapped()}"(
 $BEGIN_MODEL_PROPERTY$
@@ -41,24 +41,24 @@ $END_MODEL_PROPERTY$
             </Script>
         </Step>
 $BEGIN_MODEL_PROPERTY$
-        <Step Name="check field exists">
+        <Step Name="check field ${Model.getMapped()}.${Property.getMapped()} exists">
             <Script>
                 select count(0) from "information_schema"."columns" where "table_catalog" = '${DbName}' and "table_name" = '${Model.getMapped()}' and "column_name" = '${Property.getMapped()}'
             </Script>
         </Step>
-        <Step Name="create field" RunOnValue="0">
+        <Step Name="create field ${Model.getMapped()}.${Property.getMapped()}" RunOnValue="0">
             <Script>
                  alter table "${Model.getMapped()}" add "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getNullType()}
             </Script>
         </Step>
 $END_MODEL_PROPERTY$
 $BEGIN_MODEL_HAS_PRIMARY$
-        <Step Name="check key field exists">
+        <Step Name="check ${Model.getMapped()}'s key fields exists">
             <Script>
                 select count(0) from "information_schema"."table_constraints" where "table_catalog" = '${DbName}' and "table_name" = '${Model.getMapped()}' and "constraint_type" = 'PRIMARY KEY'
             </Script>
         </Step>
-        <Step Name="create key field" RunOnValue="0">
+        <Step Name="create ${Model.getMapped()}'s key fields" RunOnValue="0">
             <Script>
                  alter table "${Model.getMapped()}" add primary key (
 $BEGIN_MODEL_PRIMARY_PROPERTY$
@@ -71,12 +71,12 @@ $END_MODEL_HAS_PRIMARY$
     </Action>
 $BEGIN_MODEL_HAS_UNIQUE$
     <Action Name="create table unique index">
-        <Step Name="check and delete table unique index">
+        <Step Name="check and delete table ${Model.getMapped()}'s unique index">
             <Script>
                 drop index if exists "${Model.getMapped().toUpperCase()}_UNIQUE_INDEX"
             </Script>
         </Step>
-        <Step Name="create table unique index">
+        <Step Name="create table ${Model.getMapped()}'s unique index">
             <Script>
                  create unique index "${Model.getMapped().toUpperCase()}_UNIQUE_INDEX" on "${Model.getMapped()}" (
 $BEGIN_MODEL_UNIQUE_PROPERTY$
@@ -95,12 +95,12 @@ $BEGIN_BO$
                 select count(0) from information_schema.tables where "table_catalog" = '${DbName}' and "table_name" = '${Company}_SYS_ONNM'
             </Script>
         </Step>
-        <Step Name="check business object code exists" RunOnValue="1">
+        <Step Name="check business object code ${BO.getShortName()} exists" RunOnValue="1">
             <Script>
                 select count(0) from "${Company}_SYS_ONNM" where "ObjectCode" = N'${BO.getShortName()}'
             </Script>
         </Step>
-        <Step Name="create business object code" RunOnValue="0">
+        <Step Name="register business object ${BO.getShortName()} code" RunOnValue="0">
             <Script>
                 insert into "${Company}_SYS_ONNM" ("ObjectCode", "AutoKey", "DocSubType") values (N'${BO.getShortName()}', 1, '--')
             </Script>
@@ -111,12 +111,12 @@ $BEGIN_BO_MODEL$
                 select count(0) from information_schema.tables where "table_catalog" = '${DbName}' and "table_name" = '${Company}_SYS_OBOI'
             </Script>
         </Step>
-        <Step Name="delete business object informations" RunOnValue="1">
+        <Step Name="delete business object ${Model.getName()}'s informations" RunOnValue="1">
             <Script>
                 delete from "${Company}_SYS_OBOI" where Name = N'${Model.getName()}'
             </Script>
         </Step>
-        <Step Name="create business object informations" RunOnValue="1">
+        <Step Name="register business object ${Model.getName()}'s informations" RunOnValue="1">
             <Script>
                 insert into "${Company}_SYS_OBOI"("Name", "Code", "Descrp", "Mapped", "ObjectType") values (N'${Model.getName()}',N'${BO.getShortName()}',N'${Model.getDescription()}',N'${Model.getMapped().toUpperCase()}',N'${Model.getModelType()}')
             </Script>
@@ -127,12 +127,12 @@ $BEGIN_BO_MODEL$
             </Script>
         </Step>
 $BEGIN_MODEL_PROPERTY$
-        <Step Name="delete business object informations" RunOnValue="1">
+        <Step Name="delete business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
                 delete from "${Company}_SYS_BOI1" where Name = N'${Model.getName()}' and Property = N'${Model.getName()}'
             </Script>
         </Step>
-        <Step Name="delete business object informations" RunOnValue="1">
+        <Step Name="register business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
                 insert into "${Company}_SYS_BOI1" ("Name", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${Model.getName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isPrimaryKey()}', N'Y')
             </Script>
