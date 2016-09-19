@@ -59,6 +59,13 @@ public class Property implements IProperty {
 		return this.property.isPrimaryKey();
 	}
 
+	public String isPrimaryKey(String type) {
+		if (this.isPrimaryKey())
+			return "Y";
+		else
+			return "N";
+	}
+
 	@Override
 	public void setPrimaryKey(boolean value) {
 		this.property.setPrimaryKey(value);
@@ -67,6 +74,13 @@ public class Property implements IProperty {
 	@Override
 	public boolean isUniqueKey() {
 		return this.property.isUniqueKey();
+	}
+
+	public String isUniqueKey(String type) {
+		if (this.isUniqueKey())
+			return "Y";
+		else
+			return "N";
 	}
 
 	@Override

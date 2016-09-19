@@ -51,4 +51,18 @@ public interface ISqlExecutionActionStep extends IExecutionActionStep {
 	 * @param value
 	 */
 	void setScript(String value);
+
+	/**
+	 * 是否查询
+	 * 
+	 * @return
+	 */
+	boolean isQuery();
+
+	/**
+	 * 设置-是否查询
+	 * 
+	 * @return
+	 */
+	void setQuery(boolean value);
 }

@@ -7,7 +7,7 @@ $$适用于java平台下的ibas框架
     <Integrated>true</Integrated>
     <DriverName>com.mysql.jdbc.Driver</DriverName>
 $$因存在创建数据的可能，所以数据库连接默认库。
-    <DbUrl>jdbc:mysql://${DbServer}:${DbPort}/mysql?useUnicode=true&amp;characterEncoding=utf8</DbUrl>
+    <DbUrl>jdbc:mysql://${DbServer}:${DbPort}/mysql?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false</DbUrl>
     <DbUser>${DbUser}</DbUser>
     <DbPassword>${DbPassword}</DbPassword>
 $$"!"表示延迟解析变量，例如${!Property.getEditSize()}
@@ -126,12 +126,12 @@ $BEGIN_BO_MODEL$
 $BEGIN_MODEL_PROPERTY$
         <Step Name="delete business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
-                delete from `${DbName}`.`${Company}_SYS_BOI1` where `Name` = N'${Model.getName()}' and `Property` = N'${Model.getName()}'
+                delete from `${DbName}`.`${Company}_SYS_BOI1` where `Name` = N'${Model.getName()}' and `Property` = N'${Property.getName()}'
             </Script>
         </Step>
         <Step Name="register business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into `${DbName}`.`${Company}_SYS_BOI1` (`Name`, `Property`, `Mapped`, `Descrp`, `DataType`, `EditType`, `EditSize`, `Searched`, `Systemed`) VALUES(N'${Model.getName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isPrimaryKey()}', N'Y')
+                insert into `${DbName}`.`${Company}_SYS_BOI1` (`Name`, `Property`, `Mapped`, `Descrp`, `DataType`, `EditType`, `EditSize`, `Searched`, `Systemed`) VALUES(N'${Model.getName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isPrimaryKey(DB)}', N'Y')
             </Script>
         </Step>
 $END_MODEL_PROPERTY$
