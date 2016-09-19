@@ -111,7 +111,9 @@ $BEGIN_BO$
                 insert into "${DbName}"."${Company}_SYS_ONNM" ("ObjectCode", "AutoKey", "DocSubType") values (N'${BO.getShortName()}', 1, '--')
             </Script>
         </Step>
+    </Action>
 $BEGIN_BO_MODEL$
+    <Action Name="register business object informations">
         <Step Name="check business object informations table exists">
             <Script>
                 select count(0) from "TABLES" where "SCHEMA_NAME" = '${DbName}' and "TABLE_NAME" = '${Company}_SYS_OBOI'

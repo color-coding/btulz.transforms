@@ -15,7 +15,7 @@ $$设置为隔离动作（Isolated = true），此动作独立数据库事务，
     <Action Name="create db" Isolated="true" DbUrl="jdbc:postgresql://${DbServer}:${DbPort}/postgres">
         <Step Name="check db ${DbName} exists">
             <Script>
-                select count(0) from pg_database where datname = '${DbName}'
+                select count(0) from "pg_database" where "datname" = '${DbName}'
             </Script>
         </Step>
         <Step Name="create db ${DbName}" RunOnValue="0">
@@ -28,7 +28,7 @@ $BEGIN_MODEL$
     <Action Name="create table">
         <Step Name="check table ${Model.getMapped()} exists">
             <Script>
-                select count(0) from information_schema.tables where "table_catalog" = '${DbName}' and "table_name" = '${Model.getMapped()}'
+                select count(0) from "information_schema"."tables" where "table_catalog" = '${DbName}' and "table_name" = '${Model.getMapped()}'
             </Script>
         </Step>
         <Step Name="create table ${Model.getMapped()}" RunOnValue="0">
@@ -92,7 +92,7 @@ $BEGIN_BO$
     <Action Name="register business object" KeepStepResult="false">
         <Step Name="check number table exists">
             <Script>
-                select count(0) from information_schema.tables where "table_catalog" = '${DbName}' and "table_name" = '${Company}_SYS_ONNM'
+                select count(0) from "information_schema"."tables" where "table_catalog" = '${DbName}' and "table_name" = '${Company}_SYS_ONNM'
             </Script>
         </Step>
         <Step Name="check business object code ${BO.getShortName()} exists" RunOnValue="1">
@@ -105,15 +105,17 @@ $BEGIN_BO$
                 insert into "${Company}_SYS_ONNM" ("ObjectCode", "AutoKey", "DocSubType") values (N'${BO.getShortName()}', 1, '--')
             </Script>
         </Step>
+    </Action>
 $BEGIN_BO_MODEL$
+    <Action Name="register business object informations">
         <Step Name="check business object informations table exists">
             <Script>
-                select count(0) from information_schema.tables where "table_catalog" = '${DbName}' and "table_name" = '${Company}_SYS_OBOI'
+                select count(0) from "information_schema"."tables" where "table_catalog" = '${DbName}' and "table_name" = '${Company}_SYS_OBOI'
             </Script>
         </Step>
         <Step Name="delete business object ${Model.getName()}'s informations" RunOnValue="1">
             <Script>
-                delete from "${Company}_SYS_OBOI" where Name = N'${Model.getName()}'
+                delete from "${Company}_SYS_OBOI" where "Name" = N'${Model.getName()}'
             </Script>
         </Step>
         <Step Name="register business object ${Model.getName()}'s informations" RunOnValue="1">
@@ -123,13 +125,13 @@ $BEGIN_BO_MODEL$
         </Step>
         <Step Name="check business object informations table exists">
             <Script>
-                select count(0) from information_schema.tables where "table_catalog" = '${DbName}' and "table_name" = '${Company}_SYS_BOI1'
+                select count(0) from "information_schema"."tables" where "table_catalog" = '${DbName}' and "table_name" = '${Company}_SYS_BOI1'
             </Script>
         </Step>
 $BEGIN_MODEL_PROPERTY$
         <Step Name="delete business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
-                delete from "${Company}_SYS_BOI1" where Name = N'${Model.getName()}' and Property = N'${Model.getName()}'
+                delete from "${Company}_SYS_BOI1" where "Name" = N'${Model.getName()}' and "Property" = N'${Model.getName()}'
             </Script>
         </Step>
         <Step Name="register business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">

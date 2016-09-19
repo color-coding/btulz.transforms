@@ -63,7 +63,7 @@ $BEGIN_MODEL_HAS_UNIQUE$
     <Action Name="create table unique index">
         <Step Name="check table ${Model.getMapped()}'s unique index exists">
             <Script>
-                select count(0) from `information_schema`.`statistics` where `TABLE_SCHEMA` = '${DbName}' and `TABLE_NAME` = '${Model.getMapped()}' and `INDEX_NAME` = '${Model.getMapped().toUpperCase()}_UNIQUE_INDEX'
+                select count(distinct 'INDEX_NAME') from `information_schema`.`statistics` where `TABLE_SCHEMA` = '${DbName}' and `TABLE_NAME` = '${Model.getMapped()}' and `INDEX_NAME` = '${Model.getMapped().toUpperCase()}_UNIQUE_INDEX'
             </Script>
         </Step>
         <Step Name="delete table ${Model.getMapped()}'s unique index" RunOnValue="1">
@@ -87,7 +87,7 @@ $BEGIN_BO$
     <Action Name="register business object" KeepStepResult="false">
         <Step Name="check number table exists">
             <Script>
-                select count(0) from information_schema.tables where `TABLE_SCHEMA` = '${DbName}' and `TABLE_NAME` = '${Company}_SYS_ONNM'
+                select count(0) from `information_schema`.`tables` where `TABLE_SCHEMA` = '${DbName}' and `TABLE_NAME` = '${Company}_SYS_ONNM'
             </Script>
         </Step>
         <Step Name="check business object code ${BO.getShortName()} exists" RunOnValue="1">
@@ -100,36 +100,38 @@ $BEGIN_BO$
                 insert into `${DbName}`.`${Company}_SYS_ONNM` (`ObjectCode`, `AutoKey`, `DocSubType`) values (N'${BO.getShortName()}', 1, '--')
             </Script>
         </Step>
+    </Action>
 $BEGIN_BO_MODEL$
+    <Action Name="register business object informations">
         <Step Name="check business object ${Model.getName()}'s informations table exists">
             <Script>
-                select count(0) from information_schema.tables where `TABLE_SCHEMA` = '${DbName}' and `TABLE_NAME` = '${Company}_SYS_OBOI'
+                select count(0) from `information_schema`.`tables` where `TABLE_SCHEMA` = '${DbName}' and `TABLE_NAME` = '${Company}_SYS_OBOI'
             </Script>
         </Step>
         <Step Name="delete business object ${Model.getName()}'s informations" RunOnValue="1">
             <Script>
-                delete from `${DbName}`.`${Company}_SYS_OBOI` where Name = N'${Model.getName()}'
+                delete from `${DbName}`.`${Company}_SYS_OBOI` where `Name` = N'${Model.getName()}'
             </Script>
         </Step>
         <Step Name="register business object ${Model.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into `${DbName}`.`${Company}_SYS_OBOI`("Name", "Code", "Descrp", "Mapped", "ObjectType") values (N'${Model.getName()}',N'${BO.getShortName()}',N'${Model.getDescription()}',N'${Model.getMapped().toUpperCase()}',N'${Model.getModelType()}')
+                insert into `${DbName}`.`${Company}_SYS_OBOI`(`Name`, `Code`, `Descrp`, `Mapped`, `ObjectType`) values (N'${Model.getName()}',N'${BO.getShortName()}',N'${Model.getDescription()}',N'${Model.getMapped().toUpperCase()}',N'${Model.getModelType()}')
             </Script>
         </Step>
         <Step Name="check business object informations table exists">
             <Script>
-                select count(0) from information_schema.tables where `TABLE_SCHEMA` = '${DbName}' and `TABLE_NAME` = '${Company}_SYS_BOI1'
+                select count(0) from `information_schema`.`tables` where `TABLE_SCHEMA` = '${DbName}' and `TABLE_NAME` = '${Company}_SYS_BOI1'
             </Script>
         </Step>
 $BEGIN_MODEL_PROPERTY$
         <Step Name="delete business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
-                delete from `${DbName}`.`${Company}_SYS_BOI1` where Name = N'${Model.getName()}' and Property = N'${Model.getName()}'
+                delete from `${DbName}`.`${Company}_SYS_BOI1` where `Name` = N'${Model.getName()}' and `Property` = N'${Model.getName()}'
             </Script>
         </Step>
         <Step Name="register business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into `${DbName}`."${Company}_SYS_BOI1" ("Name", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${Model.getName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isPrimaryKey()}', N'Y')
+                insert into `${DbName}`.`${Company}_SYS_BOI1` (`Name`, `Property`, `Mapped`, `Descrp`, `DataType`, `EditType`, `EditSize`, `Searched`, `Systemed`) VALUES(N'${Model.getName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isPrimaryKey()}', N'Y')
             </Script>
         </Step>
 $END_MODEL_PROPERTY$
