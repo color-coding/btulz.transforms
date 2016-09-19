@@ -34,7 +34,7 @@ $BEGIN_MODEL$
 $$上步返回0时运行（RunOnValue="0"）。
         <Step Name="create table ${Model.getMapped()}" RunOnValue="0">
             <Script>
-                create ${DbTableType} table "${DbName}"."${Model.getMapped()}"(
+                create table "${DbName}"."${Model.getMapped()}"(
 $BEGIN_MODEL_PROPERTY$
                     "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getNullType()} ${Property.getSeparator(,)}
 $END_MODEL_PROPERTY$
