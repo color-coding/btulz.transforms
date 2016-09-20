@@ -178,7 +178,7 @@
     <Field Name="Refed" Description="已引用" DataType="db_Alpha" SubType="st_None" EditSize="1" PropertyName="Referenced" FixedDataType="emYesNo" DefaultValue="N" />
     <Field Name="Deleted" Description="删除的" DataType="db_Alpha" SubType="st_None" EditSize="1" PropertyName="Deleted" FixedDataType="emYesNo" DefaultValue="N" />
   </Table>
-  <BusinessObject Code="CC_TT_WHSJOURNAL" Name="物料交易记录" TableName="CC_TT_OINM" ObjectType="boud_SimpleObject" CanCancel="No" CanClose="Yes" CanDelete="No" CanYearTransfer="Yes" ManageSeries="Yes" PropertyName="MaterialsJournal">
+  <BusinessObject Code="CC_TT_MATERIALSJOURNAL" Name="物料交易记录" TableName="CC_TT_OINM" ObjectType="boud_SimpleObject" CanCancel="No" CanClose="Yes" CanDelete="No" CanYearTransfer="Yes" ManageSeries="Yes" PropertyName="MaterialsJournal">
     <ChildTables />
     <FindColumns />
     <FormColumns />
