@@ -77,7 +77,7 @@ public class testCommands extends TestCase {
 		ArrayList<String> args = new ArrayList<>();
 		args.add(String.format(Command4Sql.COMMAND_PROMPT)); // 命令
 		args.add(String.format("-SqlFile=%s", System.getenv("ibasWorkspace") + File.separator + "initialization"
-				+ File.separator + "sql_mssql_ibas_initialization.xml")); // 使用的模板
+				+ File.separator + "sql_mysql_ibas_initialization.xml")); // 使用的模板
 		args.add(String.format("-Company=%s", "CC")); // 公司
 		args.add(String.format("-DbServer=%s", "ibas-dev-mysql"));// 数据库地址
 		args.add(String.format("-DbPort=%s", "3306"));// 数据库端口
