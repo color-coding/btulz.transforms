@@ -72,14 +72,14 @@ do
     # 回到脚本目录
     cd ..
     # 检查编译结果
-    if [ -e ${WORK_FOLDER}/release/${line}*.* ]
+    if [ -e ${WORK_FOLDER}/release/${line}*.jar ]
     then
       echo --编译[${line}]成功
     else
       echo --编译[${line}]失败
     fi
   fi
-done < ${WORK_FOLDER}/compile_order.txt
+done < ${WORK_FOLDER}/compile_order.txt | sed 's/\r//g'
 
 # 本地安装开发版本服务包
 for PACKAGE in `find ${WORK_FOLDER}/release -name "ibcp.*.service*.jar"`
