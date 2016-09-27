@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 echo '****************************************************************************'
 echo '    compile_and_package.sh                                                  '
 echo '                      by niuren.zhu                                         '
