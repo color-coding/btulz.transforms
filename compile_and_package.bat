@@ -63,5 +63,10 @@ for /f %%m in (%WORKFOLDER%compile_order.txt) do (
   REM 重置当前工作目录
   cd /d %WORK_FOLDER%
 )
-
+echo 压缩编译文件为tar包
+if exist %WORK_FOLDER%release\*.* (
+  cd /d %WORK_FOLDER%release\
+  7z a -ttar btulz.transforms.tar *
+)
+cd /d %WORK_FOLDER%
 echo --编译完成，更多信息请查看[compile_and_package_log_%OPNAME%.txt]

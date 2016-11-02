@@ -89,5 +89,9 @@ do
     fi
   fi
 done < ${WORK_FOLDER}/compile_order.txt
-
+echo 压缩编译文件为tar包
+if [ -e ${WORK_FOLDER}/release/${line}*.* ]
+then
+  tar -cvf ${WORK_FOLDER}/release/btulz.transforms.tar ${WORK_FOLDER}/release/*
+fi
 echo --编译完成，更多信息请查看[compile_and_package_log_${OPNAME}.txt]
