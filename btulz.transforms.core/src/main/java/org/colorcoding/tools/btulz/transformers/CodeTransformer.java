@@ -62,11 +62,15 @@ public class CodeTransformer extends Transformer {
 	 */
 	public void setTemplateFolder(String templateFolder) {
 		if (templateFolder != null) {
-			if (templateFolder.indexOf(File.separator) < 0) {
+			File file = new File(templateFolder);
+			if (file.exists() && file.isDirectory()) {
+				this.templateFolder = file.getPath();
+				return;
+			} else {
 				// 不是完整的路径，补充目录到路径
 				try {
 					// 优先使用工作目录的模板
-					File file = new File(Environment.getWorkingFolder() + File.separator + TEMPLATE_FOLDER_CODE
+					file = new File(Environment.getWorkingFolder() + File.separator + TEMPLATE_FOLDER_CODE
 							+ File.separator + templateFolder);
 					if (file.exists() && file.isDirectory()) {
 						this.templateFolder = file.getPath();
@@ -83,11 +87,6 @@ public class CodeTransformer extends Transformer {
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
-			}
-			File file = new File(templateFolder);
-			if (file.exists() && file.isDirectory()) {
-				this.templateFolder = file.getPath();
-				return;
 			}
 		}
 		this.templateFolder = templateFolder;

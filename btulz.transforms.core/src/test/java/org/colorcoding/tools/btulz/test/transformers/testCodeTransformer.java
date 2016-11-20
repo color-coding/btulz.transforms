@@ -18,6 +18,7 @@ public class testCodeTransformer extends TestCase {
 		// Environment.getResource("code/eclipse/ibas_classic").getPath();
 		codeTransformer.setTemplateFolder("eclipse/ibas_classic");
 		codeTransformer.setOutputFolder(System.getenv("TEMP"));
+		//codeTransformer.setOutputFolder("/home/manager/code/btulz4ibcp/out/");
 		codeTransformer.setGroupId("org.colorcoding");
 		codeTransformer.setArtifactId("ibas");
 		codeTransformer.setProjectId(UUID.randomUUID().toString());
@@ -26,6 +27,7 @@ public class testCodeTransformer extends TestCase {
 		codeTransformer.addParameters(new Parameter("ibasVersion", "0.1.1"));
 		codeTransformer.addParameters(new Parameter("jerseyVersion", "2.22.1"));
 		codeTransformer.addDomains("D:\\WorkTemp\\ibcp.trainingtesting\\ibcp.trainingtesting\\src\\datastructures");
+		//codeTransformer.addDomains("/home/manager/code/btulz4ibcp/domain/");
 		// codeTransformer.addDomain((new testModels()).createDomain());
 
 		codeTransformer.transform();

@@ -294,7 +294,7 @@ class XmlParser1 extends XmlParser {
 					String value = node.getNodeValue();
 					if (value.indexOf(".") > 0) {
 						// 去除前缀
-						String[] tmps = value.split(".");
+						String[] tmps = value.split("/.");
 						value = tmps[tmps.length - 1];
 					}
 					if (value.startsWith("em")) {
