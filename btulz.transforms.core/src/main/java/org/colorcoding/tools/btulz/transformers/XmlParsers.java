@@ -294,12 +294,12 @@ class XmlParser1 extends XmlParser {
 					String value = node.getNodeValue();
 					if (value.indexOf(".") > 0) {
 						// 去除前缀
-						String[] tmps = value.split("/.");
+						String[] tmps = value.split("\\.");
 						value = tmps[tmps.length - 1];
 					}
 					if (value.startsWith("em")) {
 						// 仅枚举类型时赋值
-						object.setDeclaredType(this.convert(String.class, node.getNodeValue()));
+						object.setDeclaredType(this.convert(String.class, value));
 					}
 				}
 			}

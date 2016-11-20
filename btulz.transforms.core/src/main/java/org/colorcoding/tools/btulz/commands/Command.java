@@ -219,6 +219,7 @@ public abstract class Command<C> {
 	protected Collection<Parameter> createParameters(String values) {
 		ArrayList<Parameter> parameters = new ArrayList<>();
 		if (values != null && !values.isEmpty()) {
+			values = values.trim();
 			if (values.startsWith("[") && values.endsWith("]")) {
 				ArrayList<String> tmpValues = new ArrayList<>();
 				StringBuilder stringBuilder = null;

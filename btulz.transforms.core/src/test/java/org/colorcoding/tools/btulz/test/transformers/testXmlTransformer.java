@@ -58,9 +58,10 @@ public class testXmlTransformer extends TestCase {
 
 	public void testOldXml() throws JAXBException, TransformException, MultiTransformException {
 		XmlTransformer xmlTransformer = new XmlTransformer();
-		xmlTransformer.load(Environment.getStartupFolder() + old_xml_path + File.separator + "domain_models_old.xml",
-				false);
+		//xmlTransformer.load(Environment.getStartupFolder() + old_xml_path + File.separator + "domain_models_old.xml",
+		//		false);
 
+		xmlTransformer.load("/home/manager/Downloads/ds_sm_salesorder.xml",false);
 		JAXBContext context = JAXBContext.newInstance(Domain.class);
 		Marshaller marshaller = context.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
