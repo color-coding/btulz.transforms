@@ -26,7 +26,7 @@ $BEGIN_BO$
     @POST
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.APPLICATION_XML)
-    @Path("/fetch${BO.getName()}")
+    @Path("fetch${BO.getName()}")
     public OperationResult<${BO.getName()}> fetch${BO.getName()}(Criteria criteria, @QueryParam("token") String token) {
         return super.fetch${BO.getName()}(criteria, token);
     }
@@ -40,7 +40,7 @@ $BEGIN_BO$
     @POST
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.APPLICATION_XML)
-    @Path("/save${BO.getName()}")
+    @Path("save${BO.getName()}")
     public OperationResult<${BO.getName()}> save${BO.getName()}(${BO.getName()} bo, @QueryParam("token") String token) {
         return super.save${BO.getName()}(bo, token);
     }
