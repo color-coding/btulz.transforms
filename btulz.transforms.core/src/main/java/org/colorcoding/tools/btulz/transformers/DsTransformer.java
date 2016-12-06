@@ -104,7 +104,8 @@ public class DsTransformer extends DbTransformer {
 								this.getTemplateFile().replace(File.separatorChar + "ds_", File.separatorChar + "dm_"));
 					} else {
 						// 无路径符，尝试使用资源流
-						String resName = String.format("ds/%s", this.getTemplateFile().replace("ds_", "dm_"));
+						String resName = String.format("ds/%s",
+								this.getTemplateFile().replace("ds_", "dm_").toLowerCase());
 						InputStream inputStream = Thread.currentThread().getContextClassLoader()
 								.getResourceAsStream(resName);
 						if (inputStream != null) {
@@ -149,7 +150,7 @@ public class DsTransformer extends DbTransformer {
 				template.setTemplateFile(this.getTemplateFile());
 			} else {
 				// 无路径符，尝试使用资源流
-				String resName = String.format("ds/%s", this.getTemplateFile());
+				String resName = String.format("ds/%s", this.getTemplateFile()).toLowerCase();// 自动按小写处理
 				InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resName);
 				if (inputStream == null) {
 					throw new Exception(String.format("not found template file [%s].", resName));
