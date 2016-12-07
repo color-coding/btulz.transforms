@@ -48,8 +48,7 @@ for /f %%m in (%WORKFOLDER%compile_order.txt) do (
       echo --开始编译[%%m]+安装
       call "%MAVEN_HOME%\bin\mvn" clean package install -Dmaven.test.skip=true >>%LOGFILE%
       if exist %WORK_FOLDER%%%m\target\%%m*.jar copy /y %WORK_FOLDER%%%m\target\%%m*.jar %WORK_FOLDER%release\ >>%LOGFILE%
-      if not exist %WORK_FOLDER%release\lib mkdir %WORK_FOLDER%release\lib >>%LOGFILE%
-      if exist %WORK_FOLDER%%%m\target\lib\*.* copy /y %WORK_FOLDER%%%m\target\lib\*.* %WORK_FOLDER%release\lib\ >>%LOGFILE%
+      if exist %WORK_FOLDER%%%m\target\lib\*.* copy /y %WORK_FOLDER%%%m\target\lib\*.* %WORK_FOLDER%release\ >>%LOGFILE%
     )
     REM 检查并复制编译结果
     
