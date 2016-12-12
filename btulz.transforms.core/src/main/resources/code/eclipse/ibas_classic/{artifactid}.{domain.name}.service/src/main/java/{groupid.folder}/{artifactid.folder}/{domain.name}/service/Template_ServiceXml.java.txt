@@ -12,7 +12,7 @@ $END_BO$
 /**
 * ${Domain.getName()} 数据服务XML
 */
-@Path("/xml/")
+@Path("xml/")
 public class ServiceXml extends BORepository${Domain.getName()} {
 
     //--------------------------------------------------------------------------------------------//
