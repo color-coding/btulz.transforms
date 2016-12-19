@@ -17,7 +17,7 @@ public class testCodeTransformer extends TestCase {
 		// String tpltFolder =
 		// Environment.getResource("code/eclipse/ibas_classic").getPath();
 		codeTransformer.setTemplateFolder("eclipse/ibas_classic");
-		//codeTransformer.setOutputFolder(System.getenv("TEMP"));
+		// codeTransformer.setOutputFolder(System.getenv("TEMP"));
 		codeTransformer.setOutputFolder("/home/manager/code/btulz4ibcp/out/");
 		codeTransformer.setGroupId("org.colorcoding");
 		codeTransformer.setArtifactId("ibas");
@@ -27,8 +27,8 @@ public class testCodeTransformer extends TestCase {
 		codeTransformer.addParameters(new Parameter("Company", "CC"));
 		codeTransformer.addParameters(new Parameter("ibasVersion", "0.1.1"));
 		codeTransformer.addParameters(new Parameter("jerseyVersion", "2.22.1"));
-		//codeTransformer.addDomains("D:\\WorkTemp\\ibcp.trainingtesting\\ibcp.trainingtesting\\src\\datastructures");
-		codeTransformer.addDomains("/home/manager/Downloads/ds_sm_salesorder.xml");
+		// codeTransformer.addDomains("D:\\WorkTemp\\ibcp.trainingtesting\\ibcp.trainingtesting\\src\\datastructures");
+		codeTransformer.addDomains("/home/manager/code/btulz.transforms/btulz.transforms.shell/target/test-classes");
 		// codeTransformer.addDomain((new testModels()).createDomain());
 
 		codeTransformer.transform();
