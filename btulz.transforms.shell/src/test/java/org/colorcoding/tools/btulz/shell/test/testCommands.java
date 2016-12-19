@@ -9,7 +9,7 @@ import org.colorcoding.tools.btulz.shell.Environment;
 
 import junit.framework.TestCase;
 
-public class testCommonds extends TestCase {
+public class testCommands extends TestCase {
 
 	String charsetName = "utf-8";
 	Process process = null;
