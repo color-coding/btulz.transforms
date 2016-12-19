@@ -14,19 +14,19 @@ import org.colorcoding.tools.btulz.shell.Environment;
  *
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name = "CommandItemValue", namespace = Environment.NAMESPACE_BTULZ_SHELL_COMMANDS)
-public class CommandItemValue {
+@XmlType(name = "ValidValue", namespace = Environment.NAMESPACE_BTULZ_SHELL_COMMANDS)
+public class ValidValue {
 
-	public CommandItemValue() {
+	public ValidValue() {
 
 	}
 
-	public CommandItemValue(String value) {
+	public ValidValue(String value) {
 		this();
 		this.setValue(value);
 	}
 
-	public CommandItemValue(String value, String description) {
+	public ValidValue(String value, String description) {
 		this(value);
 		this.setDescription(description);
 	}

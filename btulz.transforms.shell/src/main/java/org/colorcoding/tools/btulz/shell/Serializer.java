@@ -2,6 +2,7 @@ package org.colorcoding.tools.btulz.shell;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.StringWriter;
 
 import javax.xml.bind.JAXBContext;
@@ -121,4 +122,22 @@ public class Serializer {
 
 	}
 
+	/**
+	 * 从xml字符流形成对象
+	 * 
+	 * @param inputStream
+	 *            字符流
+	 * @param types
+	 *            相关对象
+	 * @return 对象实例
+	 * @throws JAXBException
+	 */
+	public static Object fromXmlString(InputStream inputStream, Class<?>... types) throws JAXBException {
+		JAXBContext context = JAXBContext.newInstance(types);
+		Marshaller marshaller = context.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");// 编码格式
+		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, false);// 是否省略xm头声明信息
+		Unmarshaller unmarshaller = context.createUnmarshaller();
+		return unmarshaller.unmarshal(inputStream);
+	}
 }

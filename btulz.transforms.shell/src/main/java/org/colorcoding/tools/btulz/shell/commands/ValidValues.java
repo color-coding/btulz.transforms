@@ -16,8 +16,8 @@ import org.colorcoding.tools.btulz.shell.Environment;
  *
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name = "CommandItemValues", namespace = Environment.NAMESPACE_BTULZ_SHELL_COMMANDS)
-public class CommandItemValues extends ArrayList<CommandItemValue> {
+@XmlType(name = "ValidValues", namespace = Environment.NAMESPACE_BTULZ_SHELL_COMMANDS)
+public class ValidValues extends ArrayList<ValidValue> {
 
 	private static final long serialVersionUID = 6366175491071067769L;
 
@@ -54,12 +54,12 @@ public class CommandItemValues extends ArrayList<CommandItemValue> {
 			if (type.isEnum()) {
 				// 枚举类型
 				for (Object item : type.getEnumConstants()) {
-					this.add(new CommandItemValue(item.toString()));
+					this.add(new ValidValue(item.toString()));
 				}
 			} else if (type.equals(Boolean.class)) {
 				// 布尔值
-				this.add(new CommandItemValue(Boolean.TRUE.toString()));
-				this.add(new CommandItemValue(Boolean.FALSE.toString()));
+				this.add(new ValidValue(Boolean.TRUE.toString()));
+				this.add(new ValidValue(Boolean.FALSE.toString()));
 			}
 		} catch (Exception e) {
 

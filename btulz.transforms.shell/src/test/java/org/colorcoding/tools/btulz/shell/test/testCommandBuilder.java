@@ -5,8 +5,9 @@ import javax.xml.bind.JAXBException;
 import org.colorcoding.tools.btulz.shell.Serializer;
 import org.colorcoding.tools.btulz.shell.commands.CommandBuilder;
 import org.colorcoding.tools.btulz.shell.commands.CommandItem;
-import org.colorcoding.tools.btulz.shell.commands.CommandItemValue;
-import org.colorcoding.tools.btulz.shell.commands.CommandItemValues;
+import org.colorcoding.tools.btulz.shell.commands.CommandManager;
+import org.colorcoding.tools.btulz.shell.commands.ValidValue;
+import org.colorcoding.tools.btulz.shell.commands.ValidValues;
 
 import junit.framework.TestCase;
 
@@ -25,19 +26,35 @@ public class testCommandBuilder extends TestCase {
 		commandItems[index] = new CommandItem();
 		commandItems[index].setName("java");
 		commandItems[index].setDescription("");
+		commandItems[index].setContent("");
 		index++;
+		commandItems[index] = new CommandItem();
 		commandItems[index].setName("is");
 		commandItems[index].setDescription("");
-		commandItems[index].getItemValues().setClassName(Boolean.class.getName());
+		commandItems[index].setContent("");
+		commandItems[index].getValidValues().setClassName(Boolean.class.getName());
+		commandItems[index].getValidValues().get();
 		index++;
+		commandItems[index] = new CommandItem();
 		commandItems[index].setName("and is");
 		commandItems[index].setDescription("");
-		commandItems[index].getItemValues().setClassName(emYesNo.class.getName());
+		commandItems[index].setContent("");
+		commandItems[index].getValidValues().setClassName(emYesNo.class.getName());
+		commandItems[index].getValidValues().get();
 		index++;
 
 		commandBuilder.setItems(commandItems);
 		String xml = Serializer.toXmlString(commandBuilder, true, CommandBuilder.class, CommandItem.class,
-				CommandItemValue.class, CommandItemValues.class);
+				ValidValue.class, ValidValues.class);
 		System.out.println(xml);
+	}
+
+	public void testPrefabricated() {
+		CommandManager manager = CommandManager.create();
+		for (CommandBuilder commandBuilder : manager.getCommands()) {
+			System.out.print(commandBuilder.toString());
+			System.out.print(" ");
+			System.out.println(commandBuilder.toCommand());
+		}
 	}
 }

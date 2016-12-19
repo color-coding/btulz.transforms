@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:CommandBuilder Name="system.ping" Description="ping" xmlns:ns2="http://colorcoding.org/btulz/shell/commands">
+    <Item Name="main" Content="ping" Description="远程地址" Value="colorcoding.org" Operator=" " />
+</ns2:CommandBuilder>

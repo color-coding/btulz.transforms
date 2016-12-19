@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.shell.Environment;
@@ -15,8 +16,9 @@ import org.colorcoding.tools.btulz.shell.Environment;
  *
  */
 @XmlAccessorType(XmlAccessType.NONE)
+@XmlRootElement(name = "CommandBuilder", namespace = Environment.NAMESPACE_BTULZ_SHELL_COMMANDS)
 @XmlType(name = "CommandBuilder", namespace = Environment.NAMESPACE_BTULZ_SHELL_COMMANDS)
-public class CommandBuilder {
+public class CommandBuilder implements Comparable<CommandBuilder> {
 	/**
 	 * 名称
 	 */
@@ -45,7 +47,7 @@ public class CommandBuilder {
 		this.description = description;
 	}
 
-	@XmlElement(name = "Items")
+	@XmlElement(name = "Item")
 	private CommandItem[] items;
 
 	public final CommandItem[] getItems() {
@@ -59,6 +61,10 @@ public class CommandBuilder {
 		this.items = items;
 	}
 
+	public String toString() {
+		return String.format("{command builder %s}", this.getName());
+	}
+
 	/**
 	 * 形成命令
 	 * 
@@ -70,18 +76,28 @@ public class CommandBuilder {
 			if (commandItem == null) {
 				continue;
 			}
-			if (commandItem.isMust() && !commandItem.isSelected()) {
+			if (!commandItem.isOptional() && !commandItem.isSelected()) {
 				throw new RuntimeException(String.format("%s must be selected.", commandItem.getName()));
 			}
 			if (stringBuilder.length() > 0) {
 				stringBuilder.append(" ");
 			}
-			stringBuilder.append(commandItem.getName());
+			if (commandItem.getContent() != null && !commandItem.getContent().isEmpty()) {
+				// 添加命令内容
+				stringBuilder.append(commandItem.getContent());
+			}
 			if (commandItem.getValue() != null) {
-				stringBuilder.append(commandItem.getOperator());
+				// 添加命令值
+				if (commandItem.getOperator() != null && !commandItem.getOperator().isEmpty())
+					stringBuilder.append(commandItem.getOperator());
 				stringBuilder.append(commandItem.getValue());
 			}
 		}
 		return stringBuilder.toString();
+	}
+
+	@Override
+	public int compareTo(CommandBuilder o) {
+		return this.getName().compareTo(o.getName());
 	}
 }

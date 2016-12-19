@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.shell.Environment;
@@ -19,22 +20,22 @@ import org.colorcoding.tools.btulz.shell.Environment;
 public class CommandItem {
 
 	public CommandItem() {
-		this.setMust(true);
+		this.setOptional(false);
 		this.setSelected(false);
 	}
 
 	/**
-	 * 必须选择项目
+	 * 可选选择项目
 	 */
-	@XmlAttribute(name = "Must")
-	private boolean must;
+	@XmlAttribute(name = "optional")
+	private boolean optional;
 
-	public final boolean isMust() {
-		return must;
+	public final boolean isOptional() {
+		return optional;
 	}
 
-	public final void setMust(boolean must) {
-		this.must = must;
+	public final void setOptional(boolean optional) {
+		this.optional = optional;
 	}
 
 	/**
@@ -43,7 +44,7 @@ public class CommandItem {
 	private boolean selected;
 
 	public final boolean isSelected() {
-		if (this.isMust()) {
+		if (!this.isOptional()) {
 			this.setSelected(true);
 		}
 		return selected;
@@ -82,15 +83,26 @@ public class CommandItem {
 	}
 
 	/**
+	 * 命令内容
+	 */
+	@XmlAttribute(name = "Content")
+	private String content;
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	/**
 	 * 操作符，名称与值的
 	 */
 	private String operator;
 
 	@XmlAttribute(name = "Operator")
 	public final String getOperator() {
-		if (this.operator == null) {
-			this.operator = "=";
-		}
 		return operator;
 	}
 
@@ -115,14 +127,18 @@ public class CommandItem {
 	/**
 	 * 可选值
 	 */
-	@XmlElement(name = "Values")
-	private CommandItemValues itemValues;
+	@XmlElementWrapper(name = "ValidValues")
+	@XmlElement(name = "ValidValue", type = ValidValue.class, required = true)
+	private ValidValues validValues;
 
-	public final CommandItemValues getItemValues() {
-		if (this.itemValues == null) {
-			this.itemValues = new CommandItemValues();
+	public final ValidValues getValidValues() {
+		if (this.validValues == null) {
+			this.validValues = new ValidValues();
 		}
-		return itemValues;
+		return validValues;
 	}
 
+	public String toString() {
+		return String.format("{command item %s}", this.getName() != null ? this.getName() : this.getContent());
+	}
 }

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:CommandBuilder Name="java.version" Description="查看java版本" xmlns:ns2="http://colorcoding.org/btulz/shell/commands">
+    <Item Name="main" Content="java" />
+    <Item Name="-version" Content="-version" Description="版本" />
+</ns2:CommandBuilder>
