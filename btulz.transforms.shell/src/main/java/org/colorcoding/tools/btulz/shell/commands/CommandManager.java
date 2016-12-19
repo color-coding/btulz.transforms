@@ -21,7 +21,7 @@ import org.colorcoding.tools.btulz.shell.Serializer;
 /**
  * 命令管理员
  * 
- * @author manager
+* @author Niuren.Zhu
  *
  */
 public class CommandManager {

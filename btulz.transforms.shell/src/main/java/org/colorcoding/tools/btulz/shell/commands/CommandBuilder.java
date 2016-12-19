@@ -1,5 +1,8 @@
 package org.colorcoding.tools.btulz.shell.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -65,6 +68,12 @@ public class CommandBuilder implements Comparable<CommandBuilder> {
 		return String.format("{command builder %s}", this.getName());
 	}
 
+	protected List<Variable> getVariables() {
+		List<Variable> variables = new ArrayList<>();
+
+		return variables;
+	}
+
 	/**
 	 * 形成命令
 	 * 
@@ -72,7 +81,7 @@ public class CommandBuilder implements Comparable<CommandBuilder> {
 	 */
 	public String toCommand() {
 		StringBuilder stringBuilder = new StringBuilder();
-		for (CommandItem commandItem : items) {
+		for (CommandItem commandItem : this.getItems()) {
 			if (commandItem == null) {
 				continue;
 			}
@@ -84,13 +93,17 @@ public class CommandBuilder implements Comparable<CommandBuilder> {
 			}
 			if (commandItem.getContent() != null && !commandItem.getContent().isEmpty()) {
 				// 添加命令内容
-				stringBuilder.append(commandItem.getContent());
-			}
-			if (commandItem.getValue() != null) {
-				// 添加命令值
-				if (commandItem.getOperator() != null && !commandItem.getOperator().isEmpty())
-					stringBuilder.append(commandItem.getOperator());
-				stringBuilder.append(commandItem.getValue());
+				List<Variable> variables = this.getVariables();
+				String itemValue = commandItem.getValue();
+				if (commandItem.getItems().size() > 0) {
+					itemValue = commandItem.getItems().getValue(variables);
+				}
+				variables.add(new Variable(Variable.VARIABLE_NAME_VALUE, itemValue));
+				String content = commandItem.getContent();
+				for (Variable variable : variables) {
+					content = content.replace(variable.getName(), variable.getValue());
+				}
+				stringBuilder.append(content);
 			}
 		}
 		return stringBuilder.toString();

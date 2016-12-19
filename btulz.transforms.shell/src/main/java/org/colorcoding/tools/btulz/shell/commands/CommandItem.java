@@ -97,20 +97,6 @@ public class CommandItem {
 	}
 
 	/**
-	 * 操作符，名称与值的
-	 */
-	private String operator;
-
-	@XmlAttribute(name = "Operator")
-	public final String getOperator() {
-		return operator;
-	}
-
-	public final void setOperator(String operator) {
-		this.operator = operator;
-	}
-
-	/**
 	 * 值
 	 */
 	@XmlAttribute(name = "Value")
@@ -128,7 +114,7 @@ public class CommandItem {
 	 * 可选值
 	 */
 	@XmlElementWrapper(name = "ValidValues")
-	@XmlElement(name = "ValidValue", type = ValidValue.class, required = true)
+	@XmlElement(name = "ValidValue", type = ValidValue.class)
 	private ValidValues validValues;
 
 	public final ValidValues getValidValues() {
@@ -136,6 +122,20 @@ public class CommandItem {
 			this.validValues = new ValidValues();
 		}
 		return validValues;
+	}
+
+	/**
+	 * 子项
+	 */
+	@XmlElementWrapper(name = "Items")
+	@XmlElement(name = "Item", type = CommandItem.class)
+	private CommandItems items;
+
+	public final CommandItems getItems() {
+		if (this.items == null) {
+			this.items = new CommandItems();
+		}
+		return items;
 	}
 
 	public String toString() {

@@ -1,37 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:CommandBuilder Name="java.version" Description="查看java版本"
+<ns2:CommandBuilder Name="btulz.code" Description="生成代码"
 	xmlns:ns2="http://colorcoding.org/btulz/shell/commands">
 	<Item Name="main" Content="java" />
 	<Item Name="jar" Content="-jar ${WORK_FOLDER}btulz.transforms.core-0.1.0.jar"
 		Description="使用jar包" />
 	<Item Name="sub" Content="code" Description="子命令" />
-	<Item Content="-TemplateFolder" Description="使用的模板">
+	<Item Content="-TemplateFolder=${Value}" Description="使用的模板">
 		<ValidValues>
 			<ValidValue Value="eclipse/ibas_classic" />
 		</ValidValues>
 	</Item>
-	<Item Content="-OutputFolder" Description="输出目录" />
-	<Item Content="-GroupId" Description="组标记" />
-	<Item Content="-ArtifactId" Description="项目标记" />
-	<Item Content="-ProjectVersion" Description="项目标记" />
-	<Item Content="-ProjectUrl" Description="项目地址" />
-	<Item Content="-Domains" Description="模型文件" />
+	<Item Content="-OutputFolder=${Value}" Description="输出目录" />
+	<Item Content="-GroupId=${Value}" Description="组标记" />
+	<Item Content="-ArtifactId=${Value}" Description="项目标记" />
+	<Item Content="-ProjectVersion=${Value}" Description="项目标记" />
+	<Item Content="-ProjectUrl=${Value}" Description="项目地址" />
+	<Item Content="-Domains=${Value}" Description="模型文件" />
 	<Item Content="-Release" Description="释放资源" />
-	<Item Content="-Parameters" Description="其他参数" />
-	<Item Content="-Parameters" Description="其他参数" />
-	String.format("-TemplateFolder=%s", "eclipse/ibas_classic"), // 使用的模板
-	String.format("-OutputFolder=%s", workFolder + File.separator +
-	"temp"), // 输出目录
-	String.format("-GroupId=%s", "org.colorcoding"), // 组标记
-	String.format("-ArtifactId=%s", "ibas"), // 项目标记
-	String.format("-ProjectVersion=%s", "0.0.1"), // 项目版本
-	String.format("-ProjectUrl=%s", "http://colorcoding.org"), // 项目地址
-	String.format("-Domains=%s",
-	String.format(
-	"%1$s%2$sbtulz.transforms.core%2$ssrc%2$stest%2$sjava%2$sorg%2$scolorcoding%2$stools%2$sbtulz%2$stest%2$stransformers%2$s",
-	new File(userFolder).getParent(), File.separator)), // 模型文件
-	String.format("-Parameters=%s",
-	"[{\"name\":\"Company\",\"value\":\"CC\"},{\"name\":\"ibasVersion\",\"value\":\"0.1.1\"},{\"name\":\"jerseyVersion\",\"value\":\"2.22.1\"}]"),
-	// 其他参数
-	"-Release" };// 命令数组
+	<Item Content="-Parameters=[{${Value}}]" Description="其他参数">
+		<Items>
+			<Item
+				Content="{&quot;name&quot;:&quot;Company&quot;,&quot;value&quot;:&quot;${Value}&quot;}"
+				Description="公司标识" />
+			<Item
+				Content=",{&quot;name&quot;:&quot;ibasVersion&quot;,&quot;value&quot;:&quot;${Value}&quot;}"
+				Description="ibas版本" />
+			<Item
+				Content=",{&quot;name&quot;:&quot;jerseyVersion&quot;,&quot;value&quot;:&quot;${Value}&quot;}"
+				Description="jersey版本" />
+		</Items>
+	</Item>
 </ns2:CommandBuilder>
