@@ -2,7 +2,6 @@ package org.colorcoding.tools.btulz.shell.test;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -15,7 +14,7 @@ public class testCommonds extends TestCase {
 	String charsetName = "utf-8";
 	Process process = null;
 
-	public void testCallCommond() throws IOException, InterruptedException {
+	public void testCallCommond() throws Exception {
 		String userFolder = System.getProperty("user.dir");
 		String workFolder = Environment.getWorkingFolder();
 		String[] commands = new String[] { // 命令组
@@ -32,10 +31,12 @@ public class testCommonds extends TestCase {
 				String.format("-ProjectVersion=%s", "0.0.1"), // 项目版本
 				String.format("-ProjectUrl=%s", "http://colorcoding.org"), // 项目地址
 				String.format("-Domains=%s",
-						"/home/manager/code/btulz.transforms/btulz.transforms.core/src/test/java/org/colorcoding/tools/btulz/test/transformers/"), // 模型文件
+						String.format(
+								"%1$s%2$sbtulz.transforms.core%2$ssrc%2$stest%2$sjava%2$sorg%2$scolorcoding%2$stools%2$sbtulz%2$stest%2$stransformers%2$s",
+								new File(userFolder).getParent(), File.separator)), // 模型文件
 				String.format("-Parameters=%s",
-						"[{\"name\":\"Company\",\"value\":\"CC\"},{\"name\":\"ibasVersion\",\"value\":\"0.1.1\"},{\"name\":\"jerseyVersion\",\"value\":\"2.22.1\"}]") // 其他参数
-		};// 命令数组
+						"[{\"name\":\"Company\",\"value\":\"CC\"},{\"name\":\"ibasVersion\",\"value\":\"0.1.1\"},{\"name\":\"jerseyVersion\",\"value\":\"2.22.1\"}]"), // 其他参数
+				"-Release" };// 命令数组
 		StringBuilder stringBuilder = new StringBuilder();
 		for (String string : commands) {
 			stringBuilder.append(string);
@@ -43,19 +44,25 @@ public class testCommonds extends TestCase {
 		}
 		String commond = stringBuilder.toString();// 命令
 
-		if (System.getProperty("os.name").equalsIgnoreCase("windows")) {
+		if (System.getProperty("os.name").startsWith("Windows")) {
 			// windows
 			charsetName = "GBK";
-			commond = "cmd.exe java " + Environment.getWorkingFolder() + File.separator + commond;
-			commond = "cmd /c ping -t 192.168.3.1";
-		} else if (System.getProperty("os.name").equalsIgnoreCase("linux")) {
-			// linux
-			// commond = "java -jar
-			// /home/manager/code/btulz.transforms/release/btulz.transforms.core-0.1.0.jar
-			// code";
-			// commond = "ping 192.168.3.1";
+			// commond = "ping -t 192.168.3.1";
 			// commond = "java -version";
-		}
+			// commond = String.format("java -jar
+			// %sbtulz.transforms.core-0.1.0.jar code",
+			// new File(userFolder).getParent() + File.separator + "release" +
+			// File.separator);
+		} else if (System.getProperty("os.name").startsWith("Linux")) {
+			// linux
+			// commond = "ping 192.168.3.1";
+			// // commond = "java -version";
+			// commond = String.format("java -jar
+			// %sbtulz.transforms.core-0.1.0.jar code",
+			// new File(userFolder).getParent() + File.separator + "release" +
+			// File.separator);
+		} else
+			throw new Exception("unkwon os " + System.getProperty("os.name"));
 		System.out.println("run: " + commond);
 		process = Runtime.getRuntime().exec(commond);
 		// 开启线程1，正常输出
