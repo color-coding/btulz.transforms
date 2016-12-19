@@ -110,6 +110,6 @@ public class Model implements IModel {
 
 	@Override
 	public IModel clone() {
-		return (IModel) Serializer.Clone(this);
+		return (IModel) Serializer.clone(this);
 	}
 }

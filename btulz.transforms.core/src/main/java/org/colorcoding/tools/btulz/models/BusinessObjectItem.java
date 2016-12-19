@@ -51,6 +51,6 @@ public class BusinessObjectItem extends BusinessObject implements IBusinessObjec
 
 	@Override
 	public IBusinessObjectItem clone() {
-		return (IBusinessObjectItem) Serializer.Clone(this);
+		return (IBusinessObjectItem) Serializer.clone(this);
 	}
 }

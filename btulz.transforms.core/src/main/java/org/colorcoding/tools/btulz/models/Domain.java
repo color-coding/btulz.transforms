@@ -119,7 +119,7 @@ public class Domain implements IDomain {
 
 	@Override
 	public IDomain clone() {
-		return (IDomain) Serializer.Clone(this);
+		return (IDomain) Serializer.clone(this);
 	}
 
 	@Override

@@ -1,10 +1,8 @@
-package org.colorcoding.tools.btulz;
+package org.colorcoding.tools.btulz.shell;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -19,10 +17,6 @@ public class Serializer {
 	 * 输出字符串类型，XML
 	 */
 	public final static String OUT_TYPE_XML = "xml";
-	/**
-	 * 输出化字符串类型，JSON
-	 */
-	public final static String OUT_TYPE_JSON = "json";
 
 	/**
 	 * 通过序列化与反序列化克隆对象
@@ -73,8 +67,6 @@ public class Serializer {
 			throws JAXBException {
 		if (OUT_TYPE_XML.equals(type)) {
 			return toXmlString(object, formated, types);
-		} else if (OUT_TYPE_JSON.equals(type)) {
-			return toJsonString(object, formated, types);
 		}
 		return object.toString();
 	}
@@ -129,80 +121,4 @@ public class Serializer {
 
 	}
 
-	/**
-	 * 创建json序列化类
-	 * 
-	 * @param types
-	 *            已知类型
-	 * @return
-	 * @throws JAXBException
-	 */
-	private static JAXBContext createJAXBContextJson(Class<?>... types) throws JAXBException {
-		String factoryKey = "javax.xml.bind.context.factory";
-		String factoryValue = System.getProperty(factoryKey);
-		try {
-			// 重置序列化工厂
-			System.setProperty(factoryKey, "org.eclipse.persistence.jaxb.JAXBContextFactory");
-			Map<String, Object> properties = new HashMap<String, Object>(2);
-			// 指定格式为json，避免引用此处没有静态变量
-			properties.put("eclipselink.media-type", "application/json");
-			// json数组不要前缀类型
-			properties.put("eclipselink.json.wrapper-as-array-name", true);
-			JAXBContext context = JAXBContext.newInstance(types, properties);
-			return context;
-		} finally {
-			// 还原工厂参数
-			if (factoryValue == null) {
-				System.clearProperty(factoryKey);
-			} else {
-				System.setProperty(factoryKey, factoryValue);
-			}
-		}
-	}
-
-	/**
-	 * 格式化json字符串
-	 * 
-	 * @param object
-	 *            数据
-	 * @param formated
-	 *            是否带格式
-	 * @param types
-	 *            已知的类型
-	 * @return
-	 * @throws JAXBException
-	 */
-	public static String toJsonString(Object object, boolean formated, Class<?>... types) throws JAXBException {
-
-		Class<?>[] knownTypes = new Class[types.length + 1];
-		knownTypes[0] = object.getClass();
-		for (int i = 0; i < types.length; i++) {
-			knownTypes[i + 1] = types[0];
-		}
-		JAXBContext context = createJAXBContextJson(knownTypes);
-
-		StringWriter writer = new StringWriter();
-		Marshaller marshaller = context.createMarshaller();
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, formated);
-		marshaller.marshal(object, writer);
-		return writer.toString();
-
-	}
-
-	/**
-	 * 从json字符形成对象
-	 * 
-	 * @param value
-	 *            字符串
-	 * @param types
-	 *            相关对象
-	 * @return 对象实例
-	 * @throws JAXBException
-	 */
-	public static Object fromJsonString(String value, Class<?>... types) throws JAXBException {
-		JAXBContext context = createJAXBContextJson(types);
-		Unmarshaller unmarshaller = context.createUnmarshaller();
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(value.getBytes());
-		return unmarshaller.unmarshal(inputStream);
-	}
 }

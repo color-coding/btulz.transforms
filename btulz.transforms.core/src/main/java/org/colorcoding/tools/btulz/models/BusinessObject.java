@@ -113,6 +113,6 @@ public class BusinessObject implements IBusinessObject {
 
 	@Override
 	public IBusinessObject clone() {
-		return (IBusinessObject) Serializer.Clone(this);
+		return (IBusinessObject) Serializer.clone(this);
 	}
 }

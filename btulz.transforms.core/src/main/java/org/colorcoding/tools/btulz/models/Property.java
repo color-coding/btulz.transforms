@@ -148,6 +148,6 @@ public class Property implements IProperty {
 
 	@Override
 	public IProperty clone() {
-		return (IProperty) Serializer.Clone(this);
+		return (IProperty) Serializer.clone(this);
 	}
 }

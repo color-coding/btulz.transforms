@@ -42,22 +42,22 @@ public class testCommands extends TestCase {
 			stringBuilder.append(string);
 			stringBuilder.append(" ");
 		}
-		String commond = stringBuilder.toString();// 命令
+		String command = stringBuilder.toString();// 命令
 
 		if (System.getProperty("os.name").startsWith("Windows")) {
 			// windows
 			charsetName = "GBK";
-			// commond = "ping -t 192.168.3.1";
-			// commond = "java -version";
-			// commond = String.format("java -jar
+			// command = "ping -t 192.168.3.1";
+			// command = "java -version";
+			// command = String.format("java -jar
 			// %sbtulz.transforms.core-0.1.0.jar code",
 			// new File(userFolder).getParent() + File.separator + "release" +
 			// File.separator);
 		} else if (System.getProperty("os.name").startsWith("Linux")) {
 			// linux
-			// commond = "ping 192.168.3.1";
-			// // commond = "java -version";
-			// commond = String.format("java -jar
+			// command = "ping 192.168.3.1";
+			// // command = "java -version";
+			// command = String.format("java -jar
 			// %sbtulz.transforms.core-0.1.0.jar code",
 			// new File(userFolder).getParent() + File.separator + "release" +
 			// File.separator);
@@ -69,8 +69,8 @@ public class testCommands extends TestCase {
 			if (!workFile.exists()) {
 				workFile.mkdirs();
 			}
-			System.out.println("run: " + commond);
-			process = Runtime.getRuntime().exec(commond, null, workFile);
+			System.out.println("run: " + command);
+			process = Runtime.getRuntime().exec(command, null, workFile);
 			// 开启线程1，正常输出
 			new Thread(new Runnable() {
 				public void run() {

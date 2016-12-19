@@ -15,19 +15,14 @@ import java.net.URL;
 public class Environment {
 
 	/**
-	 * 命名空间-模型
+	 * 命名空间-壳
 	 */
-	public static final String NAMESPACE_BTULZ_MODELS = "http://colorcoding.org/btulz/models";
+	public static final String NAMESPACE_BTULZ_SHELL = "http://colorcoding.org/btulz/shell";
 
 	/**
-	 * 命名空间-变形金刚
+	 * 命名空间-壳-命令
 	 */
-	public static final String NAMESPACE_BTULZ_TRANSFORMERS = "http://colorcoding.org/btulz/transformers";
-
-	/**
-	 * 命名空间-执行计划
-	 */
-	public static final String NAMESPACE_BTULZ_ORCHESTRATION = "http://colorcoding.org/btulz/orchestration";
+	public static final String NAMESPACE_BTULZ_SHELL_COMMANDS = NAMESPACE_BTULZ_SHELL + "/commands";
 
 	/**
 	 * 程序启动的目录（主要的配置文件目录）
