@@ -64,7 +64,7 @@ public class testCommonds extends TestCase {
 		} else
 			throw new Exception("unkwon os " + System.getProperty("os.name"));
 		System.out.println("run: " + commond);
-		process = Runtime.getRuntime().exec(commond);
+		process = Runtime.getRuntime().exec(commond, null, new File(workFolder + File.separator + "temp"));
 		// 开启线程1，正常输出
 		new Thread(new Runnable() {
 			public void run() {
