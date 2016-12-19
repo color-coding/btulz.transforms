@@ -14,7 +14,7 @@ public class testCommonds extends TestCase {
 	String charsetName = "utf-8";
 	Process process = null;
 
-	public void testCallCommond() throws Exception {
+	public void testCallCommand() throws Exception {
 		String userFolder = System.getProperty("user.dir");
 		String workFolder = Environment.getWorkingFolder();
 		String[] commands = new String[] { // 命令组
@@ -63,41 +63,53 @@ public class testCommonds extends TestCase {
 			// File.separator);
 		} else
 			throw new Exception("unkwon os " + System.getProperty("os.name"));
-		System.out.println("run: " + commond);
-		process = Runtime.getRuntime().exec(commond, null, new File(workFolder + File.separator + "temp"));
-		// 开启线程1，正常输出
-		new Thread(new Runnable() {
-			public void run() {
-				try {
-					InputStream inputStream = process.getInputStream();
-					BufferedReader read = new BufferedReader(new InputStreamReader(inputStream, charsetName));
-					String line = null;
-					while ((line = read.readLine()) != null) {
-						System.out.println(line);
-					}
-					inputStream.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+
+		try {
+			File workFile = new File(workFolder + File.separator + "temp");
+			if (!workFile.exists()) {
+				workFile.mkdirs();
 			}
-		}).start();
-		// 开启线程2，错误输出
-		new Thread(new Runnable() {
-			public void run() {
-				try {
-					InputStream inputStream = process.getErrorStream();
-					BufferedReader read = new BufferedReader(new InputStreamReader(inputStream, charsetName));
-					String line = null;
-					while ((line = read.readLine()) != null) {
-						System.err.println(line);
+			System.out.println("run: " + commond);
+			process = Runtime.getRuntime().exec(commond, null, workFile);
+			// 开启线程1，正常输出
+			new Thread(new Runnable() {
+				public void run() {
+					try {
+						InputStream inputStream = process.getInputStream();
+						BufferedReader read = new BufferedReader(new InputStreamReader(inputStream, charsetName));
+						String line = null;
+						while ((line = read.readLine()) != null) {
+							System.out.println(line);
+						}
+						inputStream.close();
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-					inputStream.close();
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
+			}).start();
+			// 开启线程2，错误输出
+			new Thread(new Runnable() {
+				public void run() {
+					try {
+						InputStream inputStream = process.getErrorStream();
+						BufferedReader read = new BufferedReader(new InputStreamReader(inputStream, charsetName));
+						String line = null;
+						while ((line = read.readLine()) != null) {
+							System.err.println(line);
+						}
+						inputStream.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}).start();
+			process.waitFor();
+			// Thread.sleep(100000);
+		} finally {
+			if (process != null) {
+				// 最终销毁
+				process.destroy();
 			}
-		}).start();
-		process.waitFor();
-		// Thread.sleep(100000);
+		}
 	}
 }
