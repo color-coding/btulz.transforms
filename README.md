@@ -18,6 +18,7 @@
 * java -jar btulz.transforms.core-0.1.0.jar sql -help    运行sql命令，详见帮助
 * java -jar btulz.transforms.core-0.1.0.jar dsJar -help    分析jar包处理其中数据结构和sql，详见帮助
 
+* code 调用此命令时，如果使用默认模板则需要加-Release参数，详见帮助。
 
 ### 鸣谢 | thanks
 [牛加人等于朱](http://baike.baidu.com/view/1769.htm "NiurenZhu")<br>
