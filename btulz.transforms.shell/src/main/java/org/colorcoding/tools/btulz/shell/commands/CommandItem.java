@@ -22,12 +22,13 @@ public class CommandItem {
 	public CommandItem() {
 		this.setOptional(false);
 		this.setSelected(false);
+		this.setEditable(true);
 	}
 
 	/**
 	 * 可选选择项目
 	 */
-	@XmlAttribute(name = "optional")
+	@XmlAttribute(name = "Optional")
 	private boolean optional;
 
 	public final boolean isOptional() {
@@ -52,6 +53,20 @@ public class CommandItem {
 
 	public final void setSelected(boolean selected) {
 		this.selected = selected;
+	}
+
+	/**
+	 * 可编辑
+	 */
+	@XmlAttribute(name = "Editable")
+	private boolean editable;
+
+	public final boolean isEditable() {
+		return editable;
+	}
+
+	public final void setEditable(boolean editable) {
+		this.editable = editable;
 	}
 
 	/**
