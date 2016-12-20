@@ -5,12 +5,22 @@ import javax.xml.bind.annotation.XmlAttribute;
 /**
  * 变量
  * 
-* @author Niuren.Zhu
+ * @author Niuren.Zhu
  *
  */
 public class Variable {
-
-	public static final String VARIABLE_NAME_VALUE = "${Value}";
+	/**
+	 * 变量名称-命令项目-值
+	 */
+	public static final String VARIABLE_NAME_VALUE = "${VALUE}";
+	/**
+	 * 变量名称-工作目录
+	 */
+	public static final String VARIABLE_NAME_WORK_FOLDER = "${WORK_FOLDER}";
+	/**
+	 * 变量名称-文件分隔符
+	 */
+	public static final String VARIABLE_NAME_FILE_SEPARATOR = "${FILE_SEPARATOR}";
 
 	public Variable() {
 
@@ -50,5 +60,10 @@ public class Variable {
 
 	public final void setValue(String value) {
 		this.value = value;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("{variable %s %s}", this.getName(), this.getValue());
 	}
 }

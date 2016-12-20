@@ -1,11 +1,17 @@
 package org.colorcoding.tools.btulz.shell.test;
 
+import java.util.List;
+
 import javax.xml.bind.JAXBException;
 
 import org.colorcoding.tools.btulz.shell.Serializer;
+import org.colorcoding.tools.btulz.shell.commands.Command;
 import org.colorcoding.tools.btulz.shell.commands.CommandBuilder;
 import org.colorcoding.tools.btulz.shell.commands.CommandItem;
+import org.colorcoding.tools.btulz.shell.commands.CommandListener;
 import org.colorcoding.tools.btulz.shell.commands.CommandManager;
+import org.colorcoding.tools.btulz.shell.commands.CommandMessageEvent;
+import org.colorcoding.tools.btulz.shell.commands.MessageType;
 import org.colorcoding.tools.btulz.shell.commands.ValidValue;
 import org.colorcoding.tools.btulz.shell.commands.ValidValues;
 
@@ -51,10 +57,29 @@ public class testCommandBuilder extends TestCase {
 
 	public void testPrefabricated() {
 		CommandManager manager = CommandManager.create();
-		for (CommandBuilder commandBuilder : manager.getCommands()) {
-			System.out.print(commandBuilder.toString());
-			System.out.print(" ");
+		List<CommandBuilder> commandBuilders = manager.getCommands();
+		for (CommandBuilder commandBuilder : commandBuilders) {
+			System.out.println(commandBuilder.toString());
 			System.out.println(commandBuilder.toCommand());
 		}
+		System.out.println();
+		System.out.println();
+		for (CommandBuilder commandBuilder : commandBuilders) {
+			Command command = new Command(commandBuilder);
+			command.addListener(new CommandListener() {
+				@Override
+				public void messaged(CommandMessageEvent messageEvent) {
+					if (messageEvent.getType() == MessageType.error) {
+						System.err.println(messageEvent.getMessage());
+					} else {
+						System.out.println(messageEvent.getMessage());
+					}
+				}
+			});
+			command.run();
+			System.out.println();
+		}
+
 	}
+
 }

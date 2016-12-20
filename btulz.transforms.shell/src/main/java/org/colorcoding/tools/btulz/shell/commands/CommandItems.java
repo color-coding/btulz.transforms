@@ -22,14 +22,24 @@ public class CommandItems extends ArrayList<CommandItem> {
 	private static final long serialVersionUID = -4475012404050446583L;
 
 	public String getValue(List<Variable> variables) {
-		List<Variable> tmpVariables = new ArrayList<>(variables);
+		if (variables == null)
+			variables = new ArrayList<>();
 		StringBuilder stringBuilder = new StringBuilder();
 		for (CommandItem item : this) {
+			List<Variable> tmpVariables = new ArrayList<>(variables);
 			String content = item.getContent();
 			String itemValue = item.getValue();
 			if (item.getItems().size() > 0) {
-				itemValue = item.getItems().getValue(variables);
+				itemValue = item.getItems().getValue(tmpVariables);
 			}
+			if (itemValue == null) {
+				itemValue = "";
+			}
+			// 替换value中变量
+			for (Variable variable : tmpVariables) {
+				itemValue = itemValue.replace(variable.getName(), variable.getValue());
+			}
+			// 替换content中变量
 			tmpVariables.add(new Variable(Variable.VARIABLE_NAME_VALUE, itemValue));
 			for (Variable variable : tmpVariables) {
 				content = content.replace(variable.getName(), variable.getValue());

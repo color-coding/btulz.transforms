@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.colorcoding.tools.btulz.shell.Environment;
+
 /**
  * 命令
  * 
@@ -67,7 +69,7 @@ public class Command {
 
 	public final String getWorkFolder() {
 		if (this.workFolder == null || this.workFolder.isEmpty()) {
-			this.workFolder = System.getProperty("user.dir");
+			this.workFolder = Environment.getWorkingFolder();
 		}
 		return workFolder;
 	}
@@ -110,7 +112,11 @@ public class Command {
 			if (this.process != null) {
 				throw new RuntimeException("Has been in running command.");
 			}
+			this.fireMessages(MessageType.common, String.format("[%s] is ready to run.",
+					this.getCommandBuilder() != null ? this.getCommandBuilder().getName() : "unknown"));
+			this.fireMessages(MessageType.common, String.format("command: %s", command));
 			File workFolder = new File(this.getWorkFolder());
+			this.fireMessages(MessageType.common, String.format("workfolder: %s", workFolder.getPath()));
 			this.process = Runtime.getRuntime().exec(command, null, workFolder);
 			Command that = this;
 			this.commonThread = new Thread(new Runnable() {
@@ -162,6 +168,8 @@ public class Command {
 				this.process.destroy();
 			}
 			this.process = null;
+			this.fireMessages(MessageType.common, String.format("[%s] is done.",
+					this.getCommandBuilder() != null ? this.getCommandBuilder().getName() : "unknown"));
 		}
 	}
 

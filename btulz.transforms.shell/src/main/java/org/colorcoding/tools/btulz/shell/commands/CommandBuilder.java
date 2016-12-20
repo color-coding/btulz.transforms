@@ -1,5 +1,6 @@
 package org.colorcoding.tools.btulz.shell.commands;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,14 +65,36 @@ public class CommandBuilder implements Comparable<CommandBuilder> {
 		this.items = items;
 	}
 
+	private String workFolder;
+
+	public final String getWorkFolder() {
+		if (this.workFolder == null) {
+			this.workFolder = Environment.getWorkingFolder();
+		}
+		if (!this.workFolder.endsWith(File.separator)) {
+			// 自动补路径符
+			this.workFolder = this.workFolder + File.separator;
+		}
+		return workFolder;
+	}
+
+	public final void setWorkFolder(String workFolder) {
+		this.workFolder = workFolder;
+	}
+
 	public String toString() {
 		return String.format("{command builder %s}", this.getName());
 	}
 
-	protected List<Variable> getVariables() {
-		List<Variable> variables = new ArrayList<>();
+	private List<Variable> variables;
 
-		return variables;
+	protected List<Variable> getVariables() {
+		if (this.variables == null) {
+			this.variables = new ArrayList<>();
+			this.variables.add(new Variable(Variable.VARIABLE_NAME_WORK_FOLDER, this.getWorkFolder()));
+			this.variables.add(new Variable(Variable.VARIABLE_NAME_FILE_SEPARATOR, File.separator));
+		}
+		return this.variables;
 	}
 
 	/**
@@ -88,19 +111,28 @@ public class CommandBuilder implements Comparable<CommandBuilder> {
 			if (!commandItem.isOptional() && !commandItem.isSelected()) {
 				throw new RuntimeException(String.format("%s must be selected.", commandItem.getName()));
 			}
+			List<Variable> tmpVariables = new ArrayList<>(this.getVariables());// 新建一个数组，避免变量间影响
 			if (stringBuilder.length() > 0) {
 				stringBuilder.append(" ");
 			}
 			if (commandItem.getContent() != null && !commandItem.getContent().isEmpty()) {
 				// 添加命令内容
-				List<Variable> variables = this.getVariables();
 				String itemValue = commandItem.getValue();
 				if (commandItem.getItems().size() > 0) {
-					itemValue = commandItem.getItems().getValue(variables);
+					itemValue = commandItem.getItems().getValue(tmpVariables);
 				}
-				variables.add(new Variable(Variable.VARIABLE_NAME_VALUE, itemValue));
+				if (itemValue == null) {
+					itemValue = "";
+				}
+				// 替换value中变量
+				for (Variable variable : tmpVariables) {
+					itemValue = itemValue.replace(variable.getName(), variable.getValue());
+				}
+				// 替换content中变量
+				tmpVariables.add(new Variable(Variable.VARIABLE_NAME_VALUE, itemValue));
+
 				String content = commandItem.getContent();
-				for (Variable variable : variables) {
+				for (Variable variable : tmpVariables) {
 					content = content.replace(variable.getName(), variable.getValue());
 				}
 				stringBuilder.append(content);

@@ -1,33 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:CommandBuilder Name="btulz.code" Description="生成代码"
-	xmlns:ns2="http://colorcoding.org/btulz/shell/commands">
-	<Item Name="main" Content="java" />
-	<Item Name="jar" Content="-jar ${WORK_FOLDER}btulz.transforms.core-0.1.0.jar"
-		Description="使用jar包" />
-	<Item Name="sub" Content="code" Description="子命令" />
-	<Item Content="-TemplateFolder=${Value}" Description="使用的模板">
-		<ValidValues>
-			<ValidValue Value="eclipse/ibas_classic" />
-		</ValidValues>
-	</Item>
-	<Item Content="-OutputFolder=${Value}" Description="输出目录" />
-	<Item Content="-GroupId=${Value}" Description="组标记" />
-	<Item Content="-ArtifactId=${Value}" Description="项目标记" />
-	<Item Content="-ProjectVersion=${Value}" Description="项目标记" />
-	<Item Content="-ProjectUrl=${Value}" Description="项目地址" />
-	<Item Content="-Domains=${Value}" Description="模型文件" />
-	<Item Content="-Release" Description="释放资源" />
-	<Item Content="-Parameters=[{${Value}}]" Description="其他参数">
-		<Items>
-			<Item
-				Content="{&quot;name&quot;:&quot;Company&quot;,&quot;value&quot;:&quot;${Value}&quot;}"
-				Description="公司标识" />
-			<Item
-				Content=",{&quot;name&quot;:&quot;ibasVersion&quot;,&quot;value&quot;:&quot;${Value}&quot;}"
-				Description="ibas版本" />
-			<Item
-				Content=",{&quot;name&quot;:&quot;jerseyVersion&quot;,&quot;value&quot;:&quot;${Value}&quot;}"
-				Description="jersey版本" />
-		</Items>
-	</Item>
+<ns2:CommandBuilder Name="btulz.code" Description="生成代码" xmlns:ns2="http://colorcoding.org/btulz/shell/commands">
+    <Item Content="java" />
+    <Item Content="-jar btulz.transforms.core-0.1.0.jar" Description="使用jar包" />
+    <Item Content="code" Description="子命令" />
+    <Item Content="-TemplateFolder=${VALUE}" Description="使用的模板">
+        <ValidValues>
+            <ValidValue Value="eclipse/ibas_classic" />
+        </ValidValues>
+    </Item>
+    <Item Content="-OutputFolder=${VALUE}" Description="输出目录" Value="${WORK_FOLDER}temp" />
+    <Item Content="-GroupId=${VALUE}" Description="组标记" Value="club.ibas" />
+    <Item Content="-ArtifactId=${VALUE}" Description="项目标记" Value="ibas" />
+    <Item Content="-ProjectVersion=${VALUE}" Description="项目标记" Value="0.0.1" />
+    <Item Content="-ProjectUrl=${VALUE}" Description="项目地址" Value="http://ibas.club/" />
+    <Item Content="-Domains=${VALUE}" Description="模型文件" Value="${WORK_FOLDER}domains" />
+    <Item Content="-Parameters=[${VALUE}]" Description="其他参数">
+        <Items>
+            <Item Content="{&quot;name&quot;:&quot;Company&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="公司标识" Value="CC" />
+            <Item Content=",{&quot;name&quot;:&quot;ibasVersion&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="ibas版本" Value="0.1.1" />
+            <Item Content=",{&quot;name&quot;:&quot;jerseyVersion&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="jersey版本" Value="2.22.1" />
+        </Items>
+    </Item>
+    <Item Content="-Release" Description="释放资源" />
 </ns2:CommandBuilder>
