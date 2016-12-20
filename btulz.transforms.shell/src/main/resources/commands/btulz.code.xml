@@ -4,9 +4,7 @@
     <Item Content="-jar btulz.transforms.core-0.1.0.jar" Description="使用jar包" Editable="false" />
     <Item Content="code" Description="子命令" Editable="false" />
     <Item Content="-TemplateFolder=${VALUE}" Description="使用的模板">
-        <ValidValues>
-            <ValidValue Value="eclipse/ibas_classic" />
-        </ValidValues>
+        <ValidValues ClassName="org.colorcoding.tools.btulz.shell.commands.CodeTemplateGetter"/>
     </Item>
     <Item Content="-OutputFolder=${VALUE}" Description="输出目录" Value="${WORK_FOLDER}temp" />
     <Item Content="-GroupId=${VALUE}" Description="组标记" Value="club.ibas" />

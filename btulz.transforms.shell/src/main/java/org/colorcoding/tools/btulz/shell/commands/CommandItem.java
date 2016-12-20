@@ -128,8 +128,7 @@ public class CommandItem {
 	/**
 	 * 可选值
 	 */
-	@XmlElementWrapper(name = "ValidValues")
-	@XmlElement(name = "ValidValue", type = ValidValue.class)
+	@XmlElement(name = "ValidValues")
 	private ValidValues validValues;
 
 	public final ValidValues getValidValues() {
