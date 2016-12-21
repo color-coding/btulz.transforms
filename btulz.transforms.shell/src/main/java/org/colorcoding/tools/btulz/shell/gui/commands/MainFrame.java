@@ -62,6 +62,7 @@ public class MainFrame extends JFrame {
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		gridBagConstraints.gridheight = GridBagConstraints.REMAINDER;
+
 		this.add(this.workingPane, gridBagConstraints);
 	}
 

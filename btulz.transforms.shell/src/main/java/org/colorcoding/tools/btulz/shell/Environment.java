@@ -80,6 +80,15 @@ public class Environment {
 	}
 
 	/**
+	 * 获取历史目录
+	 * 
+	 * @return
+	 */
+	public static String getHistoryFolder() {
+		return getWorkingFolder() + File.separator + "history";
+	}
+
+	/**
 	 * 获取资源地址
 	 * 
 	 * @param type

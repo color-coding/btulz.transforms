@@ -5,13 +5,17 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import org.colorcoding.tools.btulz.shell.Environment;
 import org.colorcoding.tools.btulz.shell.commands.Command;
 import org.colorcoding.tools.btulz.shell.commands.CommandBuilder;
 import org.colorcoding.tools.btulz.shell.commands.CommandItem;
@@ -43,6 +47,19 @@ public class CommandTab extends WorkingTab {
 		this.builder = builder;
 	}
 
+	private String historyFolder;
+
+	public final String getHistoryFolder() {
+		if (this.historyFolder == null) {
+			this.historyFolder = Environment.getHistoryFolder() + File.separator + "commands";
+		}
+		return historyFolder;
+	}
+
+	public final void setHistoryFolder(String historyFolder) {
+		this.historyFolder = historyFolder;
+	}
+
 	private int last_column_ipadx = 40;
 	private JButton button_stop = null;
 	private JButton button_run = null;
@@ -60,14 +77,16 @@ public class CommandTab extends WorkingTab {
 		int count = 0;
 		gridBagConstraints.gridy = count;// 组件的纵坐标
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
-		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+		gridBagConstraints.anchor = GridBagConstraints.CENTER;
 		gridBagConstraints.insets = new Insets(1, 1, 0, 0);
 		// 名称
 		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridwidth = 1;
+		gridBagConstraints.gridwidth = 3;
+		gridBagConstraints.ipadx = 0;
 		this.add(new JLabel(String.format("%s - %s", this.getBuilder().getName(), this.getBuilder().getDescription())),
 				gridBagConstraints);
-		gridBagConstraints.gridx = 2;
+		gridBagConstraints.gridx = 3;
+		gridBagConstraints.gridwidth = 1;
 		gridBagConstraints.ipadx = last_column_ipadx;
 		this.button_stop = new JButton("stop");
 		this.button_stop.setEnabled(false);
@@ -78,7 +97,7 @@ public class CommandTab extends WorkingTab {
 				if (that.command != null) {
 					that.command.destroy();
 				}
-				that.label_command.setText("");
+				// that.label_command.setText("");
 				that.button_run.setEnabled(true);
 			}
 		});
@@ -87,9 +106,15 @@ public class CommandTab extends WorkingTab {
 		// 内容
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridwidth = 1;
-		this.label_command = new JLabel();
-		this.add(this.label_command, gridBagConstraints);
-		gridBagConstraints.gridx = 2;
+		gridBagConstraints.ipadx = 0;
+		this.add(new JLabel("History"), gridBagConstraints);
+		gridBagConstraints.gridx = 1;
+		gridBagConstraints.gridwidth = 2;
+		gridBagConstraints.ipadx = 0;
+		JComboBox<ValidValue> comboBox = new JComboBox<>(this.getValueHistory());
+		this.add(comboBox, gridBagConstraints);
+		gridBagConstraints.gridx = 3;
+		gridBagConstraints.gridwidth = 1;
 		gridBagConstraints.ipadx = last_column_ipadx;
 		this.button_run = new JButton("run");
 		this.button_run.setEnabled(true);
@@ -109,6 +134,29 @@ public class CommandTab extends WorkingTab {
 		}
 	}
 
+	private ValidValue[] getValueHistory() {
+		ArrayList<ValidValue> values = new ArrayList<>();
+		File folder = new File(this.getHistoryFolder());
+		if (folder.exists()) {
+			for (File file : folder.listFiles()) {
+				if (!file.isFile()) {
+					continue;
+				}
+				if (file.length() == 0) {
+					continue;
+				}
+				if (!file.getName().endsWith(".xml")) {
+					continue;
+				}
+				if (!file.getName().startsWith(this.getBuilder().getName())) {
+					continue;
+				}
+				values.add(new ValidValue(file.getName(), file.getName()));
+			}
+		}
+		return values.toArray(new ValidValue[] {});
+	}
+
 	private void addCommandItemLine(CommandItem commandItem, GridBagConstraints gridBagConstraints) {
 		// 添加命令内容
 		JTextField textField = new JTextField();
@@ -116,11 +164,15 @@ public class CommandTab extends WorkingTab {
 		textField.setEditable(false);
 		textField.setToolTipText(commandItem.getDescription());
 		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridwidth = 1;
+		gridBagConstraints.ipadx = 0;
 		this.add(textField, gridBagConstraints);
 		// 添加命令值
 		JTextField textValue = null;
 		commandItem.getValidValues().get();
 		gridBagConstraints.gridx = 1;
+		gridBagConstraints.gridwidth = 1;
+		gridBagConstraints.ipadx = 0;
 		if (commandItem.getValidValues().size() > 0) {
 			JComboBox<?> comboBox = new JComboBox<ValidValue>(commandItem.getValidValues().toArray());
 			comboBox.setEditable(false);
@@ -135,8 +187,20 @@ public class CommandTab extends WorkingTab {
 			}
 			this.add(textValue, gridBagConstraints);
 		}
-		// 添加额外内容
+		// 添加选择
 		gridBagConstraints.gridx = 2;
+		gridBagConstraints.gridwidth = 1;
+		// gridBagConstraints.ipadx = 10;
+		JCheckBox checkBox = new JCheckBox();
+		checkBox.setToolTipText("selected and run it");
+		checkBox.setSelected(true);
+		if (!commandItem.isOptional()) {
+			checkBox.setEnabled(false);
+		}
+		this.add(checkBox, gridBagConstraints);
+		// 添加额外内容
+		gridBagConstraints.gridx = 3;
+		gridBagConstraints.gridwidth = 1;
 		gridBagConstraints.ipadx = last_column_ipadx;
 		JButton button = new JButton("...");
 		if (commandItem.getValidValues().getClassName() != null
