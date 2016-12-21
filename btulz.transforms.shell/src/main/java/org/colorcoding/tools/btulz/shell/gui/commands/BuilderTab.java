@@ -23,6 +23,7 @@ public class BuilderTab extends JPanel {
 
 	protected void init() {
 		this.setLayout(new GridBagLayout());
+		this.setAutoscrolls(true);
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		int count = 0;
 		gridBagConstraints.gridy = count;// 组件的纵坐标

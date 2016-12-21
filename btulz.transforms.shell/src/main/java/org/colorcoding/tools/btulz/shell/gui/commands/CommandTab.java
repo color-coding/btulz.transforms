@@ -1,5 +1,6 @@
 package org.colorcoding.tools.btulz.shell.gui.commands;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -168,18 +169,24 @@ public class CommandTab extends WorkingTab {
 		gridBagConstraints.ipadx = 0;
 		this.add(textField, gridBagConstraints);
 		// 添加命令值
+		int anchor = gridBagConstraints.anchor;
+		gridBagConstraints.anchor = GridBagConstraints.EAST;
 		JTextField textValue = null;
 		commandItem.getValidValues().get();
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridwidth = 1;
 		gridBagConstraints.ipadx = 0;
 		if (commandItem.getValidValues().size() > 0) {
+			// 设置了有效值相关
 			JComboBox<?> comboBox = new JComboBox<ValidValue>(commandItem.getValidValues().toArray());
 			comboBox.setEditable(false);
-			comboBox.setSelectedIndex(0);
+			if (comboBox.getItemCount() > 0) {
+				comboBox.setSelectedIndex(0);
+			}
 			this.add(comboBox, gridBagConstraints);
 		} else {
 			textValue = new JTextField(commandItem.getValue());
+			textValue.setName(String.format("txt_value_%s", commandItem.hashCode()));
 			textValue.setEditable(commandItem.isEditable());
 			if (commandItem.getItems().size() > 0) {
 				// 存在子命令
@@ -198,11 +205,13 @@ public class CommandTab extends WorkingTab {
 			checkBox.setEnabled(false);
 		}
 		this.add(checkBox, gridBagConstraints);
+		gridBagConstraints.anchor = anchor;
 		// 添加额外内容
 		gridBagConstraints.gridx = 3;
 		gridBagConstraints.gridwidth = 1;
 		gridBagConstraints.ipadx = last_column_ipadx;
 		JButton button = new JButton("...");
+		button.setName(String.format("btn_value_%s", commandItem.hashCode()));
 		if (commandItem.getValidValues().getClassName() != null
 				&& commandItem.getValidValues().getClassName().equals(JFileChooser.class.getName())) {
 			button.addActionListener(new ActionListener() {
@@ -212,7 +221,19 @@ public class CommandTab extends WorkingTab {
 					jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 					jfc.showDialog(new JLabel(), "Selected");
 					if (button != null && jfc.getSelectedFile() != null) {
-						button.setText(jfc.getSelectedFile().getPath());
+						for (Component component : that.getComponents()) {
+							if (component.getName() == null) {
+								continue;
+							}
+							if (!component.getName().equals(button.getName().replace("btn_value_", "txt_value_"))) {
+								continue;
+							}
+							if (!(component instanceof JTextField)) {
+								continue;
+							}
+							JTextField textField = (JTextField) component;
+							textField.setText(jfc.getSelectedFile().getPath());
+						}
 					}
 				}
 			});

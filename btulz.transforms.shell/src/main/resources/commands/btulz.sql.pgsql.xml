@@ -10,5 +10,7 @@
     <Item Content="-DbName=${VALUE}" Description="数据库名称" Value="ibas_demo" />
     <Item Content="-DbUser=${VALUE}" Description="用户" Value="postgres" />
     <Item Content="-DbPassword=${VALUE}" Description="密码" Value="1q2w3e" />
-    <Item Content="-SqlFile=${VALUE}" Description="执行的文件" Value="${WORK_FOLDER}initialization" />
+    <Item Content="-SqlFile=${VALUE}" Description="执行的文件" Value="${WORK_FOLDER}initialization" >
+        <ValidValues ClassName="javax.swing.JFileChooser" />
+    </Item>
 </ns2:CommandBuilder>

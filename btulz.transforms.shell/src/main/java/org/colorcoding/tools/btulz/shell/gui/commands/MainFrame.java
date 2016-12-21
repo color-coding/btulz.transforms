@@ -32,19 +32,21 @@ public class MainFrame extends JFrame {
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.insets = new Insets(1, 1, 1, 1);
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
-		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
 		// 添加菜单
 		this.initMenus();
 		// 添加控件-构建区域
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 0;
-		gridBagConstraints.ipady = 15;
+		// gridBagConstraints.ipady = 15;
+		// gridBagConstraints.ipadx = 30;
+		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		this.add(new JLabel("Commands"), gridBagConstraints);
 		BuilderTab builderPane = new BuilderTab();
 		builderPane.setName("pane_builder");
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 1;
-		gridBagConstraints.ipady = 120;
+		// gridBagConstraints.ipady = -1;
+		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
 		this.add(builderPane, gridBagConstraints);
 		builderPane.addBuilderTabListener(new BuilderTabListener() {
 			@Override
@@ -55,14 +57,15 @@ public class MainFrame extends JFrame {
 		// 添加控件-工作区域
 		this.workingPane = new JTabbedPane();
 		this.workingPane.setName("pane_working");
-		WorkingTab tab = new AboutTab();
-		this.workingPane.addTab(tab.getTitle(), tab);
-		gridBagConstraints.ipadx = 600;
+		this.workingPane.setAutoscrolls(true);
+		// WorkingTab tab = new AboutTab();
+		// this.workingPane.addTab(tab.getTitle(), tab);
+		gridBagConstraints.ipadx = 500;
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		gridBagConstraints.gridheight = GridBagConstraints.REMAINDER;
-
+		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
 		this.add(this.workingPane, gridBagConstraints);
 	}
 
@@ -99,6 +102,8 @@ public class MainFrame extends JFrame {
 		}
 		this.workingPane.addTab(tab.getTitle(), tab);
 		this.workingPane.setSelectedComponent(tab);
+		this.pack();
+		this.setLocationRelativeTo(null);// 移到中间
 	}
 
 }
