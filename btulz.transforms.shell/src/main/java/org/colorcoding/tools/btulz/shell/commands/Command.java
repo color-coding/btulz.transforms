@@ -174,6 +174,17 @@ public class Command {
 	}
 
 	/**
+	 * 终止命令
+	 */
+	public void destroy() {
+		if (this.process != null) {
+			this.process.destroy();
+		}
+		this.fireMessages(MessageType.common, String.format("[%s] was stop.",
+				this.getCommandBuilder() != null ? this.getCommandBuilder().getName() : "unknown"));
+	}
+
+	/**
 	 * 触发消息
 	 * 
 	 * @param type

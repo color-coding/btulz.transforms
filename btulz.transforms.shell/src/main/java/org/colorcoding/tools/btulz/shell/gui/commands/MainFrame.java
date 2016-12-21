@@ -7,21 +7,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import org.colorcoding.tools.btulz.shell.commands.CommandBuilder;
-import org.colorcoding.tools.btulz.shell.commands.CommandManager;
 
 public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = -8387552310875230969L;
 
 	public MainFrame() {
-		super("btulz.transforms");
+		super("btulz.transforms.shell");
 	}
 
 	MainFrame that = this;
@@ -29,54 +28,41 @@ public class MainFrame extends JFrame {
 	public void initialize() {
 		// 设置窗体
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setBounds(0, 0, 960, 600);
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.insets = new Insets(1, 1, 1, 1);
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
+		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
 		// 添加菜单
 		this.initMenus();
 		// 添加控件-构建区域
-		JPanel builderPane = new JPanel();
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 0;
+		gridBagConstraints.ipady = 15;
+		this.add(new JLabel("Commands"), gridBagConstraints);
+		BuilderTab builderPane = new BuilderTab();
 		builderPane.setName("pane_builder");
-		for (CommandBuilder commandBuilder : CommandManager.create().getCommands()) {
-			BuilderTab builderTab = new BuilderTab(commandBuilder);
-			builderTab.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					that.onBuilderTabClick((BuilderTab) e.getSource());
-				}
-			});
-			builderPane.add(builderTab);
-		}
-		gridBagConstraints.gridx = 0;// 组件的横坐标
-		gridBagConstraints.gridy = 0;// 组件的纵坐标
-		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;// 组件所占列数，也是组件的宽度
-		gridBagConstraints.gridheight = 0;// 组件所占行数，也是组件的高度
-		gridBagConstraints.weightx = 1;// 行的权重，通过这个属性来决定如何分配列的剩余空间
-		gridBagConstraints.weighty = 0;// 列的权重，通过这个属性来决定如何分配列的剩余空间
-		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-		gridBagConstraints.fill = GridBagConstraints.NONE;
-		gridBagConstraints.insets = new Insets(0, 0, 0, 0);
-		gridBagConstraints.ipadx = 3;// 组件间的横向间距
-		gridBagConstraints.ipady = 2;// 组件间的纵向间距
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 1;
+		gridBagConstraints.ipady = 120;
 		this.add(builderPane, gridBagConstraints);
-		builderPane.setVisible(true);
+		builderPane.addBuilderTabListener(new BuilderTabListener() {
+			@Override
+			public void builderSelected(CommandBuilder builder) {
+				that.showWorkingTab(new CommandTab(builder));
+			}
+		});
 		// 添加控件-工作区域
 		this.workingPane = new JTabbedPane();
 		this.workingPane.setName("pane_working");
+		WorkingTab tab = new AboutTab();
+		this.workingPane.addTab(tab.getTitle(), tab);
+		gridBagConstraints.ipadx = 600;
 		gridBagConstraints.gridx = 1;
-		gridBagConstraints.gridy = 1;
-		gridBagConstraints.gridwidth = 0;
-		gridBagConstraints.gridheight = 0;
-		gridBagConstraints.weightx = 0;
-		gridBagConstraints.weighty = 0;
-		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-		gridBagConstraints.fill = GridBagConstraints.BOTH;
-		gridBagConstraints.insets = new Insets(0, 0, 0, 0);
-		gridBagConstraints.ipadx = 0;
-		gridBagConstraints.ipady = 0;
-		this.workingPane.addTab("about", new AboutTab());
+		gridBagConstraints.gridy = 0;
+		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		gridBagConstraints.gridheight = GridBagConstraints.REMAINDER;
 		this.add(this.workingPane, gridBagConstraints);
-		this.workingPane.setVisible(true);
 	}
 
 	protected void initMenus() {
@@ -99,6 +85,7 @@ public class MainFrame extends JFrame {
 
 	public void display() {
 		this.initialize();
+		this.pack();
 		this.setLocationRelativeTo(null);// 移到中间
 		this.setVisible(true);
 	}
@@ -109,14 +96,8 @@ public class MainFrame extends JFrame {
 		if (this.workingPane == null) {
 			return;
 		}
-		this.workingPane.add(tab.getName(), tab);
-		// this.workingPane.setSelectedIndex(this.workingPane.getTabCount() -
-		// 1);
+		this.workingPane.addTab(tab.getTitle(), tab);
+		this.workingPane.setSelectedComponent(tab);
 	}
 
-	public void onBuilderTabClick(BuilderTab tab) {
-		CommandBuilder commandBuilder = tab.getBuilder();
-		WorkingTab workingTab = new CommandTab(commandBuilder);
-		this.showWorkingTab(workingTab);
-	}
 }
