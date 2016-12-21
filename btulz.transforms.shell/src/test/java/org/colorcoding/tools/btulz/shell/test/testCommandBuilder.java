@@ -29,60 +29,58 @@ public class testCommandBuilder extends TestCase {
 		CommandBuilder commandBuilder = new CommandBuilder();
 		commandBuilder.setName("test");
 		commandBuilder.setDescription("测试");
-		CommandItem[] commandItems = new CommandItem[99];
+		CommandItem commandItem;
 		int index = 0;
-		commandItems[index] = new CommandItem();
-		commandItems[index].setName(String.valueOf(index));
-		commandItems[index].setContent("java");
+		commandItem = commandBuilder.getItems().create();
+		commandItem.setName(String.valueOf(index));
+		commandItem.setContent("java");
 		index++;
-		commandItems[index] = new CommandItem();
-		commandItems[index].setName(String.valueOf(index));
-		commandItems[index].setDescription("测试布尔可选值");
-		commandItems[index].setContent("");
-		commandItems[index].getValidValues().setClassName(Boolean.class.getName());
-		commandItems[index].getValidValues().get();
+		commandItem = commandBuilder.getItems().create();
+		commandItem.setName(String.valueOf(index));
+		commandItem.setDescription("测试布尔可选值");
+		commandItem.setContent("");
+		commandItem.getValidValues().setClassName(Boolean.class.getName());
+		commandItem.getValidValues().get();
 		index++;
-		commandItems[index] = new CommandItem();
-		commandItems[index].setName(String.valueOf(index));
-		commandItems[index].setDescription("测试枚举可选值");
-		commandItems[index].setContent("");
-		commandItems[index].getValidValues().setClassName(emYesNo.class.getName());
-		commandItems[index].getValidValues().get();
+		commandItem = commandBuilder.getItems().create();
+		commandItem.setName(String.valueOf(index));
+		commandItem.setDescription("测试枚举可选值");
+		commandItem.setContent("");
+		commandItem.getValidValues().setClassName(emYesNo.class.getName());
+		commandItem.getValidValues().get();
 		index++;
-		commandItems[index] = new CommandItem();
-		commandItems[index].setName(String.valueOf(index));
-		commandItems[index].setDescription("测试自定义可选值");
-		commandItems[index].setContent("");
-		commandItems[index].getValidValues().add(new ValidValue("1", "first"));
-		commandItems[index].getValidValues().add(new ValidValue("2", "tow"));
-		commandItems[index].getValidValues().get();
+		commandItem = commandBuilder.getItems().create();
+		commandItem.setName(String.valueOf(index));
+		commandItem.setDescription("测试自定义可选值");
+		commandItem.setContent("");
+		commandItem.getValidValues().add(new ValidValue("1", "first"));
+		commandItem.getValidValues().add(new ValidValue("2", "tow"));
+		commandItem.getValidValues().get();
 		index++;
-		commandItems[index] = new CommandItem();
-		commandItems[index].setName(String.valueOf(index));
-		commandItems[index].setDescription("测试代码模板可选值");
-		commandItems[index].setContent("");
-		commandItems[index].getValidValues().setClassName(CodeTemplateGetter.class.getName());
-		commandItems[index].getValidValues().get();
+		commandItem = commandBuilder.getItems().create();
+		commandItem.setName(String.valueOf(index));
+		commandItem.setDescription("测试代码模板可选值");
+		commandItem.setContent("");
+		commandItem.getValidValues().setClassName(CodeTemplateGetter.class.getName());
+		commandItem.getValidValues().get();
 		index++;
-		commandItems[index] = new CommandItem();
-		commandItems[index].setName(String.valueOf(index));
-		commandItems[index].setDescription("测试数据结构模板可选值");
-		commandItems[index].setContent("");
-		commandItems[index].getValidValues().setClassName(DSTemplateGetter.class.getName());
-		commandItems[index].getValidValues().get();
+		commandItem = commandBuilder.getItems().create();
+		commandItem.setName(String.valueOf(index));
+		commandItem.setDescription("测试数据结构模板可选值");
+		commandItem.setContent("");
+		commandItem.getValidValues().setClassName(DSTemplateGetter.class.getName());
+		commandItem.getValidValues().get();
 		index++;
 
-		commandBuilder.setItems(commandItems);
-
-		for (CommandItem commandItem : commandItems) {
-			if (commandItem == null) {
+		for (CommandItem item : commandBuilder.getItems()) {
+			if (item == null) {
 				continue;
 			}
-			System.out.print(commandItem.getName());
+			System.out.print(item.getName());
 			System.out.print(" ");
-			System.out.print(commandItem.getValidValues().getClassName());
+			System.out.print(item.getValidValues().getClassName());
 			System.out.println();
-			for (ValidValue validValue : commandItem.getValidValues()) {
+			for (ValidValue validValue : item.getValidValues()) {
 				System.out.println(validValue);
 			}
 		}
@@ -108,7 +106,7 @@ public class testCommandBuilder extends TestCase {
 		System.out.println(xml);
 	}
 
-	public void testPrefabricated() {
+	public void testCommandManager() {
 		CommandManager manager = CommandManager.create();
 		List<CommandBuilder> commandBuilders = manager.getCommands();
 		for (CommandBuilder commandBuilder : commandBuilders) {

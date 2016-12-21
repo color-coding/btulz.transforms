@@ -49,4 +49,21 @@ public class CommandItems extends ArrayList<CommandItem> {
 		return stringBuilder.toString();
 	}
 
+	public CommandItem create() {
+		CommandItem item = new CommandItem();
+		this.add(item);
+		return item;
+	}
+
+	public int getCount() {
+		return this.getCount(this);
+	}
+
+	private int getCount(CommandItems items) {
+		int i = this.size();
+		for (CommandItem commandItem : items) {
+			i += this.getCount(commandItem.getItems());
+		}
+		return i;
+	}
 }

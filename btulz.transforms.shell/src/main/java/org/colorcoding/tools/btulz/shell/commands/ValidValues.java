@@ -139,4 +139,8 @@ public class ValidValues implements Iterable<ValidValue> {
 	public Iterator<ValidValue> iterator() {
 		return this.getValues().listIterator();
 	}
+
+	public ValidValue[] toArray() {
+		return this.getValues().toArray(new ValidValue[] {});
+	}
 }

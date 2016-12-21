@@ -56,6 +56,13 @@ public class CommandManager {
 		return commandBuilders;
 	}
 
+	public CommandBuilder getCommands(String name) {
+		if (this.getCommandMaps().containsKey(name)) {
+			return this.getCommandMaps().get(name);
+		}
+		return null;
+	}
+
 	public void addCommands(CommandBuilder command) {
 		this.getCommandMaps().put(command.getName(), command);
 	}

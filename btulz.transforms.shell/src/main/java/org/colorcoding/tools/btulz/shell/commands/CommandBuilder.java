@@ -52,17 +52,13 @@ public class CommandBuilder implements Comparable<CommandBuilder> {
 	}
 
 	@XmlElement(name = "Item")
-	private CommandItem[] items;
+	private CommandItems items;
 
-	public final CommandItem[] getItems() {
+	public final CommandItems getItems() {
 		if (this.items == null) {
-			this.items = new CommandItem[] {};
+			this.items = new CommandItems();
 		}
 		return items;
-	}
-
-	public final void setItems(CommandItem[] items) {
-		this.items = items;
 	}
 
 	private String workFolder;
@@ -145,4 +141,5 @@ public class CommandBuilder implements Comparable<CommandBuilder> {
 	public int compareTo(CommandBuilder o) {
 		return this.getName().compareTo(o.getName());
 	}
+
 }
