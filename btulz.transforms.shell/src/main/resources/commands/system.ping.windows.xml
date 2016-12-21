@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:CommandBuilder Name="system.ping.windows" Description="ping" xmlns:ns2="http://colorcoding.org/btulz/shell/commands">
+<ns2:CommandBuilder Description="ping" xmlns:ns2="http://colorcoding.org/btulz/shell/commands">
     <Item Name="main" Content="ping" Editable="false" />
     <Item Name="-t" Content="-t" Description="持续" Editable="false" />
     <Item Name="ip" Content="${VALUE}" Description="远程地址" Value="colorcoding.org" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:CommandBuilder Name="btulz.ds.mssql" Description="创建数据结构-MSSQL" xmlns:ns2="http://colorcoding.org/btulz/shell/commands">
+<ns2:CommandBuilder Description="创建数据结构-MSSQL" xmlns:ns2="http://colorcoding.org/btulz/shell/commands">
     <Item Content="java" Editable="false" />
     <Item Content="-jar btulz.transforms.core-0.1.0.jar" Description="使用jar包" Editable="false" />
     <Item Content="ds" Description="子命令" Editable="false" />

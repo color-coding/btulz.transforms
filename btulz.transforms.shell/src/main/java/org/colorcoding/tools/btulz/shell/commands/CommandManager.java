@@ -60,18 +60,26 @@ public class CommandManager {
 		this.getCommandMaps().put(command.getName(), command);
 	}
 
-	public void addCommands(InputStream inputStream) {
+	public void addCommands(InputStream inputStream, String name) {
 		if (inputStream == null) {
 			return;
 		}
 		try {
 			Object object = Serializer.fromXmlString(inputStream, CommandBuilder.class);
 			if (object instanceof CommandBuilder) {
-				this.addCommands((CommandBuilder) object);
+				CommandBuilder commandBuilder = (CommandBuilder) object;
+				if (name != null && !name.isEmpty()) {
+					commandBuilder.setName(name);
+				}
+				this.addCommands(commandBuilder);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void addCommands(InputStream inputStream) {
+		this.addCommands(inputStream, null);
 	}
 
 	public void initialize() {
@@ -126,7 +134,7 @@ public class CommandManager {
 				}
 				InputStream inputStream = jarFile.getInputStream(jarEntry);
 				if (inputStream != null) {
-					this.addCommands(inputStream);
+					this.addCommands(inputStream, this.getCommandName(jarEntry.getName()));
 					inputStream.close();
 				}
 			}
@@ -140,7 +148,7 @@ public class CommandManager {
 		if (file.exists()) {
 			if (file.isFile()) {
 				try {
-					this.addCommands(new FileInputStream(file));
+					this.addCommands(new FileInputStream(file), this.getCommandName(file.getName()));
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
@@ -153,5 +161,12 @@ public class CommandManager {
 				}
 			}
 		}
+	}
+
+	private String getCommandName(String name) {
+		if (name == null || name.isEmpty()) {
+			return null;
+		}
+		return name.substring(0, name.lastIndexOf("."));
 	}
 }
