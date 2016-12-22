@@ -20,7 +20,7 @@
 * java -jar btulz.transforms.shell-0.1.0.jar               使用命令执行UI
 
 * code 调用此命令时，如果使用默认模板则需要加-Release参数，详见帮助。
-
+* btulz.shell.sh/bat 快速启动脚本UI脚本。
 ### 鸣谢 | thanks
 [牛加人等于朱](http://baike.baidu.com/view/1769.htm "NiurenZhu")<br>
 [老彭](http://baike.baidu.com/view/1828.htm "three-stones")<br>

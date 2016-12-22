@@ -91,9 +91,11 @@ echo 压缩编译文件为tar包
 if [ -e ${WORK_FOLDER}/release ]
 then
   cd ${WORK_FOLDER}/release/
-  for file in `ls -l btulz.transforms.shell-*.jar'` 
+  for file in `ls -l btulz.transforms.shell-*.jar` 
   do
-    echo java -jar ${file} >btulz.shell.sh
+    echo '#!/bin/bash' >btulz.shell.sh
+    echo 'WORK_FOLDER=`dirname "$0"`' >>btulz.shell.sh
+    echo 'java -jar "${WORK_FOLDER}/'${file}\" >>btulz.shell.sh
   done
   tar -cvf btulz.transforms.tar *
   cd ..
