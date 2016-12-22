@@ -107,6 +107,9 @@ public class CommandBuilder implements Comparable<CommandBuilder> {
 			if (!commandItem.isOptional() && !commandItem.isSelected()) {
 				throw new RuntimeException(String.format("%s must be selected.", commandItem.getName()));
 			}
+			if (!commandItem.isSelected()) {
+				continue;
+			}
 			List<Variable> tmpVariables = new ArrayList<>(this.getVariables());// 新建一个数组，避免变量间影响
 			if (stringBuilder.length() > 0) {
 				stringBuilder.append(" ");

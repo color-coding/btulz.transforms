@@ -2,6 +2,8 @@ package org.colorcoding.tools.btulz.shell.commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -65,5 +67,31 @@ public class CommandItems extends ArrayList<CommandItem> {
 			i += this.getCount(commandItem.getItems());
 		}
 		return i;
+	}
+
+	public CommandItem firstOrDefault(Predicate<CommandItem> filter) {
+		Objects.requireNonNull(filter);
+		for (int i = 0; i < this.size(); i++) {
+			CommandItem item = this.get(i);
+			if (item == null)
+				continue;
+			if (filter.test(item))
+				return item;
+		}
+		return null;
+	}
+
+	public CommandItem firstOrDefault(Predicate<CommandItem> filter, boolean recursion) {
+		CommandItem item = this.firstOrDefault(filter);
+		if (item == null && recursion) {
+			for (int i = 0; i < this.size(); i++) {
+				item = this.get(i);
+				item = item.getItems().firstOrDefault(filter, recursion);
+				if (item != null) {
+					break;
+				}
+			}
+		}
+		return item;
 	}
 }

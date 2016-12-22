@@ -131,7 +131,10 @@ public class CommandEditor extends JPanel {
 		gridBagConstraints.gridwidth = 3;
 		String xml = null;
 		try {
+			name = this.getBuilder().getName();
+			this.getBuilder().setName(null);// 除去名称
 			xml = Serializer.toXmlString(this.getBuilder(), true);
+			this.getBuilder().setName(name);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

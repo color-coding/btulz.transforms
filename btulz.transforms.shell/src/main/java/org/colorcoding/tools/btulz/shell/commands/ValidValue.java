@@ -64,6 +64,6 @@ public class ValidValue {
 
 	@Override
 	public String toString() {
-		return String.format("{valid value %s %s}", this.getValue(), this.getDescription());
+		return String.format("{valid value %s}", this.getValue());
 	}
 }

@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.io.Writer;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -83,7 +84,14 @@ public class Serializer {
 	 * @throws JAXBException
 	 */
 	public static String toXmlString(Object object, boolean formated, Class<?>... types) throws JAXBException {
+		StringWriter writer = new StringWriter();
+		toXmlString(object, formated, writer, types);
+		return writer.toString();
 
+	}
+
+	public static void toXmlString(Object object, boolean formated, Writer writer, Class<?>... types)
+			throws JAXBException {
 		Class<?>[] knownTypes = new Class[types.length + 1];
 		knownTypes[0] = object.getClass();
 		for (int i = 0; i < types.length; i++) {
@@ -94,10 +102,7 @@ public class Serializer {
 		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");// 编码格式
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, formated);// 是否格式化生成的xml串
 		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, false);// 是否省略xm头声明信息
-		StringWriter writer = new StringWriter();
 		marshaller.marshal(object, writer);
-		return writer.toString();
-
 	}
 
 	/**
