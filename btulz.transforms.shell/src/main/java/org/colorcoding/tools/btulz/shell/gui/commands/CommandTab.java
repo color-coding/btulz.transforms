@@ -171,6 +171,14 @@ public class CommandTab extends WorkingTab {
 		gridBagConstraints.gridwidth = 2;
 		gridBagConstraints.ipadx = 0;
 		JComboBox<?> comboBox = new JComboBox<ComboxItem>(this.getCommandsHistory());
+		comboBox.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					// 选择新的项
+				}
+			}
+		});
 		panel.add(comboBox, gridBagConstraints);
 		gridBagConstraints.gridy++;
 		// 内容项目
@@ -178,6 +186,11 @@ public class CommandTab extends WorkingTab {
 			this.addCommandItemLine(commandItem, panel, gridBagConstraints);
 		}
 	}
+
+	private static final String control_name_button = "btn_value_";
+	private static final String control_name_combox = "cmb_value_";
+	private static final String control_name_text = "txt_value_";
+	private static final String control_name_checkbox = "chk_value_";
 
 	private void addCommandItemLine(CommandItem commandItem, JPanel panel, GridBagConstraints gridBagConstraints) {
 		// 添加命令内容
@@ -198,64 +211,77 @@ public class CommandTab extends WorkingTab {
 		gridBagConstraints.ipadx = 0;
 		if (commandItem.getValidValues().size() > 0) {
 			// 设置了有效值相关
-			ComboxItem[] values = new ComboxItem[commandItem.getValidValues().size()];
-			for (int i = 0; i < values.length; i++) {
-				values[i] = new ComboxItem(commandItem.getValidValues().get(i).getValue(),
+			ComboxItem[] values = new ComboxItem[commandItem.getValidValues().size() + 1];
+			values[0] = ComboxItem.PLEASE_SELECT;
+			for (int i = 0; i < values.length - 1; i++) {
+				values[i + 1] = new ComboxItem(commandItem.getValidValues().get(i).getValue(),
 						commandItem.getValidValues().get(i).getDescription());
 			}
 			JComboBox<?> comboBox = new JComboBox<ComboxItem>(values);
-			comboBox.setName(String.format("cmb_value_%s", commandItem.hashCode()));
+			comboBox.setName(control_name_combox + commandItem.hashCode());
 			comboBox.setEditable(false);
 			comboBox.addItemListener(new ItemListener() {
+				private CommandItem commandItem = null;
+
+				public CommandItem getCommandItem() {
+					if (commandItem == null) {
+						int hashCode = Integer.valueOf(comboBox.getName().replace(control_name_combox, ""));
+						this.commandItem = that.getBuilder().getItems().firstOrDefault(c -> hashCode == c.hashCode(),
+								true);
+					}
+					return this.commandItem;
+				}
+
 				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						int hashCode = Integer.valueOf(comboBox.getName().replace("cmb_value_", ""));
-						CommandItem commandItem = that.getBuilder().getItems()
-								.firstOrDefault(c -> hashCode == c.hashCode(), true);
-						if (commandItem != null) {
+						if (this.getCommandItem() != null) {
 							ComboxItem value = (ComboxItem) comboBox.getSelectedItem();
-							commandItem.setValue(value.value);
+							this.getCommandItem().setValue(value.value);
 						}
 					}
 				}
 			});
-			if (comboBox.getItemCount() > 0) {
-				comboBox.setSelectedIndex(0);
-			}
 			panel.add(comboBox, gridBagConstraints);
 		} else {
 			JTextField textValue = new JTextField(commandItem.getValue());
-			textValue.setName(String.format("txt_value_%s", commandItem.hashCode()));
+			textValue.setName(control_name_text + commandItem.hashCode());
 			textValue.setEditable(commandItem.isEditable());
 			if (commandItem.getItems().size() > 0) {
 				// 存在子命令
 				textValue.setEditable(false);
 			}
 			textValue.getDocument().addDocumentListener(new DocumentListener() {
+				private CommandItem commandItem = null;
+
+				public CommandItem getCommandItem() {
+					if (commandItem == null) {
+						int hashCode = Integer.valueOf(textValue.getName().replace(control_name_text, ""));
+						this.commandItem = that.getBuilder().getItems().firstOrDefault(c -> hashCode == c.hashCode(),
+								true);
+					}
+					return this.commandItem;
+				}
+
 				@Override
 				public void removeUpdate(DocumentEvent e) {
+					if (this.getCommandItem() != null) {
+						this.getCommandItem().setValue(textValue.getText());
+					}
 				}
 
 				@Override
 				public void insertUpdate(DocumentEvent e) {
+					if (this.getCommandItem() != null) {
+						this.getCommandItem().setValue(textValue.getText());
+					}
 				}
 
 				@Override
 				public void changedUpdate(DocumentEvent e) {
-					int hashCode = Integer.valueOf(textValue.getName().replace("txt_value_", ""));
-					CommandItem commandItem = that.getBuilder().getItems().firstOrDefault(c -> hashCode == c.hashCode(),
-							true);
-					if (commandItem != null) {
-						commandItem.setValue(textValue.getText());
+					if (this.getCommandItem() != null) {
+						this.getCommandItem().setValue(textValue.getText());
 					}
-				}
-			});
-			textValue.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-
 				}
 			});
 			panel.add(textValue, gridBagConstraints);
@@ -265,21 +291,29 @@ public class CommandTab extends WorkingTab {
 		gridBagConstraints.gridwidth = 1;
 		// gridBagConstraints.ipadx = 10;
 		JCheckBox checkBox = new JCheckBox();
-		checkBox.setName(String.format("chk_selected_%s", commandItem.hashCode()));
+		checkBox.setName(control_name_checkbox + commandItem.hashCode());
 		checkBox.setToolTipText("selected and run it");
 		checkBox.setSelected(true);
 		if (!commandItem.isOptional()) {
 			checkBox.setEnabled(false);
 		}
 		checkBox.addItemListener(new ItemListener() {
+
+			private CommandItem commandItem = null;
+
+			public CommandItem getCommandItem() {
+				if (commandItem == null) {
+					int hashCode = Integer.valueOf(checkBox.getName().replace(control_name_checkbox, ""));
+					this.commandItem = that.getBuilder().getItems().firstOrDefault(c -> hashCode == c.hashCode(), true);
+				}
+				return this.commandItem;
+			}
+
 			// 监听ui改变，给对象赋值
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				int hashCode = Integer.valueOf(checkBox.getName().replace("chk_selected_", ""));
-				CommandItem commandItem = that.getBuilder().getItems().firstOrDefault(c -> hashCode == c.hashCode(),
-						true);
-				if (commandItem != null) {
-					commandItem.setSelected(e.getStateChange() == ItemEvent.SELECTED ? true : false);
+				if (this.getCommandItem() != null) {
+					this.getCommandItem().setSelected(e.getStateChange() == ItemEvent.SELECTED ? true : false);
 				}
 			}
 		});
@@ -290,28 +324,41 @@ public class CommandTab extends WorkingTab {
 		gridBagConstraints.gridwidth = 1;
 		gridBagConstraints.ipadx = last_column_ipadx;
 		JButton button = new JButton("...");
-		button.setName(String.format("btn_value_%s", commandItem.hashCode()));
+		button.setName(control_name_button + commandItem.hashCode());
 		if (commandItem.getValidValues().getClassName() != null
 				&& commandItem.getValidValues().getClassName().equals(JFileChooser.class.getName())) {
 			button.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					JFileChooser jfc = new JFileChooser();
-					jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-					jfc.showOpenDialog(null);
-					if (button != null && jfc.getSelectedFile() != null) {
-						for (Component component : that.getComponents()) {
+				private JTextField textField;
+
+				public JTextField geTextField() {
+					if (textField == null) {
+						for (Component component : that.getPanel(PANEL_COMMAND).getComponents()) {
 							if (component.getName() == null) {
 								continue;
 							}
-							if (!component.getName().equals(button.getName().replace("btn_value_", "txt_value_"))) {
+							if (!component.getName()
+									.equals(button.getName().replace(control_name_button, control_name_text))) {
 								continue;
 							}
 							if (!(component instanceof JTextField)) {
 								continue;
 							}
-							JTextField textField = (JTextField) component;
-							textField.setText(jfc.getSelectedFile().getPath());
+							this.textField = (JTextField) component;
+							break;
+						}
+					}
+					return this.textField;
+				}
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+
+					JFileChooser jfc = new JFileChooser();
+					jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+					jfc.showOpenDialog(null);
+					if (button != null && jfc.getSelectedFile() != null) {
+						if (this.geTextField() != null) {
+							this.geTextField().setText(jfc.getSelectedFile().getPath());
 						}
 					}
 				}
@@ -329,7 +376,7 @@ public class CommandTab extends WorkingTab {
 
 	private ComboxItem[] getCommandsHistory() {
 		ArrayList<ComboxItem> values = new ArrayList<>();
-		values.add(new ComboxItem("-", "-"));
+		values.add(ComboxItem.PLEASE_SELECT);
 		File folder = new File(this.getHistoryFolder());
 		if (folder.exists()) {
 			for (File file : folder.listFiles()) {
@@ -414,7 +461,9 @@ public class CommandTab extends WorkingTab {
 		}).start();
 	}
 
-	private class ComboxItem {
+	private static class ComboxItem {
+		public static ComboxItem PLEASE_SELECT = new ComboxItem("", "please select");
+
 		public ComboxItem() {
 		}
 
