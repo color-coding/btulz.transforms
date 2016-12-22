@@ -1,10 +1,13 @@
 package org.colorcoding.tools.btulz.shell.gui.commands;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -40,7 +43,38 @@ public class MainFrame extends JFrame {
 		// gridBagConstraints.ipady = 15;
 		// gridBagConstraints.ipadx = 30;
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
-		this.add(new JLabel("Commands"), gridBagConstraints);
+		JLabel label = new JLabel("Commands");
+		label.setFont(new java.awt.Font("Dialog", 3, 18));
+		label.setForeground(Color.BLUE);
+		label.setToolTipText("double click to reload.");
+		label.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					// 双击，重载ui
+					that.dispose();
+					MainFrame frame = new MainFrame();
+					frame.display();
+				}
+			}
+		});
+		this.add(label, gridBagConstraints);
 		BuilderTab builderPane = new BuilderTab();
 		builderPane.setName("pane_builder");
 		gridBagConstraints.gridx = 0;

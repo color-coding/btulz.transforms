@@ -89,6 +89,15 @@ public class Environment {
 	}
 
 	/**
+	 * 获取命令目录
+	 * 
+	 * @return
+	 */
+	public static String getCommandsFolder() {
+		return getWorkingFolder() + File.separator + "commands";
+	}
+
+	/**
 	 * 获取资源地址
 	 * 
 	 * @param type

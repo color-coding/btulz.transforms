@@ -1,18 +1,23 @@
 package org.colorcoding.tools.btulz.shell.gui.commands;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
@@ -65,7 +70,6 @@ public class CommandTab extends WorkingTab {
 	private JButton button_stop = null;
 	private JButton button_run = null;
 	private CommandTab that = this;
-	private JLabel label_command = null;
 	private Command command = null;
 
 	@Override
@@ -82,10 +86,49 @@ public class CommandTab extends WorkingTab {
 		gridBagConstraints.insets = new Insets(1, 1, 0, 0);
 		// 名称
 		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridwidth = 3;
+		gridBagConstraints.gridwidth = 2;
 		gridBagConstraints.ipadx = 0;
-		this.add(new JLabel(String.format("%s - %s", this.getBuilder().getName(), this.getBuilder().getDescription())),
-				gridBagConstraints);
+		JLabel label = new JLabel(
+				String.format("%s - %s", this.getBuilder().getName(), this.getBuilder().getDescription()));
+		label.setFont(new java.awt.Font("Dialog", 3, 15));
+		label.setForeground(Color.BLUE);
+		label.setToolTipText("double click to edit.");
+		label.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					// 双击，重载ui
+					JFrame frame = (JFrame) that.getRootPane().getParent();
+					CommandEditor editor = new CommandEditor(that.getBuilder());
+					JDialog dialog = new JDialog(frame, "Command Editor", true);
+					dialog.setLayout(new GridBagLayout());
+					GridBagConstraints gridBagConstraints = new GridBagConstraints();
+					gridBagConstraints.fill = GridBagConstraints.BOTH;
+					dialog.setSize(600, 360);
+					dialog.add(editor, gridBagConstraints);
+					dialog.setLocationRelativeTo(frame);// 移到中间
+					dialog.setVisible(true);
+					// dialog.pack();
+				}
+			}
+		});
+		this.add(label, gridBagConstraints);
 		gridBagConstraints.gridx = 3;
 		gridBagConstraints.gridwidth = 1;
 		gridBagConstraints.ipadx = last_column_ipadx;
@@ -219,7 +262,7 @@ public class CommandTab extends WorkingTab {
 				public void actionPerformed(ActionEvent e) {
 					JFileChooser jfc = new JFileChooser();
 					jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-					jfc.showDialog(new JLabel(), "Selected");
+					jfc.showOpenDialog(null);
 					if (button != null && jfc.getSelectedFile() != null) {
 						for (Component component : that.getComponents()) {
 							if (component.getName() == null) {

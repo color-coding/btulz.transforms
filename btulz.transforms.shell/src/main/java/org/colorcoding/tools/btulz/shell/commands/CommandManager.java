@@ -122,7 +122,7 @@ public class CommandManager {
 			throw new RuntimeException(e);
 		}
 		// 加载工作目录命令
-		this.loadResources(Environment.getWorkingFolder() + File.separator + "commands");
+		this.loadResources(Environment.getCommandsFolder());
 	}
 
 	public void loadResources(JarFile jarFile) throws IOException {
