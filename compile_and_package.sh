@@ -85,10 +85,16 @@ do
     fi
   fi
 done < ${WORK_FOLDER}/compile_order.txt
+echo 输出直接调用shell脚本
+
 echo 压缩编译文件为tar包
 if [ -e ${WORK_FOLDER}/release ]
 then
   cd ${WORK_FOLDER}/release/
+  for file in `ls -l btulz.transforms.shell-*.jar'` 
+  do
+    echo java -jar ${file} >btulz.shell.sh
+  done
   tar -cvf btulz.transforms.tar *
   cd ..
 fi
