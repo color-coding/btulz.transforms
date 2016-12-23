@@ -29,13 +29,13 @@ public class BuilderTab extends JPanel {
 
 	protected void init() {
 		this.setLayout(new GridBagLayout());
-		this.setAutoscrolls(true);
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		int count = 0;
 		gridBagConstraints.gridy = count;// 组件的纵坐标
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-		gridBagConstraints.insets = new Insets(1, 0, 0, 0);
+		gridBagConstraints.weightx = 100.0;
+		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 		for (CommandBuilder commandBuilder : CommandManager.create().getCommands()) {
 			BuilderButton builderButton = new BuilderButton(commandBuilder);
 			builderButton.addActionListener(new ActionListener() {

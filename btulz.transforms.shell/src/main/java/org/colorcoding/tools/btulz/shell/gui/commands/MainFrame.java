@@ -16,7 +16,9 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.ScrollPaneLayout;
 
 import org.colorcoding.tools.btulz.shell.commands.CommandBuilder;
 
@@ -50,8 +52,7 @@ public class MainFrame extends JFrame {
 		// 添加控件-构建区域
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 0;
-		// gridBagConstraints.ipady = 15;
-		// gridBagConstraints.ipadx = 30;
+		gridBagConstraints.weightx = 16.0;
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		JLabel label = new JLabel("Commands");
 		label.setFont(new java.awt.Font("Dialog", 3, 18));
@@ -89,9 +90,13 @@ public class MainFrame extends JFrame {
 		builderPane.setName("pane_builder");
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 1;
-		// gridBagConstraints.ipady = -1;
-		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-		this.add(builderPane, gridBagConstraints);
+		gridBagConstraints.weightx = 16.0;
+		gridBagConstraints.weighty = 100.0;
+		gridBagConstraints.anchor = GridBagConstraints.NORTH;
+		// gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		JScrollPane scrollPane = new JScrollPane(builderPane, ScrollPaneLayout.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneLayout.HORIZONTAL_SCROLLBAR_NEVER);
+		this.add(scrollPane, gridBagConstraints);
 		builderPane.addBuilderTabListener(new BuilderTabListener() {
 			@Override
 			public void builderSelected(CommandBuilder builder) {
@@ -101,12 +106,11 @@ public class MainFrame extends JFrame {
 		// 添加控件-工作区域
 		this.workingPane = new JTabbedPane();
 		this.workingPane.setName("pane_working");
-		this.workingPane.setAutoscrolls(true);
-		// WorkingTab tab = new AboutTab();
-		// this.workingPane.addTab(tab.getTitle(), tab);
-		gridBagConstraints.ipadx = 500;
+		gridBagConstraints.weightx = 84.0;
+		gridBagConstraints.weighty = 100.0;
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 0;
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		gridBagConstraints.gridheight = GridBagConstraints.REMAINDER;
 		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
@@ -133,7 +137,7 @@ public class MainFrame extends JFrame {
 
 	public void display() {
 		this.initialize();
-		this.pack();
+		this.setSize(800, 560);
 		this.setLocationRelativeTo(null);// 移到中间
 		this.setVisible(true);
 	}

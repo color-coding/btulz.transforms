@@ -26,7 +26,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneLayout;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -81,7 +83,6 @@ public class CommandTab extends WorkingTab {
 		this.historyFolder = historyFolder;
 	}
 
-	private int last_column_ipadx = BUTTON_WIDTH;
 	private JButton button_run = null;
 	private CommandTab that = this;
 	private Command command = null;
@@ -99,12 +100,12 @@ public class CommandTab extends WorkingTab {
 		int count = 0;
 		gridBagConstraints.gridy = count;// 组件的纵坐标
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
-		gridBagConstraints.anchor = GridBagConstraints.CENTER;
-		gridBagConstraints.insets = new Insets(1, 1, 0, 0);
+		gridBagConstraints.anchor = GridBagConstraints.WEST;
+		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 		// 名称
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridwidth = 2;
-		gridBagConstraints.ipadx = 0;
+		gridBagConstraints.weightx = 80.0;
 		JLabel label = new JLabel(
 				String.format("%s - %s", this.getBuilder().getName(), this.getBuilder().getDescription()));
 		label.setFont(new java.awt.Font("Dialog", 3, 15));
@@ -134,14 +135,10 @@ public class CommandTab extends WorkingTab {
 					JFrame frame = (JFrame) that.getRootPane().getParent();
 					CommandEditor editor = new CommandEditor(that.getBuilder());
 					JDialog dialog = new JDialog(frame, "Command Editor", true);
-					dialog.setLayout(new GridBagLayout());
-					GridBagConstraints gridBagConstraints = new GridBagConstraints();
-					gridBagConstraints.fill = GridBagConstraints.BOTH;
+					dialog.add(editor);
 					dialog.setSize(600, 360);
-					dialog.add(editor, gridBagConstraints);
 					dialog.setLocationRelativeTo(frame);// 移到中间
 					dialog.setVisible(true);
-					// dialog.pack();
 				}
 			}
 		});
@@ -149,7 +146,7 @@ public class CommandTab extends WorkingTab {
 		gridBagConstraints.gridx = 3;
 		gridBagConstraints.gridwidth = 1;
 		gridBagConstraints.gridheight = 2;
-		gridBagConstraints.ipadx = last_column_ipadx;
+		gridBagConstraints.weightx = 20.0;
 		this.button_run = new JButton(MSG_RUN);
 		this.button_run.setEnabled(true);
 		this.button_run.addActionListener(new ActionListener() {
@@ -165,11 +162,11 @@ public class CommandTab extends WorkingTab {
 		// 内容
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridwidth = 1;
-		gridBagConstraints.ipadx = 0;
+		gridBagConstraints.weightx = 20.0;
 		panel.add(new JLabel("History"), gridBagConstraints);
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridwidth = 2;
-		gridBagConstraints.ipadx = 0;
+		gridBagConstraints.weightx = 80.0;
 		JComboBox<?> comboBox = new JComboBox<ComboxItem>(this.getCommandsHistory());
 		comboBox.addItemListener(new ItemListener() {
 			@Override
@@ -182,9 +179,26 @@ public class CommandTab extends WorkingTab {
 		panel.add(comboBox, gridBagConstraints);
 		gridBagConstraints.gridy++;
 		// 内容项目
+		GridBagConstraints gridBagConstraintsItem = new GridBagConstraints();
+		gridBagConstraintsItem.gridy = 0;// 组件的纵坐标
+		gridBagConstraintsItem.fill = GridBagConstraints.BOTH;
+		gridBagConstraintsItem.anchor = GridBagConstraints.WEST;
+		gridBagConstraintsItem.insets = new Insets(2, 2, 2, 2);
+		JPanel panelItem = new JPanel();
+		panelItem.setLayout(new GridBagLayout());
 		for (CommandItem commandItem : this.getBuilder().getItems()) {
-			this.addCommandItemLine(commandItem, panel, gridBagConstraints);
+			this.addCommandItemLine(commandItem, panelItem, gridBagConstraintsItem);
 		}
+		JScrollPane scrollPane = new JScrollPane(panelItem, ScrollPaneLayout.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneLayout.HORIZONTAL_SCROLLBAR_NEVER);
+
+		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints.anchor = GridBagConstraints.NORTH;
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridwidth = 4;
+		gridBagConstraints.weightx = 100.0;
+		gridBagConstraints.weighty = 100.0;
+		panel.add(scrollPane, gridBagConstraints);
 	}
 
 	private static final String control_name_button = "btn_value_";
@@ -200,15 +214,13 @@ public class CommandTab extends WorkingTab {
 		textField.setToolTipText(commandItem.getDescription());
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridwidth = 1;
-		gridBagConstraints.ipadx = 0;
+		gridBagConstraints.weightx = 30.0;
 		panel.add(textField, gridBagConstraints);
 		// 添加命令值
-		int anchor = gridBagConstraints.anchor;
-		gridBagConstraints.anchor = GridBagConstraints.EAST;
 		commandItem.getValidValues().get();
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridwidth = 1;
-		gridBagConstraints.ipadx = 0;
+		gridBagConstraints.weightx = 40.0;
 		if (commandItem.getValidValues().size() > 0) {
 			// 设置了有效值相关
 			ComboxItem[] values = new ComboxItem[commandItem.getValidValues().size() + 1];
@@ -289,7 +301,9 @@ public class CommandTab extends WorkingTab {
 		// 添加选择
 		gridBagConstraints.gridx = 2;
 		gridBagConstraints.gridwidth = 1;
-		// gridBagConstraints.ipadx = 10;
+		gridBagConstraints.weightx = 10.0;
+		gridBagConstraints.fill = GridBagConstraints.NONE;
+		gridBagConstraints.anchor = GridBagConstraints.CENTER;
 		JCheckBox checkBox = new JCheckBox();
 		checkBox.setName(control_name_checkbox + commandItem.hashCode());
 		checkBox.setToolTipText("selected and run it");
@@ -318,11 +332,12 @@ public class CommandTab extends WorkingTab {
 			}
 		});
 		panel.add(checkBox, gridBagConstraints);
-		gridBagConstraints.anchor = anchor;
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
+		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		// 添加额外内容
 		gridBagConstraints.gridx = 3;
 		gridBagConstraints.gridwidth = 1;
-		gridBagConstraints.ipadx = last_column_ipadx;
+		gridBagConstraints.weightx = 20.0;
 		JButton button = new JButton("...");
 		button.setName(control_name_button + commandItem.hashCode());
 		if (commandItem.getValidValues().getClassName() != null
@@ -462,7 +477,7 @@ public class CommandTab extends WorkingTab {
 	}
 
 	private static class ComboxItem {
-		public static ComboxItem PLEASE_SELECT = new ComboxItem("", "please select");
+		public static ComboxItem PLEASE_SELECT = new ComboxItem("", " - please select - ");
 
 		public ComboxItem() {
 		}

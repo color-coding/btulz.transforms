@@ -61,15 +61,16 @@ public class CommandEditor extends JPanel {
 	protected void init() {
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		// gridBagConstraints.ipadx = 100;
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
-		gridBagConstraints.insets = new Insets(2, 2, 2, 0);
+		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 		// 名称
 		gridBagConstraints.gridy = 0;// 组件的纵坐标
 		gridBagConstraints.gridx = 0;
+		gridBagConstraints.weightx = 10.0;
 		this.add(new JLabel("Name"), gridBagConstraints);
 		gridBagConstraints.gridx = 1;
+		gridBagConstraints.weightx = 70.0;
 		int count = 1;
 		String name = this.getBuilder().getName();
 		if (name.indexOf("_") > 0) {
@@ -93,9 +94,10 @@ public class CommandEditor extends JPanel {
 		this.textField = new JTextField(String.format("%s_%s.xml", this.getBuilder().getName(), count));
 		this.add(this.textField, gridBagConstraints);
 		// 保存
+		gridBagConstraints.weightx = 20.0;
 		gridBagConstraints.gridx = 2;
-		gridBagConstraints.anchor = GridBagConstraints.EAST;
-		gridBagConstraints.fill = GridBagConstraints.VERTICAL;
+		gridBagConstraints.anchor = GridBagConstraints.WEST;
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		JButton button = new JButton("Save");
 		button.addActionListener(new ActionListener() {
 			@Override
@@ -129,6 +131,8 @@ public class CommandEditor extends JPanel {
 		gridBagConstraints.gridy = 1;// 组件的纵坐标
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridwidth = 3;
+		gridBagConstraints.weightx = 100.0;
+		gridBagConstraints.weighty = 100.0;
 		String xml = null;
 		try {
 			name = this.getBuilder().getName();

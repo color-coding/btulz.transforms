@@ -86,8 +86,8 @@ public class WorkingTab extends JPanel {
 	}
 
 	private WorkingTab that = this;
-	private JTextArea textArea;
-	private JTextField textField;
+	private JTextArea textMessages;
+	private JTextField textCommands;
 	private JButton button_stop = null;
 	private JButton button_run = null;
 
@@ -98,17 +98,30 @@ public class WorkingTab extends JPanel {
 		panel.setLayout(new GridBagLayout());
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
-		gridBagConstraints.anchor = GridBagConstraints.EAST;
-		gridBagConstraints.insets = new Insets(1, 1, 0, 0);
+		gridBagConstraints.anchor = GridBagConstraints.WEST;
+		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 		// 名称
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 0;
-		gridBagConstraints.ipadx = 0;
+		gridBagConstraints.gridwidth = 2;
+		gridBagConstraints.gridheight = 1;
+		gridBagConstraints.weightx = 90.0;
 		panel.add(new JLabel("Running Command"), gridBagConstraints);
+		// 运行的命令
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 1;
+		gridBagConstraints.gridwidth = 1;
+		gridBagConstraints.gridheight = 1;
+		gridBagConstraints.weightx = 90.0;
+		this.textCommands = new JTextField();
+		this.textCommands.setEditable(false);
+		panel.add(this.textCommands, gridBagConstraints);
 		// 停止钮
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 0;
-		gridBagConstraints.ipadx = BUTTON_WIDTH;
+		gridBagConstraints.gridwidth = 1;
+		gridBagConstraints.gridheight = 1;
+		gridBagConstraints.weightx = 10.0;
 		this.button_stop = new JButton(MSG_GO_BACK);
 		this.button_stop.addActionListener(new ActionListener() {
 			@Override
@@ -119,17 +132,12 @@ public class WorkingTab extends JPanel {
 			}
 		});
 		panel.add(this.button_stop, gridBagConstraints);
-		// 运行的命令
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridy = 1;
-		gridBagConstraints.ipadx = 0;
-		this.textField = new JTextField();
-		this.textField.setEditable(false);
-		panel.add(this.textField, gridBagConstraints);
 		// 运行钮
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 1;
-		gridBagConstraints.ipadx = BUTTON_WIDTH;
+		gridBagConstraints.gridwidth = 1;
+		gridBagConstraints.gridheight = 1;
+		gridBagConstraints.weightx = 10.0;
 		this.button_run = new JButton(MSG_RUN);
 		this.button_run.setEnabled(true);
 		this.button_run.addActionListener(new ActionListener() {
@@ -143,19 +151,21 @@ public class WorkingTab extends JPanel {
 		// 运行的状态
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 2;
-		gridBagConstraints.ipadx = 0;
 		gridBagConstraints.gridwidth = 2;
-		this.textArea = new JTextArea();
-		this.textArea.setEditable(false);
-		panel.add(this.textArea, gridBagConstraints);
+		gridBagConstraints.gridheight = 1;
+		gridBagConstraints.weightx = 100.0;
+		gridBagConstraints.weighty = 100.0;
+		this.textMessages = new JTextArea();
+		this.textMessages.setEditable(false);
+		panel.add(this.textMessages, gridBagConstraints);
 	}
 
 	public String getRunningCommand() {
-		return this.textField.getText();
+		return this.textCommands.getText();
 	}
 
 	public void setRunningCommand(String command) {
-		this.textField.setText(command);
+		this.textCommands.setText(command);
 	}
 
 	protected void onButtonStopClick(JButton button) {
@@ -175,13 +185,13 @@ public class WorkingTab extends JPanel {
 
 	protected void onButtonRunClick(JButton button) {
 		this.button_run.setEnabled(false);
-		this.textArea.setText("");
+		this.textMessages.setText("");
 		this.button_stop.setText(MSG_STOP);
 		this.changeLayout(PANEL_WORKING);
 	}
 
 	protected void logMessages(String msg) {
-		this.textArea.setText(msg);
+		this.textMessages.setText(msg);
 	}
 
 }
