@@ -67,9 +67,9 @@ if exist %WORK_FOLDER%release\*.* (
   cd /d %WORK_FOLDER%release\
   REM 输出直接调用shell脚本
   for /f %%m in ('dir /b btulz.transforms.shell-*.jar') do (
-    echo @echo off >btulz.shell.bat
-    echo SET WORK_FOLDER=%~dp0 >>btulz.shell.bat
-    echo java -jar %WORK_FOLDER%%%m >>btulz.shell.bat
+    echo @echo off>btulz.shell.bat
+    echo SET WORK_FOLDER=^%%^~dp0>>btulz.shell.bat
+    echo start /b /min java -jar "%%WORK_FOLDER%%%%m">>btulz.shell.bat
   )
   7z a -ttar btulz.transforms.tar *
 )
