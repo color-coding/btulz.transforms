@@ -219,6 +219,7 @@ public class WorkingTab extends JPanel {
 		try {
 			document.insertString(document.getLength(), msg, null);
 			document.insertString(document.getLength(), "\n", null);
+			this.textMessages.setCaretPosition(document.getLength());
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}

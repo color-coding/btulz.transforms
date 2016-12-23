@@ -2,6 +2,7 @@ package org.colorcoding.tools.btulz.shell.gui.commands;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -345,22 +346,31 @@ public class CommandTab extends WorkingTab {
 			button.addActionListener(new ActionListener() {
 				private JTextField textField;
 
-				public JTextField geTextField() {
-					if (textField == null) {
-						for (Component component : that.getPanel(PANEL_COMMAND).getComponents()) {
-							if (component.getName() == null) {
-								continue;
-							}
-							if (!component.getName()
+				private JTextField geTextField(Container container) {
+					JTextField value = null;
+					for (Component component : container.getComponents()) {
+						if (component instanceof JTextField) {
+							if (component.getName() != null && component.getName()
 									.equals(button.getName().replace(control_name_button, control_name_text))) {
-								continue;
+								value = (JTextField) component;
 							}
-							if (!(component instanceof JTextField)) {
-								continue;
-							}
-							this.textField = (JTextField) component;
+						} else if (component instanceof Container) {
+							value = this.geTextField((Container) component);
+						} else if (component instanceof JScrollPane) {
+							value = this.geTextField(((JScrollPane) component).getViewport());
+						} else {
+							continue;
+						}
+						if (value != null) {
 							break;
 						}
+					}
+					return value;
+				}
+
+				public JTextField geTextField() {
+					if (textField == null) {
+						this.textField = this.geTextField(that.getPanel(PANEL_COMMAND));
 					}
 					return this.textField;
 				}
