@@ -12,8 +12,11 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 
 public class WorkingTab extends JPanel {
 
@@ -81,8 +84,24 @@ public class WorkingTab extends JPanel {
 		return null;
 	}
 
+	private WorkingTabListener listener;
+
+	public final void addWorkingTabListener(WorkingTabListener listener) {
+		this.listener = listener;
+	}
+
+	public final void removeWorkingTabListener(WorkingTabListener listener) {
+		this.listener = null;
+	}
+
 	public void changeLayout(String name) {
-		((CardLayout) this.getLayout()).show(this, name);
+		JPanel panel = this.getPanel(name);
+		if (panel != null) {
+			((CardLayout) this.getLayout()).show(this, name);
+			if (this.listener != null) {
+				this.listener.panelChanged(panel);
+			}
+		}
 	}
 
 	private WorkingTab that = this;
@@ -157,7 +176,7 @@ public class WorkingTab extends JPanel {
 		gridBagConstraints.weighty = 100.0;
 		this.textMessages = new JTextArea();
 		this.textMessages.setEditable(false);
-		panel.add(this.textMessages, gridBagConstraints);
+		panel.add(new JScrollPane(this.textMessages), gridBagConstraints);
 	}
 
 	public String getRunningCommand() {
@@ -175,6 +194,8 @@ public class WorkingTab extends JPanel {
 		this.button_run.setEnabled(true);
 		if (this.button_stop.getText().equals(MSG_GO_BACK)) {
 			// 返回界面
+			this.textCommands.setText(null);
+			this.textMessages.setText(null);
 			if (!this.getPanels().isEmpty()) {
 				this.changeLayout(this.getPanels().get(this.getPanels().size() - 1).getName());
 			}
@@ -191,7 +212,16 @@ public class WorkingTab extends JPanel {
 	}
 
 	protected void logMessages(String msg) {
-		this.textMessages.setText(msg);
+		Document document = this.textMessages.getDocument();
+		if (document == null) {
+			return;
+		}
+		try {
+			document.insertString(document.getLength(), msg, null);
+			document.insertString(document.getLength(), "\n", null);
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

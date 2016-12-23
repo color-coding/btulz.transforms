@@ -192,7 +192,7 @@ public class CommandTab extends WorkingTab {
 		JScrollPane scrollPane = new JScrollPane(panelItem, ScrollPaneLayout.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneLayout.HORIZONTAL_SCROLLBAR_NEVER);
 
-		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		gridBagConstraints.anchor = GridBagConstraints.NORTH;
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridwidth = 4;
@@ -438,9 +438,9 @@ public class CommandTab extends WorkingTab {
 				int ret = command.run();
 				// 命令执行完成，自动点击stop钮。
 				that.command = null;// 清除命令
+				that.onButtonStopClick(null);
 				if (ret != 1) {
 					// 非用户中断
-					that.onButtonStopClick(null);
 					// 记录运行命令
 					StringBuilder stringBuilder = new StringBuilder();
 					stringBuilder.append(that.getHistoryFolder());

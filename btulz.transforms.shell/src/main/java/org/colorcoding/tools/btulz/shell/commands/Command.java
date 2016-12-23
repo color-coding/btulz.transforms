@@ -154,7 +154,8 @@ public class Command {
 			});
 			this.commonThread.start();
 			this.errorThread.start();
-			return this.process.waitFor();
+			this.process.waitFor();
+			return this.process.exitValue();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return -9999;

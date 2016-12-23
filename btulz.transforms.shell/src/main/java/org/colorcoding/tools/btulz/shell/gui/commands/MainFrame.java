@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.ScrollPaneLayout;
@@ -144,14 +145,30 @@ public class MainFrame extends JFrame {
 
 	JTabbedPane workingPane;
 
+	@Override
+	public void pack() {
+		int screenWidth = ((int) java.awt.Toolkit.getDefaultToolkit().getScreenSize().width);
+		int screenHeight = ((int) java.awt.Toolkit.getDefaultToolkit().getScreenSize().height);
+		if (this.getWidth() <= screenWidth && this.getHeight() < screenHeight) {
+			super.pack();
+		}
+	}
+
 	public void showWorkingTab(WorkingTab tab) {
 		if (this.workingPane == null) {
 			return;
 		}
 		this.workingPane.addTab(tab.getTitle(), tab);
 		this.workingPane.setSelectedComponent(tab);
-		this.pack();
+		that.pack();
 		this.setLocationRelativeTo(null);// 移到中间
+		tab.addWorkingTabListener(new WorkingTabListener() {
+			@Override
+			public void panelChanged(JPanel panel) {
+				// that.pack();
+				// that.setLocationRelativeTo(null);// 移到中间
+			}
+		});
 	}
 
 }
