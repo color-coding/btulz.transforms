@@ -1,7 +1,6 @@
 package org.colorcoding.tools.btulz.shell;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -32,27 +31,8 @@ public class Environment {
 	public static String getStartupFolder() {
 		try {
 			File file = null;
-			URL url = Thread.currentThread().getContextClassLoader().getResource("");
-			String path = null;
-			if (url != null) {
-				URI uri = url.toURI();
-				if (uri != null) {
-					path = uri.getPath();
-				}
-				if (path == null) {
-					path = url.getPath();
-					if (path != null)
-						path = java.net.URLDecoder.decode(path, "UTF-8");
-				}
-			}
-			if (path != null) {
-				if (path.split(":").length > 2) {
-					path = path.substring(path.indexOf(":") + 1, path.length());
-				}
-				if (path.indexOf("!") > 0) {
-					path = path.substring(0, path.indexOf("!"));
-				}
-			}
+			String path = Environment.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+			path = java.net.URLDecoder.decode(path, "UTF-8"); // 转换处理中文及空格
 			if (path == null) {
 				path = System.getProperty("user.dir");
 			}
@@ -65,7 +45,7 @@ public class Environment {
 				file = file.getParentFile();
 			}
 			return file.getPath();
-		} catch (URISyntaxException | UnsupportedEncodingException e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}

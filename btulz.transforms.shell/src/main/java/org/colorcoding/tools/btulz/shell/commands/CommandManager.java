@@ -174,6 +174,15 @@ public class CommandManager {
 		if (name == null || name.isEmpty()) {
 			return null;
 		}
-		return name.substring(0, name.lastIndexOf("."));
+		if (name.indexOf(File.separator) > 0) {
+			name = name.substring(name.lastIndexOf(File.separator) + 1);
+		}
+		if (name.indexOf("/") > 0) {
+			name = name.substring(name.lastIndexOf("/") + 1);
+		}
+		if (name.indexOf(".") > 0) {
+			name = name.substring(0, name.lastIndexOf("."));
+		}
+		return name;
 	}
 }

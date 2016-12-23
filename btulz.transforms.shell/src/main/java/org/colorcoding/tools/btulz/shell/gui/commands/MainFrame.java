@@ -8,7 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.URL;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -18,12 +20,20 @@ import javax.swing.JTabbedPane;
 
 import org.colorcoding.tools.btulz.shell.commands.CommandBuilder;
 
+/**
+ * 主界面
+ * 
+ * @author Niuren.Zhu
+ *
+ */
 public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = -8387552310875230969L;
 
 	public MainFrame() {
 		super("btulz.transforms.shell");
+		URL url = this.getClass().getResource("/images/icon.png");
+		this.setIconImage(new ImageIcon(url).getImage());
 	}
 
 	MainFrame that = this;

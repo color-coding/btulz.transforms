@@ -11,6 +11,12 @@ import javax.swing.JPanel;
 import org.colorcoding.tools.btulz.shell.commands.CommandBuilder;
 import org.colorcoding.tools.btulz.shell.commands.CommandManager;
 
+/**
+ * 命令（UI左侧）
+ * 
+ * @author Niuren.Zhu
+ *
+ */
 public class BuilderTab extends JPanel {
 
 	private static final long serialVersionUID = -8890774509484515334L;

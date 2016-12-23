@@ -39,7 +39,7 @@ import org.colorcoding.tools.btulz.shell.commands.CommandListener;
 import org.colorcoding.tools.btulz.shell.commands.CommandMessageEvent;
 
 /**
- * 命令执行选项卡
+ * 命令执行（UI右侧）
  * 
  * @author Niuren.Zhu
  *

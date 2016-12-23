@@ -11,6 +11,12 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * 关于和帮助
+ * 
+ * @author Niuren.Zhu
+ *
+ */
 public class AboutTab extends WorkingTab {
 
 	private static final long serialVersionUID = 7201855758302708134L;
