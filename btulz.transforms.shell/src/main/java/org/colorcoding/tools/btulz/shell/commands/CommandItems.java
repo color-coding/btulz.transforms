@@ -57,16 +57,27 @@ public class CommandItems extends ArrayList<CommandItem> {
 		return item;
 	}
 
-	public int getCount() {
-		return this.getCount(this);
+	/**
+	 * 返回所有项目，包括子项
+	 * 
+	 * @return
+	 */
+	public List<CommandItem> getItems() {
+		ArrayList<CommandItem> items = new ArrayList<>();
+		for (CommandItem item : this) {
+			items.add(item);
+			items.addAll(item.getItems().getItems());
+		}
+		return items;
 	}
 
-	private int getCount(CommandItems items) {
-		int i = this.size();
-		for (CommandItem commandItem : items) {
-			i += this.getCount(commandItem.getItems());
-		}
-		return i;
+	/**
+	 * 返回数量，包括子项
+	 * 
+	 * @return
+	 */
+	public int getCount() {
+		return this.getItems().size();
 	}
 
 	public CommandItem firstOrDefault(Predicate<CommandItem> filter) {

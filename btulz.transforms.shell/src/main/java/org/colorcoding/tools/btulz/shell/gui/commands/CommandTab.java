@@ -13,10 +13,13 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -54,6 +57,10 @@ public class CommandTab extends WorkingTab {
 	 * 工作层
 	 */
 	public static final String PANEL_COMMAND = "command_panel";
+	/**
+	 * 最多历史信息
+	 */
+	public static final int MAX_HISTORY_LIST = 10;
 
 	public CommandTab(CommandBuilder commandBuilder) {
 		super(commandBuilder.getName());
@@ -98,8 +105,7 @@ public class CommandTab extends WorkingTab {
 		}
 		panel.setLayout(new GridBagLayout());
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		int count = 0;
-		gridBagConstraints.gridy = count;// 组件的纵坐标
+		gridBagConstraints.gridy = 0;// 组件的纵坐标
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
@@ -170,10 +176,68 @@ public class CommandTab extends WorkingTab {
 		gridBagConstraints.weightx = 80.0;
 		JComboBox<?> comboBox = new JComboBox<ComboxItem>(this.getCommandsHistory());
 		comboBox.addItemListener(new ItemListener() {
+			private Component getComponent(String name, Container container) {
+				Component value = null;
+				for (Component component : container.getComponents()) {
+					if (component.getName() != null && component.getName().endsWith(name)) {
+						value = component;
+					} else if (component instanceof Container) {
+						value = this.getComponent(name, (Container) component);
+					} else if (component instanceof JScrollPane) {
+						value = this.getComponent(name, ((JScrollPane) component).getViewport());
+					} else {
+						continue;
+					}
+					if (value != null) {
+						break;
+					}
+				}
+				return value;
+			}
+
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					// 选择新的项
+					try {
+						ComboxItem comboxItem = (ComboxItem) comboBox.getSelectedItem();
+						File file = new File(that.getHistoryFolder() + File.separator + comboxItem.value);
+						if (file.isFile() && file.exists()) {
+							Object object = Serializer.fromXmlString(new FileInputStream(file), CommandBuilder.class);
+							if (object instanceof CommandBuilder) {
+								CommandBuilder commandBuilder = (CommandBuilder) object;
+								for (CommandItem item : commandBuilder.getItems().getItems()) {
+									CommandItem commandItem = that.getBuilder().getItems().firstOrDefault(
+											c -> c.getContent() != null && c.getContent().equals(item.getContent()),
+											true);
+									if (commandItem != null) {
+										// 找到了对应项目
+										Component component = this.getComponent(
+												String.format("_value_%s", commandItem.hashCode()),
+												that.getPanel(PANEL_COMMAND));
+										if (component instanceof JTextField) {
+											JTextField textField = (JTextField) component;
+											textField.setText(item.getValue());
+										} else if (component instanceof JComboBox<?>) {
+											JComboBox<?> comboBox = (JComboBox<?>) component;
+											for (int i = 0; i < comboBox.getItemCount(); i++) {
+												Object tmp = comboBox.getItemAt(i);
+												if (tmp instanceof ComboxItem) {
+													ComboxItem cItem = (ComboxItem) tmp;
+													if (cItem.value.equals(item.getValue())) {
+														comboBox.setSelectedItem(cItem);
+														break;
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		});
@@ -346,7 +410,7 @@ public class CommandTab extends WorkingTab {
 			button.addActionListener(new ActionListener() {
 				private JTextField textField;
 
-				private JTextField geTextField(Container container) {
+				private JTextField getTextField(Container container) {
 					JTextField value = null;
 					for (Component component : container.getComponents()) {
 						if (component instanceof JTextField) {
@@ -355,9 +419,9 @@ public class CommandTab extends WorkingTab {
 								value = (JTextField) component;
 							}
 						} else if (component instanceof Container) {
-							value = this.geTextField((Container) component);
+							value = this.getTextField((Container) component);
 						} else if (component instanceof JScrollPane) {
-							value = this.geTextField(((JScrollPane) component).getViewport());
+							value = this.getTextField(((JScrollPane) component).getViewport());
 						} else {
 							continue;
 						}
@@ -370,7 +434,7 @@ public class CommandTab extends WorkingTab {
 
 				public JTextField geTextField() {
 					if (textField == null) {
-						this.textField = this.geTextField(that.getPanel(PANEL_COMMAND));
+						this.textField = this.getTextField(that.getPanel(PANEL_COMMAND));
 					}
 					return this.textField;
 				}
@@ -404,7 +468,26 @@ public class CommandTab extends WorkingTab {
 		values.add(ComboxItem.PLEASE_SELECT);
 		File folder = new File(this.getHistoryFolder());
 		if (folder.exists()) {
-			for (File file : folder.listFiles()) {
+			File[] files = folder.listFiles();
+			Arrays.sort(files, new Comparator<File>() {
+				public int compare(File f1, File f2) {
+					long diff = f1.lastModified() - f2.lastModified();
+					if (diff > 0)
+						return 1;
+					else if (diff == 0)
+						return 0;
+					else
+						return -1;
+				}
+
+				public boolean equals(Object obj) {
+					return true;
+				}
+			});
+			for (File file : files) {
+				if (values.size() > MAX_HISTORY_LIST) {
+					break;
+				}
 				if (!file.isFile()) {
 					continue;
 				}
