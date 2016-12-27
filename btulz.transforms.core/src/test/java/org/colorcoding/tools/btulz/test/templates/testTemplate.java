@@ -2,13 +2,12 @@ package org.colorcoding.tools.btulz.test.templates;
 
 import java.io.File;
 
-import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.models.IBusinessObject;
 import org.colorcoding.tools.btulz.models.IDomain;
 import org.colorcoding.tools.btulz.models.IModel;
 import org.colorcoding.tools.btulz.templates.Parameter;
 import org.colorcoding.tools.btulz.templates.Parameters;
-import org.colorcoding.tools.btulz.test.transformers.testXmlTransformer;
+import org.colorcoding.tools.btulz.test.Environment;
 import org.colorcoding.tools.btulz.transformers.XmlTransformer;
 import org.colorcoding.tools.btulz.transformers.regions.RegionBusinessObject;
 import org.colorcoding.tools.btulz.transformers.regions.RegionDomain;
@@ -18,12 +17,11 @@ import junit.framework.TestCase;
 
 public class testTemplate extends TestCase {
 
-	private static String domain_file = testXmlTransformer.old_xml_path + File.separator + "domain_models_old.xml";
 	private static String template_file = "/eclipse/ibas_classic/{artifactid}.{domain.name}/src/main/java/{groupid}/{artifactid}/{domain.name}/bo/Template_Model.{Model.Name}.java.txt";
 
 	public void testJudgmentRegion() throws Exception {
 		XmlTransformer xmlTransformer = new XmlTransformer();
-		xmlTransformer.load(Environment.getWorkingFolder() + domain_file, false);
+		xmlTransformer.load(Environment.getXmlModelsFile(), false);
 		String tpltFile = Environment.getResource("code").getPath();
 		RegionDomain template = new RegionDomain();
 		template.setTemplateFile(tpltFile + File.separator + template_file);

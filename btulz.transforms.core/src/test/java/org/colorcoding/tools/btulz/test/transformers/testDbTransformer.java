@@ -2,7 +2,7 @@ package org.colorcoding.tools.btulz.test.transformers;
 
 import java.io.File;
 
-import org.colorcoding.tools.btulz.Environment;
+import org.colorcoding.tools.btulz.test.Environment;
 import org.colorcoding.tools.btulz.transformers.DsTransformer;
 import org.colorcoding.tools.btulz.transformers.DsTransformer4Jar;
 import org.colorcoding.tools.btulz.transformers.JarTransformer;
@@ -12,11 +12,6 @@ import org.colorcoding.tools.btulz.transformers.SqlTransformer4Jar;
 import junit.framework.TestCase;
 
 public class testDbTransformer extends TestCase {
-	/**
-	 * ibas工作目录，需要在系统变量中设置
-	 */
-	private String workspace = System.getenv("ibasWorkspace");
-	private static String domain_file = testXmlTransformer.old_xml_path + File.separator + "domain_models_old.xml";
 
 	/**
 	 * 测试数据结构创建
@@ -27,7 +22,7 @@ public class testDbTransformer extends TestCase {
 		System.err.println("运行请清理test-classes目录的历史文件。");
 		DsTransformer dsTransformer = new DsTransformer();
 		dsTransformer.setTemplateFile("ds_mysql_ibas_classic.xml");
-		dsTransformer.addDomains(Environment.getWorkingFolder() + domain_file);
+		dsTransformer.addDomains(Environment.getXmlModelsFile());
 		dsTransformer.setCompany("CC");
 		dsTransformer.setDbServer("ibas-dev-mysql");
 		dsTransformer.setDbPort("3306");
@@ -39,8 +34,7 @@ public class testDbTransformer extends TestCase {
 	}
 
 	public void testInitMSSQL() throws Exception {
-		File file = new File(
-				workspace + File.separator + "initialization" + File.separator + "sql_mssql_ibas_initialization.xml");
+		File file = new File(Environment.getSqlsFolder() + File.separator + "sql_mssql_ibas_initialization.xml");
 		if (file.exists() && file.isFile()) {
 			SqlTransformer sqlTransformer = new SqlTransformer();
 			sqlTransformer.setSqlFile(file.getPath());
@@ -56,8 +50,7 @@ public class testDbTransformer extends TestCase {
 	}
 
 	public void testInitMYSQL() throws Exception {
-		File file = new File(
-				workspace + File.separator + "initialization" + File.separator + "sql_mysql_ibas_initialization.xml");
+		File file = new File(Environment.getSqlsFolder() + File.separator + "sql_mysql_ibas_initialization.xml");
 		if (file.exists() && file.isFile()) {
 			SqlTransformer sqlTransformer = new SqlTransformer();
 			sqlTransformer.setSqlFile(file.getPath());
@@ -72,8 +65,7 @@ public class testDbTransformer extends TestCase {
 	}
 
 	public void testInitPGSQL() throws Exception {
-		File file = new File(
-				workspace + File.separator + "initialization" + File.separator + "sql_pgsql_ibas_initialization.xml");
+		File file = new File(Environment.getSqlsFolder() + File.separator + "sql_pgsql_ibas_initialization.xml");
 		if (file.exists() && file.isFile()) {
 			SqlTransformer sqlTransformer = new SqlTransformer();
 			sqlTransformer.setSqlFile(file.getPath());
@@ -88,8 +80,7 @@ public class testDbTransformer extends TestCase {
 	}
 
 	public void testInitHANA() throws Exception {
-		File file = new File(
-				workspace + File.separator + "initialization" + File.separator + "sql_hana_ibas_initialization.xml");
+		File file = new File(Environment.getSqlsFolder() + File.separator + "sql_hana_ibas_initialization.xml");
 		if (file.exists() && file.isFile()) {
 			SqlTransformer sqlTransformer = new SqlTransformer();
 			sqlTransformer.setSqlFile(file.getPath());
@@ -110,7 +101,7 @@ public class testDbTransformer extends TestCase {
 	 */
 	public void testDsJar() throws Exception {
 		System.err.println("运行请清理test-classes目录的历史文件。");
-		File folder = new File(workspace + File.separator + "initialization");
+		File folder = new File(Environment.getSqlsFolder());
 		for (File file : folder.listFiles()) {
 			DsTransformer4Jar dsTransformer = new DsTransformer4Jar();
 			dsTransformer.setTemplateFile("ds_mssql_ibas_classic.xml");
@@ -133,7 +124,7 @@ public class testDbTransformer extends TestCase {
 	 */
 	public void testSqlJar() throws Exception {
 		System.err.println("运行请清理test-classes目录的历史文件。");
-		File folder = new File(workspace + File.separator + "initialization");
+		File folder = new File(Environment.getSqlsFolder());
 		for (File file : folder.listFiles()) {
 			SqlTransformer4Jar sqlTransformer = new SqlTransformer4Jar();
 			sqlTransformer.setSqlFilter("sql_mssql");
@@ -156,7 +147,7 @@ public class testDbTransformer extends TestCase {
 	 */
 	public void testJar() throws Exception {
 		System.err.println("运行请清理test-classes目录的历史文件。");
-		File folder = new File(workspace + File.separator + "initialization");
+		File folder = new File(Environment.getSqlsFolder());
 		for (File file : folder.listFiles()) {
 			if (file.getName().endsWith(".jar")) {
 				JarTransformer jarTransformer = new JarTransformer();

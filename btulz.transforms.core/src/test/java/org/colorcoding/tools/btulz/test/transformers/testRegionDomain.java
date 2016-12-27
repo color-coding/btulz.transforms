@@ -6,13 +6,13 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.Serializer;
 import org.colorcoding.tools.btulz.models.IDomain;
 import org.colorcoding.tools.btulz.models.data.emDataSubType;
 import org.colorcoding.tools.btulz.models.data.emDataType;
 import org.colorcoding.tools.btulz.templates.Parameter;
 import org.colorcoding.tools.btulz.templates.Parameters;
+import org.colorcoding.tools.btulz.test.Environment;
 import org.colorcoding.tools.btulz.transformers.DataStructureOrchestration;
 import org.colorcoding.tools.btulz.transformers.XmlTransformer;
 import org.colorcoding.tools.btulz.transformers.regions.RegionDomain;
@@ -24,11 +24,9 @@ import junit.framework.TestCase;
 
 public class testRegionDomain extends TestCase {
 
-	private static String domain_file = testXmlTransformer.old_xml_path + File.separator + "domain_models_old.xml";
-
 	public void testMSSQL() throws Exception {
 		XmlTransformer xmlTransformer = new XmlTransformer();
-		xmlTransformer.load(Environment.getWorkingFolder() + domain_file, false);
+		xmlTransformer.load(Environment.getXmlModelsFile(), false);
 
 		JAXBContext context = JAXBContext.newInstance(DataStructureOrchestration.class);
 		Marshaller marshaller = context.createMarshaller();
@@ -65,7 +63,7 @@ public class testRegionDomain extends TestCase {
 
 	public void testMYSQL() throws Exception {
 		XmlTransformer xmlTransformer = new XmlTransformer();
-		xmlTransformer.load(Environment.getWorkingFolder() + domain_file, false);
+		xmlTransformer.load(Environment.getXmlModelsFile(), false);
 
 		JAXBContext context = JAXBContext.newInstance(DataStructureOrchestration.class);
 		Marshaller marshaller = context.createMarshaller();
@@ -106,7 +104,7 @@ public class testRegionDomain extends TestCase {
 
 	public void testPGSQL() throws Exception {
 		XmlTransformer xmlTransformer = new XmlTransformer();
-		xmlTransformer.load(Environment.getWorkingFolder() + domain_file, false);
+		xmlTransformer.load(Environment.getXmlModelsFile(), false);
 
 		JAXBContext context = JAXBContext.newInstance(DataStructureOrchestration.class);
 		Marshaller marshaller = context.createMarshaller();
@@ -147,7 +145,7 @@ public class testRegionDomain extends TestCase {
 
 	public void testHANA() throws Exception {
 		XmlTransformer xmlTransformer = new XmlTransformer();
-		xmlTransformer.load(Environment.getWorkingFolder() + domain_file, false);
+		xmlTransformer.load(Environment.getXmlModelsFile(), false);
 
 		JAXBContext context = JAXBContext.newInstance(DataStructureOrchestration.class);
 		Marshaller marshaller = context.createMarshaller();

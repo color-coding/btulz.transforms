@@ -7,9 +7,9 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.models.Domain;
 import org.colorcoding.tools.btulz.models.IDomain;
+import org.colorcoding.tools.btulz.test.Environment;
 import org.colorcoding.tools.btulz.test.models.testModels;
 import org.colorcoding.tools.btulz.transformers.MultiTransformException;
 import org.colorcoding.tools.btulz.transformers.TransformException;
@@ -20,10 +20,6 @@ import junit.framework.TestCase;
 
 public class testXmlTransformer extends TestCase {
 
-	public static String old_xml_path = "\\org\\colorcoding\\tools\\btulz\\test\\transformers".replace("\\",
-			File.separator);
-	private static String domain_file = testXmlTransformer.old_xml_path + File.separator + "domain_models_old.xml";
-
 	public void testSaveReadXml()
 			throws ClassNotFoundException, TransformException, MultiTransformException, JAXBException {
 		IDomain domain = (new testModels()).createDomain();
@@ -32,7 +28,7 @@ public class testXmlTransformer extends TestCase {
 		xmlTransformer.setInterruptOnError(true);
 		xmlTransformer.save();
 		xmlTransformer.setKeepResults(false);
-		xmlTransformer.load(Environment.getWorkingFolder() + domain_file, false);
+		xmlTransformer.load(Environment.getXmlModelsFile(), false);
 		xmlTransformer.save();
 		JAXBContext context = JAXBContext.newInstance(Domain.class);
 		Marshaller marshaller = context.createMarshaller();
@@ -51,17 +47,18 @@ public class testXmlTransformer extends TestCase {
 		domain = (new testModels()).createDomain();
 		xmlTransformer = new XmlTransformerDom4j();
 		// xmlTransformer.setInterruptOnError(true);
-		xmlTransformer.load(Environment.getWorkingFolder() + domain_file, false);
+		xmlTransformer.load(Environment.getXmlModelsFile(), false);
 		xmlTransformer.setInterruptOnError(true);
 		xmlTransformer.save(Environment.getWorkingFolder() + File.separator + "dom4j");
 	}
 
 	public void testOldXml() throws JAXBException, TransformException, MultiTransformException {
 		XmlTransformer xmlTransformer = new XmlTransformer();
-		//xmlTransformer.load(Environment.getStartupFolder() + old_xml_path + File.separator + "domain_models_old.xml",
-		//		false);
+		// xmlTransformer.load(Environment.getStartupFolder() + old_xml_path +
+		// File.separator + "domain_models_old.xml",
+		// false);
 
-		xmlTransformer.load("/home/manager/Downloads/ds_sm_salesorder.xml",false);
+		xmlTransformer.load(Environment.getXmlModelsFile(), false);
 		JAXBContext context = JAXBContext.newInstance(Domain.class);
 		Marshaller marshaller = context.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
