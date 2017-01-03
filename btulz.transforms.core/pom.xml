@@ -108,5 +108,10 @@
 			<artifactId>ngdbc</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.16-beta1</version>
+		</dependency>
 	</dependencies>
 </project>
