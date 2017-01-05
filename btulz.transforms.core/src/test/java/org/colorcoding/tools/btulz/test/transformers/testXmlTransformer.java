@@ -28,7 +28,7 @@ public class testXmlTransformer extends TestCase {
 		xmlTransformer.setInterruptOnError(true);
 		xmlTransformer.save();
 		xmlTransformer.setKeepResults(false);
-		xmlTransformer.load(Environment.getXmlModelsFile(), false);
+		xmlTransformer.load(Environment.getXmlModelsFileOld(), false);
 		xmlTransformer.save();
 		JAXBContext context = JAXBContext.newInstance(Domain.class);
 		Marshaller marshaller = context.createMarshaller();
@@ -47,7 +47,7 @@ public class testXmlTransformer extends TestCase {
 		domain = (new testModels()).createDomain();
 		xmlTransformer = new XmlTransformerDom4j();
 		// xmlTransformer.setInterruptOnError(true);
-		xmlTransformer.load(Environment.getXmlModelsFile(), false);
+		xmlTransformer.load(Environment.getXmlModelsFileOld(), false);
 		xmlTransformer.setInterruptOnError(true);
 		xmlTransformer.save(Environment.getWorkingFolder() + File.separator + "dom4j");
 	}
@@ -58,7 +58,7 @@ public class testXmlTransformer extends TestCase {
 		// File.separator + "domain_models_old.xml",
 		// false);
 
-		xmlTransformer.load(Environment.getXmlModelsFile(), false);
+		xmlTransformer.load(Environment.getXmlModelsFileOld(), false);
 		JAXBContext context = JAXBContext.newInstance(Domain.class);
 		Marshaller marshaller = context.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");

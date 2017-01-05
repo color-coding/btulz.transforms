@@ -21,7 +21,7 @@ public class testTemplate extends TestCase {
 
 	public void testJudgmentRegion() throws Exception {
 		XmlTransformer xmlTransformer = new XmlTransformer();
-		xmlTransformer.load(Environment.getXmlModelsFile(), false);
+		xmlTransformer.load(Environment.getXmlModelsFileOld(), false);
 		String tpltFile = Environment.getResource("code").getPath();
 		RegionDomain template = new RegionDomain();
 		template.setTemplateFile(tpltFile + File.separator + template_file);

@@ -235,4 +235,8 @@ public class XmlTransformer extends FileTransformer {
 			}
 		}
 	}
+
+	@Override
+	public void transform() throws Exception {
+	}
 }

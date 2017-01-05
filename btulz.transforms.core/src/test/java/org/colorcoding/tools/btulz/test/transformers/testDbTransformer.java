@@ -22,7 +22,7 @@ public class testDbTransformer extends TestCase {
 		System.err.println("运行请清理test-classes目录的历史文件。");
 		DsTransformer dsTransformer = new DsTransformer();
 		dsTransformer.setTemplateFile("ds_mysql_ibas_classic.xml");
-		dsTransformer.addDomains(Environment.getXmlModelsFile());
+		dsTransformer.addDomains(Environment.getXmlModelsFileOld());
 		dsTransformer.setCompany("CC");
 		dsTransformer.setDbServer("ibas-dev-mysql");
 		dsTransformer.setDbPort("3306");

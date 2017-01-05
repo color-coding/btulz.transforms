@@ -16,13 +16,17 @@ public final class Environment extends org.colorcoding.tools.btulz.Environment {
 		return Environment.getWorkingFolder() + File.separator + "sqls";
 	}
 
-	public static String getXmlModelsFile() {
+	public static String getXmlModelsFileOld() {
 		return "//org//colorcoding//tools//btulz//test//transformers//domain_models_old.xml".replace("//",
 				File.separator);
 	}
 
-	public static String getExcelModelsFile() {
+	public static String getExcelModelsFileOld() {
 		return "//org//colorcoding//tools//btulz//test//transformers//domain_models_old.xls".replace("//",
 				File.separator);
+	}
+
+	public static String getExcelModelsFile() {
+		return "//classes//templates//domain_models_template.xlsx".replace("//", File.separator);
 	}
 }

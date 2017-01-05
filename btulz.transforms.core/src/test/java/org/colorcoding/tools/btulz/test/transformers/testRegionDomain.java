@@ -26,7 +26,7 @@ public class testRegionDomain extends TestCase {
 
 	public void testMSSQL() throws Exception {
 		XmlTransformer xmlTransformer = new XmlTransformer();
-		xmlTransformer.load(Environment.getXmlModelsFile(), false);
+		xmlTransformer.load(Environment.getXmlModelsFileOld(), false);
 
 		JAXBContext context = JAXBContext.newInstance(DataStructureOrchestration.class);
 		Marshaller marshaller = context.createMarshaller();
@@ -63,7 +63,7 @@ public class testRegionDomain extends TestCase {
 
 	public void testMYSQL() throws Exception {
 		XmlTransformer xmlTransformer = new XmlTransformer();
-		xmlTransformer.load(Environment.getXmlModelsFile(), false);
+		xmlTransformer.load(Environment.getXmlModelsFileOld(), false);
 
 		JAXBContext context = JAXBContext.newInstance(DataStructureOrchestration.class);
 		Marshaller marshaller = context.createMarshaller();
@@ -104,7 +104,7 @@ public class testRegionDomain extends TestCase {
 
 	public void testPGSQL() throws Exception {
 		XmlTransformer xmlTransformer = new XmlTransformer();
-		xmlTransformer.load(Environment.getXmlModelsFile(), false);
+		xmlTransformer.load(Environment.getXmlModelsFileOld(), false);
 
 		JAXBContext context = JAXBContext.newInstance(DataStructureOrchestration.class);
 		Marshaller marshaller = context.createMarshaller();
@@ -145,7 +145,7 @@ public class testRegionDomain extends TestCase {
 
 	public void testHANA() throws Exception {
 		XmlTransformer xmlTransformer = new XmlTransformer();
-		xmlTransformer.load(Environment.getXmlModelsFile(), false);
+		xmlTransformer.load(Environment.getXmlModelsFileOld(), false);
 
 		JAXBContext context = JAXBContext.newInstance(DataStructureOrchestration.class);
 		Marshaller marshaller = context.createMarshaller();

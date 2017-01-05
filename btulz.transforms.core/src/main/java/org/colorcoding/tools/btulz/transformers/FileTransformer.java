@@ -254,8 +254,4 @@ public abstract class FileTransformer extends Transformer implements IFileTransf
 	 */
 	protected abstract void save(File outFolder, IDomain domain) throws Exception;
 
-	public void transform() {
-		// load时已加载，不需要处理
-	}
-
 }
