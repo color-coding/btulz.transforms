@@ -21,6 +21,10 @@ import org.apache.log4j.PropertyConfigurator;
 public class Environment {
 
 	/**
+	 * 命名空间-工具
+	 */
+	public static final String NAMESPACE_BTULZ_UTIL = "http://colorcoding.org/btulz/util";
+	/**
 	 * 命名空间-模型
 	 */
 	public static final String NAMESPACE_BTULZ_MODELS = "http://colorcoding.org/btulz/models";

@@ -75,7 +75,7 @@ public class testExcelTransformer extends TestCase {
 		}
 	}
 
-	public void loadWorkbook(Workbook workbook) {
+	private void loadWorkbook(Workbook workbook) {
 		String cellValue = null;
 		for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
 			Sheet sheet = workbook.getSheetAt(i);
@@ -119,8 +119,10 @@ public class testExcelTransformer extends TestCase {
 
 	public void testTransformer() throws TransformException, MultiTransformException {
 		ExcelTransformer excelTransformer = new ExcelTransformer();
-		excelTransformer.setIgnoreSheet(false);// 不忽悠注释表格
+		excelTransformer.setIgnoreSheet(false);// 不忽略注释表格
+		excelTransformer.setInterruptOnError(true);
 		excelTransformer.load((new File(Environment.getWorkingFolder())).getParent() + Environment.getExcelModelsFile(),
 				true);
 	}
+
 }

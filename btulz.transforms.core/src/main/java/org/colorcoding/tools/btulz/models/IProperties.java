@@ -1,6 +1,6 @@
 package org.colorcoding.tools.btulz.models;
 
-import java.util.List;
+import org.colorcoding.tools.btulz.util.List;
 
 /**
  * 属性集合

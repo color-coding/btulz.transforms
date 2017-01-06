@@ -167,36 +167,16 @@ public class ExcelTransformer extends FileTransformer {
 	private void parse(IDomain domain, Sheet sheet) throws TransformException {
 		IExcelParser parser = this.createParser(sheet);
 		if (parser == null) {
-			Environment.getLogger().warn(String.format("[%s] no parser available.", sheet.getSheetName()));
+			Environment.getLogger().debug(String.format("[%s] no parser available.", sheet.getSheetName()));
 			return;
 		} else {
-			Environment.getLogger().warn(String.format("[%s] using [%s].", sheet.getSheetName(), parser.toString()));
+			Environment.getLogger().debug(String.format("[%s] using [%s].", sheet.getSheetName(), parser.toString()));
 		}
 		try {
-			// 添加数据解释监听
-			ExcelTransformer that = this;
-			parser.addListener(new ConvertDataListener() {
-				@Override
-				public Object convertData(ConvertDataEvent event) {
-					return that.convertData(event);
-				}
-			});
 			parser.parse(domain, sheet);
 		} catch (Exception e) {
 			throw new TransformException(e);
 		}
-	}
-
-	/**
-	 * 转换数据
-	 * 
-	 * @param event
-	 * @return
-	 */
-	protected Object convertData(ConvertDataEvent event) {
-
-		// 原始返回
-		return event.getData();
 	}
 
 	/**

@@ -1,11 +1,10 @@
 package org.colorcoding.tools.btulz.models;
 
-import java.util.ArrayList;
-
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
+import org.colorcoding.tools.btulz.util.ArrayList;
 
 @XmlType(name = "Models", namespace = Environment.NAMESPACE_BTULZ_MODELS)
 @XmlSeeAlso({ Model.class })

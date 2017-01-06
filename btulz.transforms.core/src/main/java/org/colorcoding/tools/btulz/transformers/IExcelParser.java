@@ -30,11 +30,6 @@ public interface IExcelParser {
 	 */
 	void parse(IDomain domain, Sheet sheet) throws Exception;
 
-	/**
-	 * 添加数据解释监听者，退出自动移出
-	 * 
-	 * @param listener
-	 */
-	void addListener(ConvertDataListener listener);
-
+	@Override
+	String toString();
 }
