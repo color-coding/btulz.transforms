@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ns2:CommandBuilder Description="创建脚本-MSSQL" xmlns:ns2="http://colorcoding.org/btulz/shell/commands">
     <Item Content="java" Editable="false" />
+    <Item Content="&quot;-Dfile.encoding=utf-8&quot;" Description="使用utf-8编码方式" Editable="false" />
     <Item Content="-jar btulz.transforms.core-0.1.0.jar" Description="使用jar包" Editable="false" />
     <Item Content="sql" Description="子命令" Editable="false" />
     <Item Content="-Company=${VALUE}" Description="公司" Value="CC" />
