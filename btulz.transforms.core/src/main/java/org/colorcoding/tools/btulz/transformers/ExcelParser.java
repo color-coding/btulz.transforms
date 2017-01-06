@@ -38,19 +38,19 @@ public class ExcelParser implements IExcelParser {
 		Object cellValue = null;
 		CellType cellType = CellType.forInt(cell.getCellType());
 		if (cellType == CellType.STRING) {
-			cellValue = cell.getRichStringCellValue().getString();
+			cellValue = cell.getStringCellValue();
 		} else if (cellType == CellType.NUMERIC) {
 			if (DateUtil.isCellDateFormatted(cell)) {
-				cellValue = String.valueOf(cell.getDateCellValue());
+				cellValue = cell.getDateCellValue();
 			} else {
-				cellValue = String.valueOf(cell.getNumericCellValue());
+				cellValue = cell.getNumericCellValue();
 			}
 		} else if (cellType == CellType.BOOLEAN) {
-			cellValue = String.valueOf(cell.getBooleanCellValue());
+			cellValue = cell.getBooleanCellValue();
 		} else if (cellType == CellType.FORMULA) {
-			cellValue = String.valueOf(cell.getCellFormula());
+			cellValue = cell.getCellFormula();
 		} else if (cellType == CellType.BLANK) {
-			cellValue = String.valueOf("");
+			cellValue = "";
 		}
 		return cellValue;
 	}
