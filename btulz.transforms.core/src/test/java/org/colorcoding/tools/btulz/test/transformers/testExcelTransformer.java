@@ -4,7 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -15,41 +19,17 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.colorcoding.tools.btulz.models.Domain;
+import org.colorcoding.tools.btulz.models.IDomain;
 import org.colorcoding.tools.btulz.test.Environment;
 import org.colorcoding.tools.btulz.transformers.ExcelTransformer;
-import org.colorcoding.tools.btulz.transformers.MultiTransformException;
-import org.colorcoding.tools.btulz.transformers.TransformException;
 
 import junit.framework.TestCase;
 
 public class testExcelTransformer extends TestCase {
 
 	// jdbc.odbc的方法已在java7中取消
-
-	public void testLoadXls() throws Exception {
-		InputStream stream = null;
-		Workbook wb = null;
-		String fileName = Environment.getWorkingFolder() + Environment.getExcelModelsFileOld();
-		try {
-			stream = new FileInputStream(fileName);
-
-			if (fileName.endsWith(".xls")) {
-				wb = new HSSFWorkbook(stream);
-			} else {
-				throw new Exception("读取的不是excel文件");
-			}
-			this.loadWorkbook(wb);
-		} catch (FileNotFoundException e) {
-			throw e;
-		} finally {
-			if (wb != null) {
-				wb.close();
-			}
-			if (stream != null) {
-				stream.close();
-			}
-		}
-	}
+	// 不支持旧版的excel模板，有需要转成xml再使用（兼容旧版xml）
 
 	public void testLoadXlsx() throws Exception {
 		InputStream stream = null;
@@ -57,7 +37,9 @@ public class testExcelTransformer extends TestCase {
 		String fileName = (new File(Environment.getWorkingFolder())).getParent() + Environment.getExcelModelsFile();
 		try {
 			stream = new FileInputStream(fileName);
-			if (fileName.endsWith(".xlsx")) {
+			if (fileName.endsWith(".xls")) {
+				wb = new HSSFWorkbook(stream);
+			} else if (fileName.endsWith(".xlsx")) {
 				wb = new XSSFWorkbook(stream);
 			} else {
 				throw new Exception("读取的不是excel文件");
@@ -117,12 +99,26 @@ public class testExcelTransformer extends TestCase {
 		}
 	}
 
-	public void testTransformer() throws TransformException, MultiTransformException {
+	public void testTransformer() throws Exception {
 		ExcelTransformer excelTransformer = new ExcelTransformer();
 		excelTransformer.setIgnoreSheet(false);// 不忽略注释表格
 		excelTransformer.setInterruptOnError(true);
 		excelTransformer.load((new File(Environment.getWorkingFolder())).getParent() + Environment.getExcelModelsFile(),
 				true);
+		JAXBContext context = JAXBContext.newInstance(Domain.class);
+		Marshaller marshaller = context.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+
+		System.out.println("序列化输出：");
+		for (IDomain item : excelTransformer.getWorkingDomains()) {
+			StringWriter writer = new StringWriter();
+			marshaller.marshal(item, writer);
+			String oldXML = writer.toString();
+			System.out.println(oldXML);
+		}
+		excelTransformer.transform();// 保存为xml
 	}
 
 }

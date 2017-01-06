@@ -7,7 +7,9 @@ import org.colorcoding.tools.btulz.Console;
 import org.colorcoding.tools.btulz.commands.Command4Code;
 import org.colorcoding.tools.btulz.commands.Command4DSJar;
 import org.colorcoding.tools.btulz.commands.Command4Ds;
+import org.colorcoding.tools.btulz.commands.Command4Excel;
 import org.colorcoding.tools.btulz.commands.Command4Sql;
+import org.colorcoding.tools.btulz.test.Environment;
 
 import junit.framework.TestCase;
 
@@ -120,6 +122,19 @@ public class testCommands extends TestCase {
 		args.add(String.format("-Release")); // 释放资源
 		System.out.println("显示帮助信息：");
 		Console.main(new String[] { Command4DSJar.COMMAND_PROMPT, Command4DSJar.ARGUMENT_NAME_HELP });
+		System.out.println("开始运行：");
+		Console.main(args.toArray(new String[] {}));
+	}
+
+	public void testCommandExcel() {
+		ArrayList<String> args = new ArrayList<>();
+		args.add(String.format(Command4Excel.COMMAND_PROMPT)); // 命令
+		args.add(String.format("-ExcelFile=%s",
+				(new File(Environment.getWorkingFolder())).getParent() + Environment.getExcelModelsFile())); // 使用的模板
+		args.add(String.format("-OutputFolder=%s", "D:\\worktemp\\")); // 输出目录
+		args.add(String.format("-IgnoreSheet=%s", "no")); // 输出目录
+		System.out.println("显示帮助信息：");
+		Console.main(new String[] { Command4Excel.COMMAND_PROMPT, Command4Excel.ARGUMENT_NAME_HELP });
 		System.out.println("开始运行：");
 		Console.main(args.toArray(new String[] {}));
 	}

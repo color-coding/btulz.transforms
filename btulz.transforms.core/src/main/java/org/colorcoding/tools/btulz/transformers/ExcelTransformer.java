@@ -44,12 +44,32 @@ public class ExcelTransformer extends FileTransformer {
 		this.ignoreSheet = ignoreSheet;
 	}
 
+	private String outputFolder;
+
+	public final String getOutputFolder() {
+		if (this.outputFolder == null || this.outputFolder.isEmpty()) {
+			this.outputFolder = Environment.getWorkingFolder() + File.separator + "out";
+		}
+		return outputFolder;
+	}
+
+	public final void setOutputFolder(String outputFolder) {
+		this.outputFolder = outputFolder;
+	}
+
 	/**
 	 * 当前领域模型输出为xml格式
 	 */
 	@Override
 	public final void transform() throws Exception {
-		this.transform(Environment.getWorkingFolder() + File.separator + "out");
+		XmlTransformer xmlTransformer = null;
+		for (IDomain domain : this.getWorkingDomains()) {
+			xmlTransformer = new XmlTransformerDom4j();
+			xmlTransformer.load(domain);
+			xmlTransformer.setInterruptOnError(true);
+			xmlTransformer.setKeepResults(false);
+			xmlTransformer.save(this.getOutputFolder());
+		}
 	}
 
 	/**
@@ -60,14 +80,8 @@ public class ExcelTransformer extends FileTransformer {
 	 * @throws Exception
 	 */
 	public void transform(String outFolder) throws Exception {
-		XmlTransformer xmlTransformer = null;
-		for (IDomain domain : this.getWorkingDomains()) {
-			xmlTransformer = new XmlTransformer();
-			xmlTransformer.load(domain);
-			xmlTransformer.setInterruptOnError(true);
-			xmlTransformer.setKeepResults(false);
-			xmlTransformer.save(outFolder);
-		}
+		this.setOutputFolder(outFolder);
+		this.transform();
 	}
 
 	@Override
@@ -167,10 +181,10 @@ public class ExcelTransformer extends FileTransformer {
 	private void parse(IDomain domain, Sheet sheet) throws TransformException {
 		IExcelParser parser = this.createParser(sheet);
 		if (parser == null) {
-			Environment.getLogger().debug(String.format("[%s] no parser available.", sheet.getSheetName()));
+			Environment.getLogger().info(String.format("[%s] no parser available.", sheet.getSheetName()));
 			return;
 		} else {
-			Environment.getLogger().debug(String.format("[%s] using [%s].", sheet.getSheetName(), parser.toString()));
+			Environment.getLogger().info(String.format("[%s] using [%s].", sheet.getSheetName(), parser.toString()));
 		}
 		try {
 			parser.parse(domain, sheet);

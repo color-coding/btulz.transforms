@@ -21,12 +21,7 @@ public final class Environment extends org.colorcoding.tools.btulz.Environment {
 				File.separator);
 	}
 
-	public static String getExcelModelsFileOld() {
-		return "//org//colorcoding//tools//btulz//test//transformers//domain_models_old.xls".replace("//",
-				File.separator);
-	}
-
 	public static String getExcelModelsFile() {
-		return "//classes//templates//domain_models_template.xlsx".replace("//", File.separator);
+		return "//classes//templates//domain_models_template_v4.0.xlsx".replace("//", File.separator);
 	}
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:CommandBuilder Description="解析excel文件输出xml" xmlns:ns2="http://colorcoding.org/btulz/shell/commands">
+  <Item Content="java" Editable="false" />
+  <Item Content="-jar btulz.transforms.core-0.1.0.jar" Description="使用jar包" Editable="false" />
+  <Item Content="excel" Description="子命令" Editable="false" />
+  <Item Content="-ExcelFile=${VALUE}" Description="解析的excel文件">
+    <ValidValues ClassName="javax.swing.JFileChooser" />
+  </Item>
+  <Item Content="-OutputFolder=${VALUE}" Description="输出目录" Value="${WORK_FOLDER}temp">
+    <ValidValues ClassName="javax.swing.JFileChooser" />
+  </Item>
+  <Item Content="-IgnoreSheet=${VALUE}" Description="忽略注释的表格" Value="yes">
+    <ValidValues>
+      <ValidValue Description="忽略" Value="yes" />
+      <ValidValue Description="不忽略" Value="no" />
+    </ValidValues>
+  </Item>
+  <Item Content="-Release" Description="释放资源" Editable="false" Optional="true" />
+</ns2:CommandBuilder>

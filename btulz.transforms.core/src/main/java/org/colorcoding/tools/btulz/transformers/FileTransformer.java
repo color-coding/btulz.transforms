@@ -66,7 +66,11 @@ public abstract class FileTransformer extends Transformer implements IFileTransf
 		this.loadFile(file, includingSubFolder);
 		// 如果有错误，则抛出错误
 		if (!this.isInterruptOnError() && this.getErrors().length > 0) {
-			throw new MultiTransformException(this.getErrors());
+			StringBuilder stringBuilder = new StringBuilder();
+			for (Exception exception : this.getErrors()) {
+				stringBuilder.append(exception.getMessage());
+			}
+			throw new MultiTransformException(stringBuilder.toString(), this.getErrors());
 		}
 	}
 
@@ -82,7 +86,11 @@ public abstract class FileTransformer extends Transformer implements IFileTransf
 		}
 		// 如果有错误，则抛出错误
 		if (!this.isInterruptOnError() && this.getErrors().length > 0) {
-			throw new MultiTransformException(this.getErrors());
+			StringBuilder stringBuilder = new StringBuilder();
+			for (Exception exception : this.getErrors()) {
+				stringBuilder.append(exception.getMessage());
+			}
+			throw new MultiTransformException(stringBuilder.toString(), this.getErrors());
 		}
 	}
 
@@ -178,7 +186,11 @@ public abstract class FileTransformer extends Transformer implements IFileTransf
 		}
 		// 如果有错误，则抛出错误
 		if (!this.isInterruptOnError() && this.getErrors().length > 0) {
-			throw new MultiTransformException(this.getErrors());
+			StringBuilder stringBuilder = new StringBuilder();
+			for (Exception exception : this.getErrors()) {
+				stringBuilder.append(exception.getMessage());
+			}
+			throw new MultiTransformException(stringBuilder.toString(), this.getErrors());
 		}
 	}
 

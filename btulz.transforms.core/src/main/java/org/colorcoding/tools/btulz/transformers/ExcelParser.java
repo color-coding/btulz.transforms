@@ -13,6 +13,7 @@ import org.colorcoding.tools.btulz.models.IBusinessObject;
 import org.colorcoding.tools.btulz.models.IBusinessObjectItem;
 import org.colorcoding.tools.btulz.models.IDomain;
 import org.colorcoding.tools.btulz.models.IModel;
+import org.colorcoding.tools.btulz.models.IProperty;
 import org.colorcoding.tools.btulz.models.data.emBORelation;
 import org.colorcoding.tools.btulz.models.data.emDataSubType;
 import org.colorcoding.tools.btulz.models.data.emDataType;
@@ -111,38 +112,77 @@ public class ExcelParser implements IExcelParser {
 		String tmpValue = String.valueOf(value).trim();
 		if (targetType.isEnum()) {
 			// 枚举类型
-			if (targetType.isAssignableFrom(emYesNo.class)) {
-				return "是".equals(tmpValue) ? (T) emYesNo.Yes : (T) emYesNo.No;
-			} else if (targetType.isAssignableFrom(emBORelation.class)) {
-				if ("".equals(tmpValue)) {
-
-				} else if ("".equals(tmpValue)) {
-
+			if (targetType == emYesNo.class) {
+				if ("是".equals(tmpValue)) {
+					return (T) emYesNo.Yes;
+				} else if ("Yes".equals(tmpValue)) {
+					return (T) emYesNo.Yes;
 				}
-				return (T) emBORelation.OneToOne;
-			} else if (targetType.isAssignableFrom(emModelType.class)) {
-				if ("".equals(tmpValue)) {
-
-				} else if ("".equals(tmpValue)) {
-
+				return (T) emYesNo.No;
+			} else if (targetType == emBORelation.class) {
+				if ("一对一".equals(tmpValue)) {
+					return (T) emBORelation.OneToOne;
+				}
+				return (T) emBORelation.OneToMany;
+			} else if (targetType == emModelType.class) {
+				if ("主数据".equals(tmpValue)) {
+					return (T) emModelType.MasterData;
+				} else if ("主数据行".equals(tmpValue)) {
+					return (T) emModelType.MasterDataLine;
+				} else if ("单据".equals(tmpValue)) {
+					return (T) emModelType.Document;
+				} else if ("单据行".equals(tmpValue)) {
+					return (T) emModelType.DocumentLine;
+				} else if ("普通".equals(tmpValue)) {
+					return (T) emModelType.Simple;
+				} else if ("普通行".equals(tmpValue)) {
+					return (T) emModelType.SimpleLine;
 				}
 				return (T) emModelType.Unspecified;
-			} else if (targetType.isAssignableFrom(emDataType.class)) {
-				if ("".equals(tmpValue)) {
-
-				} else if ("".equals(tmpValue)) {
-
+			} else if (targetType == emDataType.class) {
+				if ("字母数字".equals(tmpValue)) {
+					return (T) emDataType.Alphanumeric;
+				} else if ("长字符串".equals(tmpValue)) {
+					return (T) emDataType.Memo;
+				} else if ("数字".equals(tmpValue)) {
+					return (T) emDataType.Numeric;
+				} else if ("日期".equals(tmpValue)) {
+					return (T) emDataType.Date;
+				} else if ("小数".equals(tmpValue)) {
+					return (T) emDataType.Decimal;
+				} else if ("字节".equals(tmpValue)) {
+					return (T) emDataType.Bytes;
 				}
 				return (T) emDataType.Unknown;
-			} else if (targetType.isAssignableFrom(emDataSubType.class)) {
-				if ("".equals(tmpValue)) {
-
-				} else if ("".equals(tmpValue)) {
-
+			} else if (targetType == emDataSubType.class) {
+				if ("地址".equals(tmpValue)) {
+					return (T) emDataSubType.Address;
+				} else if ("电话".equals(tmpValue)) {
+					return (T) emDataSubType.Phone;
+				} else if ("时间".equals(tmpValue)) {
+					return (T) emDataSubType.Time;
+				} else if ("率".equals(tmpValue)) {
+					return (T) emDataSubType.Rate;
+				} else if ("总计".equals(tmpValue)) {
+					return (T) emDataSubType.Sum;
+				} else if ("价格".equals(tmpValue)) {
+					return (T) emDataSubType.Price;
+				} else if ("数量".equals(tmpValue)) {
+					return (T) emDataSubType.Quantity;
+				} else if ("百分比".equals(tmpValue)) {
+					return (T) emDataSubType.Percentage;
+				} else if ("单位数量".equals(tmpValue)) {
+					return (T) emDataSubType.Measurement;
+				} else if ("连接".equals(tmpValue)) {
+					return (T) emDataSubType.Link;
+				} else if ("图片".equals(tmpValue)) {
+					return (T) emDataSubType.Image;
+				} else if ("邮箱".equals(tmpValue)) {
+					return (T) emDataSubType.Email;
 				}
 				return (T) emDataSubType.Default;
 			}
-		} else if (targetType == Boolean.TYPE) {
+		} else if (targetType == Boolean.class) {
 			// 布尔
 			if ("是".equals(tmpValue)) {
 				return (T) Boolean.TRUE;
@@ -150,10 +190,14 @@ public class ExcelParser implements IExcelParser {
 				return (T) Boolean.TRUE;
 			}
 			return (T) Boolean.FALSE;
-		} else if (targetType == Integer.TYPE) {
+		} else if (targetType == Integer.class) {
 			// 数值
-			return (T) Integer.valueOf(tmpValue);
-		} else if (targetType.equals(String.class)) {
+			if (tmpValue.indexOf(".") > 0) {
+				// 带.
+				tmpValue = tmpValue.substring(0, tmpValue.indexOf("."));
+			}
+			return (T) (Object) Integer.parseInt(tmpValue);
+		} else if (targetType == String.class) {
 			// 字符
 			return (T) String.valueOf(tmpValue);
 		}
@@ -304,6 +348,18 @@ public class ExcelParser implements IExcelParser {
 			}
 		}
 
+		/**
+		 * 已知的数据区域定义
+		 * 
+		 * @return
+		 */
+		protected List<ExcelDataArea> getDataAreas() {
+			List<ExcelDataArea> areas = new ArrayList<>();
+			areas.add(new ExcelDataAreaEmpty(this.getExcelParser()));
+			areas.add(new ExcelDataAreaProperty(this.getExcelParser()));
+			return areas;
+		}
+
 		public final static int COLUMN_INDEX_TABLE_NAME = 1;
 		public final static int COLUMN_INDEX_DESCRIPTION = 4;
 		public final static int COLUMN_INDEX_NAME = 6;
@@ -311,13 +367,45 @@ public class ExcelParser implements IExcelParser {
 		public final static int COLUMN_INDEX_IS_ENTITY = 11;
 
 		public int parse(Row row, IDomain domain) {
+			Sheet sheet = row.getSheet();
+			ExcelDataArea area = null;
 			int useCount = 0;
 			IModel model = domain.getModels().create();
 			model.setMapped(this.convertData(row.getCell(COLUMN_INDEX_TABLE_NAME), String.class));
 			model.setDescription(this.convertData(row.getCell(COLUMN_INDEX_DESCRIPTION), String.class));
 			model.setName(this.convertData(row.getCell(COLUMN_INDEX_NAME), String.class));
 			model.setModelType(this.convertData(row.getCell(COLUMN_INDEX_MODEL_TYPE), emModelType.class));
-			model.setEntity(this.convertData(row.getCell(COLUMN_INDEX_IS_ENTITY), boolean.class));
+			model.setEntity(this.convertData(row.getCell(COLUMN_INDEX_IS_ENTITY), Boolean.class));
+			useCount++;// 自身行
+			useCount++;// propety标题1
+			useCount++;// propety标题2
+			// 开始属性行处理
+			for (int iRow = row.getRowNum() + useCount; iRow < sheet.getLastRowNum(); iRow++) {
+				useCount++;
+				row = sheet.getRow(iRow);
+				if (row == null) {
+					// 遇到空行，认为是中断行
+					break;
+				}
+				area = null;
+				for (ExcelDataArea tmpArea : this.getDataAreas()) {
+					if (tmpArea.match(row)) {
+						area = tmpArea;
+						break;
+					}
+				}
+				if (area instanceof ExcelDataAreaEmpty) {
+					// 遇到无数据行，认为是中断行
+					break;
+				} else if (area instanceof ExcelDataAreaProperty) {
+					// 属性行
+					useCount += area.parse(row, model);
+				} else {
+					Environment.getLogger().warn(String.format("sheet [%s] row [%s] is unkown.",
+							row.getSheet().getSheetName(), row.getRowNum() + 1));
+					break;
+				}
+			}
 			return useCount;
 		}
 	}
@@ -375,32 +463,23 @@ public class ExcelParser implements IExcelParser {
 			return areas;
 		}
 
+		public final static int COLUMN_INDEX_FIELD_NAME = 0;
+		public final static int COLUMN_INDEX_DESCRIPTION = 1;
+		public final static int COLUMN_INDEX_NAME = 2;
+		public final static int COLUMN_INDEX_DATA_TYPE = 4;
+		public final static int COLUMN_INDEX_DATA_SUB_TYPE = 5;
+		public final static int COLUMN_INDEX_EDIT_SIZE = 6;
+
 		public int parse(Row row, IModel model) {
 			int useCount = 0;
-			Sheet sheet = row.getSheet();
-			ExcelDataArea area = null;
-			for (int iRow = 0; iRow < sheet.getLastRowNum(); iRow++) {
-				useCount++;
-				row = sheet.getRow(iRow);
-				if (row == null) {
-					// 遇到空行，认为是中断行
-					break;
-				}
-				area = null;
-				for (ExcelDataArea tmpArea : this.getDataAreas()) {
-					if (tmpArea.match(row)) {
-						area = tmpArea;
-						break;
-					}
-				}
-				if (area instanceof ExcelDataAreaEmpty) {
-					// 遇到无数据行，认为是中断行
-					break;
-				} else if (area instanceof ExcelDataAreaProperty) {
-					// 属性行
+			IProperty property = model.getProperties().create();
+			property.setMapped(this.convertData(row.getCell(COLUMN_INDEX_FIELD_NAME), String.class));
+			property.setDescription(this.convertData(row.getCell(COLUMN_INDEX_DESCRIPTION), String.class));
+			property.setName(this.convertData(row.getCell(COLUMN_INDEX_NAME), String.class));
+			property.setDataType(this.convertData(row.getCell(COLUMN_INDEX_DATA_TYPE), emDataType.class));
+			property.setDataSubType(this.convertData(row.getCell(COLUMN_INDEX_DATA_SUB_TYPE), emDataSubType.class));
+			property.setEditSize(this.convertData(row.getCell(COLUMN_INDEX_EDIT_SIZE), Integer.class));
 
-				}
-			}
 			return useCount;
 		}
 	}

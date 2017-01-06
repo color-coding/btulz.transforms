@@ -2,32 +2,18 @@ package org.colorcoding.tools.btulz.transformers;
 
 public class MultiTransformException extends Exception {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2405395597366247548L;
 
 	public MultiTransformException() {
 		super();
 	}
 
-	public MultiTransformException(String arg0, Throwable arg1, boolean arg2, boolean arg3) {
-		super(arg0, arg1, arg2, arg3);
+	public MultiTransformException(String message) {
+		super(message);
 	}
 
-	public MultiTransformException(String arg0, Throwable arg1) {
-		super(arg0, arg1);
-	}
-
-	public MultiTransformException(String arg0) {
-		super(arg0);
-	}
-
-	public MultiTransformException(Throwable arg0) {
-		super(arg0);
-	}
-
-	public MultiTransformException(Exception[] errors) {
+	public MultiTransformException(String message, Exception[] errors) {
+		this(message);
 		this.errors = errors;
 	}
 

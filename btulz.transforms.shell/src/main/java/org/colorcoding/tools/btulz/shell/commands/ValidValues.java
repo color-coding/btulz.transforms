@@ -52,7 +52,7 @@ public class ValidValues implements Iterable<ValidValue> {
 		if (this.getClassName() != null && !this.getClassName().isEmpty()) {
 			return null;
 		}
-		return this.values;
+		return this.getValues();
 	}
 
 	void getValuesProxy(List<ValidValue> values) {

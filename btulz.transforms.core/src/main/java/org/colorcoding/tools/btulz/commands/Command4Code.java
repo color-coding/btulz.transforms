@@ -53,7 +53,6 @@ public class Command4Code extends Command4Release<Command4Code> {
 			arguments.add(argument);
 		}
 		// 添加自身参数
-		arguments.add(new Argument("-Release", "释放资源模板"));
 		arguments.add(new Argument("-TemplateFolder", "使用的模板"));
 		arguments.add(new Argument("-OutputFolder", "代码输出的目录"));
 		arguments.add(new Argument("-GroupId", "组命名空间"));

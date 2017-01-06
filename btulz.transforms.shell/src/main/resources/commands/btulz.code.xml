@@ -23,5 +23,5 @@
             <Item Content=",{&quot;name&quot;:&quot;jerseyVersion&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="jersey版本" Value="2.22.1" />
         </Items>
     </Item>
-    <Item Content="-Release" Description="释放资源" />
+    <Item Content="-Release" Description="释放资源" Optional="true" />
 </ns2:CommandBuilder>
