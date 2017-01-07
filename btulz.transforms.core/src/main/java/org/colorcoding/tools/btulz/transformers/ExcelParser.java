@@ -146,7 +146,7 @@ public class ExcelParser implements IExcelParser {
 					return (T) emDataType.Memo;
 				} else if ("数字".equals(tmpValue)) {
 					return (T) emDataType.Numeric;
-				} else if ("日期".equals(tmpValue)) {
+				} else if ("日期/时间".equals(tmpValue) || "日期/小时".equals(tmpValue)) {
 					return (T) emDataType.Date;
 				} else if ("小数".equals(tmpValue)) {
 					return (T) emDataType.Decimal;
@@ -159,7 +159,9 @@ public class ExcelParser implements IExcelParser {
 					return (T) emDataSubType.Address;
 				} else if ("电话".equals(tmpValue)) {
 					return (T) emDataSubType.Phone;
-				} else if ("时间".equals(tmpValue)) {
+				} else if ("日期".equals(tmpValue)) {
+					return (T) emDataSubType.Date;
+				} else if ("时间".equals(tmpValue) || "小时".equals(tmpValue)) {
 					return (T) emDataSubType.Time;
 				} else if ("率".equals(tmpValue)) {
 					return (T) emDataSubType.Rate;
@@ -469,6 +471,7 @@ public class ExcelParser implements IExcelParser {
 		public final static int COLUMN_INDEX_DATA_TYPE = 4;
 		public final static int COLUMN_INDEX_DATA_SUB_TYPE = 5;
 		public final static int COLUMN_INDEX_EDIT_SIZE = 6;
+		public final static int COLUMN_INDEX_DECLARED_TYPE = 8;
 
 		public int parse(Row row, IModel model) {
 			int useCount = 0;
@@ -479,7 +482,10 @@ public class ExcelParser implements IExcelParser {
 			property.setDataType(this.convertData(row.getCell(COLUMN_INDEX_DATA_TYPE), emDataType.class));
 			property.setDataSubType(this.convertData(row.getCell(COLUMN_INDEX_DATA_SUB_TYPE), emDataSubType.class));
 			property.setEditSize(this.convertData(row.getCell(COLUMN_INDEX_EDIT_SIZE), Integer.class));
-
+			String value = this.convertData(row.getCell(COLUMN_INDEX_DECLARED_TYPE), String.class);
+			if (value != null && !value.isEmpty()) {
+				property.setDeclaredType(value);
+			}
 			return useCount;
 		}
 	}

@@ -25,6 +25,10 @@ public enum emDataSubType {
 	 */
 	Phone,
 	/**
+	 * 日期
+	 */
+	Date,
+	/**
 	 * 时间
 	 */
 	Time,

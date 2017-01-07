@@ -28,7 +28,13 @@ public class testXmlTransformer extends TestCase {
 		xmlTransformer.setInterruptOnError(true);
 		xmlTransformer.save();
 		xmlTransformer.setKeepResults(false);
-		xmlTransformer.load(Environment.getWorkingFolder() + File.separator + Environment.getXmlModelsFileOld(), false);
+		// xmlTransformer.load(Environment.getWorkingFolder() + File.separator +
+		// Environment.getXmlModelsFileOld(), false);
+
+		xmlTransformer.load(Environment.getWorkingFolder()
+				+ "/out/TrainingTesting/ibas.trainingtesting/src/main/resources/datastructures".replace("/",
+						File.separator),
+				false);
 		xmlTransformer.save();
 		JAXBContext context = JAXBContext.newInstance(Domain.class);
 		Marshaller marshaller = context.createMarshaller();

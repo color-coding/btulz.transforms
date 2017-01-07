@@ -257,7 +257,7 @@ public class Property implements IProperty {
 		case Numeric:
 			return "int";
 		case Date:
-			if (this.getDataSubType() == emDataSubType.Default)
+			if (this.getDataSubType() == emDataSubType.Default || this.getDataSubType() == emDataSubType.Date)
 				return "datetime";
 			else if (this.getDataSubType() == emDataSubType.Time)
 				return "smallint";
@@ -293,7 +293,7 @@ public class Property implements IProperty {
 				this.annotatedType = "db_Numeric";
 				break;
 			case Date:
-				if (this.getDataSubType() == emDataSubType.Default)
+				if (this.getDataSubType() == emDataSubType.Default || this.getDataSubType() == emDataSubType.Date)
 					this.annotatedType = "db_Date";
 				else if (this.getDataSubType() == emDataSubType.Time)
 					this.annotatedType = "db_Numeric";

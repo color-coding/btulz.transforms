@@ -134,4 +134,25 @@ public class Domain implements IDomain {
 		return this.clone();
 	}
 
+	@Override
+	public void buildMapping() {
+		for (IBusinessObject bo : this.getBusinessObjects()) {
+			this.buildMapping(bo);
+		}
+	}
+
+	private void buildMapping(IBusinessObject bo) {
+		if (bo.getMappedModel() != null) {
+			for (IModel model : this.getModels()) {
+				if (bo.getMappedModel().equals(model.getName())) {
+					bo.setMappedModel(model);
+					break;
+				}
+			}
+		}
+		for (IBusinessObject boItem : bo.getRelatedBOs()) {
+			this.buildMapping(boItem);
+		}
+	}
+
 }

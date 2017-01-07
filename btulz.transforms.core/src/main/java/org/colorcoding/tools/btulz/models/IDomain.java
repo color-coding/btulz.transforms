@@ -79,4 +79,8 @@ public interface IDomain {
 	 */
 	IDomain clone(boolean noChilds);
 
+	/**
+	 * 构建映射关系
+	 */
+	void buildMapping();
 }

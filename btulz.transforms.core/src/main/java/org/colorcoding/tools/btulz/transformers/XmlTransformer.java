@@ -211,7 +211,6 @@ public class XmlTransformer extends FileTransformer {
 			element.setAttribute("Name", bo.getName());
 			element.setAttribute("Description", bo.getDescription());
 			element.setAttribute("ShortName", bo.getShortName());
-			element.setAttribute("ShortName", bo.getShortName());
 			element.setAttribute("MappedModel", bo.getMappedModel());
 		}
 	}

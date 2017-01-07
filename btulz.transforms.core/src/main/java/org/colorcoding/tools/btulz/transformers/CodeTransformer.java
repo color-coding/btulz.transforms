@@ -249,6 +249,7 @@ public class CodeTransformer extends Transformer {
 		}
 		for (IDomain domain : domains) {
 			Environment.getLogger().info(String.format("begin transform domain [%s] to codes.", domain.getName()));
+			domain.buildMapping();// 构建关系
 			File outFolder = new File(this.getOutputFolder() + File.separator + domain.getName());
 			Parameters parameters = this.getRuntimeParameters();
 			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, domain));
