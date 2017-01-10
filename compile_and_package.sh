@@ -84,7 +84,7 @@ do
       echo --编译[${line}]失败
     fi
   fi
-done < ${WORK_FOLDER}/compile_order.txt
+done < ${WORK_FOLDER}/compile_order.txt | sed 's/\r//g'
 
 echo 输出直接调用shell脚本
 cp -r ${WORK_FOLDER}/btulz.transforms.shell/src/main/commands/btulz.shell.sh.txt ${WORK_FOLDER}/release/btulz.shell.sh
