@@ -1,0 +1,121 @@
+﻿/**
+ * @license
+ * Copyright color-coding studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+
+import * as bobas from './basis/bobas/bobas';
+
+/**
+* ${BO.getDescription()}
+*/
+export class ${BO.getName()} extends bobas.BusinessObject<${BO.getName()}> {
+
+    /**
+    * 构造函数
+    */
+    constructor() {
+        super();
+    }
+
+$BEGIN_BO_MODEL$
+$BEGIN_MODEL_PROPERTY$
+    private _${Property.getName()}: ${Property.getDeclaredType()};
+    /**
+    * ${Property.getDescription()}
+    */
+    get ${Property.getName()}(): ${Property.getDeclaredType()} {
+        return this._${Property.getName()};
+    }
+    set ${Property.getName()}(value: ${Property.getDeclaredType()}) {
+        this._${Property.getName()} = value;
+    }
+
+$END_MODEL_PROPERTY$
+$END_BO_MODEL$
+
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+    private _${BOItem.getName()}s: ${BOItem.getName()}s = new ${BOItem.getName()}s(this);
+    /**
+    * ${BOItem.getDescription()}集合
+    * 
+    */
+    get _${BOItem.getName()}s: ${BOItem.getName()}s {
+        return this._${BOItem.getName()}s;
+    }
+    set items(value: ${BOItem.getName()}s) {
+        this._${BOItem.getName()}s = value;
+    }
+
+$END_BOITEM_RELATION_IS_ONETOMANY$
+
+$BEGIN_BOITEM_RELATION_IS_ONETOONE$
+    private ${BOItem.getName()}: ${BOItem.getName()} = new ${BOItem.getName()}();
+    /**
+    * ${BOItem.getDescription()}
+    * 
+    */
+    get ${BOItem.getName()}(): ${BOItem.getName()} {
+        return this.${BOItem.getName()};
+    }
+    set ${BOItem.getName()}(value: ${BOItem.getName()}) {
+        this.${BOItem.getName()} = value;
+    }
+
+$END_BOITEM_RELATION_IS_ONETOONE$
+$END_BOITEM$
+}
+
+$BEGIN_BOITEM$
+/**
+* ${BOItem.getDescription()}
+*/
+export class ${BOItem.getName()} extends bobas.BusinessObject<${BOItem.getName()}> {
+    /**
+    * 构造函数
+    */
+    constructor() {
+        super();
+    }
+
+$BEGIN_MODEL$
+$BEGIN_MODEL_PROPERTY$
+    private _${Property.getName()}: ${Property.getDeclaredType()};
+    /**
+    * ${Property.getDescription()}
+    */
+    get ${Property.getName()}(): ${Property.getDeclaredType()} {
+        return this._${Property.getName()};
+    }
+    set ${Property.getName()}(value: ${Property.getDeclaredType()}) {
+        this._${Property.getName()} = value;
+    }
+
+$END_MODEL_PROPERTY$
+$END_MODEL$
+}
+
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+/**
+* ${BOItem.getDescription()} 集合
+*/
+export class ${BOItem.getName()}s extends bobas.BusinessObjects<${BOItem.getName()}, ${BO.getName()}> {
+
+    /**
+     * 创建并添加子项
+     */
+    create(): ${BOItem.getName()} {
+        let item = new ${BOItem.getName()}();
+        this.add(item);
+        return item;
+    }
+
+}
+$END_BOITEM_RELATION_IS_ONETOMANY$
+
+$END_BOITEM$
+
+

@@ -23,12 +23,12 @@ public class testCodeTransformer extends TestCase {
 		codeTransformer.addParameters(new Parameter("Company", "CC"));
 		codeTransformer.addParameters(new Parameter("ibasVersion", "0.1.1"));
 		codeTransformer.addParameters(new Parameter("jerseyVersion", "2.22.1"));
-		// codeTransformer.addDomains(Environment.getWorkingFolder() +
-		// File.separator + Environment.getXmlModelsFileOld());
+		codeTransformer.addDomains(Environment.getWorkingFolder() + File.separator + Environment.getXmlModelsFileOld());
 
-		codeTransformer.addDomains(Environment.getWorkingFolder()
-				+ "/out/TrainingTesting/ibas.trainingtesting/src/main/resources/datastructures".replace("/",
-						File.separator));
+		// codeTransformer.addDomains(Environment.getWorkingFolder()
+		// +
+		// "/out/TrainingTesting/ibas.trainingtesting/src/main/resources/datastructures".replace("/",
+		// File.separator));
 		codeTransformer.transform();
 	}
 
