@@ -6,16 +6,20 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
+/// <reference path="./${Domain.getShortName().toLowerCase()}BORepository.d.ts" />
+
 import * as bobas from './basis/bobas/bobas';
+import { IBORepository${Domain.getName()} } from './${Domain.getShortName().toLowerCase()}BORepository.d';
 import { DataConverter4${Domain.getName()} } from './DataConverters';
 $BEGIN_BO$
+import { I${BO.getName()} } from './bo/${BO.getName().toLowerCase()}.d';
 import { ${BO.getName()} } from './bo/${BO.getName().toLowerCase()}';
 $END_BO$
 
 /**
 * <%Domain.Name%> 业务仓库
 */
-export class BORepository${Domain.getName()} extends bobas.BORepositoryApplication {
+export class BORepository${Domain.getName()} extends bobas.BORepositoryApplication implements IBORepository${Domain.getName()} {
 
     private converter: DataConverter4${Domain.getName()};
     /**
@@ -29,7 +33,6 @@ export class BORepository${Domain.getName()} extends bobas.BORepositoryApplicati
     }
 
 $BEGIN_BO$
-    /*----------------------------------------低调分割线--------------------------------------------*/
     /**
      * 查询 ${BO.getDescription()}
      * @param criteria 查询

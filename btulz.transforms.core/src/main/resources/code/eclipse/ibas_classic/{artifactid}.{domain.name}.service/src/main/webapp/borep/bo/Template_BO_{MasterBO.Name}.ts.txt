@@ -6,12 +6,15 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
+/// <reference path="./${BO.getName().toLowerCase()}.d.ts" />
+
 import * as bobas from './basis/bobas/bobas';
+import { I${BO.getName()} } from './${BO.getName().toLowerCase()}';
 
 /**
 * ${BO.getDescription()}
 */
-export class ${BO.getName()} extends bobas.BusinessObject<${BO.getName()}> {
+export class ${BO.getName()} extends bobas.BusinessObject<${BO.getName()}> implements I${BO.getName()} {
 
     /**
     * 构造函数

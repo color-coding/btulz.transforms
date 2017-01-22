@@ -1,0 +1,35 @@
+﻿/**
+ * @license
+ * Copyright color-coding studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+
+import * as bobas from './basis/bobas/bobas';
+$BEGIN_BO$
+import { I${BO.getName()} } from './bo/${BO.getName().toLowerCase()}.d';
+$END_BO$
+
+/**
+* <%Domain.Name%> 业务仓库
+*/
+export interface BORepository${Domain.getName()} extends bobas.IBORemoteRepository {
+
+$BEGIN_BO$
+    /**
+     * 查询 ${BO.getDescription()}
+     * @param criteria 查询
+     * @param callBack 回掉函数，参数为：bobas.IOperationResult<${BO.getName()}>
+     */
+    fetch${BO.getName()}(criteria: bobas.ICriteria, callBack: Function);
+
+    /**
+     * 保存 ${BO.getDescription()}
+     * @param bo 业务对象
+     * @param callBack 回掉函数，参数为：bobas.IOperationResult<${BO.getName()}>
+     */
+    save${BO.getName()}(bo: ${BO.getName()}, callBack: Function);
+$END_BO$
+
+}
