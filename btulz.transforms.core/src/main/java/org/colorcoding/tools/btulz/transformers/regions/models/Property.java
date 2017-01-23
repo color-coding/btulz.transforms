@@ -284,28 +284,28 @@ public class Property implements IProperty {
 		if (this.annotatedType == null) {
 			switch (this.getDataType()) {
 			case Alphanumeric:
-				this.annotatedType = "db_Alphanumeric";
+				this.annotatedType = "ALPHANUMERIC";
 				break;
 			case Memo:
-				this.annotatedType = "db_Memo";
+				this.annotatedType = "MEMO";
 				break;
 			case Numeric:
-				this.annotatedType = "db_Numeric";
+				this.annotatedType = "NUMERIC";
 				break;
 			case Date:
 				if (this.getDataSubType() == emDataSubType.Default || this.getDataSubType() == emDataSubType.Date)
-					this.annotatedType = "db_Date";
+					this.annotatedType = "DATE";
 				else if (this.getDataSubType() == emDataSubType.Time)
-					this.annotatedType = "db_Numeric";
+					this.annotatedType = "NUMERIC";
 				break;
 			case Decimal:
-				this.annotatedType = "db_Decimal";
+				this.annotatedType = "DECIMAL";
 				break;
 			case Bytes:
-				this.annotatedType = "db_Bytes";
+				this.annotatedType = "BYTES";
 				break;
 			default:
-				this.annotatedType = "db_Unknown";
+				this.annotatedType = "UNKNOWN";
 				break;
 			}
 		}

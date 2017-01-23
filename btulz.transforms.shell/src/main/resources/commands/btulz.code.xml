@@ -20,7 +20,7 @@
     <Item Content="-Parameters=[${VALUE}]" Description="其他参数">
         <Items>
             <Item Content="{&quot;name&quot;:&quot;Company&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="公司标识" Value="CC" />
-            <Item Content=",{&quot;name&quot;:&quot;ibasVersion&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="ibas版本" Value="0.1.1" />
+            <Item Content=",{&quot;name&quot;:&quot;ibasVersion&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="ibas版本" Value="0.1.2" />
             <Item Content=",{&quot;name&quot;:&quot;jerseyVersion&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="jersey版本" Value="2.22.1" />
         </Items>
     </Item>

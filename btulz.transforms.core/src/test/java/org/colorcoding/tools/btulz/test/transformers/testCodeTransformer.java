@@ -21,7 +21,7 @@ public class testCodeTransformer extends TestCase {
 		codeTransformer.setProjectVersion("0.0.1");
 		codeTransformer.setProjectUrl("http://colorcoding.org");
 		codeTransformer.addParameters(new Parameter("Company", "CC"));
-		codeTransformer.addParameters(new Parameter("ibasVersion", "0.1.1"));
+		codeTransformer.addParameters(new Parameter("ibasVersion", "0.1.2"));
 		codeTransformer.addParameters(new Parameter("jerseyVersion", "2.22.1"));
 		codeTransformer.addDomains(Environment.getWorkingFolder() + File.separator + Environment.getXmlModelsFileOld());
 
