@@ -6,19 +6,26 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import * as bobas from './basis/bobas/bobas';
+import {
+    emYesNo,
+    emDocumentStatus,
+    emBOStatus,
+    emApprovalStatus,
+    IBusinessObject,
+    IBusinessObjects
+} from './basis/bobas/bobas';
 
 /**
 * ${BO.getDescription()}
 */
-export interface I${BO.getName()} extends bobas.IBusinessObject<${BO.getName()}> {
+export interface I${BO.getName()} extends IBusinessObject<${BO.getName()}> {
 
 $BEGIN_BO_MODEL$
 $BEGIN_MODEL_PROPERTY$
     /**
     * ${Property.getDescription()}
     */
-    ${Property.getName()}(): ${Property.getDeclaredType()};
+    ${Property.getName(LowerCamelCase)}: ${Property.getDeclaredType()};
     
 $END_MODEL_PROPERTY$
 $END_BO_MODEL$
@@ -29,7 +36,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
     * ${BOItem.getDescription()}集合
     * 
     */
-    ${BOItem.getName()}s: ${BOItem.getName()}s;
+    ${BOItem.getName(LowerCamelCase)}s: I${BOItem.getName()}s;
 
 $END_BOITEM_RELATION_IS_ONETOMANY$
 
@@ -38,7 +45,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOONE$
     * ${BOItem.getDescription()}
     * 
     */
-    ${BOItem.getName()}(): ${BOItem.getName()};
+    ${BOItem.getName(LowerCamelCase)}: I${BOItem.getName()};
 
 $END_BOITEM_RELATION_IS_ONETOONE$
 $END_BOITEM$
@@ -48,24 +55,24 @@ $BEGIN_BOITEM$
 /**
 * ${BOItem.getDescription()}
 */
-export interface I${BOItem.getName()} extends bobas.IBusinessObject<${BOItem.getName()}> {
+export interface I${BOItem.getName()} extends IBusinessObject<${BOItem.getName()}> {
 
-$BEGIN_MODEL$
+$BEGIN_BO_MODEL$
 $BEGIN_MODEL_PROPERTY$
     /**
     * ${Property.getDescription()}
     */
-    ${Property.getName()}(): ${Property.getDeclaredType()};
+    ${Property.getName(LowerCamelCase)}: ${Property.getDeclaredType()};
 
 $END_MODEL_PROPERTY$
-$END_MODEL$
+$END_BO_MODEL$
 }
 
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
 /**
 * ${BOItem.getDescription()} 集合
 */
-export interface I${BOItem.getName()}s extends bobas.IBusinessObjects<I${BOItem.getName()}, I${BO.getName()}> {
+export interface I${BOItem.getName()}s extends IBusinessObjects<I${BOItem.getName()}, I${BO.getName()}> {
 
     /**
      * 创建并添加子项

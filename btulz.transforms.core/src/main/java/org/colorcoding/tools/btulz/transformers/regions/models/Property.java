@@ -8,6 +8,7 @@ import org.colorcoding.tools.btulz.models.IProperty;
 import org.colorcoding.tools.btulz.models.data.emDataSubType;
 import org.colorcoding.tools.btulz.models.data.emDataType;
 import org.colorcoding.tools.btulz.templates.Parameter;
+import org.colorcoding.tools.btulz.util.NamingRules;
 
 public class Property implements IProperty {
 	/**
@@ -32,6 +33,10 @@ public class Property implements IProperty {
 	@Override
 	public String getName() {
 		return this.property.getName();
+	}
+
+	public String getName(String type) {
+		return NamingRules.format(type, this.property.getName());
 	}
 
 	@Override

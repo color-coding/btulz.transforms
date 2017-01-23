@@ -14,7 +14,7 @@ $END_BO$
 /**
 * <%Domain.Name%> 业务仓库
 */
-export interface BORepository${Domain.getName()} extends bobas.IBORemoteRepository {
+export interface IBORepository${Domain.getName()} extends bobas.IBORemoteRepository {
 
 $BEGIN_BO$
     /**
@@ -29,7 +29,7 @@ $BEGIN_BO$
      * @param bo 业务对象
      * @param callBack 回掉函数，参数为：bobas.IOperationResult<${BO.getName()}>
      */
-    save${BO.getName()}(bo: ${BO.getName()}, callBack: Function);
+    save${BO.getName()}(bo: I${BO.getName()}, callBack: Function);
 $END_BO$
 
 }

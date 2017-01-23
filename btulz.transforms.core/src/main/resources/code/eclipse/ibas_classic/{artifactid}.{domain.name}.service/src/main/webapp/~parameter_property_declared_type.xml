@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- 此模板的定义类型额外映射说明 -->
+<ns2:DataTypeMappings xmlns:ns2="http://colorcoding.org/btulz/transformers">
+    <!-- SubType未指定则忽略子项类型 -->
+    <Mapping DataType="Alphanumeric" Mapped="string"/>
+    <Mapping DataType="Memo" Mapped="string"/>
+    <Mapping DataType="Numeric" Mapped="number"/>
+    <Mapping DataType="Decimal" Mapped="number"/>
+    <Mapping DataType="Date" SubType="Default" Mapped="Date"/>
+    <Mapping DataType="Date" SubType="Time" Mapped="number"/>
+    <Mapping DataType="Bytes" Mapped="[]"/>
+</ns2:DataTypeMappings>
