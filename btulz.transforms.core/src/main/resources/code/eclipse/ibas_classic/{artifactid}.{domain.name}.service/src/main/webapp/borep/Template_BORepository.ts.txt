@@ -6,27 +6,34 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
-/// <reference path="./${Domain.getShortName().toLowerCase()}BORepository.d.ts" />
+/// <reference path="./BORepository.d.ts" />
 
-import * as bobas from './basis/bobas/bobas';
-import { IBORepository${Domain.getName()} } from './${Domain.getShortName().toLowerCase()}BORepository.d';
+import {
+    IBORemoteRepository,
+    ICriteria,
+    IOperationResult,
+    BORepositoryApplication,
+    IDataConverter,
+    object,
+} from './basis/bobas/bobas';
+import { IBORepository${Domain.getName()} } from './BORepository.d';
 import { DataConverter4${Domain.getName()} } from './DataConverters';
 $BEGIN_BO$
-import { I${BO.getName()} } from './bo/${BO.getName().toLowerCase()}.d';
-import { ${BO.getName()} } from './bo/${BO.getName().toLowerCase()}';
+import { I${BO.getName()} } from './bo/${BO.getName()}.d';
+import { ${BO.getName()} } from './bo/${BO.getName()}';
 $END_BO$
 
 /**
 * <%Domain.Name%> 业务仓库
 */
-export class BORepository${Domain.getName()} extends bobas.BORepositoryApplication implements IBORepository${Domain.getName()} {
+export class BORepository${Domain.getName()} extends BORepositoryApplication implements IBORepository${Domain.getName()} {
 
     private converter: DataConverter4${Domain.getName()};
     /**
      * 创建此模块的后端与前端数据的转换者
      */
-    protected createDataConverter(): bobas.IDataConverter {
-        if (bobas.object.isNull(this.converter)) {
+    protected createDataConverter(): IDataConverter {
+        if (object.isNull(this.converter)) {
             this.converter = new DataConverter4${Domain.getName()}();
         }
         return this.converter;
@@ -36,16 +43,16 @@ $BEGIN_BO$
     /**
      * 查询 ${BO.getDescription()}
      * @param criteria 查询
-     * @param callBack 回掉函数，参数为：bobas.IOperationResult<${BO.getName()}>
+     * @param callBack 回掉函数，参数为：IOperationResult<${BO.getName()}>
      */
-    fetch${BO.getName()}(criteria: bobas.ICriteria, callBack: Function) {
+    fetch${BO.getName()}(criteria: ICriteria, callBack: Function) {
         super.fetch("${BO.getName()}", criteria, callBack);
     }
 
     /**
      * 保存 ${BO.getDescription()}
      * @param bo 业务对象
-     * @param callBack 回掉函数，参数为：bobas.IOperationResult<${BO.getName()}>
+     * @param callBack 回掉函数，参数为：IOperationResult<${BO.getName()}>
      */
     save${BO.getName()}(bo: ${BO.getName()}, callBack: Function) {
         super.save("${BO.getName()}", bo, callBack);

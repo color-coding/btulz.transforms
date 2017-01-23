@@ -6,22 +6,25 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import * as bobas from './basis/bobas/bobas';
-import { DataConverter4${Domain.getName()} } from './DataConverters';
+import {
+    DataConverter4ibas,
+    BOConverter,
+    IBusinessObject
+} from './basis/bobas/bobas';
 $BEGIN_BO$
-import { ${BO.getName()} } from './bo/${BO.getName().toLowerCase()}';
+import { ${BO.getName()} } from './bo/${BO.getName()}';
 $END_BO$
 
 
 /**
  * ${Domain.getName()} 模块的数据转换者
  */
-export class DataConverter4${Domain.getName()} extends bobas.DataConverter4ibas {
+export class DataConverter4${Domain.getName()} extends DataConverter4ibas {
 
     /**
      * 创建业务对象转换者
      */
-    protected createBOConverter(): bobas.BOConverter {
+    protected createBOConverter(): BOConverter {
         return new ${Domain.getName()}BOConverter();
     }
 }
@@ -29,7 +32,7 @@ export class DataConverter4${Domain.getName()} extends bobas.DataConverter4ibas 
 /**
  * ${Domain.getName()} 模块的业务对象转换者
  */
-class ${Domain.getName()}BOConverter extends bobas.BOConverter {
+class ${Domain.getName()}BOConverter extends BOConverter {
 
     constructor() {
         super();
@@ -50,7 +53,7 @@ $END_BO$
      * @param data 远程数据
      * @returns 本地数据
      */
-    protected customParsing(data: any): bobas.IBusinessObject {
+    protected customParsing(data: any): IBusinessObject {
         return data;
     }
 

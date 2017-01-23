@@ -6,28 +6,32 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import * as bobas from './basis/bobas/bobas';
+import {
+    IBORemoteRepository,
+    ICriteria,
+    IOperationResult
+} from './basis/bobas/bobas';
 $BEGIN_BO$
-import { I${BO.getName()} } from './bo/${BO.getName().toLowerCase()}.d';
+import { I${BO.getName()} } from './bo/${BO.getName()}.d';
 $END_BO$
 
 /**
 * <%Domain.Name%> 业务仓库
 */
-export interface IBORepository${Domain.getName()} extends bobas.IBORemoteRepository {
+export interface IBORepository${Domain.getName()} extends IBORemoteRepository {
 
 $BEGIN_BO$
     /**
      * 查询 ${BO.getDescription()}
      * @param criteria 查询
-     * @param callBack 回掉函数，参数为：bobas.IOperationResult<${BO.getName()}>
+     * @param callBack 回掉函数，参数为：IOperationResult<${BO.getName()}>
      */
-    fetch${BO.getName()}(criteria: bobas.ICriteria, callBack: Function);
+    fetch${BO.getName()}(criteria: ICriteria, callBack: Function);
 
     /**
      * 保存 ${BO.getDescription()}
      * @param bo 业务对象
-     * @param callBack 回掉函数，参数为：bobas.IOperationResult<${BO.getName()}>
+     * @param callBack 回掉函数，参数为：IOperationResult<${BO.getName()}>
      */
     save${BO.getName()}(bo: I${BO.getName()}, callBack: Function);
 $END_BO$
