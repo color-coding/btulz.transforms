@@ -10,7 +10,7 @@ import {
     IBORemoteRepository,
     ICriteria,
     IOperationResult
-} from './basis/bobas/bobas';
+} from './basis/bobas/index';
 $BEGIN_BO$
 import { I${BO.getName()} } from './bo/${BO.getName()}.d';
 $END_BO$

@@ -1,4 +1,4 @@
-package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.service;
+package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.service.rest;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -12,8 +12,8 @@ $END_BO$
 /**
 * ${Domain.getName()} 数据服务JSON
 */
-@Path("json/")
-public class ServiceJson extends BORepository${Domain.getName()} {
+@Path("datas/")
+public class ServiceData extends BORepository${Domain.getName()} {
 
     //--------------------------------------------------------------------------------------------//
 $BEGIN_BO$

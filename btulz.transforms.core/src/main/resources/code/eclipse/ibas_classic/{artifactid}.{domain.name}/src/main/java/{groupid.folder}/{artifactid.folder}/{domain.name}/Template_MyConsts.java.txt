@@ -5,25 +5,34 @@ package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()};
  */
 public final class MyConsts {
     /**
+    * 公司标记
+    */
+    public static final String COMPANY_ID = MyConfiguration.getConfigValue(MyConfiguration.CONFIG_ITEM_COMPANY_ID, "CC");
+
+    /**
     * 模块标识
     */
-    public static final String MY_MODULE_ID = "${ProjectId}";
+    public static final String MODULE_ID = "${ProjectId}";
+
     /**
     * 命名空间
     */
     public static final String NAMESPACE_ROOT = "${ProjectUrl}/${ArtifactId}/${Domain.getName().toLowerCase()}/";
+
     /**
     * 数据命名空间
     */
-    public static final String NAMESPACE_DATA = "${ProjectUrl}/${ArtifactId}/${Domain.getName().toLowerCase()}/data";
+    public static final String NAMESPACE_DATA = NAMESPACE_ROOT + "data";
+
     /**
     * 业务对象命名空间
     */
-    public static final String NAMESPACE_BO = "${ProjectUrl}/${ArtifactId}/${Domain.getName().toLowerCase()}/bo";
+    public static final String NAMESPACE_BO = NAMESPACE_ROOT + "bo";
+
     /**
     * 服务命名空间
     */
-    public static final String NAMESPACE_SERVICE = "${ProjectUrl}/${ArtifactId}/${Domain.getName().toLowerCase()}/service";
+    public static final String NAMESPACE_SERVICE = NAMESPACE_ROOT + "service";
 
 }
 

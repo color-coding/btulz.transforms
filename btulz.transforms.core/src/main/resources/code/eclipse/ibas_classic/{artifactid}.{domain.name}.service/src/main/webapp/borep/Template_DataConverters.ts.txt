@@ -10,7 +10,7 @@ import {
     DataConverter4ibas,
     BOConverter,
     IBusinessObject
-} from './basis/bobas/bobas';
+} from './basis/bobas/index';
 $BEGIN_BO$
 import { ${BO.getName()} } from './bo/${BO.getName()}';
 $END_BO$

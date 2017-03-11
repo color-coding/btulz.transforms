@@ -63,7 +63,7 @@
         </dependency>
         <dependency>
             <groupId>org.colorcoding.ibas</groupId>
-			<artifactId>bobas.businessobjectscommon.jersey</artifactId>
+            <artifactId>bobas.businessobjectscommon.jersey</artifactId>
             <version>${ibas.version}</version>
         </dependency>
         <dependency>

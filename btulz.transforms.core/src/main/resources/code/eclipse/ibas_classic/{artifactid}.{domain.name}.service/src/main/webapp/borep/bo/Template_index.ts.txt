@@ -7,10 +7,7 @@
  */
 
 // 模块索引文件，此文件集中导出类
-
-export * from './BORepository.d';
-export * from './BORepository';
 $BEGIN_BO$
-export * from './bo/${BO.getName()}.d';
-export * from './bo/${BO.getName()}';
+export * from './${BO.getName()}.d';
+export * from './${BO.getName()}';
 $END_BO$

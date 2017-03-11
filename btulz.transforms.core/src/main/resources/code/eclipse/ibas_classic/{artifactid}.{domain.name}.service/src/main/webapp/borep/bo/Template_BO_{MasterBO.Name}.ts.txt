@@ -15,7 +15,8 @@ import {
     emApprovalStatus,
     BusinessObject,
     BusinessObjects
-} from './basis/bobas/bobas';
+} from './basis/bobas/index';
+
 import { 
     I${BO.getName()},
 $BEGIN_BOITEM$

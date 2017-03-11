@@ -4,8 +4,8 @@
     <appSettings>
         <!--配置项目-公司标记-->
         <add key="CompanyId" value="${Company}" />
-		<!--配置项目-消息级别-->
-		<add key="MsgLevel" value="info" />
+        <!--配置项目-消息级别-->
+        <add key="MsgLevel" value="info" />
         <!-- 配置项目-数据库类型 -->
         <add key="MasterDbType" value="MSSQL" />
         <!-- 配置项目-数据库地址-->
@@ -16,5 +16,7 @@
         <add key="MasterDbUserID" value="sa" />
         <!-- 配置项目-数据库用户密码 -->
         <add key="MasterDbUserPassword" value="1q2w3e" />
+        <!--配置项目-序列化管理方式-->
+        <add key="SerializationWay" value="jersey" />
     </appSettings>
 </ns2:configuration>

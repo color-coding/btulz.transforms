@@ -1,11 +1,9 @@
 package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()};
 
-import org.colorcoding.ibas.bobas.configuration.Configuration;
-
 /**
  * 我的配置项
  */
-public class MyConfiguration extends Configuration {
+public class MyConfiguration extends org.colorcoding.ibas.bobas.MyConfiguration {
 
 
 }

@@ -1,19 +1,22 @@
-package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.service;
+package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.service.soap;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebService;
 
 import org.colorcoding.ibas.bobas.common.*;
+import org.colorcoding.ibas.bobas.cxf.WebServicePath;
 import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.repository.*;
 $BEGIN_BO$
 import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${BO.getName().toLowerCase()}.*;
 $END_BO$
 
 /**
-* ${Domain.getName()} 数据服务XML
+* ${Domain.getName()} 数据服务JSON
 */
-@Path("xml/")
-public class ServiceXml extends BORepository${Domain.getName()} {
+@WebService
+@WebServicePath("/datas")
+public class ServiceData extends BORepository${Domain.getName()} {
 
     //--------------------------------------------------------------------------------------------//
 $BEGIN_BO$
@@ -23,11 +26,8 @@ $BEGIN_BO$
      * @param token 口令
      * @return 操作结果
      */
-    @POST
-    @Produces(MediaType.APPLICATION_XML)
-    @Consumes(MediaType.APPLICATION_XML)
-    @Path("fetch${BO.getName()}")
-    public OperationResult<${BO.getName()}> fetch${BO.getName()}(Criteria criteria, @QueryParam("token") String token) {
+    @WebMethod
+    public OperationResult<${BO.getName()}> fetch${BO.getName()}(@WebParam(name = "criteria") Criteria criteria, @WebParam(name = "token") String token) {
         return super.fetch${BO.getName()}(criteria, token);
     }
 
@@ -37,11 +37,8 @@ $BEGIN_BO$
      * @param token 口令
      * @return 操作结果
      */
-    @POST
-    @Produces(MediaType.APPLICATION_XML)
-    @Consumes(MediaType.APPLICATION_XML)
-    @Path("save${BO.getName()}")
-    public OperationResult<${BO.getName()}> save${BO.getName()}(${BO.getName()} bo, @QueryParam("token") String token) {
+    @WebMethod
+    public OperationResult<${BO.getName()}> save${BO.getName()}(@WebParam(name = "bo") ${BO.getName()} bo, @WebParam(name = "token") String token) {
         return super.save${BO.getName()}(bo, token);
     }
 

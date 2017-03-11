@@ -13,7 +13,7 @@ import {
     emApprovalStatus,
     IBusinessObject,
     IBusinessObjects
-} from './basis/bobas/bobas';
+} from './basis/bobas/index';
 
 /**
 * ${BO.getDescription()}

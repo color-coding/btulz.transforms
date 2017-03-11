@@ -14,17 +14,17 @@ import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.data.*;
 * 
 */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name = "${Model.getName()}", namespace = MyConsts.NAMESPACE_BO)
+@XmlType(name = ${Model.getName()}.BUSINESS_OBJECT_NAME, namespace = MyConsts.NAMESPACE_BO)
 $BEGIN_MODEL_MODELTYPE_IS_DOCUMENT$
-@XmlRootElement(name = "${Model.getName()}", namespace = MyConsts.NAMESPACE_BO)
+@XmlRootElement(name = ${Model.getName()}.BUSINESS_OBJECT_NAME, namespace = MyConsts.NAMESPACE_BO)
 @BOCode(${Model.getName()}.BUSINESS_OBJECT_CODE)
 $END_MODEL_MODELTYPE_IS_DOCUMENT$
 $BEGIN_MODEL_MODELTYPE_IS_MASTERDATA$
-@XmlRootElement(name = "${Model.getName()}", namespace = MyConsts.NAMESPACE_BO)
+@XmlRootElement(name = ${Model.getName()}.BUSINESS_OBJECT_NAME, namespace = MyConsts.NAMESPACE_BO)
 @BOCode(${Model.getName()}.BUSINESS_OBJECT_CODE)
 $END_MODEL_MODELTYPE_IS_MASTERDATA$
 $BEGIN_MODEL_MODELTYPE_IS_SIMPLE$
-@XmlRootElement(name = "${Model.getName()}", namespace = MyConsts.NAMESPACE_BO)
+@XmlRootElement(name = ${Model.getName()}.BUSINESS_OBJECT_NAME, namespace = MyConsts.NAMESPACE_BO)
 @BOCode(${Model.getName()}.BUSINESS_OBJECT_CODE)
 $END_MODEL_MODELTYPE_IS_SIMPLE$
 public class ${Model.getName()} extends BusinessObject<${Model.getName()}> implements I${Model.getName()} {
@@ -37,33 +37,43 @@ public class ${Model.getName()} extends BusinessObject<${Model.getName()}> imple
     /**
     * 当前类型
     */
-    private final static Class<?> MY_CLASS = ${Model.getName()}.class;
+    private static final Class<?> MY_CLASS = ${Model.getName()}.class;
 
     /**
     * 数据库表
     */
-    public final static String DB_TABLE_NAME = "${Model.getMapped()}";
+    public static final String DB_TABLE_NAME = "${Model.getMapped()}";
 
     /**
     * 业务对象编码
     */
-    public final static String BUSINESS_OBJECT_CODE = "${MasterBO.getShortName()}";
+    public static final String BUSINESS_OBJECT_CODE = "${MasterBO.getShortName()}";
+
+    /**
+    * 业务对象名称
+    */
+    public static final String BUSINESS_OBJECT_NAME = "${Model.getName()}";
 
 $BEGIN_MODEL_PROPERTY$
+    /**
+    * 属性名称-${Property.getDescription()}
+    */
+    private static final String PROPERTY_${Property.getName().toUpperCase()}_NAME = "${Property.getName()}";
+
     /**
     * ${Property.getDescription()} 属性
     */
     @DbField(name = "${Property.getMapped()}", type = DbFieldType.${Property.getAnnotatedType()}, table = DB_TABLE_NAME, primaryKey = ${Property.isPrimaryKey()})
-    public final static IPropertyInfo<${Property.getDeclaredType()}> ${Property.getName()}Property = registerProperty("${Property.getName()}", ${Property.getDeclaredType()}.class, MY_CLASS);
+    public static final IPropertyInfo<${Property.getDeclaredType()}> PROPERTY_${Property.getName().toUpperCase()} = registerProperty(PROPERTY_${Property.getName().toUpperCase()}_NAME, ${Property.getDeclaredType()}.class, MY_CLASS);
 
     /**
     * 获取-${Property.getDescription()}
     * 
     * @return 值
     */
-    @XmlElement(name = "${Property.getName()}")
+    @XmlElement(name = PROPERTY_${Property.getName().toUpperCase()}_NAME)
     public final ${Property.getDeclaredType()} get${Property.getName()}() {
-        return this.getProperty(${Property.getName()}Property);
+        return this.getProperty(PROPERTY_${Property.getName().toUpperCase()});
     }
 
     /**
@@ -72,7 +82,7 @@ $BEGIN_MODEL_PROPERTY$
     * @param value 值
     */
     public final void set${Property.getName()}(${Property.getDeclaredType()} value) {
-        this.setProperty(${Property.getName()}Property, value);
+        this.setProperty(PROPERTY_${Property.getName().toUpperCase()}, value);
     }
 
 $BEGIN_PROPERTY_DECLAREDTYPE_IS_DECIMAL$
@@ -109,19 +119,24 @@ $END_MODEL_PROPERTY$
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
     /**
+    * 属性名称-${BOItem.getDescription()}
+    */
+    private static final String PROPERTY_${BOItem.getName().toUpperCase()}S_NAME = "${BOItem.getName()}s";
+
+    /**
     * ${BOItem.getDescription()}的集合属性
     * 
     */ 
-    public final static IPropertyInfo<I${BOItem.getName()}s> ${BOItem.getName()}sProperty = registerProperty("${BOItem.getName()}s", I${BOItem.getName()}s.class, MY_CLASS);
+    public static final IPropertyInfo<I${BOItem.getName()}s> PROPERTY_${BOItem.getName().toUpperCase()}S = registerProperty(PROPERTY_${BOItem.getName().toUpperCase()}S_NAME, I${BOItem.getName()}s.class, MY_CLASS);
     /**
     * 获取-${BOItem.getDescription()}集合
     * 
     * @return 值
     */
-    @XmlElementWrapper(name = "${BOItem.getName()}s")
-    @XmlElement(name = "${BOItem.getName()}", type = ${BOItem.getName()}.class)
+    @XmlElementWrapper(name = PROPERTY_${BOItem.getName().toUpperCase()}S_NAME)
+    @XmlElement(name = ${BOItem.getName()}.BUSINESS_OBJECT_NAME, type = ${BOItem.getName()}.class)
     public final I${BOItem.getName()}s get${BOItem.getName()}s() {
-        return this.getProperty(${BOItem.getName()}sProperty);
+        return this.getProperty(PROPERTY_${BOItem.getName().toUpperCase()}S);
     }
 
     /**
@@ -130,25 +145,30 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
     * @param value 值
     */
     public final void set${BOItem.getName()}s(I${BOItem.getName()}s value) {
-        this.setProperty(${BOItem.getName()}sProperty, value);
+        this.setProperty(PROPERTY_${BOItem.getName().toUpperCase()}S, value);
     }
 
 $END_BOITEM_RELATION_IS_ONETOMANY$
 
 $BEGIN_BOITEM_RELATION_IS_ONETOONE$
     /**
+    * 属性名称-${BOItem.getDescription()}
+    */
+    private static final String PROPERTY_${BOItem.getName().toUpperCase()}_NAME = "${BOItem.getName()}";
+
+    /**
     * ${BOItem.getDescription()}属性
     * 
     */ 
-    public final static IPropertyInfo<I${BOItem.getName()}> ${BOItem.getName()}Property = registerProperty("${BOItem.getName()}", I${BOItem.getName()}.class, MY_CLASS);
+    public static final IPropertyInfo<I${BOItem.getName()}> PROPERTY_${BOItem.getName().toUpperCase()} = registerProperty(PROPERTY_${BOItem.getName().toUpperCase()}_NAME, I${BOItem.getName()}.class, MY_CLASS);
     /**
     * 获取-${BOItem.getDescription()}
     * 
     * @return 值
     */
-    @XmlElement(name = "${BOItem.getName()}", type = ${BOItem.getName()}.class)
+    @XmlElement(name = PROPERTY_${BOItem.getName().toUpperCase()}_NAME}, type = ${BOItem.getName()}.class)
     public final I${BOItem.getName()} get${BOItem.getName()}() {
-        return this.getProperty(${BOItem.getName()}Property);
+        return this.getProperty(PROPERTY_${BOItem.getName().toUpperCase()});
     }
 
     /**
@@ -157,7 +177,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOONE$
     * @param value 值
     */
     public final void set${BOItem.getName()}(I${BOItem.getName()} value) {
-        this.setProperty(${BOItem.getName()}Property, value);
+        this.setProperty(PROPERTY_${BOItem.getName().toUpperCase()}, value);
     }
 $END_BOITEM_RELATION_IS_ONETOONE$
 $END_BOITEM$
@@ -177,7 +197,6 @@ $BEGIN_BOITEM_RELATION_IS_ONETOONE$
 $END_BOITEM_RELATION_IS_ONETOONE$
 $END_BOITEM$
         this.setObjectCode(BUSINESS_OBJECT_CODE);
-        // TODO: 初始化数据，默认的不需要可以删除
 $BEGIN_MODEL_MODELTYPE_IS_DOCUMENT$
         this.setPostingDate(DateTime.getToday());
         this.setDocumentDate(DateTime.getToday());

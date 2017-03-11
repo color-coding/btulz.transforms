@@ -1,4 +1,4 @@
-package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.service;
+package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.service.rest;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.ext.ContextResolver;
@@ -16,7 +16,7 @@ $END_BO$
  * 序列化解释器
  */
 @Provider
-@Produces({ "application/xml", "application/json" })
+@Produces({ "application/json" })
 public class Resolver implements ContextResolver<JAXBContext> {
 
     private static JAXBContext jaxbContext = null;

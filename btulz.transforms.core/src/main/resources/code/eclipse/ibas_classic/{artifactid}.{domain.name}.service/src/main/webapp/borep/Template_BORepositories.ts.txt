@@ -15,7 +15,7 @@ import {
     BORepositoryApplication,
     IDataConverter,
     object,
-} from './basis/bobas/bobas';
+} from './basis/bobas/index';
 import { IBORepository${Domain.getName()} } from './BORepository.d';
 import { DataConverter4${Domain.getName()} } from './DataConverters';
 $BEGIN_BO$

@@ -1,4 +1,4 @@
-package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.service;
+package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.service.rest;
 
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
