@@ -15,7 +15,7 @@ $END_BO$
 * ${Domain.getName()} 数据服务JSON
 */
 @WebService
-@WebServicePath("/datas")
+@WebServicePath("datas")
 public class ServiceData extends BORepository${Domain.getName()} {
 
     //--------------------------------------------------------------------------------------------//
