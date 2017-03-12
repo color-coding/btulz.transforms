@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @license
  * Copyright color-coding studio. All Rights Reserved.
  *
@@ -16,10 +16,9 @@ import {
     IDataConverter,
     object,
 } from './basis/bobas/index';
-import { IBORepository${Domain.getName()} } from './BORepository.d';
+import { IBORepository${Domain.getName()} } from '../api/BORepository.d';
 import { DataConverter4${Domain.getName()} } from './DataConverters';
 $BEGIN_BO$
-import { I${BO.getName()} } from './bo/${BO.getName()}.d';
 import { ${BO.getName()} } from './bo/${BO.getName()}';
 $END_BO$
 

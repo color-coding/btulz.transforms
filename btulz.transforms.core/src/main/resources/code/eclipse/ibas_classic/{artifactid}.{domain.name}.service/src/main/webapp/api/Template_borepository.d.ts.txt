@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @license
  * Copyright color-coding studio. All Rights Reserved.
  *
@@ -16,7 +16,7 @@ import { I${BO.getName()} } from './bo/${BO.getName()}.d';
 $END_BO$
 
 /**
-* <%Domain.Name%> 业务仓库
+* ${Domain.getName()} 业务仓库
 */
 export interface IBORepository${Domain.getName()} extends IBORemoteRepository {
 

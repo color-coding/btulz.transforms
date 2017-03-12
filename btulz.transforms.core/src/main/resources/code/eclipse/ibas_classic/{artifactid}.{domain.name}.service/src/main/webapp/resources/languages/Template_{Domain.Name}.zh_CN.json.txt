@@ -1,0 +1,11 @@
+{
+  "mu_${Domain.Name().toLowerCase()}": "${Domain.getDescription()}",
+$BEGIN_BO$
+  "mu_${Domain.Name().toLowerCase()}_func_${BO.getName().toLowerCase()}": "${BO.getDescription()}",
+  "mu_${Domain.Name().toLowerCase()}_app_${BO.getName().toLowerCase()}_list": "${BO.getDescription()}列表",
+  "mu_${Domain.Name().toLowerCase()}_app_${BO.getName().toLowerCase()}_choose": "${BO.getDescription()}选择",
+  "mu_${Domain.Name().toLowerCase()}_app_${BO.getName().toLowerCase()}_view": "${BO.getDescription()}查看",
+  "mu_${Domain.Name().toLowerCase()}_app_${BO.getName().toLowerCase()}_edit": "${BO.getDescription()}编辑",
+$END_BO$
+  "mu_${Domain.Name().toLowerCase()}_closing_delimiter": "---------"
+}

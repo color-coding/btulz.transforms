@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @license
  * Copyright color-coding studio. All Rights Reserved.
  *
@@ -57,7 +57,7 @@ $BEGIN_BOITEM$
 */
 export interface I${BOItem.getName()} extends IBusinessObject<${BOItem.getName()}> {
 
-$BEGIN_BO_MODEL$
+$BEGIN_BOITEM_MODEL$
 $BEGIN_MODEL_PROPERTY$
     /**
     * ${Property.getDescription()}
@@ -65,7 +65,7 @@ $BEGIN_MODEL_PROPERTY$
     ${Property.getName(LowerCamelCase)}: ${Property.getDeclaredType()};
 
 $END_MODEL_PROPERTY$
-$END_BO_MODEL$
+$END_BOITEM_MODEL$
 }
 
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$

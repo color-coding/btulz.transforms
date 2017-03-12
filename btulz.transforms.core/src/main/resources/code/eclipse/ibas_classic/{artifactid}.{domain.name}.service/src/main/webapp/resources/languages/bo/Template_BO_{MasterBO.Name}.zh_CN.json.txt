@@ -1,0 +1,25 @@
+{
+$BEGIN_BO_MODEL$
+  "bo_${BO.getName().toLowerCase()}": "${BO.getDescription()}",
+$BEGIN_MODEL_PROPERTY$
+  "bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}": "${Property.getDescription()}",
+$END_MODEL_PROPERTY$
+$END_BO_MODEL$
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+  "bo_${BO.getName().toLowerCase()}_${BOItem.getName().toLowerCase()}s": "${BOItem.getDescription()}",
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$BEGIN_BOITEM_RELATION_IS_ONETOONE$
+  "bo_${BO.getName().toLowerCase()}_${BOItem.getName().toLowerCase()}": "${BOItem.getDescription()}",
+$END_BOITEM_RELATION_IS_ONETOONE$
+$END_BOITEM$
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_MODEL$
+  "bo_${BOItem.getName().toLowerCase()}": "${BOItem.getDescription()}",
+$BEGIN_MODEL_PROPERTY$
+  "bo_${BOItem.getName().toLowerCase()}_${Property.getName().toLowerCase()}": "${Property.getDescription()}",
+$END_MODEL_PROPERTY$
+$END_BOITEM_MODEL$
+$END_BOITEM$
+  "bo_${BO.getName().toLowerCase()}_closing_delimiter": "---------"
+}
