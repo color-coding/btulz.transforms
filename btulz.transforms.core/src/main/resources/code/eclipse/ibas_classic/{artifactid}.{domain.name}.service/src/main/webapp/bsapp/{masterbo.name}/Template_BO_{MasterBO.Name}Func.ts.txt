@@ -6,3 +6,33 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
+import * as ibas from "../../3rdparty/ibas/index";
+import { ${BO.getName()}ListApp } from "./${BO.getName()}ListApp";
+
+export class ${BO.getName()}Func extends ibas.ModuleFunction {
+
+    /** 功能标识 */
+    static FUNCTION_ID = "${ID.newUUID()}";
+    /** 功能名称 */
+    static FUNCTION_NAME = "module_a_func_${BO.getName()}";
+    /** 根文件名称 */
+    static ROOT_FILE_NAME: string = "${Domain.getName().toLowerCase()}/index";
+
+    constructor() {
+        super();
+        this.id = ${BO.getName()}Func.FUNCTION_ID;
+        this.name = ${BO.getName()}Func.FUNCTION_NAME;
+        this.description = ibas.i18n.prop(this.name);
+    }
+
+    /** 默认功能 */
+    default(): ibas.IApplication<ibas.IView> {
+        // 获取根地址
+        let rootUrl: string = ibas.url.rootUrl(${BO.getName()}Func.ROOT_FILE_NAME);
+        // 加载语言-框架默认
+        ibas.i18n.load(ibas.string.format("{0}/resources/languages/bo/${BO.getName()}.{1}.json", rootUrl, ibas.i18n.language));
+        let app: ${BO.getName()}ListApp = new ${BO.getName()}ListApp();
+        app.navigation = this.navigation;
+        return app;
+    }
+}

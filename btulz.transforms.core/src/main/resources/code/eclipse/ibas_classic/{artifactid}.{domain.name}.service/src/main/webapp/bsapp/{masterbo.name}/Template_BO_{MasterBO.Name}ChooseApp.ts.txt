@@ -6,3 +6,78 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
+import * as ibas from "../../3rdparty/ibas/index";
+import { BORepository${Domain.getName()} } from "../../borep/BORepositories";
+import * as bo from "../../borep/bo/index";
+import { ${BO.getName()}EditApp } from "./${BO.getName()}EditApp";
+
+/** 应用-${BO.getDescription()} */
+export class ${BO.getName()}ChooseApp extends ibas.BOChooseApplication<I${BO.getName()}ChooseView, bo.${BO.getName()}> {
+
+    /** 应用标识 */
+    static APPLICATION_ID: string = "${ID.newUUID()}";
+    /** 应用名称 */
+    static APPLICATION_NAME: string = "mu_${Domain.Name().toLowerCase()}_app_${BO.getName().toLowerCase()}_choose";
+
+    constructor() {
+        super();
+        this.id = ${BO.getName()}ChooseApp.APPLICATION_ID;
+        this.name = ${BO.getName()}ChooseApp.APPLICATION_NAME;
+        this.description = ibas.i18n.prop(this.name);
+    }
+    /** 注册视图 */
+    protected registerView(): void {
+        super.registerView();
+        // 其他事件
+    }
+    /** 视图显示后 */
+    protected viewShowed(): void {
+        // 视图加载完成
+    }
+    /** 查询数据 */
+    protected fetchData(criteria: ibas.ICriteria): void {
+        this.busy(true);
+        let that = this;
+        let boRepository = new BORepository${Domain.getName()}();
+        let fetcher: ibas.FetchCaller<bo.${BO.getName()}> = {
+            /** 查询条件 */
+            criteria: criteria,
+            /**
+             * 调用完成
+             * @param opRslt 结果
+             */
+            onCompleted(opRslt: ibas.IOperationResult<bo.${BO.getName()}>): void {
+                try {
+                    if (opRslt.resultCode !== 0) {
+                        throw new Error(opRslt.message);
+                    }
+                    that.view.showData(opRslt.resultObjects);
+                    that.busy(false);
+                } catch (error) {
+                    that.messages(error);
+                }
+            }
+        }
+        boRepository.fetch${BO.getName()}(fetcher);
+        this.proceeding(ibas.emMessageType.INFORMATION, ibas.i18n.prop("sys_shell_fetching_data"));
+    }
+    /** 新建数据 */
+    protected newData(): void {
+        // 关闭自身
+        this.destroy();
+        // 调用编辑应用
+        let app = new ${BO.getName()}EditApp();
+        app.navigation = this.navigation;
+        app.viewShower = this.viewShower;
+        app.run();
+    }
+    /** 选择数据 */
+    protected chooseData(data: bo.${BO.getName()}): void {
+
+    }
+}
+/** 视图-${BO.getDescription()} */
+export interface I${BO.getName()}ChooseView extends ibas.IBOChooseView {
+    /** 显示数据 */
+    showData(datas: bo.${BO.getName()}[]): void;
+}

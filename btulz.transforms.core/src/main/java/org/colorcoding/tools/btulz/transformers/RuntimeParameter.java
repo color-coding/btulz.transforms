@@ -9,7 +9,7 @@ public class RuntimeParameter {
 		return rd.nextLong();
 	}
 
-	public String getUUID() {
+	public String newUUID() {
 		return UUID.randomUUID().toString();
 	}
 }

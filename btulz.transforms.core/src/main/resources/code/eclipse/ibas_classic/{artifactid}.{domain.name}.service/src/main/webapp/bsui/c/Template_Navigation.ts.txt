@@ -5,3 +5,44 @@
  * Use of this source code is governed by an Apache License, Version 2.0
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
+
+import * as ibas from "../../3rdparty/ibas/index";
+$BEGIN_BO$
+import * as ${BO.getName().toLowerCase()}Apps from "../../bsapp/${BO.getName().toLowerCase()}/index";
+$END_BO$
+$BEGIN_BO$
+import * as ${BO.getName().toLowerCase()}Views from "./${BO.getName().toLowerCase()}/index";
+$END_BO$
+
+/**
+ * 视图导航
+ */
+export class Navigation extends ibas.ViewNavigation {
+
+    /** 
+     * 创建实例
+     * @param id 应用id
+     */
+    protected newView(id: string): ibas.IView {
+        let view: ibas.IView = null;
+        switch (id) {
+$BEGIN_BO$
+            case ${BO.getName().toLowerCase()}Apps.${BO.getName()}ListApp.APPLICATION_ID:
+                view = new ${BO.getName().toLowerCase()}Views.${BO.getName()}ListView();
+                break;
+            case ${BO.getName().toLowerCase()}Apps.${BO.getName()}ChooseApp.APPLICATION_ID:
+                view = new ${BO.getName().toLowerCase()}Views.${BO.getName()}ChooseView();
+                break;
+            case ${BO.getName().toLowerCase()}Apps.${BO.getName()}ViewApp.APPLICATION_ID:
+                view = new ${BO.getName().toLowerCase()}Views.${BO.getName()}ViewView();
+                break;
+            case ${BO.getName().toLowerCase()}Apps.${BO.getName()}EditApp.APPLICATION_ID:
+                view = new ${BO.getName().toLowerCase()}Views.${BO.getName()}EditView();
+                break;
+$END_BO$
+            default:
+                break;
+        }
+        return view;
+    }
+}

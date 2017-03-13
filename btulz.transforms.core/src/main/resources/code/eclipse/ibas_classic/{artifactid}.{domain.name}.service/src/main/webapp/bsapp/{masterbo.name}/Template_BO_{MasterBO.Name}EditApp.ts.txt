@@ -6,3 +6,92 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
+import * as ibas from "../../3rdparty/ibas/index";
+import { BORepository${Domain.getName()} } from "../../borep/BORepositories";
+import * as bo from "../../borep/bo/index";
+
+/** 应用-${BO.getDescription()} */
+export class ${BO.getName()}EditApp extends ibas.BOEditApplication<I${BO.getName()}EditView, bo.${BO.getName()}> {
+
+    /** 应用标识 */
+    static APPLICATION_ID: string = "${ID.newUUID()}";
+    /** 应用名称 */
+    static APPLICATION_NAME: string = "mu_${Domain.Name().toLowerCase()}_app_${BO.getName().toLowerCase()}_edit";
+
+    constructor() {
+        super();
+        this.id = ${BO.getName()}EditApp.APPLICATION_ID;
+        this.name = ${BO.getName()}EditApp.APPLICATION_NAME;
+        this.description = ibas.i18n.prop(this.name);
+    }
+    /** 注册视图 */
+    protected registerView(): void {
+        super.registerView();
+        // 其他事件
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+        this.view.add${BOItem.getName()}Event = this.add${BOItem.getName()};
+        this.view.remove${BOItem.getName()}Event = this.remove${BOItem.getName()};
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+    }
+    /** 视图显示后 */
+    protected viewShowed(): void {
+        // 视图加载完成
+        this.view.show${BO.getName()}(this.editData);
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+        this.view.show${BOItem.getName()}s(this.editData.${BOItem.getName(LowerCamelCase)}s);
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+    }
+    /** 待编辑的数据 */
+    protected editData: bo.${BO.getName()};
+    /** 保存数据 */
+    protected saveData(): void {
+        this.messages(ibas.emMessageType.SUCCESS, ibas.i18n.prop("sys_shell_ui_sucessful"));
+    }
+    /** 运行,覆盖原方法 */
+    run(...args: any[]): void {
+        let data: bo.${BO.getName()} = arguments[0];
+        if (ibas.object.isNull(data)) {
+            data = new bo.${BO.getName()}();
+
+        }
+        this.editData = data;
+        super.run();
+    }
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+
+    /** 添加${BOItem.getDescription()}事件 */
+    add${BOItem.getName()}(): void {
+        this.editData.${BOItem.getName(LowerCamelCase)}s.create();
+        this.view.show${BOItem.getName()}s(this.editData.${BOItem.getName(LowerCamelCase)}s);
+    }
+    /** 删除${BOItem.getDescription()}事件 */
+    remove${BOItem.getName()}(item: bo.${BOItem.getName()}): void {
+        if (this.editData.${BOItem.getName(LowerCamelCase)}s.indexOf(item) >= 0) {
+            this.editData.${BOItem.getName(LowerCamelCase)}s.remove(item);
+            this.view.show${BOItem.getName()}s(this.editData.${BOItem.getName(LowerCamelCase)}s);
+        }
+    }
+
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+}
+/** 视图-${BO.getDescription()} */
+export interface I${BO.getName()}EditView extends ibas.IBOEditView {
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+    /** 添加${BOItem.getDescription()}事件 */
+    add${BOItem.getName()}Event: Function;
+    /** 删除${BOItem.getDescription()}事件 */
+    remove${BOItem.getName()}Event: Function;
+    /** 显示数据 */
+    show${BOItem.getName()}s(datas: bo.${BOItem.getName()}[]): void;
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+    /** 显示数据 */
+    show${BO.getName()}(data: bo.${BO.getName()}): void;
+}
