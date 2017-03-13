@@ -1,8 +1,6 @@
 package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.test.bo;
 
 import junit.framework.TestCase;
-import java.io.StringWriter;
-import javax.xml.bind.*;
 import org.colorcoding.ibas.bobas.data.*;
 import org.colorcoding.ibas.bobas.common.*;
 import org.colorcoding.ibas.bobas.repository.*;
@@ -45,27 +43,6 @@ $BEGIN_BOITEM_RELATION_IS_ONETOONE$
         
 $END_BOITEM_RELATION_IS_ONETOONE$
 $END_BOITEM$
-
-        // 测试序列化及反序列化
-        System.out.println("序列化输出：");
-        JAXBContext context = JAXBContext.newInstance(${BO.getName()}.class);
-        Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, false);
-        StringWriter writer = new StringWriter();
-        marshaller.marshal(bo, writer);
-        String oldXML = writer.toString();
-        System.out.println(oldXML);
-
-        System.out.println("反序列化输出：");
-        I${BO.getName()} boCloned = bo.clone();
-        writer = new StringWriter();
-        marshaller.marshal(boCloned, writer);
-        String newXML = writer.toString();
-        System.out.println(newXML);
-
-        // assertEquals("marshal and unmarshal not equal.", oldXML, newXML);//克隆会修正值，此处不相等
 
         // 测试对象的保存和查询
         IOperationResult<?> operationResult = null;
