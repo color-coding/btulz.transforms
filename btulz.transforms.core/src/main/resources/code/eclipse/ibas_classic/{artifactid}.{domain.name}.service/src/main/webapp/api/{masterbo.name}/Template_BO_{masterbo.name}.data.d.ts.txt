@@ -13,18 +13,14 @@ import {
     emApprovalStatus,
     IBusinessObject,
     IBusinessObjects
-} from './basis/bobas/index';
+} from '../../3rdparty/ibas/index';
 
-/**
-* ${BO.getDescription()}
-*/
-export interface I${BO.getName()} extends IBusinessObject<${BO.getName()}> {
+/** ${BO.getDescription()} */
+export interface I${BO.getName()} extends IBusinessObject<I${BO.getName()}> {
 
 $BEGIN_BO_MODEL$
 $BEGIN_MODEL_PROPERTY$
-    /**
-    * ${Property.getDescription()}
-    */
+    /** ${Property.getDescription()} */
     ${Property.getName(LowerCamelCase)}: ${Property.getDeclaredType()};
     
 $END_MODEL_PROPERTY$
@@ -32,19 +28,13 @@ $END_BO_MODEL$
 
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
-    /**
-    * ${BOItem.getDescription()}集合
-    * 
-    */
+    /** ${BOItem.getDescription()}集合 */
     ${BOItem.getName(LowerCamelCase)}s: I${BOItem.getName()}s;
 
 $END_BOITEM_RELATION_IS_ONETOMANY$
 
 $BEGIN_BOITEM_RELATION_IS_ONETOONE$
-    /**
-    * ${BOItem.getDescription()}
-    * 
-    */
+    /** ${BOItem.getDescription()} */
     ${BOItem.getName(LowerCamelCase)}: I${BOItem.getName()};
 
 $END_BOITEM_RELATION_IS_ONETOONE$
@@ -52,16 +42,12 @@ $END_BOITEM$
 }
 
 $BEGIN_BOITEM$
-/**
-* ${BOItem.getDescription()}
-*/
+/** ${BOItem.getDescription()} */
 export interface I${BOItem.getName()} extends IBusinessObject<${BOItem.getName()}> {
 
 $BEGIN_BOITEM_MODEL$
 $BEGIN_MODEL_PROPERTY$
-    /**
-    * ${Property.getDescription()}
-    */
+    /** ${Property.getDescription()} */
     ${Property.getName(LowerCamelCase)}: ${Property.getDeclaredType()};
 
 $END_MODEL_PROPERTY$
@@ -69,14 +55,10 @@ $END_BOITEM_MODEL$
 }
 
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
-/**
-* ${BOItem.getDescription()} 集合
-*/
+/** ${BOItem.getDescription()} 集合 */
 export interface I${BOItem.getName()}s extends IBusinessObjects<I${BOItem.getName()}, I${BO.getName()}> {
 
-    /**
-     * 创建并添加子项
-     */
+    /** 创建并添加子项 */
     create(): I${BOItem.getName()};
 }
 $END_BOITEM_RELATION_IS_ONETOMANY$

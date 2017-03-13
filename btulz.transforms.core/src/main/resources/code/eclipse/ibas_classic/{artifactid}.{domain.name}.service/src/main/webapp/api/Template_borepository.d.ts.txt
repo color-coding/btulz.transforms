@@ -9,31 +9,29 @@
 import {
     IBORemoteRepository,
     ICriteria,
-    IOperationResult
-} from './basis/bobas/index';
+    IOperationResult,
+    FetchCaller,
+    SaveCaller
+} from '../3rdparty/ibas/index';
 $BEGIN_BO$
-import { I${BO.getName()} } from './bo/${BO.getName()}.d';
+import { I${BO.getName()} } from './${BO.getName().toLowerCase()}/${BO.getName().toLowerCase()}.data.d';
 $END_BO$
 
-/**
-* ${Domain.getName()} 业务仓库
-*/
+/** ${Domain.getName()} 业务仓库 */
 export interface IBORepository${Domain.getName()} extends IBORemoteRepository {
 
 $BEGIN_BO$
     /**
      * 查询 ${BO.getDescription()}
-     * @param criteria 查询
-     * @param callBack 回掉函数，参数为：IOperationResult<${BO.getName()}>
+     * @param fetcher 查询者
      */
-    fetch${BO.getName()}(criteria: ICriteria, callBack: Function);
+    fetch${BO.getName()}(fetcher: FetchCaller<I${BO.getName()}>);
 
     /**
      * 保存 ${BO.getDescription()}
-     * @param bo 业务对象
-     * @param callBack 回掉函数，参数为：IOperationResult<${BO.getName()}>
+     * @param saver 保存者
      */
-    save${BO.getName()}(bo: I${BO.getName()}, callBack: Function);
+    save${BO.getName()}(saver: SaveCaller<I${BO.getName()}>);
 $END_BO$
 
 }

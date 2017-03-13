@@ -13,7 +13,7 @@ import {
     emApprovalStatus,
     BusinessObject,
     BusinessObjects
-} from './basis/bobas/index';
+} from '../../3rdparty/ibas/index';
 import { 
     I${BO.getName()},
 $BEGIN_BOITEM$
@@ -25,31 +25,31 @@ $BEGIN_BOITEM_RELATION_IS_ONETOONE$
     I${BOItem.getName()},
 $END_BOITEM_RELATION_IS_ONETOONE$
 $END_BOITEM$
-} from '../../api/${BO.getName().toLowerCase()}/${BO.getName()}.d';
+} from '../../api/${BO.getName().toLowerCase()}/${BO.getName().toLowerCase()}.data.d';
 
-/**
-* ${BO.getDescription()}
-*/
+/** ${BO.getDescription()} */
 export class ${BO.getName()} extends BusinessObject<${BO.getName()}> implements I${BO.getName()} {
 
-    /**
-    * 构造函数
-    */
     constructor() {
         super();
     }
 
+    /** 业务对象编码 */
+    static BUSINESS_OBJECT_CODE: string = "${MasterBO.getShortName()}";
+
 $BEGIN_BO_MODEL$
 $BEGIN_MODEL_PROPERTY$
-    private _${Property.getName(LowerCamelCase)}: ${Property.getDeclaredType()};
-    /**
-    * ${Property.getDescription()}
-    */
+    /** 映射的属性名称-${Property.getDescription()} */
+    private static PROPERTY_NAME_${Property.getName().toUpperCase()}: string = "_${Property.getName(LowerCamelCase)}";
+
+    /** 获取-${Property.getDescription()} */
     get ${Property.getName(LowerCamelCase)}(): ${Property.getDeclaredType()} {
-        return this._${Property.getName(LowerCamelCase)};
+        return this.getProperty<${Property.getDeclaredType()}>(${BO.getName()}.PROPERTY_NAME_${Property.getName().toUpperCase()});
     }
+
+    /** 设置-${Property.getDescription()} */
     set ${Property.getName(LowerCamelCase)}(value: ${Property.getDeclaredType()}) {
-        this._${Property.getName(LowerCamelCase)} = value;
+        this.setProperty(${BO.getName()}.PROPERTY_NAME_${Property.getName().toUpperCase()}, value);
     }
 
 $END_MODEL_PROPERTY$
@@ -57,74 +57,87 @@ $END_BO_MODEL$
 
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
-    private _${BOItem.getName(LowerCamelCase)}s: ${BOItem.getName()}s = new ${BOItem.getName()}s(this);
-    /**
-    * ${BOItem.getDescription()}集合
-    * 
-    */
+    /** 映射的属性名称-${BOItem.getDescription()}集合 */
+    private static PROPERTY_NAME_${BOItem.getName().toUpperCase()}S: string = "_${BOItem.getName(LowerCamelCase)}s";
+
+    /** 获取-${BOItem.getDescription()}集合 */
     get ${BOItem.getName(LowerCamelCase)}s(): ${BOItem.getName()}s {
-        return this._${BOItem.getName(LowerCamelCase)}s;
+        return this.getProperty<${BOItem.getName()}s>(${BO.getName()}.PROPERTY_NAME_${BOItem.getName().toUpperCase()}S);
     }
+
+    /** 设置-${BOItem.getDescription()}集合 */
     set ${BOItem.getName(LowerCamelCase)}s(value: ${BOItem.getName()}s) {
-        this._${BOItem.getName(LowerCamelCase)}s = value;
+        this.setProperty(${BO.getName()}.PROPERTY_NAME_${BOItem.getName().toUpperCase()}S, value);
     }
 
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $BEGIN_BOITEM_RELATION_IS_ONETOONE$
-    private o${BOItem.getName(LowerCamelCase)}: ${BOItem.getName()} = new ${BOItem.getName()}();
-    /**
-    * ${BOItem.getDescription()}
-    * 
-    */
+    /** 映射的属性名称-${BOItem.getDescription()}集合 */
+    private static PROPERTY_NAME_${BOItem.getName().toUpperCase()}: string = "_${BOItem.getName(LowerCamelCase)}";
+
+    /** 获取-${BOItem.getDescription()}集合 */
     get ${BOItem.getName(LowerCamelCase)}(): ${BOItem.getName()} {
-        return this.o${BOItem.getName(LowerCamelCase)};
+        return this.getProperty<${BOItem.getName()}>(${BO.getName()}.PROPERTY_NAME_${BOItem.getName().toUpperCase()});
     }
+
+    /** 设置-${BOItem.getDescription()}集合 */
     set ${BOItem.getName(LowerCamelCase)}(value: ${BOItem.getName()}) {
-        this.o${BOItem.getName(LowerCamelCase)} = value;
+        this.setProperty(${BO.getName()}.PROPERTY_NAME_${BOItem.getName().toUpperCase()}, value);
     }
 
 $END_BOITEM_RELATION_IS_ONETOONE$
 $END_BOITEM$
+
+    /** 初始化数据 */
+    protected init(): void {
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+        this.${BOItem.getName(LowerCamelCase)}s = new ${BOItem.getName()}s(this);
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$BEGIN_BOITEM_RELATION_IS_ONETOONE$
+        this.${BOItem.getName(LowerCamelCase)} = new ${BOItem.getName()}();
+$END_BOITEM_RELATION_IS_ONETOONE$
+$END_BOITEM$
+        this.objectCode = ${BO.getName()}.BUSINESS_OBJECT_CODE;
+    }
 }
 
 $BEGIN_BOITEM$
-/**
-* ${BOItem.getDescription()}
-*/
+/** ${BOItem.getDescription()} */
 export class ${BOItem.getName()} extends BusinessObject<${BOItem.getName()}> implements I${BOItem.getName()} {
-    /**
-    * 构造函数
-    */
+
     constructor() {
         super();
     }
 
 $BEGIN_BOITEM_MODEL$
 $BEGIN_MODEL_PROPERTY$
-    private _${Property.getName(LowerCamelCase)}: ${Property.getDeclaredType()};
-    /**
-    * ${Property.getDescription()}
-    */
+    /** 映射的属性名称-${Property.getDescription()} */
+    private static PROPERTY_NAME_${Property.getName().toUpperCase()}: string = "_${Property.getName(LowerCamelCase)}";
+
+    /** 获取-${Property.getDescription()} */
     get ${Property.getName(LowerCamelCase)}(): ${Property.getDeclaredType()} {
-        return this._${Property.getName(LowerCamelCase)};
+        return this.getProperty<${Property.getDeclaredType()}>(${BOItem.getName()}.PROPERTY_NAME_${Property.getName().toUpperCase()});
     }
+
+    /** 设置-${Property.getDescription()} */
     set ${Property.getName(LowerCamelCase)}(value: ${Property.getDeclaredType()}) {
-        this._${Property.getName(LowerCamelCase)} = value;
+        this.setProperty(${BOItem.getName()}.PROPERTY_NAME_${Property.getName().toUpperCase()}, value);
     }
 
 $END_MODEL_PROPERTY$
 $END_BOITEM_MODEL$
+
+    /** 初始化数据 */
+    protected init(): void {
+    }
 }
 
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
-/**
-* ${BOItem.getDescription()} 集合
-*/
+/** ${BOItem.getDescription()} 集合 */
 export class ${BOItem.getName()}s extends BusinessObjects<${BOItem.getName()}, ${BO.getName()}> implements I${BOItem.getName()}s {
 
-    /**
-     * 创建并添加子项
-     */
+    /** 创建并添加子项 */
     create(): ${BOItem.getName()} {
         let item = new ${BOItem.getName()}();
         this.add(item);

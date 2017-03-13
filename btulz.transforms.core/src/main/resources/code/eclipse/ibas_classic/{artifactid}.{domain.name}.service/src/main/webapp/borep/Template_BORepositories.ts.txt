@@ -6,31 +6,27 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
-/// <reference path="./BORepository.d.ts" />
-
 import {
+    object,
     IBORemoteRepository,
     ICriteria,
     IOperationResult,
-    BORepositoryApplication,
     IDataConverter,
-    object,
-} from './basis/bobas/index';
+    BORepositoryApplication,
+    FetchCaller,
+    SaveCaller
+} from '../3rdparty/ibas/index';
 import { IBORepository${Domain.getName()} } from '../api/BORepository.d';
 import { DataConverter4${Domain.getName()} } from './DataConverters';
 $BEGIN_BO$
 import { ${BO.getName()} } from './bo/${BO.getName()}';
 $END_BO$
 
-/**
-* <%Domain.Name%> 业务仓库
-*/
+/** <%Domain.Name%> 业务仓库 */
 export class BORepository${Domain.getName()} extends BORepositoryApplication implements IBORepository${Domain.getName()} {
 
     private converter: DataConverter4${Domain.getName()};
-    /**
-     * 创建此模块的后端与前端数据的转换者
-     */
+    /** 创建此模块的后端与前端数据的转换者 */
     protected createDataConverter(): IDataConverter {
         if (object.isNull(this.converter)) {
             this.converter = new DataConverter4${Domain.getName()}();
@@ -41,20 +37,18 @@ export class BORepository${Domain.getName()} extends BORepositoryApplication imp
 $BEGIN_BO$
     /**
      * 查询 ${BO.getDescription()}
-     * @param criteria 查询
-     * @param callBack 回掉函数，参数为：IOperationResult<${BO.getName()}>
+     * @param fetcher 查询者
      */
-    fetch${BO.getName()}(criteria: ICriteria, callBack: Function) {
-        super.fetch("${BO.getName()}", criteria, callBack);
+    fetch${BO.getName()}(fetcher: FetchCaller<${BO.getName()}>) {
+        super.fetch("${BO.getName()}", fetcher);
     }
 
     /**
      * 保存 ${BO.getDescription()}
-     * @param bo 业务对象
-     * @param callBack 回掉函数，参数为：IOperationResult<${BO.getName()}>
+     * @param saver 保存者
      */
-    save${BO.getName()}(bo: ${BO.getName()}, callBack: Function) {
-        super.save("${BO.getName()}", bo, callBack);
+    save${BO.getName()}(saver: SaveCaller<${BO.getName()}>) {
+        super.save("${BO.getName()}", saver);
     }
 $END_BO$
 

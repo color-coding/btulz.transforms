@@ -7,31 +7,25 @@
  */
 
 import {
-    DataConverter4ibas,
+    IBusinessObject,
     BOConverter,
-    IBusinessObject
-} from './basis/bobas/index';
+    DataConverter4ibas
+} from '../3rdparty/ibas/index';
 $BEGIN_BO$
 import { ${BO.getName()} } from './bo/${BO.getName()}';
 $END_BO$
 
 
-/**
- * ${Domain.getName()} 模块的数据转换者
- */
+/** ${Domain.getName()} 模块的数据转换者 */
 export class DataConverter4${Domain.getName()} extends DataConverter4ibas {
 
-    /**
-     * 创建业务对象转换者
-     */
+    /** 创建业务对象转换者 */
     protected createBOConverter(): BOConverter {
         return new ${Domain.getName()}BOConverter();
     }
 }
 
-/**
- * ${Domain.getName()} 模块的业务对象转换者
- */
+/** ${Domain.getName()} 模块的业务对象转换者 */
 class ${Domain.getName()}BOConverter extends BOConverter {
 
     constructor() {
