@@ -494,7 +494,9 @@ public class CodeTransformer extends Transformer {
 				template.export(parameters,
 						this.getFilePath(output, source.getName().replace(TEMPLATE_FILE_BO_ITEM, ""), parameters));
 				// 如果有子项继续
-				this.transformFileBOItems(source, output, new Parameters(parameters), businessObjectItem);
+				Parameters nParameters = new Parameters(parameters);
+				nParameters.add(new Parameter(RegionBusinessObject.REGION_PARAMETER_NAME, businessObjectItem));
+				this.transformFileBOItems(source, output, nParameters, businessObjectItem);
 			}
 		}
 	}

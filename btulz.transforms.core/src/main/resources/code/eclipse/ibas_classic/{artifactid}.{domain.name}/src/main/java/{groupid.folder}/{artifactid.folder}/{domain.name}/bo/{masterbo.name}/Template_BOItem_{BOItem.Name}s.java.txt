@@ -1,6 +1,8 @@
 package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${MasterBO.getName().toLowerCase()};
 
+import java.beans.PropertyChangeEvent;
 import javax.xml.bind.annotation.*;
+import org.colorcoding.ibas.bobas.common.*;
 import org.colorcoding.ibas.bobas.bo.*;
 import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.MyConsts;
 
@@ -56,4 +58,24 @@ public class ${BOItem.getName()}s extends BusinessObjects<I${BOItem.getName()}, 
         return null;
     }
 
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+    @Override
+    protected void afterAddItem(I${BOItem.getName()} item) {
+        super.afterAddItem(item);
+        // TODO 设置关联值
+    }
+
+    @Override
+    public ICriteria getElementCriteria() {
+        ICriteria criteria = super.getElementCriteria();
+        // TODO 添加关联查询条件
+        return criteria;
+    }
+
+    @Override
+    public void onParentPropertyChanged(PropertyChangeEvent evt) {
+        super.onParentPropertyChanged(evt);
+        // TODO 设置关联值
+    }
+$END_BOITEM_RELATION_IS_ONETOMANY$
 }

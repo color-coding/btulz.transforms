@@ -203,9 +203,6 @@ $BEGIN_MODEL_MODELTYPE_IS_DOCUMENT$
         this.setDeliveryDate(DateTime.getToday());
         this.setDocumentStatus(emDocumentStatus.RELEASED);
 $END_MODEL_MODELTYPE_IS_DOCUMENT$
-$BEGIN_MODEL_MODELTYPE_IS_SIMPLE$
-        this.setActivated(emYesNo.YES);
-$END_MODEL_MODELTYPE_IS_SIMPLE$
 $BEGIN_MODEL_MODELTYPE_IS_MASTERDATA$
         this.setActivated(emYesNo.YES);
 $END_MODEL_MODELTYPE_IS_MASTERDATA$

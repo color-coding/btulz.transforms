@@ -4,10 +4,6 @@ package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()};
  * 常量（命名空间等）
  */
 public final class MyConsts {
-    /**
-    * 公司标记
-    */
-    public static final String COMPANY_ID = MyConfiguration.getConfigValue(MyConfiguration.CONFIG_ITEM_COMPANY_ID, "CC");
 
     /**
     * 模块标识
