@@ -129,23 +129,26 @@ public class Command4Init extends Command<Command4Init> {
 	private List<IBusinessObject> analysis(File file) throws Exception {
 		ArrayList<IBusinessObject> bos = new ArrayList<>();
 		if (file.isDirectory()) {
-			// 获取类目录
-			File classFolder = this.getBOClassFolder(file.getParentFile());
-			if (classFolder == null) {
-				throw new ClassNotFoundException("unable to get class folder from data folder.");
-			}
 			for (File item : file.listFiles()) {
 				if (item.isFile()) {
+
+					// 获取类目录
+					File classFolder = this.getBOClassFolder(file.getParentFile());
+					if (classFolder == null) {
+						throw new ClassNotFoundException("unable to get class folder from data folder.");
+					}
 					if (item.getName().startsWith("bo.")) {
 						String name = item.getName().toLowerCase();
 						if (!name.startsWith("bo.")) {
 							continue;
 						}
-						String protocol = this.getProtocol(name);
-						String boType = this.getBOType(name);
+						DataInfo info = this.getDataInfo(name);
+						if (info == null) {
+							throw new Exception(String.format("[%s] cannot be resolved.", name));
+						}
 						InputStream inputStream = new FileInputStream(item);
 						if (inputStream != null) {
-							bos.add(this.analysis(protocol, boType, inputStream));
+							bos.add(this.analysis(info.protocol, info.name, inputStream));
 							inputStream.close();
 						}
 					}
@@ -164,11 +167,13 @@ public class Command4Init extends Command<Command4Init> {
 							}
 							String name = jarEntry.getName().toLowerCase();
 							if (name.startsWith("initialization/bo.")) {
-								String protocol = this.getProtocol(name);
-								String boType = this.getBOType(name);
+								DataInfo info = this.getDataInfo(name);
+								if (info == null) {
+									throw new Exception(String.format("[%s] cannot be resolved.", name));
+								}
 								InputStream inputStream = jarFile.getInputStream(jarEntry);
 								if (inputStream != null) {
-									bos.add(this.analysis(protocol, boType, inputStream));
+									bos.add(this.analysis(info.protocol, info.name, inputStream));
 									inputStream.close();
 								}
 							}
@@ -194,6 +199,9 @@ public class Command4Init extends Command<Command4Init> {
 		if (folder == null) {
 			return null;
 		}
+		if (folder.isFile()) {
+			return null;
+		}
 		if (folder.isDirectory()) {
 			if (folder.getName().equalsIgnoreCase("bo")) {
 				return folder;
@@ -208,27 +216,45 @@ public class Command4Init extends Command<Command4Init> {
 		return null;
 	}
 
-	protected String getProtocol(String fileName) throws Exception {
-		int index = fileName.lastIndexOf(".");
-		if (index < fileName.length()) {
-			return fileName.substring(index + 1);
+	protected DataInfo getDataInfo(String fileName) {
+		// initialization/bo.applicationmodule.if.xml
+		String value = fileName;
+		int index = value.indexOf("/");
+		if (index > 0) {
+			value = value.substring(index + 1);
 		}
-		throw new Exception(String.format("[%s] cannot be resolved.", fileName));
-	}
-
-	protected String getBOType(String fileName) throws Exception {
-		int sIndex = fileName.indexOf(".");
-		int eIndex = fileName.indexOf(".", sIndex + 1);
-		if (sIndex < eIndex) {
-			return fileName.substring(sIndex + 1, eIndex);
+		index = value.lastIndexOf(".");
+		if (index < 0) {
+			return null;
 		}
-		throw new Exception(String.format("[%s] cannot be resolved.", fileName));
+		DataInfo info = new DataInfo();
+		info.protocol = value.substring(index + 1);
+		value = value.substring(0, index);
+		index = value.indexOf(".");
+		if (index < 0) {
+			return null;
+		}
+		info.namespace = value.substring(0, index);
+		value = value.substring(index + 1);
+		index = value.indexOf(".");
+		if (index < 0) {
+			return null;
+		}
+		info.name = value.substring(0, index);
+		return info;
 	}
 
 	protected IBusinessObject analysis(String protocol, String boType, InputStream stream)
 			throws ValidateException, IOException {
 		ISerializer serializer = SerializerFactory.create().createManager().create(protocol);
 		Class<?>[] knownTypes = this.getKnownTypes(boType);
+		if (knownTypes.length > 0) {
+			// 默认使用第一个对象类型进行数据检查
+			Class<?> knownType = knownTypes[0];
+			if (knownType != null) {
+				// serializer.validate(knownType, stream);
+			}
+		}
 		return (IBusinessObject) serializer.deserialize(stream, BusinessObject.class, knownTypes);
 	}
 
@@ -237,4 +263,9 @@ public class Command4Init extends Command<Command4Init> {
 		return knownTypes.toArray(new Class<?>[] {});
 	}
 
+	protected class DataInfo {
+		public String namespace;
+		public String name;
+		public String protocol;
+	}
 }

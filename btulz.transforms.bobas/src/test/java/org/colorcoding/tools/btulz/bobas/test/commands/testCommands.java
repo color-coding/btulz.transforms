@@ -23,7 +23,7 @@ public class testCommands extends TestCase {
 		args.add(String.format("-data=%s", data));
 		args.add(String.format("-config=%s", config));
 		Console.main(args.toArray(new String[] {}));
-		data = String.format("%s%sibas.initialfantasy%starget%sclasses", ifFolder, File.separator, File.separator,
+		data = String.format("%s%sibas.initialfantasy%starget%sclasses%sinitialization", ifFolder, File.separator, File.separator, File.separator,
 				File.separator);
 		args = new ArrayList<>();
 		args.add(String.format(Command4Init.COMMAND_PROMPT)); // 命令
