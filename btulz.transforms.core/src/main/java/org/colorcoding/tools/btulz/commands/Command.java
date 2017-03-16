@@ -47,7 +47,7 @@ public abstract class Command<C> {
 
 	public String getName() {
 		if (this.name == null) {
-			this.name = "btulz";
+			this.name = "_____";
 		}
 		return name;
 	}
@@ -75,7 +75,7 @@ public abstract class Command<C> {
 	 *            参数
 	 */
 	protected void print(String message, Object... args) {
-		System.out.println(String.format("[%s]: ", this.getName()) + String.format(message, args));
+		System.out.println(String.format("[btulz|%s]: ", this.getName()) + String.format(message, args));
 	}
 
 	/**

@@ -3,6 +3,9 @@ package org.colorcoding.tools.btulz.bobas.commands;
 import org.colorcoding.ibas.bobas.bo.IBusinessObject;
 import org.colorcoding.ibas.bobas.common.OperationResult;
 import org.colorcoding.ibas.bobas.core.RepositoryException;
+import org.colorcoding.ibas.bobas.organization.IOrganizationManager;
+import org.colorcoding.ibas.bobas.organization.IUser;
+import org.colorcoding.ibas.bobas.organization.OrganizationFactory;
 import org.colorcoding.ibas.bobas.repository.BORepositoryLogicService;
 
 /**
@@ -16,7 +19,13 @@ class BORepository4Init extends BORepositoryLogicService {
 	public BORepository4Init() {
 		this.setUseCache(false); // 不使用缓存
 		this.setCheckApprovalProcess(false);// 不使用审批流程
-		// this.setCurrentUser(User.SYSTEM_USER);// 使用系统用户
+		// 使用系统用户
+		IOrganizationManager orgManager = OrganizationFactory.create().createManager();
+		IUser user = orgManager.getUser(IOrganizationManager.SYSTEM_USER_SIGN);
+		if (user == null) {
+			throw new RuntimeException("not found system user.");
+		}
+		this.setCurrentUser(user);
 	}
 
 	public boolean openRepository() throws RepositoryException {
