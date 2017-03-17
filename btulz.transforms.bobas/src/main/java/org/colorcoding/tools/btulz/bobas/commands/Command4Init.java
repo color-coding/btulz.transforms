@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.colorcoding.ibas.bobas.MyConfiguration;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBusinessObject;
@@ -20,9 +23,12 @@ import org.colorcoding.ibas.bobas.serialization.ValidateException;
 import org.colorcoding.tools.btulz.commands.Argument;
 import org.colorcoding.tools.btulz.commands.Command;
 import org.colorcoding.tools.btulz.commands.Prompt;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 /**
- * 初始化命令
+ * 初始化命令 注意：
  * 
  * @author Niuren.Zhu
  *
@@ -131,27 +137,13 @@ public class Command4Init extends Command<Command4Init> {
 		if (file.isDirectory()) {
 			for (File item : file.listFiles()) {
 				if (item.isFile()) {
-
-					// 获取类目录
-					File classFolder = this.getBOClassFolder(file.getParentFile());
-					if (classFolder == null) {
-						throw new ClassNotFoundException("unable to get class folder from data folder.");
+					String name = item.getName().toLowerCase();
+					InputStream inputStream = new FileInputStream(item);
+					IBusinessObject bo = this.analysis(name, inputStream);
+					if (bo != null) {
+						bos.add(bo);
 					}
-					if (item.getName().startsWith("bo.")) {
-						String name = item.getName().toLowerCase();
-						if (!name.startsWith("bo.")) {
-							continue;
-						}
-						DataInfo info = this.getDataInfo(name);
-						if (info == null) {
-							throw new Exception(String.format("[%s] cannot be resolved.", name));
-						}
-						InputStream inputStream = new FileInputStream(item);
-						if (inputStream != null) {
-							bos.add(this.analysis(info.protocol, info.name, inputStream));
-							inputStream.close();
-						}
-					}
+					inputStream.close();
 				}
 			}
 		} else if (file.isFile()) {
@@ -166,17 +158,12 @@ public class Command4Init extends Command<Command4Init> {
 								continue;
 							}
 							String name = jarEntry.getName().toLowerCase();
-							if (name.startsWith("initialization/bo.")) {
-								DataInfo info = this.getDataInfo(name);
-								if (info == null) {
-									throw new Exception(String.format("[%s] cannot be resolved.", name));
-								}
-								InputStream inputStream = jarFile.getInputStream(jarEntry);
-								if (inputStream != null) {
-									bos.add(this.analysis(info.protocol, info.name, inputStream));
-									inputStream.close();
-								}
+							InputStream inputStream = jarFile.getInputStream(jarEntry);
+							IBusinessObject bo = this.analysis(name, inputStream);
+							if (bo != null) {
+								bos.add(bo);
 							}
+							inputStream.close();
 						}
 					}
 				} finally {
@@ -188,84 +175,40 @@ public class Command4Init extends Command<Command4Init> {
 		return bos;
 	}
 
-	/**
-	 * 获取类目录
-	 * 
-	 * @param dataFolder
-	 *            数据目录
-	 * @return
-	 */
-	protected File getBOClassFolder(File folder) {
-		if (folder == null) {
+	protected IBusinessObject analysis(String name, InputStream stream)
+			throws ValidateException, IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
+		if (name.indexOf("/") > 0) {
+			name = name.substring(name.indexOf("/"));
+		}
+		if (!name.startsWith("bo")) {
 			return null;
 		}
-		if (folder.isFile()) {
+		if (!name.endsWith(".xml")) {
 			return null;
 		}
-		if (folder.isDirectory()) {
-			if (folder.getName().equalsIgnoreCase("bo")) {
-				return folder;
+		String boType = null;
+		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
+		for (int i = 0; i < document.getDocumentElement().getAttributes().getLength(); i++) {
+			Node item = document.getDocumentElement().getAttributes().item(i);
+			if (item.getNodeName().startsWith("xmlns")) {
+				boType = item.getNodeValue();
 			}
 		}
-		for (File item : folder.listFiles()) {
-			File tmp = this.getBOClassFolder(item);
-			if (tmp != null) {
-				return tmp;
-			}
+		// 获取数据文件指向的对象类型
+		if (boType == null) {
+			throw new ClassNotFoundException(name);
 		}
+		// 获取对象类型
+		Class<?> boClass = this.getKnownType(boType);
+		if (boClass == null) {
+			throw new ClassNotFoundException(boType);
+		}
+		ISerializer<?> serializer = SerializerFactory.create().createManager().create(".xml");
+		return (IBusinessObject) serializer.deserialize(stream, BusinessObject.class, boClass);
+	}
+
+	protected Class<?> getKnownType(String type) {
 		return null;
 	}
 
-	protected DataInfo getDataInfo(String fileName) {
-		// initialization/bo.applicationmodule.if.xml
-		String value = fileName;
-		int index = value.indexOf("/");
-		if (index > 0) {
-			value = value.substring(index + 1);
-		}
-		index = value.lastIndexOf(".");
-		if (index < 0) {
-			return null;
-		}
-		DataInfo info = new DataInfo();
-		info.protocol = value.substring(index + 1);
-		value = value.substring(0, index);
-		index = value.indexOf(".");
-		if (index < 0) {
-			return null;
-		}
-		info.namespace = value.substring(0, index);
-		value = value.substring(index + 1);
-		index = value.indexOf(".");
-		if (index < 0) {
-			return null;
-		}
-		info.name = value.substring(0, index);
-		return info;
-	}
-
-	protected IBusinessObject analysis(String protocol, String boType, InputStream stream)
-			throws ValidateException, IOException {
-		ISerializer serializer = SerializerFactory.create().createManager().create(protocol);
-		Class<?>[] knownTypes = this.getKnownTypes(boType);
-		if (knownTypes.length > 0) {
-			// 默认使用第一个对象类型进行数据检查
-			Class<?> knownType = knownTypes[0];
-			if (knownType != null) {
-				// serializer.validate(knownType, stream);
-			}
-		}
-		return (IBusinessObject) serializer.deserialize(stream, BusinessObject.class, knownTypes);
-	}
-
-	protected Class<?>[] getKnownTypes(String type) {
-		ArrayList<Class<?>> knownTypes = new ArrayList<>();
-		return knownTypes.toArray(new Class<?>[] {});
-	}
-
-	protected class DataInfo {
-		public String namespace;
-		public String name;
-		public String protocol;
-	}
 }
