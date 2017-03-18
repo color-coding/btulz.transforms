@@ -5,11 +5,24 @@ import java.util.ArrayList;
 
 import org.colorcoding.ibas.bobas.MyConfiguration;
 import org.colorcoding.tools.btulz.bobas.Console;
+import org.colorcoding.tools.btulz.bobas.commands.BOClassLoder;
 import org.colorcoding.tools.btulz.bobas.commands.Command4Init;
 
 import junit.framework.TestCase;
 
 public class testCommands extends TestCase {
+
+	public void testClassLoader() throws ClassNotFoundException {
+		File folder = new File(MyConfiguration.getStartupFolder());
+		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();
+		String ifFolder = folder.getPath() + File.separator + "ibas.initialfantasy";
+		String data = String.format("%s%sibas.initialfantasy%starget%sclasses%sinitialization", ifFolder,
+				File.separator, File.separator, File.separator, File.separator);
+		BOClassLoder loader = new BOClassLoder();
+		loader.setWorkFolder(data);
+		Class<?> type = loader.getClass("http://colorcoding.org/ibas/initialfantasy/bo/applicationmodule");
+		assertEquals(type.getSimpleName(), "ApplicationModule");
+	}
 
 	public void testInit() {
 		File folder = new File(MyConfiguration.getStartupFolder());
@@ -23,8 +36,8 @@ public class testCommands extends TestCase {
 		args.add(String.format("-data=%s", data));
 		args.add(String.format("-config=%s", config));
 		Console.main(args.toArray(new String[] {}));
-		data = String.format("%s%sibas.initialfantasy%starget%sclasses%sinitialization", ifFolder, File.separator, File.separator, File.separator,
-				File.separator);
+		data = String.format("%s%sibas.initialfantasy%starget%sclasses%sinitialization", ifFolder, File.separator,
+				File.separator, File.separator, File.separator);
 		args = new ArrayList<>();
 		args.add(String.format(Command4Init.COMMAND_PROMPT)); // 命令
 		args.add(String.format("-data=%s", data));

@@ -24,6 +24,7 @@ import org.colorcoding.tools.btulz.commands.Argument;
 import org.colorcoding.tools.btulz.commands.Command;
 import org.colorcoding.tools.btulz.commands.Prompt;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
@@ -74,6 +75,15 @@ public class Command4Init extends Command<Command4Init> {
 	@Override
 	protected boolean isRequiredArguments() {
 		return true;
+	}
+
+	private BOClassLoder boLoader;
+
+	protected BOClassLoder getBOLoader() {
+		if (this.boLoader == null) {
+			this.boLoader = new BOClassLoder();
+		}
+		return this.boLoader;
 	}
 
 	@Override
@@ -177,8 +187,9 @@ public class Command4Init extends Command<Command4Init> {
 
 	protected IBusinessObject analysis(String name, InputStream stream)
 			throws ValidateException, IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
-		if (name.indexOf("/") > 0) {
-			name = name.substring(name.indexOf("/"));
+		int index = name.indexOf("/");
+		if (index > 0) {
+			name = name.substring(index + 1);
 		}
 		if (!name.startsWith("bo")) {
 			return null;
@@ -186,14 +197,9 @@ public class Command4Init extends Command<Command4Init> {
 		if (!name.endsWith(".xml")) {
 			return null;
 		}
-		String boType = null;
-		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
-		for (int i = 0; i < document.getDocumentElement().getAttributes().getLength(); i++) {
-			Node item = document.getDocumentElement().getAttributes().item(i);
-			if (item.getNodeName().startsWith("xmlns")) {
-				boType = item.getNodeValue();
-			}
-		}
+		// 命名属于初始化数据，开始进行分析
+		this.print("analysing [%s].", name);
+		String boType = this.getBOName(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream));
 		// 获取数据文件指向的对象类型
 		if (boType == null) {
 			throw new ClassNotFoundException(name);
@@ -205,6 +211,35 @@ public class Command4Init extends Command<Command4Init> {
 		}
 		ISerializer<?> serializer = SerializerFactory.create().createManager().create(".xml");
 		return (IBusinessObject) serializer.deserialize(stream, BusinessObject.class, boClass);
+	}
+
+	protected String getBOName(Document document) throws SAXException {
+		String boType = null;
+		Element element = document.getDocumentElement();
+		if (element == null) {
+			throw new SAXException("invaild xml data.");
+		}
+		String boName = element.getNodeName().toLowerCase();
+		String perfix = null;
+		int index = boName.indexOf(":");
+		if (index > 0) {
+			perfix = boName.substring(0, index);
+			boName = boName.substring(index + 1);
+		}
+		String xmlns = "xmlns";
+		if (perfix != null) {
+			xmlns = xmlns + ":" + perfix;
+			for (int i = 0; i < element.getAttributes().getLength(); i++) {
+				Node item = document.getDocumentElement().getAttributes().item(i);
+				if (item.getNodeName().equalsIgnoreCase(xmlns)) {
+					boType = item.getNodeValue() + "/" + boName;
+					break;
+				}
+			}
+		} else {
+			boType = boName;
+		}
+		return boType;
 	}
 
 	protected Class<?> getKnownType(String type) {
