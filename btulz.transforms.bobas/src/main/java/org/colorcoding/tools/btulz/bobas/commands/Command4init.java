@@ -34,15 +34,15 @@ import org.xml.sax.SAXException;
  * @author Niuren.Zhu
  *
  */
-@Prompt(Command4Init.COMMAND_PROMPT)
-public class Command4Init extends Command<Command4Init> {
+@Prompt(Command4init.COMMAND_PROMPT)
+public class Command4init extends Command<Command4init> {
 
 	/**
 	 * 命令符
 	 */
 	public final static String COMMAND_PROMPT = "init";
 
-	public Command4Init() {
+	public Command4init() {
 		this.setName(COMMAND_PROMPT);
 		this.setDescription("initialization");
 	}
@@ -77,13 +77,13 @@ public class Command4Init extends Command<Command4Init> {
 		return true;
 	}
 
-	private BOClassLoder boLoader;
+	private ClassLoder4bobas classLoader;
 
-	protected BOClassLoder getBOLoader() {
-		if (this.boLoader == null) {
-			this.boLoader = new BOClassLoder();
+	protected ClassLoder4bobas getClassLoader() {
+		if (this.classLoader == null) {
+			this.classLoader = new ClassLoder4bobas();
 		}
-		return this.boLoader;
+		return this.classLoader;
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class Command4Init extends Command<Command4Init> {
 			if (bos == null || bos.size() == 0) {
 				return RETURN_VALUE_NO_COMMAND_EXECUTION;
 			}
-			BORepository4Init boRepository = new BORepository4Init();
+			BORepository4init boRepository = new BORepository4init();
 			IOperationResult<?> opRslt = null;
 			try {
 				boRepository.beginTransaction();// 开启事务

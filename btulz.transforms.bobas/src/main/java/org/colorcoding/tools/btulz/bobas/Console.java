@@ -1,6 +1,6 @@
 package org.colorcoding.tools.btulz.bobas;
 
-import org.colorcoding.tools.btulz.bobas.commands.Command4Init;
+import org.colorcoding.tools.btulz.bobas.commands.Command4init;
 import org.colorcoding.tools.btulz.commands.CommandsManager;
 
 /**
@@ -18,7 +18,7 @@ public class Console {
 				if (commandsManager == null) {
 					commandsManager = new CommandsManager();
 					// 注册发布的命令
-					commandsManager.register(Command4Init.class);
+					commandsManager.register(Command4init.class);
 				}
 			}
 		}
