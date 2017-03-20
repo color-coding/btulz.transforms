@@ -22,7 +22,7 @@ public class testCommands extends TestCase {
 				File.separator, "ibas.initialfantasy"));
 		File jarFile = new File(String.format("%1$s%2$s%3$s%2$srelease%2$sbobas.businessobjectscommon-0.1.2.jar",
 				folder.getPath(), File.separator, "ibas-framework"));
-		ClassLoader parentLoader = Thread.currentThread().getContextClassLoader().getParent();
+		ClassLoader parentLoader = ClassLoader.class.getClassLoader();
 		ClassLoder4bobas loader = new ClassLoder4bobas(
 				new URL[] { classFolder.toURI().toURL(), jarFile.toURI().toURL() }, parentLoader);
 		loader.init();
@@ -30,27 +30,30 @@ public class testCommands extends TestCase {
 			System.out.println(item);
 			loader.loadClass(item.getKey());
 		}
-
+		loader.close();
 	}
 
 	public void testInit() {
 		File folder = new File(MyConfiguration.getStartupFolder());
 		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();
 		String ifFolder = folder.getPath() + File.separator + "ibas.initialfantasy";
-		String config = String.format("%s%sibas.initialfantasy%sapp.xml", ifFolder, File.separator, File.separator);
-		String data = String.format("%s%srelease%sibas.initialfantasy-0.0.1.jar", ifFolder, File.separator,
-				File.separator);
+		String config = String.format("%s%2$sibas.initialfantasy%2$sapp.xml", ifFolder, File.separator);
+		String data = String.format("%s%2$srelease%2$sibas.initialfantasy-0.0.1.jar", ifFolder, File.separator);
+		String classes = String.format("%s%2$srelease%2$sibas.initialfantasy-0.0.1.jar", ifFolder, File.separator);
 		ArrayList<String> args = new ArrayList<>();
 		args.add(String.format(Command4init.COMMAND_PROMPT)); // 命令
 		args.add(String.format("-data=%s", data));
 		args.add(String.format("-config=%s", config));
+		args.add(String.format("-classes=%s", classes));
 		Console.main(args.toArray(new String[] {}));
-		data = String.format("%s%sibas.initialfantasy%starget%sclasses%sinitialization", ifFolder, File.separator,
-				File.separator, File.separator, File.separator);
+		data = String.format("%s%2$sibas.initialfantasy%2$starget%2$sclasses%2$sinitialization", ifFolder,
+				File.separator);
+		classes = String.format("%s%2$sibas.initialfantasy%2$starget%2$sclasses", ifFolder, File.separator);
 		args = new ArrayList<>();
 		args.add(String.format(Command4init.COMMAND_PROMPT)); // 命令
 		args.add(String.format("-data=%s", data));
 		args.add(String.format("-config=%s", config));
+		args.add(String.format("-classes=%s", classes));
 		Console.main(args.toArray(new String[] {}));
 	}
 }

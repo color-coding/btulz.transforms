@@ -88,7 +88,8 @@ public class ClassLoder4bobas extends URLClassLoader {
 		return names;
 	}
 
-	protected Class<?> defineClass(String name, InputStream inputStream) throws IOException, ClassFormatError {
+	protected Class<?> defineClass(String name, InputStream inputStream)
+			throws IOException, ClassFormatError, NoClassDefFoundError, ClassNotFoundException {
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		int data = inputStream.read();
 		while (data != -1) {
@@ -100,7 +101,8 @@ public class ClassLoder4bobas extends URLClassLoader {
 		return this.defineClass(name, bytes, 0, bytes.length);
 	}
 
-	public Class<?> loadClass(String name) throws ClassNotFoundException {
+	@Override
+	public Class<?> findClass(String name) throws ClassNotFoundException {
 		if (this.getClassesMap().containsKey(name)) {
 			URL url = this.getClassesMap().get(name);
 			try {
@@ -108,18 +110,18 @@ public class ClassLoder4bobas extends URLClassLoader {
 				connection.connect();
 				InputStream inputStream = connection.getInputStream();
 				try {
-					this.defineClass(name, inputStream);
-				} catch (ClassFormatError e) {
+					return this.defineClass(name, inputStream);
+				} catch (java.lang.LinkageError e) {
 					// 加载出错，可能缺少连接引用
 					// 加载连接引用
-					this.loadClass(e.getMessage());
+					this.findClass(e.getMessage());
 					// 重新调用加载
-					this.loadClass(name);
+					return this.findClass(name);
 				}
 			} catch (Exception e) {
 				throw new ClassNotFoundException(e.getMessage());
 			}
 		}
-		throw new ClassNotFoundException(name);
+		return super.findClass(name);
 	}
 }
