@@ -2,13 +2,18 @@ package org.colorcoding.tools.btulz.bobas.commands;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * 业务对象类型加载器
@@ -18,39 +23,69 @@ import java.util.List;
  */
 public class ClassLoder4bobas extends URLClassLoader {
 
-	public ClassLoder4bobas(URL[] urls) {
-		super(urls);
+	public ClassLoder4bobas(URL[] urls, ClassLoader parent) {
+		super(urls, parent);
 	}
 
-	public void loadClasses() {
+	private Map<String, URL> classesMap;
+
+	public Map<String, URL> getClassesMap() {
+		if (this.classesMap == null) {
+			this.classesMap = new HashMap<>();
+		}
+		return this.classesMap;
+	}
+
+	public void init() throws IOException {
 		for (URL item : this.getURLs()) {
 			if (item.getProtocol().equals("file")) {
-				try {
-					File file = new File(java.net.URLDecoder.decode(item.getPath(), "UTF-8"));
-					this.loadClasses(file, file.getPath() + File.separator);
-				} catch (Exception e) {
+				File file = new File(java.net.URLDecoder.decode(item.getPath(), "UTF-8"));
+				if (file.getName().endsWith(".jar")) {
+					JarFile jarFile = new JarFile(file);
+					Enumeration<JarEntry> jarEntries = jarFile.entries();
+					if (jarEntries != null) {
+						while (jarEntries.hasMoreElements()) {
+							JarEntry jarEntry = (JarEntry) jarEntries.nextElement();
+							if (jarEntry.isDirectory()) {
+								continue;
+							}
+							if (jarEntry.getName().toLowerCase().endsWith(".class")) {
+								String name = jarEntry.getName().replace("/", ".");
+								name = name.replace(".class", "");
+								this.getClassesMap().put(name, new URL(String.format("jar:file:%s%s%s%s",
+										file.getPath(), "!", "/", jarEntry.toString())));
+							}
+						}
+					}
+					jarFile.close();
+				} else {
+					for (String tmp : this.getClasses(file)) {
+						String name = tmp.replace(file.getPath(), "");
+						if (name.startsWith(File.separator)) {
+							name = name.substring(1);
+						}
+						name = name.replace(File.separator, ".");
+						name = name.replace(".class", "");
+						this.getClassesMap().put(name, new URL("file", "", tmp));
+					}
 				}
-			} else if (item.getProtocol().equals("jar")) {
-
 			}
 		}
 	}
 
-	private void loadClasses(File file, String root) throws ClassFormatError, IOException {
+	private List<String> getClasses(File file) throws IOException {
+		ArrayList<String> names = new ArrayList<>();
 		if (file.isDirectory()) {
 			for (File item : file.listFiles()) {
-				this.loadClasses(item, root);
+				names.addAll(this.getClasses(item));
 			}
 		} else if (file.isFile()) {
-			if (file.getName().endsWith(".class")) {
-				FileInputStream inputStream = new FileInputStream(file);
-				String name = file.getPath().replace(root, "");
-				name = name.replace(".class", "");
-				name = name.replace("\\", ".");
-				this.defineClass(name, inputStream);
-				inputStream.close();
+			String tmp = file.getPath().toLowerCase();
+			if (tmp.endsWith(".class")) {
+				names.add(file.getPath());
 			}
 		}
+		return names;
 	}
 
 	protected Class<?> defineClass(String name, InputStream inputStream) throws IOException, ClassFormatError {
@@ -61,59 +96,30 @@ public class ClassLoder4bobas extends URLClassLoader {
 			data = inputStream.read();
 		}
 		byte[] bytes = buffer.toByteArray();
+		inputStream.close();
 		return this.defineClass(name, bytes, 0, bytes.length);
 	}
 
-	public List<String> getClassNames(String name) {
-		ArrayList<String> names = new ArrayList<>();
-		StringBuilder className = new StringBuilder();
-		if (!name.startsWith("\\")) {
-			className.append("\\");
-		}
-		className.append(name);
-		if (!name.endsWith(".class")) {
-			className.append(".class");
-		}
-		for (URL item : this.getURLs()) {
-			if (item.getProtocol().equals("file")) {
+	public Class<?> loadClass(String name) throws ClassNotFoundException {
+		if (this.getClassesMap().containsKey(name)) {
+			URL url = this.getClassesMap().get(name);
+			try {
+				URLConnection connection = url.openConnection();
+				connection.connect();
+				InputStream inputStream = connection.getInputStream();
 				try {
-					File file = new File(java.net.URLDecoder.decode(item.getPath(), "UTF-8"));
-					for (String tmp : this.getClassNames(file, className.toString())) {
-						tmp = tmp.replace(file.getPath(), "");
-						if (tmp.startsWith("\\")) {
-							tmp = tmp.substring(1);
-						}
-						tmp = tmp.replace("\\", ".");
-						names.add(tmp);
-						try {
-							Class<?> type = this.loadClass(tmp, false);
-							System.err.println(type.getName());
-						} catch (Exception e) {
-							System.err.println(e);
-						}
-					}
-				} catch (Exception e) {
+					this.defineClass(name, inputStream);
+				} catch (ClassFormatError e) {
+					// 加载出错，可能缺少连接引用
+					// 加载连接引用
+					this.loadClass(e.getMessage());
+					// 重新调用加载
+					this.loadClass(name);
 				}
-			} else if (item.getProtocol().equals("jar")) {
-
+			} catch (Exception e) {
+				throw new ClassNotFoundException(e.getMessage());
 			}
 		}
-		return names;
+		throw new ClassNotFoundException(name);
 	}
-
-	private List<String> getClassNames(File file, String name) {
-		ArrayList<String> names = new ArrayList<>();
-		if (file.isDirectory()) {
-			for (File item : file.listFiles()) {
-				names.addAll(this.getClassNames(item, name));
-			}
-		} else if (file.isFile()) {
-			String tmp = file.getPath().toLowerCase();
-			if (tmp.endsWith(name)) {
-				names.add(file.getPath());
-			}
-		}
-		return names;
-	}
-
 }

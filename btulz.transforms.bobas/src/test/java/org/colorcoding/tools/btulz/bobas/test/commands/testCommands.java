@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map.Entry;
 
 import org.colorcoding.ibas.bobas.MyConfiguration;
 import org.colorcoding.tools.btulz.bobas.Console;
@@ -17,16 +18,17 @@ public class testCommands extends TestCase {
 	public void testClassLoader() throws ClassNotFoundException, IOException {
 		File folder = new File(MyConfiguration.getStartupFolder());
 		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();
-		String ifFolder = folder.getPath() + File.separator + "ibas.initialfantasy";
-		File classFile = new File(String.format("%s%sibas.initialfantasy%starget%sclasses", ifFolder, File.separator,
-				File.separator, File.separator));
-		ClassLoder4bobas loader = new ClassLoder4bobas(new URL[] { classFile.toURI().toURL() });
-		loader.loadClasses();
-		for (String item : loader.getClassNames("applicationmodule")) {
+		File classFolder = new File(String.format("%1$s%2$s%3$s%2$s%3$s%2$starget%2$sclasses", folder.getPath(),
+				File.separator, "ibas.initialfantasy"));
+		File jarFile = new File(String.format("%1$s%2$s%3$s%2$srelease%2$sbobas.businessobjectscommon-0.1.2.jar",
+				folder.getPath(), File.separator, "ibas-framework"));
+		ClassLoader parentLoader = Thread.currentThread().getContextClassLoader().getParent();
+		ClassLoder4bobas loader = new ClassLoder4bobas(
+				new URL[] { classFolder.toURI().toURL(), jarFile.toURI().toURL() }, parentLoader);
+		loader.init();
+		for (Entry<String, URL> item : loader.getClassesMap().entrySet()) {
 			System.out.println(item);
-
-			// Class<?> type = loader.loadClass(item);
-			// System.err.println(type.getSimpleName());
+			loader.loadClass(item.getKey());
 		}
 
 	}
