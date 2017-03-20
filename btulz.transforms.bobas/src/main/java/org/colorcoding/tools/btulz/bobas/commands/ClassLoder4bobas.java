@@ -5,16 +5,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlType;
-
-import org.apache.commons.collections4.map.HashedMap;
-import org.colorcoding.tools.btulz.Environment;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 业务对象类型加载器
@@ -22,19 +16,44 @@ import org.colorcoding.tools.btulz.Environment;
  * @author manager
  *
  */
-public class ClassLoder4bobas extends ClassLoader {
+public class ClassLoder4bobas extends URLClassLoader {
 
-	private String workFolder;
-
-	public String getWorkFolder() {
-		return workFolder;
+	public ClassLoder4bobas(URL[] urls) {
+		super(urls);
 	}
 
-	public void setWorkFolder(String workFolder) {
-		this.workFolder = workFolder;
+	public void loadClasses() {
+		for (URL item : this.getURLs()) {
+			if (item.getProtocol().equals("file")) {
+				try {
+					File file = new File(java.net.URLDecoder.decode(item.getPath(), "UTF-8"));
+					this.loadClasses(file, file.getPath() + File.separator);
+				} catch (Exception e) {
+				}
+			} else if (item.getProtocol().equals("jar")) {
+
+			}
+		}
 	}
 
-	protected Class<?> defineClass(InputStream inputStream) throws IOException, ClassFormatError {
+	private void loadClasses(File file, String root) throws ClassFormatError, IOException {
+		if (file.isDirectory()) {
+			for (File item : file.listFiles()) {
+				this.loadClasses(item, root);
+			}
+		} else if (file.isFile()) {
+			if (file.getName().endsWith(".class")) {
+				FileInputStream inputStream = new FileInputStream(file);
+				String name = file.getPath().replace(root, "");
+				name = name.replace(".class", "");
+				name = name.replace("\\", ".");
+				this.defineClass(name, inputStream);
+				inputStream.close();
+			}
+		}
+	}
+
+	protected Class<?> defineClass(String name, InputStream inputStream) throws IOException, ClassFormatError {
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		int data = inputStream.read();
 		while (data != -1) {
@@ -42,107 +61,59 @@ public class ClassLoder4bobas extends ClassLoader {
 			data = inputStream.read();
 		}
 		byte[] bytes = buffer.toByteArray();
-		inputStream.close();
-		return this.defineClass(null, bytes, 0, bytes.length);
+		return this.defineClass(name, bytes, 0, bytes.length);
 	}
 
-	protected void registerClass(Class<?> type) throws ClassNotFoundException {
-		if (type == null) {
-			return;
+	public List<String> getClassNames(String name) {
+		ArrayList<String> names = new ArrayList<>();
+		StringBuilder className = new StringBuilder();
+		if (!name.startsWith("\\")) {
+			className.append("\\");
 		}
-		if (type.isInterface()) {
-			return;
+		className.append(name);
+		if (!name.endsWith(".class")) {
+			className.append(".class");
 		}
-		if (type.isAnnotation()) {
-			return;
-		}
-		if (type.isArray()) {
-			return;
-		}
-		Environment.getLogger().debug(String.format("registered class [%s].", type.getName()));
-		XmlSeeAlso seeAlso = type.getAnnotation(XmlSeeAlso.class);
-		if (seeAlso != null) {
-			// 加载标记已知类型
-			for (Class<?> item : seeAlso.value()) {
-				Environment.getLogger().debug(String.format("registered reference class [%s].", item.getName()));
-				this.loadClass(item.getName());
-			}
-		}
-		XmlType xmlType = type.getAnnotation(XmlType.class);
-		if (xmlType == null) {
-			return;
-		}
-		String xmlName = type.getSimpleName();
-		if (!xmlType.name().equals("##default")) {
-			xmlName = xmlType.name();
-		}
-		if (!xmlType.namespace().equals("##default")) {
-			if (xmlType.namespace().endsWith("/")) {
-				xmlName = String.format("%s%s", xmlType.namespace(), xmlName);
-			} else {
-				xmlName = String.format("%s/%s", xmlType.namespace(), xmlName);
-			}
-		}
-		this.getClassMap().put(xmlName, type);
-	}
-
-	private Map<String, Class<?>> classMap;
-
-	protected Map<String, Class<?>> getClassMap() {
-		if (this.classMap == null) {
-			this.classMap = new HashedMap<String, Class<?>>();
-		}
-		return this.classMap;
-	}
-
-	public Class<?> getClass(String name) throws ClassNotFoundException, IOException {
-		if (this.getClassMap().containsKey(name)) {
-			return this.getClassMap().get(name);
-		}
-		return this.getClass(new File(this.getWorkFolder()), name);
-	}
-
-	protected Class<?> getClass(File file, String name) throws IOException, ClassNotFoundException, ClassFormatError {
-		if (file.isDirectory()) {
-			System.err.println(file.getPath());
-			for (File item : file.listFiles()) {
-				Class<?> tmpClass = this.getClass(item, name);
-				if (tmpClass != null) {
-					return tmpClass;
-				}
-			}
-		} else if (file.isFile()) {
-			String fileName = file.getName().toLowerCase();
-			if (fileName.endsWith(".jar")) {
-				JarFile jarFile = new JarFile(file);
-				Enumeration<JarEntry> jarEntries = jarFile.entries();
-				if (jarEntries != null) {
-					while (jarEntries.hasMoreElements()) {
-						JarEntry jarEntry = (JarEntry) jarEntries.nextElement();
-						if (jarEntry.isDirectory()) {
-							continue;
+		for (URL item : this.getURLs()) {
+			if (item.getProtocol().equals("file")) {
+				try {
+					File file = new File(java.net.URLDecoder.decode(item.getPath(), "UTF-8"));
+					for (String tmp : this.getClassNames(file, className.toString())) {
+						tmp = tmp.replace(file.getPath(), "");
+						if (tmp.startsWith("\\")) {
+							tmp = tmp.substring(1);
 						}
-						InputStream inputStream = jarFile.getInputStream(jarEntry);
-						// 注册类型
-						this.registerClass(this.defineClass(inputStream));
-						// 注册成功，则返回
-						if (this.getClassMap().containsKey(name)) {
-							return this.getClassMap().get(name);
+						tmp = tmp.replace("\\", ".");
+						names.add(tmp);
+						try {
+							Class<?> type = this.loadClass(tmp, false);
+							System.err.println(type.getName());
+						} catch (Exception e) {
+							System.err.println(e);
 						}
 					}
+				} catch (Exception e) {
 				}
-				jarFile.close();
-			} else if (fileName.endsWith(".class")) {
-				InputStream inputStream = new FileInputStream(file);
-				// 注册类型
-				this.registerClass(this.defineClass(inputStream));
-				// 注册成功，则返回
-				if (this.getClassMap().containsKey(name)) {
-					return this.getClassMap().get(name);
-				}
+			} else if (item.getProtocol().equals("jar")) {
+
 			}
 		}
-		return null;
+		return names;
+	}
+
+	private List<String> getClassNames(File file, String name) {
+		ArrayList<String> names = new ArrayList<>();
+		if (file.isDirectory()) {
+			for (File item : file.listFiles()) {
+				names.addAll(this.getClassNames(item, name));
+			}
+		} else if (file.isFile()) {
+			String tmp = file.getPath().toLowerCase();
+			if (tmp.endsWith(name)) {
+				names.add(file.getPath());
+			}
+		}
+		return names;
 	}
 
 }

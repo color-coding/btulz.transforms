@@ -77,15 +77,6 @@ public class Command4init extends Command<Command4init> {
 		return true;
 	}
 
-	private ClassLoder4bobas classLoader;
-
-	protected ClassLoder4bobas getClassLoader() {
-		if (this.classLoader == null) {
-			this.classLoader = new ClassLoder4bobas();
-		}
-		return this.classLoader;
-	}
-
 	@Override
 	protected int run(Argument[] arguments) {
 		try {

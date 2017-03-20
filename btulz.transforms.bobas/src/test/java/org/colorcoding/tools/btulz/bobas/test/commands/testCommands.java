@@ -2,10 +2,10 @@ package org.colorcoding.tools.btulz.bobas.test.commands;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import org.colorcoding.ibas.bobas.MyConfiguration;
-import org.colorcoding.ibas.bobas.core.BOFactory;
 import org.colorcoding.tools.btulz.bobas.Console;
 import org.colorcoding.tools.btulz.bobas.commands.ClassLoder4bobas;
 import org.colorcoding.tools.btulz.bobas.commands.Command4init;
@@ -18,16 +18,17 @@ public class testCommands extends TestCase {
 		File folder = new File(MyConfiguration.getStartupFolder());
 		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();
 		String ifFolder = folder.getPath() + File.separator + "ibas.initialfantasy";
-		String data = String.format("%s%sibas.initialfantasy%starget%sclasses", ifFolder, File.separator,
-				File.separator, File.separator);
-		ClassLoder4bobas loader = new ClassLoder4bobas();
-		loader.setWorkFolder(data);
-		for (Class<?> item : BOFactory.create().getKnownClasses("ibas.initialfantasy.bo")) {
-			System.out.println(item.getName());
+		File classFile = new File(String.format("%s%sibas.initialfantasy%starget%sclasses", ifFolder, File.separator,
+				File.separator, File.separator));
+		ClassLoder4bobas loader = new ClassLoder4bobas(new URL[] { classFile.toURI().toURL() });
+		loader.loadClasses();
+		for (String item : loader.getClassNames("applicationmodule")) {
+			System.out.println(item);
+
+			// Class<?> type = loader.loadClass(item);
+			// System.err.println(type.getSimpleName());
 		}
-		Class<?> type = loader.getClass("http://colorcoding.org/ibas/initialfantasy/bo/applicationmodule");
-		assertNotNull("not found.", type);
-		assertEquals("not found.", type.getSimpleName(), "ApplicationModule");
+
 	}
 
 	public void testInit() {
