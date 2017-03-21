@@ -84,6 +84,40 @@ public class Command4init extends Command<Command4init> {
 
 	private ClassLoder4bobas classLoader = null;
 
+	protected ClassLoder4bobas getClassLoader() {
+		return this.classLoader;
+	}
+
+	private void initClassLoader(Iterable<URL> lib) throws ClassNotFoundException, IOException {
+		List<URL> classes = new ArrayList<>();
+		for (URL url : lib) {
+			classes.add(url);
+		}
+		// 父项类加载指向，当前的父项，以便进行隔离
+		ClassLoader parentClassLoader = this.getClass().getClassLoader();
+		// 获取BORepository4init.class地址
+		URL urlBORepository4init = parentClassLoader
+				.getResource(BORepository4init.class.getName().replace(".", "/") + ".class");
+		classes.add(urlBORepository4init);
+		this.classLoader = new ClassLoder4bobas(classes.toArray(new URL[] {}), parentClassLoader);
+		this.classLoader.init();
+	}
+
+	protected BORepository4init createBORepository() throws ClassNotFoundException {
+		Class<?> boRepositoryType = this.getClassLoader().findClass(BORepository4init.class.getName());
+		if (boRepositoryType == null) {
+			throw new ClassNotFoundException(BORepository4init.class.getName());
+		}
+		try {
+			return (BORepository4init) boRepositoryType.newInstance();
+		} catch (Exception e) {
+			if (e.getCause() instanceof ClassNotFoundException) {
+				this.getClassLoader().findClass(e.getCause().getMessage());
+			}
+			return this.createBORepository();
+		}
+	}
+
 	@Override
 	protected int run(Argument[] arguments) {
 		try {
@@ -125,22 +159,12 @@ public class Command4init extends Command<Command4init> {
 				throw new Exception(String.format("data file [%s] not exists.", argData));
 			}
 			// 初始化classLoader
-			ClassLoader parentClassLoader = this.getClass().getClassLoader();
-			// 获取BORepository4init.class地址
-			URL urlBORepository4init = parentClassLoader
-					.getResource(BORepository4init.class.getName().replace(".", "/") + ".class");
-			argClasses.add(urlBORepository4init);
-			this.classLoader = new ClassLoder4bobas(argClasses.toArray(new URL[] {}), parentClassLoader);
-			this.classLoader.init();
+			this.initClassLoader(argClasses);
 			List<IBusinessObject> bos = this.analysis(file);
 			if (bos == null || bos.size() == 0) {
 				return RETURN_VALUE_NO_COMMAND_EXECUTION;
 			}
-			Class<?> boRepositoryType = this.classLoader.findClass(BORepository4init.class.getName());
-			if (boRepositoryType == null) {
-				throw new ClassNotFoundException(BORepository4init.class.getName());
-			}
-			BORepository4init boRepository = (BORepository4init) boRepositoryType.newInstance();
+			BORepository4init boRepository = this.createBORepository();
 			IOperationResult<?> opRslt = null;
 			try {
 				boRepository.beginTransaction();// 开启事务
@@ -276,9 +300,9 @@ public class Command4init extends Command<Command4init> {
 		if (simpleName.startsWith("http")) {
 			simpleName = simpleName.substring(simpleName.lastIndexOf("/") + 1);
 		}
-		for (Entry<String, URL> item : this.classLoader.getClassesMap().entrySet()) {
+		for (Entry<String, URL> item : this.getClassLoader().getClassesMap().entrySet()) {
 			if (item.getKey().toLowerCase().endsWith(simpleName)) {
-				Class<?> type = this.classLoader.findClass(item.getKey());
+				Class<?> type = this.getClassLoader().findClass(item.getKey());
 				if (type != null) {
 					XmlType xmlType = type.getAnnotation(XmlType.class);
 					if (xmlType != null) {
@@ -300,7 +324,7 @@ public class Command4init extends Command<Command4init> {
 				}
 			}
 		}
-		return null;
+		throw new ClassNotFoundException(name);
 	}
 
 }

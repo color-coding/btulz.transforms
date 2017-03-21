@@ -40,6 +40,9 @@ public class ClassLoder4bobas extends URLClassLoader {
 
 	public void init() throws IOException, ClassNotFoundException {
 		for (URL item : this.getURLs()) {
+			if (item == null) {
+				continue;
+			}
 			if (item.getProtocol().equals("file")) {
 				File file = new File(java.net.URLDecoder.decode(item.getPath(), "UTF-8"));
 				if (file.getName().endsWith(".jar")) {
@@ -111,33 +114,29 @@ public class ClassLoder4bobas extends URLClassLoader {
 
 	@Override
 	public Class<?> findClass(String name) throws ClassNotFoundException {
-		try {
-			return super.findClass(name);
-		} catch (Exception e) {
-			if (this.getClassesMap().containsKey(name)) {
-				URL url = this.getClassesMap().get(name);
-				try {
-					URLConnection connection = url.openConnection();
-					connection.connect();
-					InputStream inputStream = connection.getInputStream();
-					try {
-						return this.defineClass(name, inputStream);
-					} catch (ClassNotFoundException | NoClassDefFoundError | IOException | ClassFormatError e1) {
-						System.err.println(e1);
-					} catch (LinkageError e1) {
-						// 加载出错，可能缺少连接引用
-						// 加载连接引用
-						this.findClass(e1.getMessage());
-						// 重新调用加载
-						return this.findClass(name);
-					}
-				} catch (ClassNotFoundException | NoClassDefFoundError | ClassFormatError e1) {
-					System.err.println(e1);
-				} catch (IOException e2) {
-					throw new ClassNotFoundException(e2.getMessage());
-				}
-			}
-			throw new ClassNotFoundException(name);
+		Class<?> type = this.findLoadedClass(name);
+		if (type != null) {
+			return type;
 		}
+		if (this.getClassesMap().containsKey(name)) {
+			URL url = this.getClassesMap().get(name);
+			try {
+				URLConnection connection = url.openConnection();
+				connection.connect();
+				InputStream inputStream = connection.getInputStream();
+				try {
+					return this.defineClass(name, inputStream);
+				} catch (LinkageError e1) {
+					// 加载出错，可能缺少连接引用
+					// 加载连接引用
+					this.findClass(e1.getMessage());
+					// 重新调用加载
+					return this.findClass(name);
+				}
+			} catch (IOException e2) {
+				throw new ClassNotFoundException(e2.getMessage());
+			}
+		}
+		return super.findClass(name);
 	}
 }
