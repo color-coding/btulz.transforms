@@ -103,7 +103,7 @@ public class Command4init extends Command<Command4init> {
 		this.classLoader.init();
 	}
 
-	protected BORepository4init createBORepository() throws ClassNotFoundException {
+	protected BORepository4init createBORepository() throws Exception {
 		Class<?> boRepositoryType = this.getClassLoader().findClass(BORepository4init.class.getName());
 		if (boRepositoryType == null) {
 			throw new ClassNotFoundException(BORepository4init.class.getName());
@@ -113,8 +113,9 @@ public class Command4init extends Command<Command4init> {
 		} catch (Exception e) {
 			if (e.getCause() instanceof ClassNotFoundException) {
 				this.getClassLoader().findClass(e.getCause().getMessage());
+				return this.createBORepository();
 			}
-			return this.createBORepository();
+			throw e;
 		}
 	}
 
@@ -160,6 +161,7 @@ public class Command4init extends Command<Command4init> {
 			}
 			// 初始化classLoader
 			this.initClassLoader(argClasses);
+			Thread.currentThread().setContextClassLoader(this.getClassLoader());
 			List<IBusinessObject> bos = this.analysis(file);
 			if (bos == null || bos.size() == 0) {
 				return RETURN_VALUE_NO_COMMAND_EXECUTION;

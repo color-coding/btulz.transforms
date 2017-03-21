@@ -46,7 +46,7 @@ public class testCommands extends TestCase {
 		String config = String.format("%s%2$sibas.initialfantasy%2$sapp.xml", ifFolder, File.separator);
 		String data = String.format("%s%2$srelease%2$sibas.initialfantasy-0.0.1.jar", ifFolder, File.separator);
 		String classes = String.format("%s%2$srelease%2$sibas.initialfantasy-0.0.1.jar", ifFolder, File.separator);
-		classes = classes + ";" + ibas;
+		classes = classes + ";";// + ibas;
 		ArrayList<String> args = new ArrayList<>();
 		args.add(String.format(Command4init.COMMAND_PROMPT)); // 命令
 		args.add(String.format("-data=%s", data));
@@ -57,7 +57,7 @@ public class testCommands extends TestCase {
 				File.separator);
 		classes = MyConfiguration.getStartupFolder();
 		classes = String.format("%s%2$sibas.initialfantasy%2$starget%2$sclasses", ifFolder, File.separator);
-		classes = classes + ";" + ibas;
+		classes = classes + ";";// + ibas;
 		args = new ArrayList<>();
 		args.add(String.format(Command4init.COMMAND_PROMPT)); // 命令
 		args.add(String.format("-data=%s", data));
