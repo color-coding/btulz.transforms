@@ -104,19 +104,7 @@ public class Command4init extends Command<Command4init> {
 	}
 
 	protected BORepository4init createBORepository() throws Exception {
-		Class<?> boRepositoryType = this.getClassLoader().findClass(BORepository4init.class.getName());
-		if (boRepositoryType == null) {
-			throw new ClassNotFoundException(BORepository4init.class.getName());
-		}
-		try {
-			return (BORepository4init) boRepositoryType.newInstance();
-		} catch (Exception e) {
-			if (e.getCause() instanceof ClassNotFoundException) {
-				this.getClassLoader().findClass(e.getCause().getMessage());
-				return this.createBORepository();
-			}
-			throw e;
-		}
+		return new BORepository4init();
 	}
 
 	@Override
@@ -205,25 +193,7 @@ public class Command4init extends Command<Command4init> {
 		ISerializer<?> serializer = SerializerFactory.create().createManager().create("xml");
 		if (file.isDirectory()) {
 			for (File item : file.listFiles()) {
-				if (item.isFile()) {
-					String name = item.getName().toLowerCase();
-					if (!name.startsWith("bo")) {
-						continue;
-					}
-					if (!name.endsWith(".xml")) {
-						continue;
-					}
-					InputStream inputStream = new FileInputStream(item);
-					String boName = this.getBOName(inputStream);
-					Class<?> boType = this.getBOType(boName);
-					inputStream = new FileInputStream(item);
-					IBusinessObject bo = (IBusinessObject) serializer.deserialize(inputStream, BusinessObject.class,
-							boType);
-					if (bo != null) {
-						bos.add(bo);
-					}
-					inputStream.close();
-				}
+				bos.addAll(this.analysis(item));
 			}
 		} else if (file.isFile()) {
 			if (file.getName().toLowerCase().endsWith(".jar")) {
@@ -260,6 +230,20 @@ public class Command4init extends Command<Command4init> {
 					}
 				} finally {
 					jarFile.close();
+				}
+			} else {
+				String name = file.getName().toLowerCase();
+				if (name.startsWith("bo") && name.endsWith(".xml")) {
+					InputStream inputStream = new FileInputStream(file);
+					String boName = this.getBOName(inputStream);
+					Class<?> boType = this.getBOType(boName);
+					inputStream = new FileInputStream(file);
+					IBusinessObject bo = (IBusinessObject) serializer.deserialize(inputStream, BusinessObject.class,
+							boType);
+					if (bo != null) {
+						bos.add(bo);
+					}
+					inputStream.close();
 				}
 			}
 		}
