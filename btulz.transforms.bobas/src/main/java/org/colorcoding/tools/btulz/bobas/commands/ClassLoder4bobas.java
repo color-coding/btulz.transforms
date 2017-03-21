@@ -27,16 +27,18 @@ public class ClassLoder4bobas extends URLClassLoader {
 		super(urls, parent);
 	}
 
-	private Map<String, URL> classesMap;
+	private volatile HashMap<String, URL> classesMap;
 
-	public Map<String, URL> getClassesMap() {
+	public synchronized Map<String, URL> getClassesMap() {
 		if (this.classesMap == null) {
 			this.classesMap = new HashMap<>();
 		}
 		return this.classesMap;
 	}
 
-	public void init() throws IOException {
+	private static String CLASSES_FOLDER = String.format("%1$sclasses%1$s", File.separator);
+
+	public void init() throws IOException, ClassNotFoundException {
 		for (URL item : this.getURLs()) {
 			if (item.getProtocol().equals("file")) {
 				File file = new File(java.net.URLDecoder.decode(item.getPath(), "UTF-8"));
@@ -60,7 +62,13 @@ public class ClassLoder4bobas extends URLClassLoader {
 					jarFile.close();
 				} else {
 					for (String tmp : this.getClasses(file)) {
-						String name = tmp.replace(file.getPath(), "");
+						String name = tmp;
+						if (!name.equalsIgnoreCase(file.getPath())) {
+							name = tmp.replace(file.getPath(), "");
+						} else if (name.indexOf(CLASSES_FOLDER) > 0) {
+							// 加载本模块.class资源
+							name = name.substring(name.indexOf(CLASSES_FOLDER) + CLASSES_FOLDER.length());
+						}
 						if (name.startsWith(File.separator)) {
 							name = name.substring(1);
 						}
@@ -103,25 +111,33 @@ public class ClassLoder4bobas extends URLClassLoader {
 
 	@Override
 	public Class<?> findClass(String name) throws ClassNotFoundException {
-		if (this.getClassesMap().containsKey(name)) {
-			URL url = this.getClassesMap().get(name);
-			try {
-				URLConnection connection = url.openConnection();
-				connection.connect();
-				InputStream inputStream = connection.getInputStream();
+		try {
+			return super.findClass(name);
+		} catch (Exception e) {
+			if (this.getClassesMap().containsKey(name)) {
+				URL url = this.getClassesMap().get(name);
 				try {
-					return this.defineClass(name, inputStream);
-				} catch (java.lang.LinkageError e) {
-					// 加载出错，可能缺少连接引用
-					// 加载连接引用
-					this.findClass(e.getMessage());
-					// 重新调用加载
-					return this.findClass(name);
+					URLConnection connection = url.openConnection();
+					connection.connect();
+					InputStream inputStream = connection.getInputStream();
+					try {
+						return this.defineClass(name, inputStream);
+					} catch (ClassNotFoundException | NoClassDefFoundError | IOException | ClassFormatError e1) {
+						System.err.println(e1);
+					} catch (LinkageError e1) {
+						// 加载出错，可能缺少连接引用
+						// 加载连接引用
+						this.findClass(e1.getMessage());
+						// 重新调用加载
+						return this.findClass(name);
+					}
+				} catch (ClassNotFoundException | NoClassDefFoundError | ClassFormatError e1) {
+					System.err.println(e1);
+				} catch (IOException e2) {
+					throw new ClassNotFoundException(e2.getMessage());
 				}
-			} catch (Exception e) {
-				throw new ClassNotFoundException(e.getMessage());
 			}
+			throw new ClassNotFoundException(name);
 		}
-		return super.findClass(name);
 	}
 }

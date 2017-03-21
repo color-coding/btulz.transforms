@@ -14,7 +14,7 @@ import org.colorcoding.ibas.bobas.repository.BORepositoryLogicService;
  * @author Niuren.Zhu
  *
  */
-class BORepository4init extends BORepositoryLogicService {
+public class BORepository4init extends BORepositoryLogicService {
 
 	public BORepository4init() {
 		this.setUseCache(false); // 不使用缓存

@@ -102,6 +102,9 @@ public class Command4init extends Command<Command4init> {
 				} else if (argument.getName().equalsIgnoreCase("-classes")) {
 					String[] tmps = argument.getValue().split(";");
 					for (String item : tmps) {
+						if (item == null || item.isEmpty()) {
+							continue;
+						}
 						File file = new File(item);
 						if (!file.exists()) {
 							this.print("class file [%s] not exists.", item);
@@ -122,13 +125,22 @@ public class Command4init extends Command<Command4init> {
 				throw new Exception(String.format("data file [%s] not exists.", argData));
 			}
 			// 初始化classLoader
-			this.classLoader = new ClassLoder4bobas(argClasses.toArray(new URL[] {}), this.getClass().getClassLoader());
+			ClassLoader parentClassLoader = this.getClass().getClassLoader();
+			// 获取BORepository4init.class地址
+			URL urlBORepository4init = parentClassLoader
+					.getResource(BORepository4init.class.getName().replace(".", "/") + ".class");
+			argClasses.add(urlBORepository4init);
+			this.classLoader = new ClassLoder4bobas(argClasses.toArray(new URL[] {}), parentClassLoader);
 			this.classLoader.init();
 			List<IBusinessObject> bos = this.analysis(file);
 			if (bos == null || bos.size() == 0) {
 				return RETURN_VALUE_NO_COMMAND_EXECUTION;
 			}
-			BORepository4init boRepository = new BORepository4init();
+			Class<?> boRepositoryType = this.classLoader.findClass(BORepository4init.class.getName());
+			if (boRepositoryType == null) {
+				throw new ClassNotFoundException(BORepository4init.class.getName());
+			}
+			BORepository4init boRepository = (BORepository4init) boRepositoryType.newInstance();
 			IOperationResult<?> opRslt = null;
 			try {
 				boRepository.beginTransaction();// 开启事务
@@ -199,6 +211,9 @@ public class Command4init extends Command<Command4init> {
 								continue;
 							}
 							String name = jarEntry.getName().toLowerCase();
+							if (name.indexOf("/") > 0) {
+								name = name.substring(name.indexOf("/") + 1);
+							}
 							if (!name.startsWith("bo")) {
 								continue;
 							}
