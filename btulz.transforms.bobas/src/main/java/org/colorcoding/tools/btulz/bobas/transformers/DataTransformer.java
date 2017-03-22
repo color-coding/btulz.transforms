@@ -92,7 +92,9 @@ public class DataTransformer extends Transformer {
 	@Override
 	public final void transform() throws TransformException, RepositoryException, IOException, ClassNotFoundException,
 			SAXException, ParserConfigurationException, JAXBException {
-		ClassLoader olderLoader = null;
+		// 切换当前线程使用的classloader
+		ClassLoader olderLoader = Thread.currentThread().getContextClassLoader();
+		Thread.currentThread().setContextClassLoader(this.getClassLoader());
 		try {
 			// 读取配置文件
 			MyConfiguration.create(this.getConfigFile());
@@ -101,9 +103,6 @@ public class DataTransformer extends Transformer {
 			if (!file.exists()) {
 				throw new TransformException(String.format("data file [%s] not exists.", this.getDataFile()));
 			}
-			// 切换当前线程使用的classloader
-			olderLoader = Thread.currentThread().getContextClassLoader();
-			Thread.currentThread().setContextClassLoader(this.getClassLoader());
 			// 分析数据
 			List<IBusinessObject> bos = this.analysisData(file);
 			if (bos == null || bos.size() == 0) {
