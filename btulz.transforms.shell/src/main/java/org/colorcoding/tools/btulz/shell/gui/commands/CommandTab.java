@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -441,13 +443,57 @@ public class CommandTab extends WorkingTab {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-
 					JFileChooser jfc = new JFileChooser();
+					if (commandItem.getValidValues().getDefinitions() != null
+							&& !commandItem.getValidValues().getDefinitions().isEmpty()) {
+						// 存在额外定义
+						for (String item : commandItem.getValidValues().getDefinitions().split(";")) {
+							if (item == null || item.isEmpty()) {
+								continue;
+							}
+							if (item.indexOf("=") > 0) {
+								// MultiSelectionEnabled=true
+								String name = item.split("=")[0];
+								String value = item.split("=")[1];
+								for (Method method : JFileChooser.class.getDeclaredMethods()) {
+									if (method.getParameterTypes().length != 1) {
+										continue;
+									}
+									if (method.getName().endsWith(name)) {
+										Class<?> valueType = method.getParameterTypes()[0];
+										Object nValue = null;
+										if (valueType.equals(boolean.class)) {
+											nValue = Boolean.valueOf(value);
+										}
+										if (nValue != null) {
+											try {
+												method.invoke(jfc, nValue);
+											} catch (IllegalAccessException | IllegalArgumentException
+													| InvocationTargetException e1) {
+												that.logMessages(e1.toString());
+											}
+										}
+									}
+								}
+							}
+						}
+					}
 					jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 					jfc.showOpenDialog(null);
 					if (button != null && jfc.getSelectedFile() != null) {
 						if (this.geTextField() != null) {
-							this.geTextField().setText(jfc.getSelectedFile().getPath());
+							if (jfc.isMultiSelectionEnabled()) {
+								StringBuilder stringBuilder = new StringBuilder();
+								for (File item : jfc.getSelectedFiles()) {
+									if (stringBuilder.length() > 0) {
+										stringBuilder.append(";");
+									}
+									stringBuilder.append(item.getPath());
+								}
+								this.geTextField().setText(stringBuilder.toString());
+							} else {
+								this.geTextField().setText(jfc.getSelectedFile().getPath());
+							}
 						}
 					}
 				}

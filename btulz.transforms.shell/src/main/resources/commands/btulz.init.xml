@@ -11,6 +11,6 @@
       <ValidValues ClassName="javax.swing.JFileChooser" />
     </Item>
     <Item Content="-classes=${VALUE}" Description="类库文件（;）">
-      <ValidValues ClassName="javax.swing.JFileChooser" />
+      <ValidValues ClassName="javax.swing.JFileChooser" Definitions="MultiSelectionEnabled=true" />
     </Item>
 </ns2:CommandBuilder>

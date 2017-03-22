@@ -59,6 +59,17 @@ public class ValidValues implements Iterable<ValidValue> {
 		this.values = values;
 	}
 
+	@XmlAttribute(name = "Definitions")
+	private String definitions;
+
+	public final String getDefinitions() {
+		return definitions;
+	}
+
+	public final void setDefinitions(String definitions) {
+		this.definitions = definitions;
+	}
+
 	/**
 	 * 初始化下
 	 */
