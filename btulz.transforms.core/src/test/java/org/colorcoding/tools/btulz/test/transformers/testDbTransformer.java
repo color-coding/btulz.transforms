@@ -22,13 +22,13 @@ public class testDbTransformer extends TestCase {
 		System.err.println("运行请清理test-classes目录的历史文件。");
 		DsTransformer dsTransformer = new DsTransformer();
 		dsTransformer.setTemplateFile("ds_mssql_ibas_classic.xml");
-		// dsTransformer.addDomains(Environment.getXmlModelsFileOld());
-		dsTransformer.addDomains("E:\\MyWorks\\ColorCoding\\models");
+		dsTransformer.addDomains(Environment.getWorkingFolder() + File.separator + Environment.getXmlModelsFileOld());
+		// dsTransformer.addDomains("E:\\MyWorks\\ColorCoding\\models");
 		dsTransformer.setCompany("CC");
 		dsTransformer.setDbServer("ibas-dev-mssql");
 		dsTransformer.setDbPort("1433");
 		dsTransformer.setDbSchema("dbo");
-		dsTransformer.setDbName("ibas_demo" + "_" + dsTransformer.hashCode());
+		dsTransformer.setDbName("ibas_demo");
 		dsTransformer.setDbUser("sa");
 		dsTransformer.setDbPassword("1q2w3e");
 		dsTransformer.transform();

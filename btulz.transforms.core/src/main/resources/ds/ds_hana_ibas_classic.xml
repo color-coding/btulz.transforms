@@ -146,7 +146,45 @@ $BEGIN_MODEL_PROPERTY$
             </Script>
         </Step>
 $END_MODEL_PROPERTY$
-$END_BO_MODEL$
     </Action>
+$END_BO_MODEL$
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_MODEL$
+    <Action Name="register business object informations">
+        <Step Name="check business object informations table exists">
+            <Script>
+                select count(0) from "TABLES" where "SCHEMA_NAME" = '${DbName}' and "TABLE_NAME" = '${Company}_SYS_OBOI'
+            </Script>
+        </Step>
+        <Step Name="delete business object ${Model.getName()}'s informations" RunOnValue="1">
+            <Script>
+                delete from "${DbName}"."${Company}_SYS_OBOI" where "Name" = N'${Model.getName()}'
+            </Script>
+        </Step>
+        <Step Name="register business object ${Model.getName()}'s informations" RunOnValue="1">
+            <Script>
+                insert into "${DbName}"."${Company}_SYS_OBOI"("Name", "Code", "Descrp", "Mapped", "ObjectType") values (N'${Model.getName()}',N'${BO.getShortName()}',N'${Model.getDescription()}',N'${Model.getMapped().toUpperCase()}',N'${Model.getModelType()}')
+            </Script>
+        </Step>
+        <Step Name="check business object properties informations table exists">
+            <Script>
+                select count(0) from "TABLES" where "SCHEMA_NAME" = '${DbName}' and "TABLE_NAME" = '${Company}_SYS_BOI1'
+            </Script>
+        </Step>
+$BEGIN_MODEL_PROPERTY$
+        <Step Name="delete business object property ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
+            <Script>
+                delete from "${DbName}"."${Company}_SYS_BOI1" where "Name" = N'${Model.getName()}' and "Property" = N'${Property.getName()}'
+            </Script>
+        </Step>
+        <Step Name="register business object property ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
+            <Script>
+                insert into "${DbName}"."${Company}_SYS_BOI1" ("Name", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${Model.getName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isPrimaryKey(DB)}', N'Y')
+            </Script>
+        </Step>
+$END_MODEL_PROPERTY$
+$END_BOITEM_MODEL$
+    </Action>
+$END_BOITEM$
 $END_BO$
 </ns2:DataStructureOrchestration>
