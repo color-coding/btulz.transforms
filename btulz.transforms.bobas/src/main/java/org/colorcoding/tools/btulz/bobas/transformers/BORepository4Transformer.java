@@ -1,4 +1,4 @@
-package org.colorcoding.tools.btulz.bobas.commands;
+package org.colorcoding.tools.btulz.bobas.transformers;
 
 import org.colorcoding.ibas.bobas.bo.IBusinessObject;
 import org.colorcoding.ibas.bobas.common.OperationResult;
@@ -9,14 +9,16 @@ import org.colorcoding.ibas.bobas.organization.OrganizationFactory;
 import org.colorcoding.ibas.bobas.repository.BORepositoryLogicService;
 
 /**
- * 审批流程专用业务仓库
+ * 变形金刚专用业务仓库
+ * 
+ * 不会触发审批流程，使用系统用户权限
  * 
  * @author Niuren.Zhu
  *
  */
-public class BORepository4init extends BORepositoryLogicService {
+public class BORepository4Transformer extends BORepositoryLogicService {
 
-	public BORepository4init() {
+	public BORepository4Transformer() {
 		this.setUseCache(false); // 不使用缓存
 		this.setCheckApprovalProcess(false);// 不使用审批流程
 		// 使用系统用户

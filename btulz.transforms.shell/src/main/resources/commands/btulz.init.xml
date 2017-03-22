@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:CommandBuilder Description="解析文件数据导入业务仓库" xmlns:ns2="http://colorcoding.org/btulz/shell/commands">
+    <Item Content="java" Editable="false" />
+    <Item Content="-Dfile.encoding=utf-8" Description="使用utf-8编码方式" Editable="false" />
+    <Item Content="-jar btulz.transforms.bobas-0.1.0.jar" Description="使用jar包" Editable="false" />
+    <Item Content="init" Description="子命令" Editable="false" />
+    <Item Content="-config=${VALUE}" Description="业务仓库配置文件">
+      <ValidValues ClassName="javax.swing.JFileChooser" />
+    </Item>
+    <Item Content="-data=${VALUE}" Description="数据文件">
+      <ValidValues ClassName="javax.swing.JFileChooser" />
+    </Item>
+    <Item Content="-classes=${VALUE}" Description="类库文件（;）">
+      <ValidValues ClassName="javax.swing.JFileChooser" />
+    </Item>
+</ns2:CommandBuilder>

@@ -1,4 +1,4 @@
-package org.colorcoding.tools.btulz.bobas.commands;
+package org.colorcoding.tools.btulz.bobas.transformers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLConnection;
+import java.net.URLStreamHandlerFactory;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -21,10 +22,18 @@ import java.util.jar.JarFile;
  * @author manager
  *
  */
-public class ClassLoder4bobas extends URLClassLoader {
+public class ClassLoader4bobas extends URLClassLoader {
 
-	public ClassLoder4bobas(URL[] urls, ClassLoader parent) {
+	public ClassLoader4bobas(URL[] urls, ClassLoader parent) {
 		super(urls, parent);
+	}
+
+	public ClassLoader4bobas(URL[] urls, ClassLoader parent, URLStreamHandlerFactory factory) {
+		super(urls, parent, factory);
+	}
+
+	public ClassLoader4bobas(URL[] urls) {
+		super(urls);
 	}
 
 	private volatile HashMap<String, URL> classesMap;
