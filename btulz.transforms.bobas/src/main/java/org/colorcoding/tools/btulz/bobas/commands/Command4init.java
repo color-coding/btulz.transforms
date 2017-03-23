@@ -1,11 +1,14 @@
 package org.colorcoding.tools.btulz.bobas.commands;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.colorcoding.tools.btulz.bobas.transformers.DataTransformer;
+import org.colorcoding.tools.btulz.bobas.transformers.ClassLoader4Transformer;
 import org.colorcoding.tools.btulz.bobas.transformers.DataTransformer4Jar;
 import org.colorcoding.tools.btulz.commands.Argument;
 import org.colorcoding.tools.btulz.commands.Command;
@@ -65,6 +68,7 @@ public class Command4init extends Command<Command4init> {
 
 	@Override
 	protected int run(Argument[] arguments) {
+		ClassLoader4Transformer classLoader = null;
 		try {
 			String argData = "";
 			String argConfig = "";
@@ -93,15 +97,43 @@ public class Command4init extends Command<Command4init> {
 					}
 				}
 			}
-			DataTransformer transformer = new DataTransformer4Jar();
-			transformer.setConfigFile(argConfig);
-			transformer.setDataFile(argData);
-			transformer.addLibrary(argClasses);
-			transformer.transform();
+			// DataTransformer transformer = new DataTransformer4Jar();
+			// transformer.setConfigFile(argConfig);
+			// transformer.setDataFile(argData);
+			// transformer.addLibrary(argClasses);
+			// transformer.transform();
+			ClassLoader parentLoader = this.getClass().getClassLoader();
+			URL url = this.getClass().getProtectionDomain().getCodeSource().getLocation();
+			argClasses.add(url);
+			classLoader = new ClassLoader4Transformer(argClasses.toArray(new URL[] {}), parentLoader);
+			Class<?> dtType = classLoader.findClass(DataTransformer4Jar.class.getName());
+			Object transformer = dtType.newInstance();
+			Method method = dtType.getMethod("setConfigFile", String.class);
+			method.invoke(transformer, argConfig);
+			method = dtType.getMethod("setDataFile", String.class);
+			method.invoke(transformer, argData);
+			// method = dtType.getMethod("addLibrary", List.class);
+			// method.invoke(transformer, argClasses);
+			method = dtType.getMethod("setClassLoader", ClassLoader4Transformer.class);
+			method.invoke(transformer, classLoader);
+			method = dtType.getMethod("transform");
+			method.invoke(transformer);
 			return RETURN_VALUE_SUCCESS;
 		} catch (Exception e) {
-			this.print(e);
+			if (e instanceof InvocationTargetException) {
+				this.print(e.getCause());
+			} else {
+				this.print(e);
+			}
 			return RETURN_VALUE_COMMAND_EXECUTION_FAILD;
+		} finally {
+			try {
+				if (classLoader != null) {
+					classLoader.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

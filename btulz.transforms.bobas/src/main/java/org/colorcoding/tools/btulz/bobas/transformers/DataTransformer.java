@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
-import java.util.Map.Entry;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlType;
@@ -76,26 +76,26 @@ public class DataTransformer extends Transformer {
 		this.dataFile = dataFile;
 	}
 
-	private ClassLoader4Transformer classLoader = null;
+	private ClassLoader4Transformer classLoader;
 
-	protected final synchronized ClassLoader4Transformer getClassLoader() throws ClassNotFoundException, IOException {
+	public final ClassLoader4Transformer getClassLoader() {
 		if (this.classLoader == null) {
-			URL[] urls = this.getLibrary().toArray(new URL[] {});
-			// 父项类加载指向，当前的父项，以便进行隔离
-			ClassLoader parentLoader = ClassLoader.getSystemClassLoader();
-			this.classLoader = new ClassLoader4Transformer(urls, parentLoader);
-			this.classLoader.init();
+			ClassLoader parentLoader = this.getClass().getClassLoader();
+			this.classLoader = new ClassLoader4Transformer(this.getLibrary().toArray(new URL[] {}), parentLoader);
 		}
-		return this.classLoader;
+		return classLoader;
+	}
+
+	public final void setClassLoader(ClassLoader4Transformer classLoader) {
+		this.classLoader = classLoader;
 	}
 
 	@Override
 	public final void transform() throws TransformException, RepositoryException, IOException, ClassNotFoundException,
 			SAXException, ParserConfigurationException, JAXBException {
-		// 切换当前线程使用的classloader
-		ClassLoader olderLoader = Thread.currentThread().getContextClassLoader();
-		Thread.currentThread().setContextClassLoader(this.getClassLoader());
+		ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 		try {
+			Thread.currentThread().setContextClassLoader(this.getClassLoader());
 			// 读取配置文件
 			MyConfiguration.create(this.getConfigFile());
 			// 获取业务对象
@@ -113,13 +113,8 @@ public class DataTransformer extends Transformer {
 			// 保存数据
 			this.saveDatas(bos);
 		} finally {
-			// 切换原始加载器
-			if (olderLoader != null) {
-				Thread.currentThread().setContextClassLoader(olderLoader);
-			}
-			if (this.classLoader != null) {
-				this.classLoader.close();
-				this.classLoader = null;
+			if (oldLoader != null) {
+				Thread.currentThread().setContextClassLoader(oldLoader);
 			}
 		}
 	}
@@ -133,9 +128,10 @@ public class DataTransformer extends Transformer {
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 * @throws ClassNotFoundException
+	 * @throws TransformException
 	 */
 	protected List<IBusinessObject> analysisData(File file)
-			throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
+			throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, TransformException {
 		ArrayList<IBusinessObject> bos = new ArrayList<>();
 		if (file.isDirectory()) {
 			for (File item : file.listFiles()) {
@@ -207,15 +203,18 @@ public class DataTransformer extends Transformer {
 	 * @return
 	 * @throws ClassNotFoundException
 	 * @throws IOException
+	 * @throws TransformException
 	 */
-	protected Class<?> getClass(String name) throws ClassNotFoundException, IOException {
+	protected Class<?> getClass(String name) throws ClassNotFoundException, IOException, TransformException {
 		String simpleName = name;
 		if (simpleName.startsWith("http")) {
 			simpleName = simpleName.substring(simpleName.lastIndexOf("/") + 1);
 		}
-		for (Entry<String, URL> item : this.getClassLoader().getClassesMap().entrySet()) {
-			if (item.getKey().toLowerCase().endsWith(simpleName)) {
-				Class<?> type = this.getClassLoader().findClass(item.getKey());
+		Enumeration<String> classNames = this.getClassLoader().getClassNames();
+		while (classNames.hasMoreElements()) {
+			String className = classNames.nextElement();
+			if (className.toLowerCase().endsWith(simpleName)) {
+				Class<?> type = this.getClassLoader().findClass(className);
 				if (type != null) {
 					XmlType xmlType = type.getAnnotation(XmlType.class);
 					if (xmlType != null) {

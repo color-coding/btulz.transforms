@@ -15,6 +15,7 @@ import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBusinessObject;
 import org.colorcoding.ibas.bobas.serialization.ISerializer;
 import org.colorcoding.ibas.bobas.serialization.SerializerFactory;
+import org.colorcoding.tools.btulz.transformers.TransformException;
 import org.xml.sax.SAXException;
 
 /**
@@ -29,7 +30,7 @@ public class DataTransformer4Jar extends DataTransformer {
 
 	@Override
 	protected List<IBusinessObject> analysisData(File file)
-			throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
+			throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, TransformException {
 		if (file.isFile() && file.getName().toLowerCase().endsWith(".jar")) {
 			ArrayList<IBusinessObject> bos = new ArrayList<>();
 			JarFile jarFile = new JarFile(file);

@@ -4,17 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.net.URLConnection;
 import java.net.URLStreamHandlerFactory;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -38,93 +31,55 @@ public class ClassLoader4Transformer extends URLClassLoader {
 		super(urls);
 	}
 
-	private Vector<Class<?>> classes = null;
+	public Enumeration<String> getClassNames() {
+		return new Enumeration<String>() {
 
-	@SuppressWarnings("unchecked")
-	public Vector<Class<?>> getClasses()
-			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		if (this.classes == null) {
-			Class<?> rootClass = this.getClass();
-			while (rootClass != ClassLoader.class)
-				rootClass = rootClass.getSuperclass();
-			Field field = rootClass.getDeclaredField("classes");
-			field.setAccessible(true);
-			// 获取已加载的类
-			this.classes = (Vector<Class<?>>) field.get(this);
-		}
-		return this.classes;
-	}
+			int fileIndex = 0;
 
-	private volatile HashMap<String, URL> classesMap;
+			private boolean hasMore = true;
 
-	public synchronized Map<String, URL> getClassesMap() {
-		if (this.classesMap == null) {
-			this.classesMap = new HashMap<>();
-		}
-		return this.classesMap;
-	}
-
-	private static String CLASSES_FOLDER = String.format("%1$sclasses%1$s", File.separator);
-
-	public void init() throws IOException, ClassNotFoundException {
-		for (URL item : this.getURLs()) {
-			if (item == null) {
-				continue;
+			@Override
+			public boolean hasMoreElements() {
+				return this.hasMore;
 			}
-			if (item.getProtocol().equals("file")) {
-				File file = new File(java.net.URLDecoder.decode(item.getPath(), "UTF-8"));
-				if (file.getName().endsWith(".jar")) {
-					JarFile jarFile = new JarFile(file);
-					Enumeration<JarEntry> jarEntries = jarFile.entries();
-					if (jarEntries != null) {
-						while (jarEntries.hasMoreElements()) {
-							JarEntry jarEntry = (JarEntry) jarEntries.nextElement();
-							if (jarEntry.isDirectory()) {
-								continue;
+
+			Enumeration<JarEntry> jarEntries;
+
+			@SuppressWarnings("resource")
+			@Override
+			public String nextElement() {
+				try {
+					if (jarEntries == null) {
+						for (int i = fileIndex; i < getURLs().length; i++) {
+							URL item = getURLs()[i];
+							File file = new File(java.net.URLDecoder.decode(item.getPath(), "UTF-8"));
+							if (file.getName().endsWith(".jar")) {
+								JarFile jarFile = new JarFile(file);
+								Enumeration<JarEntry> jarEntries = jarFile.entries();
+								if (jarEntries != null) {
+									while (jarEntries.hasMoreElements()) {
+										JarEntry jarEntry = (JarEntry) jarEntries.nextElement();
+										if (jarEntry.isDirectory()) {
+											continue;
+										}
+										if (jarEntry.getName().toLowerCase().endsWith(".class")) {
+											String name = jarEntry.getName().replace("/", ".");
+											name = name.replace(".class", "");
+											return name;
+										}
+									}
+								}
+								jarFile.close();
 							}
-							if (jarEntry.getName().toLowerCase().endsWith(".class")) {
-								String name = jarEntry.getName().replace("/", ".");
-								name = name.replace(".class", "");
-								this.getClassesMap().put(name, new URL(String.format("jar:file:%s%s%s%s",
-										file.getPath(), "!", "/", jarEntry.toString())));
-							}
+							fileIndex++;
 						}
 					}
-					jarFile.close();
-				} else {
-					for (String tmp : this.getClasses(file)) {
-						String name = tmp;
-						if (!name.equalsIgnoreCase(file.getPath())) {
-							name = tmp.replace(file.getPath(), "");
-						} else if (name.indexOf(CLASSES_FOLDER) > 0) {
-							// 加载本模块.class资源
-							name = name.substring(name.indexOf(CLASSES_FOLDER) + CLASSES_FOLDER.length());
-						}
-						if (name.startsWith(File.separator)) {
-							name = name.substring(1);
-						}
-						name = name.replace(File.separator, ".");
-						name = name.replace(".class", "");
-						this.getClassesMap().put(name, new URL("file", "", tmp));
-					}
+					return null;
+				} catch (Exception e) {
+					throw new RuntimeException(e);
 				}
 			}
-		}
-	}
-
-	private List<String> getClasses(File file) throws IOException {
-		ArrayList<String> names = new ArrayList<>();
-		if (file.isDirectory()) {
-			for (File item : file.listFiles()) {
-				names.addAll(this.getClasses(item));
-			}
-		} else if (file.isFile()) {
-			String tmp = file.getPath().toLowerCase();
-			if (tmp.endsWith(".class")) {
-				names.add(file.getPath());
-			}
-		}
-		return names;
+		};
 	}
 
 	protected Class<?> defineClass(String name, InputStream inputStream)
@@ -142,33 +97,17 @@ public class ClassLoader4Transformer extends URLClassLoader {
 
 	@Override
 	public Class<?> findClass(String name) throws ClassNotFoundException {
+		// 首先，查看是否已经加载
 		Class<?> type = this.findLoadedClass(name);
 		if (type != null) {
 			return type;
 		}
 		try {
-			return this.getParent().loadClass(name);
-		} catch (ClassNotFoundException | NullPointerException e) {
-			if (this.getClassesMap().containsKey(name)) {
-				URL url = this.getClassesMap().get(name);
-				try {
-					URLConnection connection = url.openConnection();
-					connection.connect();
-					InputStream inputStream = connection.getInputStream();
-					try {
-						return this.defineClass(name, inputStream);
-					} catch (LinkageError e1) {
-						// 加载出错，可能缺少连接引用
-						// 加载连接引用
-						this.findClass(e1.getMessage());
-						// 重新调用加载
-						return this.findClass(name);
-					}
-				} catch (IOException e2) {
-					throw new ClassNotFoundException(e2.getMessage());
-				}
-			}
+			// 父项加载失败，子项加载
 			return super.findClass(name);
+		} catch (ClassNotFoundException e) {
+			// 没有加载，尝试父项加载
+			return this.getParent().loadClass(name);
 		}
 	}
 }

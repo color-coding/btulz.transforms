@@ -3,12 +3,14 @@ package org.colorcoding.tools.btulz.bobas.test.transformers;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Map.Entry;
+import java.util.Enumeration;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.colorcoding.ibas.bobas.MyConfiguration;
+import org.colorcoding.ibas.bobas.common.Criteria;
+import org.colorcoding.ibas.bobas.common.ICriteria;
 import org.colorcoding.ibas.bobas.core.RepositoryException;
 import org.colorcoding.ibas.bobas.organization.IOrganizationManager;
 import org.colorcoding.tools.btulz.bobas.transformers.ClassLoader4Transformer;
@@ -27,37 +29,37 @@ public class testDataTransformer extends TestCase {
 		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();
 		File classFolder = new File(String.format("%1$s%2$s%3$s%2$s%3$s%2$starget%2$sclasses", folder.getPath(),
 				File.separator, "ibas.initialfantasy"));
+		classFolder = new File(String.format("%1$s%2$s%3$s%2$srelease%2$sibas.initialfantasy-0.0.1.jar",
+				folder.getPath(), File.separator, "ibas.initialfantasy"));
 		File jarFile = new File(String.format("%1$s%2$s%3$s%2$srelease%2$sbobas.businessobjectscommon-0.1.2.jar",
 				folder.getPath(), File.separator, "ibas-framework"));
 		ClassLoader parentLoader = this.getClass().getClassLoader();
 		ClassLoader4Transformer loader = new ClassLoader4Transformer(
 				new URL[] { classFolder.toURI().toURL(), jarFile.toURI().toURL() }, parentLoader);
-		loader.init();
-		int count = 0;
-		for (Entry<String, URL> item : loader.getClassesMap().entrySet()) {
-			// System.out.println(item);
-			Class<?> type = loader.findClass(item.getKey());
+		Enumeration<String> classNames = loader.getClassNames();
+		while (classNames.hasMoreElements()) {
+			String className = classNames.nextElement();
+			// System.out.println(className);
+			Class<?> type = loader.findClass(className);
 			if (!type.getClassLoader().equals(loader)) {
 				// 仅其他加载器加载类型
 				System.err.println(type.getName());
 			}
-			count++;
 		}
 		Class<?> type = null;
 		// 测试基本类型的，能否引用
 		// type = loader.findClass(Object.class.getName());
 		// Object object = (Object) type.newInstance();
 		// 测试是否能用接口接受类型实例，结论不行
-		// type = loader.findClass(Criteria.class.getName());
-		// ICriteria criteria = (ICriteria) type.newInstance();
+		type = loader.findClass(Criteria.class.getName());
+		ICriteria criteria = (ICriteria) type.newInstance();
 		// 父加载器接口引用子加载器的类
 		type = loader.findClass(IOrganizationManager.class.getName());
 		type = loader.findClass("org.colorcoding.ibas.bobas.organization.fantasy.OrganizationManager");
 		IOrganizationManager manager = (IOrganizationManager) type.newInstance();
-		type = loader.findClass("org.colorcoding.ibas.bobas.organization.fantasy.OrganizationManager");
-		manager = (IOrganizationManager) type.newInstance();
+		type = loader.findClass("org.colorcoding.ibas.initialfantasy.bo.organizations.OrganizationalStructure");
+		Object org = type.newInstance();
 		loader.close();
-		System.err.println(count);
 	}
 
 	public void testTransformer() throws ClassNotFoundException, TransformException, RepositoryException, IOException,
