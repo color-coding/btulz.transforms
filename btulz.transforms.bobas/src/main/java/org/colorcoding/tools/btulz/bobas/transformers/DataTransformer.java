@@ -106,7 +106,7 @@ public class DataTransformer extends Transformer {
 			// 分析数据
 			List<IBusinessObject> bos = this.analysisData(file);
 			if (bos == null || bos.size() == 0) {
-				Environment.getLogger().debug(String.format("no data in [%s].", file.getPath()));
+				Environment.getLogger().info(String.format("no data in [%s].", file.getPath()));
 				return;
 			}
 			Environment.getLogger().info(String.format("resolve data [%s], in [%s].", bos.size(), file.getPath()));
@@ -249,7 +249,7 @@ public class DataTransformer extends Transformer {
 	 * @throws TransformException
 	 */
 	protected void saveDatas(List<IBusinessObject> datas) throws RepositoryException, TransformException {
-		BORepository4Transformer boRepository = new BORepository4Transformer();
+		IBORepository4Transformer boRepository = new BORepository4Transformer();
 		IOperationResult<?> opRslt = null;
 		try {
 			boRepository.beginTransaction();// 开启事务

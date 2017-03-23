@@ -16,7 +16,7 @@ import org.colorcoding.ibas.bobas.repository.BORepositoryLogicService;
  * @author Niuren.Zhu
  *
  */
-public class BORepository4Transformer extends BORepositoryLogicService {
+public class BORepository4Transformer extends BORepositoryLogicService implements IBORepository4Transformer {
 
 	public BORepository4Transformer() {
 		this.setUseCache(false); // 不使用缓存
@@ -30,26 +30,32 @@ public class BORepository4Transformer extends BORepositoryLogicService {
 		this.setCurrentUser(user);
 	}
 
+	@Override
 	public boolean openRepository() throws RepositoryException {
 		return super.openRepository();
 	}
 
+	@Override
 	public void closeRepository() throws RepositoryException {
 		super.closeRepository();
 	}
 
+	@Override
 	public boolean beginTransaction() throws RepositoryException {
 		return super.beginTransaction();
 	}
 
+	@Override
 	public void rollbackTransaction() throws RepositoryException {
 		super.rollbackTransaction();
 	}
 
+	@Override
 	public void commitTransaction() throws RepositoryException {
 		super.commitTransaction();
 	}
 
+	@Override
 	public <P extends IBusinessObject> OperationResult<P> save(P bo) {
 		String token = this.getCurrentUser().getToken();
 		return super.save(bo, token);

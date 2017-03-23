@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.colorcoding.tools.btulz.bobas.transformers.DataTransformer;
+import org.colorcoding.tools.btulz.bobas.transformers.DataTransformer4Jar;
 import org.colorcoding.tools.btulz.commands.Argument;
 import org.colorcoding.tools.btulz.commands.Command;
 import org.colorcoding.tools.btulz.commands.Prompt;
@@ -92,7 +93,7 @@ public class Command4init extends Command<Command4init> {
 					}
 				}
 			}
-			DataTransformer transformer = new DataTransformer();
+			DataTransformer transformer = new DataTransformer4Jar();
 			transformer.setConfigFile(argConfig);
 			transformer.setDataFile(argData);
 			transformer.addLibrary(argClasses);
