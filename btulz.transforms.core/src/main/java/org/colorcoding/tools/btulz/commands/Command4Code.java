@@ -27,7 +27,7 @@ public class Command4Code extends Command4Release<Command4Code> {
 
 	public Command4Code() {
 		this.setName(COMMAND_PROMPT);
-		this.setDescription("根据模型创建代码。");
+		this.setDescription("根据模型创建代码");
 	}
 
 	@Override

@@ -28,7 +28,7 @@ public class Command4DSJar extends Command4Release<Command4DSJar> {
 
 	public Command4DSJar() {
 		this.setName(COMMAND_PROMPT);
-		this.setDescription("执行jar包中的数据结构和SQL说明。");
+		this.setDescription("执行jar包中的数据结构和SQL说明");
 	}
 
 	@Override

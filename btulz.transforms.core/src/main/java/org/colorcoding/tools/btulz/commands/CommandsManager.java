@@ -14,6 +14,11 @@ import org.colorcoding.tools.btulz.Environment;
  */
 public class CommandsManager {
 
+	/**
+	 * 新行字符
+	 */
+	public static final String NEW_LINE = System.getProperty("line.separator", "\r\n");
+
 	private HashMap<String, Class<? extends Command<?>>> commands;
 
 	protected Map<String, Class<? extends Command<?>>> getCommands() {
@@ -94,6 +99,11 @@ public class CommandsManager {
 			return Command.RETURN_VALUE_NO_COMMAND_EXECUTION;
 		}
 		String prompt = args[0].trim();
+		if (prompt.equalsIgnoreCase("ls")) {
+			// 列出当前存在的命令
+			this.printRegistedCommands();
+			return Command.RETURN_VALUE_SUCCESS;
+		}
 		Class<? extends Command<?>> commandType = this.getCommands(prompt);
 		if (commandType == null) {
 			// 没有找到命令
@@ -114,4 +124,36 @@ public class CommandsManager {
 		}
 	}
 
+	private void printRegistedCommands() {
+		// 列出当前存在的命令
+		StringBuilder invalidCommands = new StringBuilder();
+		invalidCommands.append(String.format("invaild command:"));
+		invalidCommands.append(NEW_LINE);
+		StringBuilder vaildCommands = new StringBuilder();
+		vaildCommands.append("vaild commands:");
+		vaildCommands.append(NEW_LINE);
+		for (Class<? extends Command<?>> item : this.getCommands().values()) {
+			try {
+				Command<?> command = item.newInstance();
+				vaildCommands.append("    ");
+				vaildCommands.append(command.getName());
+				for (int i = command.getName().length(); i < 10; i++) {
+					vaildCommands.append(" ");
+				}
+				vaildCommands.append(command.getDescription());
+				vaildCommands.append(NEW_LINE);
+			} catch (InstantiationException | IllegalAccessException e) {
+				vaildCommands.append("    ");
+				vaildCommands.append(item.getSimpleName());
+				invalidCommands.append(NEW_LINE);
+				invalidCommands.append("    ");
+				invalidCommands.append(e.toString());
+				invalidCommands.append(NEW_LINE);
+			}
+		}
+		this.print(vaildCommands.toString());
+		if (invalidCommands.length() > 1) {
+			this.print(invalidCommands.toString());
+		}
+	}
 }

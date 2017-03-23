@@ -15,8 +15,9 @@ public class testCommands extends TestCase {
 		File folder = new File(MyConfiguration.getStartupFolder());
 		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();
 		String ifFolder = folder.getPath() + File.separator + "ibas.initialfantasy";
-		String ibas = String.format("%1$s%2$s%3$s%2$srelease%2$sbobas.businessobjectscommon-0.1.2.jar",
-				folder.getPath(), File.separator, "ibas-framework");
+		// String ibas =
+		// String.format("%1$s%2$s%3$s%2$srelease%2$sbobas.businessobjectscommon-0.1.2.jar",
+		// folder.getPath(), File.separator, "ibas-framework");
 		String config = String.format("%s%2$sibas.initialfantasy%2$sapp.xml", ifFolder, File.separator);
 		String data = String.format("%s%2$srelease%2$sibas.initialfantasy-0.0.1.jar", ifFolder, File.separator);
 		String classes = String.format("%s%2$srelease%2$sibas.initialfantasy-0.0.1.jar", ifFolder, File.separator);

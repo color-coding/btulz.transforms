@@ -26,16 +26,16 @@ public class Command4init extends Command<Command4init> {
 
 	public Command4init() {
 		this.setName(COMMAND_PROMPT);
-		this.setDescription("initialization");
+		this.setDescription("导入初始化数据");
 	}
 
 	@Override
 	protected Argument[] createArguments() {
 		ArrayList<Argument> arguments = new ArrayList<>();
 		// 添加自身参数
-		arguments.add(new Argument("-data", "data file or data folder"));
-		arguments.add(new Argument("-config", "config file"));
-		arguments.add(new Argument("-classes", "library files"));
+		arguments.add(new Argument("-data", "数据文件，支持解析jar文件"));
+		arguments.add(new Argument("-config", "配置文件"));
+		arguments.add(new Argument("-classes", "加载的类库，多个时用“;”分隔"));
 		return arguments.toArray(new Argument[] {});
 	}
 
@@ -44,7 +44,7 @@ public class Command4init extends Command<Command4init> {
 	 */
 	@Override
 	protected void moreHelps(StringBuilder stringBuilder) {
-		stringBuilder.append("sample");
+		stringBuilder.append("示例：");
 		stringBuilder.append(NEW_LINE);
 		stringBuilder.append("  ");
 		stringBuilder.append(COMMAND_PROMPT);
@@ -85,7 +85,7 @@ public class Command4init extends Command<Command4init> {
 						}
 						File file = new File(item);
 						if (!file.exists()) {
-							this.print("class file [%s] not exists.", item);
+							this.print("类库[%s]不存在", item);
 							continue;
 						}
 						argClasses.add(file.toURI().toURL());

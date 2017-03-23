@@ -27,7 +27,7 @@ public class Command4Ds extends Command4Release<Command4Code> {
 
 	public Command4Ds() {
 		this.setName(COMMAND_PROMPT);
-		this.setDescription("根据模型创建数据结构。");
+		this.setDescription("根据模型创建数据结构");
 	}
 
 	@Override

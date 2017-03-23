@@ -27,7 +27,7 @@ public class Command4Excel extends Command4Release<Command4Excel> {
 
 	public Command4Excel() {
 		this.setName(COMMAND_PROMPT);
-		this.setDescription("根据excel文件输出模型。");
+		this.setDescription("根据excel文件输出模型");
 	}
 
 	@Override

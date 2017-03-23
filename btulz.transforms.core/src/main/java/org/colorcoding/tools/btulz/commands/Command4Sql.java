@@ -25,7 +25,7 @@ public class Command4Sql extends Command<Command4Sql> {
 
 	public Command4Sql() {
 		this.setName(COMMAND_PROMPT);
-		this.setDescription("运行SQL脚本说明。");
+		this.setDescription("运行SQL脚本说明");
 	}
 
 	@Override
