@@ -76,14 +76,14 @@ public class DataTransformer extends Transformer {
 		this.dataFile = dataFile;
 	}
 
-	private ClassLoader4bobas classLoader = null;
+	private ClassLoader4Transformer classLoader = null;
 
-	protected final synchronized ClassLoader4bobas getClassLoader() throws ClassNotFoundException, IOException {
+	protected final synchronized ClassLoader4Transformer getClassLoader() throws ClassNotFoundException, IOException {
 		if (this.classLoader == null) {
 			URL[] urls = this.getLibrary().toArray(new URL[] {});
 			// 父项类加载指向，当前的父项，以便进行隔离
-			ClassLoader parentLoader = this.getClass().getClassLoader();
-			this.classLoader = new ClassLoader4bobas(urls, parentLoader);
+			ClassLoader parentLoader = ClassLoader.getSystemClassLoader();
+			this.classLoader = new ClassLoader4Transformer(urls, parentLoader);
 			this.classLoader.init();
 		}
 		return this.classLoader;
@@ -215,7 +215,7 @@ public class DataTransformer extends Transformer {
 		}
 		for (Entry<String, URL> item : this.getClassLoader().getClassesMap().entrySet()) {
 			if (item.getKey().toLowerCase().endsWith(simpleName)) {
-				Class<?> type = this.getClassLoader().loadClass(item.getKey());
+				Class<?> type = this.getClassLoader().findClass(item.getKey());
 				if (type != null) {
 					XmlType xmlType = type.getAnnotation(XmlType.class);
 					if (xmlType != null) {

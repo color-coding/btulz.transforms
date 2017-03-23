@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLConnection;
@@ -13,6 +14,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -22,18 +24,35 @@ import java.util.jar.JarFile;
  * @author manager
  *
  */
-public class ClassLoader4bobas extends URLClassLoader {
+public class ClassLoader4Transformer extends URLClassLoader {
 
-	public ClassLoader4bobas(URL[] urls, ClassLoader parent) {
+	public ClassLoader4Transformer(URL[] urls, ClassLoader parent) {
 		super(urls, parent);
 	}
 
-	public ClassLoader4bobas(URL[] urls, ClassLoader parent, URLStreamHandlerFactory factory) {
+	public ClassLoader4Transformer(URL[] urls, ClassLoader parent, URLStreamHandlerFactory factory) {
 		super(urls, parent, factory);
 	}
 
-	public ClassLoader4bobas(URL[] urls) {
+	public ClassLoader4Transformer(URL[] urls) {
 		super(urls);
+	}
+
+	private Vector<Class<?>> classes = null;
+
+	@SuppressWarnings("unchecked")
+	public Vector<Class<?>> getClasses()
+			throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		if (this.classes == null) {
+			Class<?> rootClass = this.getClass();
+			while (rootClass != ClassLoader.class)
+				rootClass = rootClass.getSuperclass();
+			Field field = rootClass.getDeclaredField("classes");
+			field.setAccessible(true);
+			// 获取已加载的类
+			this.classes = (Vector<Class<?>>) field.get(this);
+		}
+		return this.classes;
 	}
 
 	private volatile HashMap<String, URL> classesMap;
@@ -127,25 +146,29 @@ public class ClassLoader4bobas extends URLClassLoader {
 		if (type != null) {
 			return type;
 		}
-		if (this.getClassesMap().containsKey(name)) {
-			URL url = this.getClassesMap().get(name);
-			try {
-				URLConnection connection = url.openConnection();
-				connection.connect();
-				InputStream inputStream = connection.getInputStream();
+		try {
+			return this.getParent().loadClass(name);
+		} catch (ClassNotFoundException | NullPointerException e) {
+			if (this.getClassesMap().containsKey(name)) {
+				URL url = this.getClassesMap().get(name);
 				try {
-					return this.defineClass(name, inputStream);
-				} catch (LinkageError e1) {
-					// 加载出错，可能缺少连接引用
-					// 加载连接引用
-					this.findClass(e1.getMessage());
-					// 重新调用加载
-					return this.findClass(name);
+					URLConnection connection = url.openConnection();
+					connection.connect();
+					InputStream inputStream = connection.getInputStream();
+					try {
+						return this.defineClass(name, inputStream);
+					} catch (LinkageError e1) {
+						// 加载出错，可能缺少连接引用
+						// 加载连接引用
+						this.findClass(e1.getMessage());
+						// 重新调用加载
+						return this.findClass(name);
+					}
+				} catch (IOException e2) {
+					throw new ClassNotFoundException(e2.getMessage());
 				}
-			} catch (IOException e2) {
-				throw new ClassNotFoundException(e2.getMessage());
 			}
+			return super.findClass(name);
 		}
-		return super.findClass(name);
 	}
 }
