@@ -7,7 +7,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLStreamHandlerFactory;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -31,53 +33,88 @@ public class ClassLoader4Transformer extends URLClassLoader {
 		super(urls);
 	}
 
-	public Enumeration<String> getClassNames() {
-		return new Enumeration<String>() {
-
-			int fileIndex = 0;
-
-			private boolean hasMore = true;
+	public Iterable<String> getClassNames() {
+		return new Iterable<String>() {
 
 			@Override
-			public boolean hasMoreElements() {
-				return this.hasMore;
-			}
+			public Iterator<String> iterator() {
+				return new Iterator<String>() {
+					/**
+					 * 类库文件的迭代器
+					 */
+					private Iterator<URL> urlIterator = new Iterator<URL>() {
+						int index = 0;
 
-			Enumeration<JarEntry> jarEntries;
-
-			@SuppressWarnings("resource")
-			@Override
-			public String nextElement() {
-				try {
-					if (jarEntries == null) {
-						for (int i = fileIndex; i < getURLs().length; i++) {
-							URL item = getURLs()[i];
-							File file = new File(java.net.URLDecoder.decode(item.getPath(), "UTF-8"));
-							if (file.getName().endsWith(".jar")) {
-								JarFile jarFile = new JarFile(file);
-								Enumeration<JarEntry> jarEntries = jarFile.entries();
-								if (jarEntries != null) {
-									while (jarEntries.hasMoreElements()) {
-										JarEntry jarEntry = (JarEntry) jarEntries.nextElement();
-										if (jarEntry.isDirectory()) {
-											continue;
-										}
-										if (jarEntry.getName().toLowerCase().endsWith(".class")) {
-											String name = jarEntry.getName().replace("/", ".");
-											name = name.replace(".class", "");
-											return name;
-										}
-									}
-								}
-								jarFile.close();
+						@Override
+						public boolean hasNext() {
+							if (index < getURLs().length) {
+								return true;
 							}
-							fileIndex++;
+							return false;
 						}
+
+						@Override
+						public URL next() {
+							URL item = getURLs()[index];
+							index++;
+							return item;
+						}
+					};
+
+					private Iterator<String> classNameIterator;
+
+					@Override
+					public boolean hasNext() {
+						if (this.classNameIterator != null) {
+							if (this.classNameIterator.hasNext()) {
+								return true;
+							}
+						}
+						if (this.urlIterator.hasNext()) {
+							return true;
+						}
+						return false;
 					}
-					return null;
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
+
+					@Override
+					public String next() {
+						if (this.classNameIterator != null && this.classNameIterator.hasNext()) {
+							return this.classNameIterator.next();
+						} else {
+							try {
+								while (this.urlIterator.hasNext()) {
+									ArrayList<String> classNames = new ArrayList<>();
+									URL url = this.urlIterator.next();
+									File file = new File(java.net.URLDecoder.decode(url.getPath(), "UTF-8"));
+									if (file.getName().endsWith(".jar")) {
+										JarFile jarFile = new JarFile(file);
+										Enumeration<JarEntry> jarEntries = jarFile.entries();
+										if (jarEntries != null) {
+											while (jarEntries.hasMoreElements()) {
+												JarEntry jarEntry = (JarEntry) jarEntries.nextElement();
+												if (jarEntry.isDirectory()) {
+													continue;
+												}
+												if (jarEntry.getName().toLowerCase().endsWith(".class")) {
+													String name = jarEntry.getName().replace("/", ".");
+													name = name.replace(".class", "");
+													classNames.add(name);
+												}
+											}
+										}
+										jarFile.close();
+									}
+									this.classNameIterator = classNames.iterator();
+									return this.next();
+								}
+							} catch (Exception e) {
+								throw new RuntimeException(e);
+							}
+						}
+						return null;
+					}
+
+				};
 			}
 		};
 	}

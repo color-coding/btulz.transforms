@@ -3,7 +3,6 @@ package org.colorcoding.tools.btulz.bobas.test.transformers;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Enumeration;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -36,16 +35,17 @@ public class testDataTransformer extends TestCase {
 		ClassLoader parentLoader = this.getClass().getClassLoader();
 		ClassLoader4Transformer loader = new ClassLoader4Transformer(
 				new URL[] { classFolder.toURI().toURL(), jarFile.toURI().toURL() }, parentLoader);
-		Enumeration<String> classNames = loader.getClassNames();
-		while (classNames.hasMoreElements()) {
-			String className = classNames.nextElement();
+		int count = 0;
+		for (String className : loader.getClassNames()) {
 			// System.out.println(className);
 			Class<?> type = loader.findClass(className);
 			if (!type.getClassLoader().equals(loader)) {
 				// 仅其他加载器加载类型
 				System.err.println(type.getName());
 			}
+			count++;
 		}
+		System.err.println("class count:" + count);
 		Class<?> type = null;
 		// 测试基本类型的，能否引用
 		// type = loader.findClass(Object.class.getName());

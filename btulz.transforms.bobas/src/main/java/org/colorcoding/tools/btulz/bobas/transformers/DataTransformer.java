@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
@@ -210,9 +209,8 @@ public class DataTransformer extends Transformer {
 		if (simpleName.startsWith("http")) {
 			simpleName = simpleName.substring(simpleName.lastIndexOf("/") + 1);
 		}
-		Enumeration<String> classNames = this.getClassLoader().getClassNames();
-		while (classNames.hasMoreElements()) {
-			String className = classNames.nextElement();
+		// 遍历加载器可识别类名称，找到可能的
+		for (String className : this.getClassLoader().getClassNames()) {
 			if (className.toLowerCase().endsWith(simpleName)) {
 				Class<?> type = this.getClassLoader().findClass(className);
 				if (type != null) {
