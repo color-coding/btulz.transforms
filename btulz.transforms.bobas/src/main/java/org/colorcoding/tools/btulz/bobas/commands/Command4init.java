@@ -8,6 +8,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.colorcoding.ibas.bobas.common.IOperationResult;
+import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.bobas.transformers.ClassLoader4Transformer;
 import org.colorcoding.tools.btulz.bobas.transformers.DataTransformer4Jar;
 import org.colorcoding.tools.btulz.commands.Argument;
@@ -97,16 +99,15 @@ public class Command4init extends Command<Command4init> {
 					}
 				}
 			}
-			// DataTransformer transformer = new DataTransformer4Jar();
-			// transformer.setConfigFile(argConfig);
-			// transformer.setDataFile(argData);
-			// transformer.addLibrary(argClasses);
-			// transformer.transform();
 			ClassLoader parentLoader = this.getClass().getClassLoader();
 			URL url = this.getClass().getProtectionDomain().getCodeSource().getLocation();
 			argClasses.add(url);
+			Environment.getLogger().debug(String.format("add library %s.", url.toString()));
 			classLoader = new ClassLoader4Transformer(argClasses.toArray(new URL[] {}), parentLoader);
 			Class<?> dtType = classLoader.findClass(DataTransformer4Jar.class.getName());
+			Environment.getLogger().debug(
+					String.format("DataTransformer loaded by %s.", dtType.getClassLoader().getClass().getSimpleName()));
+			classLoader.loadClass(IOperationResult.class.getName());
 			Object transformer = dtType.newInstance();
 			Method method = dtType.getMethod("setConfigFile", String.class);
 			method.invoke(transformer, argConfig);
@@ -119,7 +120,7 @@ public class Command4init extends Command<Command4init> {
 			method = dtType.getMethod("transform");
 			method.invoke(transformer);
 			return RETURN_VALUE_SUCCESS;
-		} catch (Exception e) {
+		} catch (Exception | Error e) {
 			if (e instanceof InvocationTargetException) {
 				this.print(e.getCause());
 			} else {
@@ -132,7 +133,7 @@ public class Command4init extends Command<Command4init> {
 					classLoader.close();
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				this.print(e);
 			}
 		}
 	}

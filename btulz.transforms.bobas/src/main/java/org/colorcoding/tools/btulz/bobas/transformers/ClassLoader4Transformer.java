@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.colorcoding.tools.btulz.Environment;
+
 /**
  * 业务对象类型加载器
  * 
@@ -141,9 +143,12 @@ public class ClassLoader4Transformer extends URLClassLoader {
 		}
 		try {
 			// 父项加载失败，子项加载
+			Environment.getLogger().debug(String.format("to find %s by %s.", name, this.getClass().getSimpleName()));
 			return super.findClass(name);
 		} catch (ClassNotFoundException e) {
 			// 没有加载，尝试父项加载
+			Environment.getLogger()
+					.debug(String.format("to find %s by %s.", name, this.getParent().getClass().getSimpleName()));
 			return this.getParent().loadClass(name);
 		}
 	}

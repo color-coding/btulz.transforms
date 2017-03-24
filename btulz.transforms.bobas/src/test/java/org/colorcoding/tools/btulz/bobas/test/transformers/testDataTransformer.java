@@ -94,6 +94,6 @@ public class testDataTransformer extends TestCase {
 				transformer.addLibrary(item.toURI().toURL());
 			}
 		}
-		transformer.transform();
+		// transformer.transform();
 	}
 }
