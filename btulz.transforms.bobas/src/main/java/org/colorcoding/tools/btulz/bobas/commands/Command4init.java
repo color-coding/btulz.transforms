@@ -2,19 +2,21 @@ package org.colorcoding.tools.btulz.bobas.commands;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.colorcoding.ibas.bobas.common.IOperationResult;
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.bobas.transformers.ClassLoader4Transformer;
 import org.colorcoding.tools.btulz.bobas.transformers.DataTransformer4Jar;
 import org.colorcoding.tools.btulz.commands.Argument;
 import org.colorcoding.tools.btulz.commands.Command;
 import org.colorcoding.tools.btulz.commands.Prompt;
+import org.colorcoding.tools.btulz.transformers.Transformer;
 
 /**
  * 初始化命令
@@ -42,6 +44,7 @@ public class Command4init extends Command<Command4init> {
 		arguments.add(new Argument("-data", "数据文件，支持解析jar文件"));
 		arguments.add(new Argument("-config", "配置文件"));
 		arguments.add(new Argument("-classes", "加载的类库，多个时用“;”分隔"));
+		arguments.add(new Argument("-test", "测试"));
 		return arguments.toArray(new Argument[] {});
 	}
 
@@ -75,6 +78,7 @@ public class Command4init extends Command<Command4init> {
 			String argData = "";
 			String argConfig = "";
 			List<URL> argClasses = new ArrayList<>();
+			boolean test = false;
 			for (Argument argument : arguments) {
 				if (!argument.isInputed()) {
 					// 没有输出的参数不做处理
@@ -82,6 +86,8 @@ public class Command4init extends Command<Command4init> {
 				}
 				if (argument.getName().equalsIgnoreCase("-data")) {
 					argData = argument.getValue();
+				} else if (argument.getName().equalsIgnoreCase("-test")) {
+					test = true;
 				} else if (argument.getName().equalsIgnoreCase("-config")) {
 					argConfig = argument.getValue();
 				} else if (argument.getName().equalsIgnoreCase("-classes")) {
@@ -99,15 +105,24 @@ public class Command4init extends Command<Command4init> {
 					}
 				}
 			}
+			URL url = DataTransformer4Jar.class.getProtectionDomain().getCodeSource().getLocation();
+			// argClasses.add(url);
+			// Environment.getLogger().debug(String.format("add library %s.",
+			// url.toString()));
+			url = Transformer.class.getProtectionDomain().getCodeSource().getLocation();
+			// argClasses.add(url);
+			// Environment.getLogger().debug(String.format("add library %s.",
+			// url.toString()));
 			ClassLoader parentLoader = this.getClass().getClassLoader();
-			URL url = this.getClass().getProtectionDomain().getCodeSource().getLocation();
-			argClasses.add(url);
-			Environment.getLogger().debug(String.format("add library %s.", url.toString()));
 			classLoader = new ClassLoader4Transformer(argClasses.toArray(new URL[] {}), parentLoader);
+			if (test) {
+				// 测试类加载器
+				this.testClassLoder(classLoader);
+				return RETURN_VALUE_NO_COMMAND_EXECUTION;
+			}
 			Class<?> dtType = classLoader.findClass(DataTransformer4Jar.class.getName());
 			Environment.getLogger().debug(
 					String.format("DataTransformer loaded by %s.", dtType.getClassLoader().getClass().getSimpleName()));
-			classLoader.loadClass(IOperationResult.class.getName());
 			Object transformer = dtType.newInstance();
 			Method method = dtType.getMethod("setConfigFile", String.class);
 			method.invoke(transformer, argConfig);
@@ -134,6 +149,47 @@ public class Command4init extends Command<Command4init> {
 				}
 			} catch (IOException e) {
 				this.print(e);
+			}
+		}
+	}
+
+	private void testClassLoder(ClassLoader4Transformer classLoader) {
+		for (URL url : classLoader.getURLs()) {
+			this.print("registered library %s", url.toString());
+		}
+		for (String className : classLoader.getClassNames()) {
+			Class<?> type = null;
+			this.print("test class loader %s", className);
+			try {
+				type = classLoader.loadClass(className);
+				if (type.getClassLoader().equals(classLoader)) {
+					this.print("passed.");
+				} else {
+					this.print("faild, %s.", type.getClassLoader());
+				}
+			} catch (ClassNotFoundException e) {
+				this.print(e);
+			}
+			if (type != null && !type.isInterface() && !type.isArray() && !type.isAnnotation() && !type.isEnum()
+					&& !type.isPrimitive()
+					// 非抽象类型
+					&& !Modifier.isAbstract(type.getModifiers())
+					// public
+					&& Modifier.isPublic(type.getModifiers())) {
+				this.print("test new instance %s", type.getName());
+				for (Constructor<?> item : type.getConstructors()) {
+					if (item.getParameterCount() == 0
+							// public方法
+							&& Modifier.isPublic(item.getModifiers())) {
+						try {
+							type.newInstance();
+							this.print("pass new instance.");
+						} catch (InstantiationException | IllegalAccessException e) {
+							this.print(e);
+						}
+						break;
+					}
+				}
 			}
 		}
 	}

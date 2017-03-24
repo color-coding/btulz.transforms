@@ -12,6 +12,7 @@ import org.colorcoding.ibas.bobas.common.Criteria;
 import org.colorcoding.ibas.bobas.common.ICriteria;
 import org.colorcoding.ibas.bobas.core.RepositoryException;
 import org.colorcoding.ibas.bobas.organization.IOrganizationManager;
+import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.bobas.transformers.ClassLoader4Transformer;
 import org.colorcoding.tools.btulz.bobas.transformers.DataTransformer;
 import org.colorcoding.tools.btulz.bobas.transformers.DataTransformer4Jar;
@@ -64,6 +65,7 @@ public class testDataTransformer extends TestCase {
 
 	public void testTransformer() throws ClassNotFoundException, TransformException, RepositoryException, IOException,
 			SAXException, ParserConfigurationException, JAXBException {
+		Environment.getLogger().debug("begin test.");
 		File folder = new File(MyConfiguration.getStartupFolder());
 		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();
 		String ifFolder = folder.getPath() + File.separator + "ibas.initialfantasy";
