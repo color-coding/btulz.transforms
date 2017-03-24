@@ -35,11 +35,6 @@ public class ClassLoader4Transformer extends URLClassLoader {
 		super(urls);
 	}
 
-	@Override
-	public Class<?> loadClass(String name) throws ClassNotFoundException {
-		return super.loadClass(name);
-	}
-
 	public Iterable<String> getClassNames() {
 		return new Iterable<String>() {
 

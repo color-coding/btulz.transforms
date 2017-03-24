@@ -16,7 +16,6 @@ import org.colorcoding.tools.btulz.bobas.transformers.DataTransformer4Jar;
 import org.colorcoding.tools.btulz.commands.Argument;
 import org.colorcoding.tools.btulz.commands.Command;
 import org.colorcoding.tools.btulz.commands.Prompt;
-import org.colorcoding.tools.btulz.transformers.Transformer;
 
 /**
  * 初始化命令
@@ -105,16 +104,8 @@ public class Command4init extends Command<Command4init> {
 					}
 				}
 			}
-			URL url = DataTransformer4Jar.class.getProtectionDomain().getCodeSource().getLocation();
-			// argClasses.add(url);
-			// Environment.getLogger().debug(String.format("add library %s.",
-			// url.toString()));
-			url = Transformer.class.getProtectionDomain().getCodeSource().getLocation();
-			// argClasses.add(url);
-			// Environment.getLogger().debug(String.format("add library %s.",
-			// url.toString()));
 			ClassLoader parentLoader = this.getClass().getClassLoader();
-			classLoader = new ClassLoader4Transformer(argClasses.toArray(new URL[] {}), parentLoader);
+			classLoader = new ClassLoader4Transformer(this.filter(argClasses), parentLoader);
 			if (test) {
 				// 测试类加载器
 				this.testClassLoder(classLoader);
@@ -151,6 +142,28 @@ public class Command4init extends Command<Command4init> {
 				this.print(e);
 			}
 		}
+	}
+
+	/**
+	 * 过滤输入类库
+	 * 
+	 * @param args
+	 * @return
+	 */
+	private URL[] filter(List<URL> args) {
+		ArrayList<URL> urls = new ArrayList<>();
+		for (URL url : args) {
+			if (url.toString().endsWith(".jar")) {
+				if (url.toString().indexOf("bobas.businessobjectscommon-") > 0) {
+					continue;
+				}
+				if (url.toString().indexOf("btulz.transforms.") > 0) {
+					continue;
+				}
+			}
+			urls.add(url);
+		}
+		return urls.toArray(new URL[] {});
 	}
 
 	private void testClassLoder(ClassLoader4Transformer classLoader) {
