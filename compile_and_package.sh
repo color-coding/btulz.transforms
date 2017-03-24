@@ -95,7 +95,7 @@ echo 压缩编译文件为tar包
 if [ -e ${WORK_FOLDER}/release ]
 then
   cd ${WORK_FOLDER}/release/
-  tar -cvf btulz.transforms.tar
+  tar -cvf btulz.transforms.tar btulz.transforms.* bobas.businessobjectscommon-* jaxen-* log4j-* mysql-connector-java-* ngdbc-* postgresql-* sqljdbc* dom4j-*
   cd ..
 fi
 echo --编译完成，更多信息请查看[compile_and_package_log_${OPNAME}.txt]
