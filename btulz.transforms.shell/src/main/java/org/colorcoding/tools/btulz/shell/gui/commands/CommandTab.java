@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -496,6 +497,45 @@ public class CommandTab extends WorkingTab {
 							}
 						}
 					}
+				}
+			});
+		} else if (commandItem.getValidValues().getClassName() != null
+				&& commandItem.getValidValues().getClassName().equals(java.util.UUID.class.getName())) {
+			button.addActionListener(new ActionListener() {
+				private JTextField textField;
+
+				private JTextField getTextField(Container container) {
+					JTextField value = null;
+					for (Component component : container.getComponents()) {
+						if (component instanceof JTextField) {
+							if (component.getName() != null && component.getName()
+									.equals(button.getName().replace(control_name_button, control_name_text))) {
+								value = (JTextField) component;
+							}
+						} else if (component instanceof Container) {
+							value = this.getTextField((Container) component);
+						} else if (component instanceof JScrollPane) {
+							value = this.getTextField(((JScrollPane) component).getViewport());
+						} else {
+							continue;
+						}
+						if (value != null) {
+							break;
+						}
+					}
+					return value;
+				}
+
+				public JTextField geTextField() {
+					if (textField == null) {
+						this.textField = this.getTextField(that.getPanel(PANEL_COMMAND));
+					}
+					return this.textField;
+				}
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					this.geTextField().setText(UUID.randomUUID().toString());
 				}
 			});
 		} else {

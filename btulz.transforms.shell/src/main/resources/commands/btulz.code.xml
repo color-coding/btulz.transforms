@@ -21,6 +21,9 @@
         <Items>
             <Item Content="{&quot;name&quot;:&quot;Company&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="公司标识" Value="CC" />
             <Item Content=",{&quot;name&quot;:&quot;ibasVersion&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="ibas版本" Value="0.1.2" />
+            <Item Content=",{&quot;name&quot;:&quot;ProjectId&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="项目标识" >
+                <ValidValues ClassName="java.util.UUID"/>
+            </Item>
         </Items>
     </Item>
     <Item Content="-Release" Description="释放资源" />
