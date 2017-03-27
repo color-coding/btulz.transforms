@@ -19,11 +19,14 @@ export class ${BO.getName()}ListApp extends ibas.BOListApplication<I${BO.getName
     static APPLICATION_ID: string = "${ID.newUUID()}";
     /** 应用名称 */
     static APPLICATION_NAME: string = "mu_${Domain.Name().toLowerCase()}_app_${BO.getName().toLowerCase()}_list";
+    /** 业务对象编码 */
+    static BUSINESS_OBJECT_CODE: string = "${MasterBO.getShortName()}";
 
     constructor() {
         super();
         this.id = ${BO.getName()}ListApp.APPLICATION_ID;
         this.name = ${BO.getName()}ListApp.APPLICATION_NAME;
+        this.boCode = ${BO.getName()}ListApp.BUSINESS_OBJECT_CODE;
         this.description = ibas.i18n.prop(this.name);
     }
     /** 注册视图 */

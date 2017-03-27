@@ -18,11 +18,14 @@ export class ${BO.getName()}ChooseApp extends ibas.BOChooseApplication<I${BO.get
     static APPLICATION_ID: string = "${ID.newUUID()}";
     /** 应用名称 */
     static APPLICATION_NAME: string = "mu_${Domain.Name().toLowerCase()}_app_${BO.getName().toLowerCase()}_choose";
+    /** 业务对象编码 */
+    static BUSINESS_OBJECT_CODE: string = "${MasterBO.getShortName()}";
 
     constructor() {
         super();
         this.id = ${BO.getName()}ChooseApp.APPLICATION_ID;
         this.name = ${BO.getName()}ChooseApp.APPLICATION_NAME;
+        this.boCode = ${BO.getName()}ChooseApp.BUSINESS_OBJECT_CODE;
         this.description = ibas.i18n.prop(this.name);
     }
     /** 注册视图 */
