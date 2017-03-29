@@ -17,6 +17,11 @@ import { I${BO.getName()}ChooseView } from "../../../bsapp/${BO.getName()}/index
  */
 export class ${BO.getName()}ChooseView extends ibas.BOChooseView implements I${BO.getName()}ChooseView {
 
+    /** 返回查询的对象 */
+    get queryTarget(): any {
+        return bo.${BO.getName()};
+    }
+
     /** 绘制工具条 */
     darwBars(): any {
         let that = this;

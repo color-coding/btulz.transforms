@@ -17,6 +17,11 @@ import { I${BO.getName()}ListView } from "../../../bsapp/${BO.getName()}/index";
  */
 export class ${BO.getName()}ListView extends ibas.BOListView implements I${BO.getName()}ListView {
 
+    /** 返回查询的对象 */
+    get queryTarget(): any {
+        return bo.${BO.getName()};
+    }
+
     /** 编辑数据，参数：目标数据 */
     editDataEvent: Function;
 
