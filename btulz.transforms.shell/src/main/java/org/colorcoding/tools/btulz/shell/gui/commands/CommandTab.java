@@ -479,6 +479,16 @@ public class CommandTab extends WorkingTab {
 							}
 						}
 					}
+					// 设置打开路径
+					if (this.geTextField() != null) {
+						File file = new File(this.geTextField().getText());
+						if (file.exists()) {
+							if (file.isFile()) {
+								file = file.getParentFile();
+							}
+							jfc.setCurrentDirectory(file);
+						}
+					}
 					jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 					jfc.showOpenDialog(null);
 					if (button != null && jfc.getSelectedFile() != null) {
