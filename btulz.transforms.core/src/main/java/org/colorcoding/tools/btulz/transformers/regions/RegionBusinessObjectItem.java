@@ -51,7 +51,8 @@ public class RegionBusinessObjectItem extends RegionBase {
 						public Parameter next() {
 							Parameter parameter = new Parameter();
 							parameter.setName(REGION_PARAMETER_NAME);
-							parameter.setValue(new BusinessObjectItem(businessObject.getRelatedBOs().get(curIndex)));
+							parameter.setValue(
+									new BusinessObjectItem(businessObject.getRelatedBOs().get(curIndex), curIndex + 1));
 							curIndex++;
 							return parameter;
 						}

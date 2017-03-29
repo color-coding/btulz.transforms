@@ -12,6 +12,11 @@ public class BusinessObjectItem implements IBusinessObjectItem {
 		this.boItem = boItem;
 	}
 
+	public BusinessObjectItem(IBusinessObjectItem boItem, int index) {
+		this.boItem = boItem;
+		this.index = index;
+	}
+
 	private IBusinessObjectItem boItem;
 
 	@Override
@@ -76,6 +81,16 @@ public class BusinessObjectItem implements IBusinessObjectItem {
 	@Override
 	public void setRelation(emBORelation relation) {
 		this.boItem.setRelation(relation);
+	}
+
+	private int index;
+
+	public final int getIndex() {
+		return index;
+	}
+
+	public final void setIndex(int index) {
+		this.index = index;
 	}
 
 	@Override

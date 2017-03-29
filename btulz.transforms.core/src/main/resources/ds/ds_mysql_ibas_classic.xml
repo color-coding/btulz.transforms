@@ -152,7 +152,7 @@ $BEGIN_BOITEM_MODEL$
         </Step>
         <Step Name="register business object ${Model.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into `${DbName}`.`${Company}_SYS_OBOI`(`Name`, `Code`, `Descrp`, `Mapped`, `ObjectType`) values (N'${Model.getName()}',N'${BO.getShortName()}',N'${Model.getDescription()}',N'${Model.getMapped().toUpperCase()}',N'${Model.getModelType()}')
+                insert into `${DbName}`.`${Company}_SYS_OBOI`(`Name`, `Code`, `Descrp`, `Mapped`, `ObjectType`) values (N'${Model.getName()}',N'${BO.getShortName()}.${BOItem.getIndex()}',N'${Model.getDescription()}',N'${Model.getMapped().toUpperCase()}',N'${Model.getModelType()}')
             </Script>
         </Step>
         <Step Name="check business object informations table exists">
