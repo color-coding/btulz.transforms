@@ -55,6 +55,7 @@ $END_BOITEM$
                     })
                 ]
             }),
+            enableSelectAll: false,
             visibleRowCount: 6,
             rows: "{/}",
             columns: [

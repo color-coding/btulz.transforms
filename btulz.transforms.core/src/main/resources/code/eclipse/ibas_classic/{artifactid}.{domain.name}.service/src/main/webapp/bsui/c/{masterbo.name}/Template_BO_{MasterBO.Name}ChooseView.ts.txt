@@ -55,18 +55,16 @@ export class ${BO.getName()}ChooseView extends ibas.BOChooseView implements I${B
     /** 绘制视图 */
     darw(): any {
         let that = this;
-        this.form = new sap.ui.layout.form.SimpleForm("");
         this.table = new sap.ui.table.Table("", {
+            enableSelectAll: false,
             visibleRowCount: 15,
             rows: "{/}",
             columns: [
             ]
         });
-        this.form.addContent(this.table);
-        this.id = this.form.getId();
-        return this.form;
+        this.id = this.table.getId();
+        return this.table;
     }
-    private form: sap.ui.layout.form.SimpleForm;
     private table: sap.ui.table.Table;
     /** 显示数据 */
     showData(datas: bo.${BO.getName()}[]): void {
