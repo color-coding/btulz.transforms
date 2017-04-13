@@ -3,6 +3,15 @@
         "module": "amd",
         "target": "es6",
         "noImplicitAny": false,
-        "removeComments": true
+        "removeComments": true,
+        "baseUrl": "./",
+        "paths": {
+            "ibas/index": [
+                "./3rdparty/ibas/index"
+            ],
+            "openui5/typings/ibas.utils": [
+                "./3rdparty/openui5/typings/ibas.utils"
+            ]
+        }
     }
 }

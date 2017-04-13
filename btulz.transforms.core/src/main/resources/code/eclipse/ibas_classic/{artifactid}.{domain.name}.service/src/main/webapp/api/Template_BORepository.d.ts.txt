@@ -7,31 +7,26 @@
  */
 
 import {
-    IBORemoteRepository,
-    ICriteria,
-    IOperationResult,
     FetchCaller,
     SaveCaller
-} from '../3rdparty/ibas/index';
-$BEGIN_BO$
-import { I${BO.getName()} } from './${BO.getName().toLowerCase()}/${BO.getName().toLowerCase()}.data.d';
-$END_BO$
+} from "ibas/index";
+import * as bo from "./bo/index"
 
 /** ${Domain.getName()} 业务仓库 */
-export interface IBORepository${Domain.getName()} extends IBORemoteRepository {
+export interface IBORepository${Domain.getName()} {
 
 $BEGIN_BO$
     /**
      * 查询 ${BO.getDescription()}
      * @param fetcher 查询者
      */
-    fetch${BO.getName()}(fetcher: FetchCaller<I${BO.getName()}>);
-
+    fetch${BO.getName()}(fetcher: FetchCaller<bo.I${BO.getName()}>);
     /**
      * 保存 ${BO.getDescription()}
      * @param saver 保存者
      */
-    save${BO.getName()}(saver: SaveCaller<I${BO.getName()}>);
+    save${BO.getName()}(saver: SaveCaller<bo.I${BO.getName()}>);
+
 $END_BO$
 
 }

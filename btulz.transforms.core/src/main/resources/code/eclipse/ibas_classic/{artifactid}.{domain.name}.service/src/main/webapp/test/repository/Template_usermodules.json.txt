@@ -1,0 +1,9 @@
+[
+  {
+    "id": "${ProjectId}",
+    "name": "${Domain.getName()}",
+    "category": "",
+    "address": ".../",
+    "repository": ".../test/repository"
+  }
+]

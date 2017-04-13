@@ -6,10 +6,9 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
-/// <reference path="../../../3rdparty/openui5/typings/index.d.ts" />
-import * as ibas from "../../../3rdparty/ibas/index";
+import * as ibas from "ibas/index";
+import { utils } from "openui5/typings/ibas.utils";
 import * as bo from "../../../borep/bo/index";
-import { utils } from "../../../3rdparty/openui5/typings/ibas.utils";
 import { I${BO.getName()}ListView } from "../../../bsapp/${BO.getName()}/index";
 
 /**
@@ -21,9 +20,10 @@ export class ${BO.getName()}ListView extends ibas.BOListView implements I${BO.ge
     get queryTarget(): any {
         return bo.${BO.getName()};
     }
-
     /** 编辑数据，参数：目标数据 */
     editDataEvent: Function;
+    /** 删除数据事件，参数：删除对象集合 */
+    deleteDataEvent: Function;
 
     /** 绘制视图 */
     darw(): any {
@@ -67,7 +67,19 @@ export class ${BO.getName()}ListView extends ibas.BOListView implements I${BO.ge
                         press: function (): void {
                             that.fireViewEvents(that.editDataEvent);
                         }
-                    })
+                    }),
+                    new sap.m.ToolbarSeparator(""),
+                    new sap.m.Button("", {
+                        text: ibas.i18n.prop("sys_shell_ui_data_delete"),
+                        type: sap.m.ButtonType.Transparent,
+                        icon: "sap-icon://delete",
+                        press: function (): void {
+                            that.fireViewEvents(that.deleteDataEvent,
+                                // 获取表格选中的对象
+                                utils.getTableSelecteds<bo.${BO.getName()}>(that.table)
+                            );
+                        }
+                    }),
                 ]
             }),
             content: [this.form]

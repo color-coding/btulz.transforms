@@ -6,10 +6,9 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
-/// <reference path="../../../3rdparty/openui5/typings/index.d.ts" />
-import * as ibas from "../../../3rdparty/ibas/index";
+import * as ibas from "ibas/index";
+import { utils } from "openui5/typings/ibas.utils";
 import * as bo from "../../../borep/bo/index";
-import { utils } from "../../../3rdparty/openui5/typings/ibas.utils";
 import { I${BO.getName()}ChooseView } from "../../../bsapp/${BO.getName()}/index";
 
 /**

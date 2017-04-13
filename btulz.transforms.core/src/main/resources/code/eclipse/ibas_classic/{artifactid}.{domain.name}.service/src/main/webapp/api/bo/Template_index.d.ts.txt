@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @license
  * Copyright color-coding studio. All Rights Reserved.
  *
@@ -6,6 +6,7 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import {
-
-} from '../../3rdparty/ibas/index';
+// 模块索引文件，此文件集中导出类
+$BEGIN_BO$
+export * from "./${BO.getName()}.d";
+$END_BO$

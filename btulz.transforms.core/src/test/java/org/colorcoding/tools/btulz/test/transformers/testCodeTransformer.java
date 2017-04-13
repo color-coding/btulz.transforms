@@ -25,8 +25,9 @@ public class testCodeTransformer extends TestCase {
 		// codeTransformer.addDomains(Environment.getWorkingFolder() +
 		// File.separator + Environment.getXmlModelsFileOld());
 
-		codeTransformer.addDomains(
-				"E:\\MyWorks\\ColorCoding\\ibas.initialfantasy\\ibas.initialfantasy\\src\\main\\resources\\datastructures");
+		codeTransformer.addDomains("E:\\MyWorks\\ColorCoding\\DS_TrainingTesting.xml");
+		// codeTransformer.addDomains(
+		// "E:\\MyWorks\\ColorCoding\\ibas.initialfantasy\\ibas.initialfantasy\\src\\main\\resources\\datastructures");
 		// codeTransformer.addDomains(Environment.getWorkingFolder()
 		// +
 		// "/out/TrainingTesting/ibas.trainingtesting/src/main/resources/datastructures".replace("/",

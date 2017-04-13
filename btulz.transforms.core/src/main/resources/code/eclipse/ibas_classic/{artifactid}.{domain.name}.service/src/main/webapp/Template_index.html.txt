@@ -7,13 +7,34 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8" />
     <script type="text/javascript" src="./3rdparty/ibas/3rdparty/jquery.js"></script>
+    <script type="text/javascript" src="./3rdparty/ibas/3rdparty/require.js"></script>
     <script type="text/javascript">
+        // 显示消息
+        let requireError = function (error) {
+            console.error(error);
+            alert("应用加载失败，请联系管理员或尝试使用其他浏览器。");
+        };
         let loadEntry = function () {
-            // 加载入口
-            let domScript = document.createElement('script');
-            domScript.src = "./3rdparty/ibas/3rdparty/require.js";
-            domScript.setAttribute("data-main", "./index");
-            document.getElementsByTagName('head')[0].appendChild(domScript);
+            // 加载ibas
+            let require = requirejs.config({
+                baseUrl: "./3rdparty"
+            });
+            require(["ibas/index"], function (ibas) {
+                // 加载成功，创建壳加载
+                let sysRequire = ibas.requires.create({
+                    baseUrl: "./3rdparty"
+                }, []);
+                // 加载应用系统
+                sysRequire(["ibas/bsbas/systems/index"], function () {
+                    // 加载成功
+                    let shellRequire = ibas.requires.create({
+                        context: ibas.requires.naming("shell"),
+                        baseUrl: "./3rdparty/ibas/shell"
+                    }, ["ibas/bsbas/systems"]);
+                    shellRequire(["index"], function (index) {
+                    }, requireError);
+                }, requireError);
+            }, requireError);
         }
         let loadUI5 = function (url) {
             // 加载opopenui5库

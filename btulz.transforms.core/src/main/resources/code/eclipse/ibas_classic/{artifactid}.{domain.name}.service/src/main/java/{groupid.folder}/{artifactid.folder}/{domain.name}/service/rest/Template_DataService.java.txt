@@ -12,8 +12,8 @@ $END_BO$
 /**
 * ${Domain.getName()} 数据服务JSON
 */
-@Path("datas")
-public class ServiceData extends BORepository${Domain.getName()} {
+@Path("data")
+public class DataService extends BORepository${Domain.getName()} {
 
     //--------------------------------------------------------------------------------------------//
 $BEGIN_BO$

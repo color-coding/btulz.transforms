@@ -6,10 +6,9 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
-/// <reference path="../../../3rdparty/openui5/typings/index.d.ts" />
-import * as ibas from "../../../3rdparty/ibas/index";
+import * as ibas from "ibas/index";
+import { utils } from "openui5/typings/ibas.utils";
 import * as bo from "../../../borep/bo/index";
-import { utils } from "../../../3rdparty/openui5/typings/ibas.utils";
 import { I${BO.getName()}ViewView } from "../../../bsapp/${BO.getName()}/index";
 
 /**
@@ -24,6 +23,8 @@ export class ${BO.getName()}ViewView extends ibas.BOViewView implements I${BO.ge
             content: [
             ]
         });
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
         this.form.addContent(new sap.ui.core.Title("", { text: "Items" }));
         this.table = new sap.ui.table.Table("", {
             enableSelectAll: false,
@@ -33,6 +34,8 @@ export class ${BO.getName()}ViewView extends ibas.BOViewView implements I${BO.ge
             ]
         });
         this.form.addContent(this.table);
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
         this.page = new sap.m.Page("", {
             showHeader: false,
             subHeader: new sap.m.Toolbar("", {

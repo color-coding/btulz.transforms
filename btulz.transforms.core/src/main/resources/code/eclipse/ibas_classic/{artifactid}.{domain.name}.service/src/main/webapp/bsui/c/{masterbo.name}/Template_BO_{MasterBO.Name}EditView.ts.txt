@@ -6,10 +6,9 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
-/// <reference path="../../../3rdparty/openui5/typings/index.d.ts" />
-import * as ibas from "../../../3rdparty/ibas/index";
+import * as ibas from "ibas/index";
+import { utils } from "openui5/typings/ibas.utils";
 import * as bo from "../../../borep/bo/index";
-import { utils } from "../../../3rdparty/openui5/typings/ibas.utils";
 import { I${BO.getName()}EditView } from "../../../bsapp/${BO.getName()}/index";
 
 /**
@@ -17,6 +16,8 @@ import { I${BO.getName()}EditView } from "../../../bsapp/${BO.getName()}/index";
  */
 export class ${BO.getName()}EditView extends ibas.BOEditView implements I${BO.getName()}EditView {
 
+    /** 删除数据事件 */
+    deleteDataEvent: Function;
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
     /** 添加${BOItem.getDescription()}事件 */
@@ -34,6 +35,8 @@ $END_BOITEM$
             ]
         });
         this.form.addContent(new sap.ui.core.Title("", { text: ibas.i18n.prop("bo_${BO.getName()}item") }));
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
         this.table = new sap.ui.table.Table("", {
             extension: new sap.m.Toolbar("", {
                 content: [
@@ -62,6 +65,8 @@ $END_BOITEM$
             ]
         });
         this.form.addContent(this.table);
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
         this.page = new sap.m.Page("", {
             showHeader: false,
             subHeader: new sap.m.Toolbar("", {
@@ -73,7 +78,16 @@ $END_BOITEM$
                         press: function (): void {
                             that.fireViewEvents(that.saveDataEvent);
                         }
-                    })
+                    }),
+                    new sap.m.ToolbarSeparator(""),
+                    new sap.m.Button("", {
+                        text: ibas.i18n.prop("sys_shell_ui_data_delete"),
+                        type: sap.m.ButtonType.Transparent,
+                        icon: "sap-icon://delete",
+                        press: function (): void {
+                            that.fireViewEvents(that.deleteDataEvent);
+                        }
+                    }),
                 ]
             }),
             content: [this.form]

@@ -6,10 +6,10 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
-/// <reference path="../3rdparty/ibas/3rdparty/index.d.ts" />
-import * as ibas from "../3rdparty/ibas/index";
+import * as ibas from "ibas/index";
+import { BORepository${Domain.getName()} } from "../borep/BORepositories";
 $BEGIN_BO$
-import { ${BO.getName()}Func } from './${BO.getName().toLowerCase()}/index';
+import { ${BO.getName()}Func, ${BO.getName()}ChooseServiceMapping, ${BO.getName()}LinkServiceMapping } from "./${BO.getName().toLowerCase()}/index";
 $END_BO$
 
 /** 模块控制台 */
@@ -17,17 +17,23 @@ export class Console extends ibas.ModuleConsole {
     /** 模块-标识 */
     static CONSOLE_ID: string = "${ProjectId}";
     /** 模块-名称 */
-    static CONSOLE_NAME: string = "${Domain.getName()}";
+    static CONSOLE_NAME: string = "${Domain.Name().toLowerCase()}";
     /** 根文件名称 */
     static ROOT_FILE_NAME: string = "${Domain.getName().toLowerCase()}/index";
-
+    /** 构造函数 */
     constructor() {
         super();
         this.id = Console.CONSOLE_ID;
         this.name = Console.CONSOLE_NAME;
     }
-
-    private _navigation: any;
+    /** 设置仓库地址 */
+    setRepository(address: string): void {
+        // 壳不用设置
+        ibas.config.set(ibas.string.format(
+            BORepository${Domain.getName()}.CONFIG_ITEM_TEMPLATE_REMOTE_REPOSITORY_ADDRESS, BORepository${Domain.getName()}.name), address
+        );
+    }
+    private _navigation: ibas.IViewNavigation;
     /** 创建视图导航 */
     navigation(): ibas.IViewNavigation {
         return this._navigation;
@@ -37,6 +43,11 @@ export class Console extends ibas.ModuleConsole {
         // 注册功能
 $BEGIN_BO$
         this.register(new ${BO.getName()}Func());
+$END_BO$
+        // 注册服务应用
+$BEGIN_BO$
+        this.register(new ${BO.getName()}ChooseServiceMapping());
+        this.register(new ${BO.getName()}LinkServiceMapping());
 $END_BO$
         // 注册常驻应用
 
@@ -63,7 +74,7 @@ $END_BO$
         let that: Console = this;
         require(uiModules, function (ui: any): void {
             // 设置导航
-            that._navigation = new ui.Navigation();
+            that._navigation = new ui.default();
             // 调用初始化
             that.initialize();
         });

@@ -6,29 +6,18 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import {
-    object,
-    IBORemoteRepository,
-    ICriteria,
-    IOperationResult,
-    IDataConverter,
-    BORepositoryApplication,
-    FetchCaller,
-    SaveCaller
-} from '../3rdparty/ibas/index';
-import { IBORepository${Domain.getName()} } from '../api/BORepository.d';
-import { DataConverter4${Domain.getName()} } from './DataConverters';
-$BEGIN_BO$
-import { ${BO.getName()} } from './bo/${BO.getName()}';
-$END_BO$
+import * as ibas from "ibas/index";
+import * as bo from "./bo/index";
+import { IBORepository${Domain.getName()} } from "api/borepository.d";
+import { DataConverter4${Domain.getName()} } from "./DataConverters";
 
 /** <%Domain.Name%> 业务仓库 */
-export class BORepository${Domain.getName()} extends BORepositoryApplication implements IBORepository${Domain.getName()} {
+export class BORepository${Domain.getName()} extends ibas.BORepositoryApplication implements IBORepository${Domain.getName()} {
 
     private converter: DataConverter4${Domain.getName()};
     /** 创建此模块的后端与前端数据的转换者 */
-    protected createDataConverter(): IDataConverter {
-        if (object.isNull(this.converter)) {
+    protected createConverter(): ibas.IDataConverter {
+        if (ibas.object.isNull(this.converter)) {
             this.converter = new DataConverter4${Domain.getName()}();
         }
         return this.converter;
@@ -39,17 +28,17 @@ $BEGIN_BO$
      * 查询 ${BO.getDescription()}
      * @param fetcher 查询者
      */
-    fetch${BO.getName()}(fetcher: FetchCaller<${BO.getName()}>) {
-        super.fetch("${BO.getName()}", fetcher);
+    fetch${BO.getName()}(fetcher: ibas.FetchCaller<bo.${BO.getName()}>):void {
+        super.fetch(bo.${BO.getName()}.name, fetcher);
     }
-
     /**
      * 保存 ${BO.getDescription()}
      * @param saver 保存者
      */
-    save${BO.getName()}(saver: SaveCaller<${BO.getName()}>) {
-        super.save("${BO.getName()}", saver);
+    save${BO.getName()}(saver: ibas.SaveCaller<bo.${BO.getName()}>):void {
+        super.save(bo.${BO.getName()}.name, saver);
     }
+
 $END_BO$
 
 

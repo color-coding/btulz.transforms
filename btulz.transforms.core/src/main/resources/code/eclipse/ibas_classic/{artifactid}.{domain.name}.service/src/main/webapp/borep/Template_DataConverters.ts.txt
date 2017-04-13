@@ -6,27 +6,20 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import {
-    IBusinessObject,
-    BOConverter,
-    DataConverter4ibas
-} from '../3rdparty/ibas/index';
-$BEGIN_BO$
-import { ${BO.getName()} } from './bo/${BO.getName()}';
-$END_BO$
-
+import * as ibas from "ibas/index";
+import * as bo from "./bo/index";
 
 /** ${Domain.getName()} 模块的数据转换者 */
-export class DataConverter4${Domain.getName()} extends DataConverter4ibas {
+export class DataConverter4${Domain.getName()} extends ibas.DataConverter4ibas {
 
     /** 创建业务对象转换者 */
-    protected createBOConverter(): BOConverter {
+    protected createBOConverter(): ibas.BOConverter {
         return new ${Domain.getName()}BOConverter();
     }
 }
 
 /** ${Domain.getName()} 模块的业务对象转换者 */
-class ${Domain.getName()}BOConverter extends BOConverter {
+class ${Domain.getName()}BOConverter extends ibas.BOConverter {
 
     constructor() {
         super();
@@ -36,7 +29,7 @@ class ${Domain.getName()}BOConverter extends BOConverter {
     private init() {
         // 注册业务对象映射
 $BEGIN_BO$
-        this.mappingBOs("${BO.getName()}", ${BO.getName()});
+        this.mappingBOs("${BO.getName()}", bo.${BO.getName()});
 $END_BO$
         // 注册枚举映射
         
@@ -47,7 +40,7 @@ $END_BO$
      * @param data 远程数据
      * @returns 本地数据
      */
-    protected customParsing(data: any): IBusinessObject {
+    protected customParsing(data: any): ibas.IBusinessObject {
         return data;
     }
 
@@ -58,8 +51,7 @@ $END_BO$
      * @param value 值
      * @returns 转换的值
      */
-    protected convertData(boName: string, property: string, value
-        : any): any {
+    protected convertData(boName: string, property: string, value: any): any {
         // 不做处理，原始返回
         return value;
     }
@@ -71,8 +63,7 @@ $END_BO$
      * @param value 值
      * @returns 解析的值
     */
-    protected parsingData(boName: string, property: string, value
-        : any): any {
+    protected parsingData(boName: string, property: string, value: any): any {
         if (typeof value === "string") {
             // 日期类型，直接转换
             if (value.indexOf("T") > 0 && value.indexOf("-") > 0 && value.indexOf(":") > 0) {
@@ -80,7 +71,7 @@ $END_BO$
                 return this.parsingDate(value);
             }
 $BEGIN_BO$
-            if (boName.startsWith(${BO.getName()}.name)) {
+            if (boName.startsWith(bo.${BO.getName()}.name)) {
                 // ${BO.getDescription()}
 
             }
