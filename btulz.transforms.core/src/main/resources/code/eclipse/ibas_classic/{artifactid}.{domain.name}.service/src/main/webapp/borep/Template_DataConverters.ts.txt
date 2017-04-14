@@ -81,4 +81,3 @@ $END_BO$
         return value;
     }
 }
-

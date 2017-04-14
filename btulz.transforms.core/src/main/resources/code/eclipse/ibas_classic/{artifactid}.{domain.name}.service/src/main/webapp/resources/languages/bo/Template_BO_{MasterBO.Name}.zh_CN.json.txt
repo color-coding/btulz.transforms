@@ -21,5 +21,5 @@ $BEGIN_MODEL_PROPERTY$
 $END_MODEL_PROPERTY$
 $END_BOITEM_MODEL$
 $END_BOITEM$
-  "bo_${BO.getName().toLowerCase()}_closing_delimiter": "---------"
+  "bo_${BO.getName().toLowerCase()}_closing_delimiter": "----结束----"
 }

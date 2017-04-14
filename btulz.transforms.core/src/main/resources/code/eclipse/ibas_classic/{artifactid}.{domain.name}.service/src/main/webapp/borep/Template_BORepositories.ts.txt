@@ -40,7 +40,4 @@ $BEGIN_BO$
     }
 
 $END_BO$
-
-
-
 }

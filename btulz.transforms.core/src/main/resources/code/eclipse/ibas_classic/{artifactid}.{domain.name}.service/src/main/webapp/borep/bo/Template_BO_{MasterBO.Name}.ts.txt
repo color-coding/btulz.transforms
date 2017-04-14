@@ -126,5 +126,3 @@ export class ${BOItem.getName()}s extends BusinessObjects<${BOItem.getName()}, $
 }
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
-
-

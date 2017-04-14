@@ -7,7 +7,6 @@
  */
 
 import * as ibas from "ibas/index";
-import { BORepository${Domain.getName()} } from "../borep/BORepositories";
 $BEGIN_BO$
 import { ${BO.getName()}Func, ${BO.getName()}ChooseServiceMapping, ${BO.getName()}LinkServiceMapping } from "./${BO.getName().toLowerCase()}/index";
 $END_BO$
@@ -17,7 +16,7 @@ export class Console extends ibas.ModuleConsole {
     /** 模块-标识 */
     static CONSOLE_ID: string = "${ProjectId}";
     /** 模块-名称 */
-    static CONSOLE_NAME: string = "${Domain.Name().toLowerCase()}";
+    static CONSOLE_NAME: string = "${Domain.Name()}";
     /** 根文件名称 */
     static ROOT_FILE_NAME: string = "${Domain.getName().toLowerCase()}/index";
     /** 构造函数 */
@@ -25,13 +24,6 @@ export class Console extends ibas.ModuleConsole {
         super();
         this.id = Console.CONSOLE_ID;
         this.name = Console.CONSOLE_NAME;
-    }
-    /** 设置仓库地址 */
-    setRepository(address: string): void {
-        // 壳不用设置
-        ibas.config.set(ibas.string.format(
-            BORepository${Domain.getName()}.CONFIG_ITEM_TEMPLATE_REMOTE_REPOSITORY_ADDRESS, BORepository${Domain.getName()}.name), address
-        );
     }
     private _navigation: ibas.IViewNavigation;
     /** 创建视图导航 */
@@ -59,8 +51,8 @@ $END_BO$
         // 加载语言-框架默认
         ibas.i18n.load(ibas.string.format("{0}/resources/languages/${Domain.getName().toLowerCase()}.{1}.json", rootUrl, ibas.i18n.language));
         // 设置资源属性
-        this.description = ibas.i18n.prop(this.name);
-        // this.icon = "";
+        this.description = ibas.i18n.prop(this.name.toLowerCase());
+        this.icon = ibas.i18n.prop(this.name.toLowerCase() + "_icon");
         // 先加载ui导航
         let uiModules: string[] = [];
         if (!ibas.config.get(ibas.config.CONFIG_ITEM_DISABLE_PLATFORM_VIEW, false)
@@ -82,5 +74,3 @@ $END_BO$
         super.run();
     }
 }
-
- 

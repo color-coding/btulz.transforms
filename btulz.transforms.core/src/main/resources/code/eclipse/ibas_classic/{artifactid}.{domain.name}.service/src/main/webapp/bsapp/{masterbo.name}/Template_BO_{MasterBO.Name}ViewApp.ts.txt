@@ -32,7 +32,7 @@ export class ${BO.getName()}ViewApp extends ibas.BOViewService<I${BO.getName()}V
     protected registerView(): void {
         super.registerView();
         // 其他事件
-
+        this.view.editDataEvent = this.editData;
     }
     /** 视图显示后 */
     protected viewShowed(): void {

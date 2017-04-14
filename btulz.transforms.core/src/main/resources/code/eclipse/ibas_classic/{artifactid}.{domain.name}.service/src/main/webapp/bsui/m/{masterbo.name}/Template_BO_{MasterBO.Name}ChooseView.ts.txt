@@ -6,5 +6,7 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 
-
-
+import * as ibas from "ibas/index";
+import { utils } from "openui5/typings/ibas.utils";
+import * as bo from "../../../borep/bo/index";
+import { I${BO.getName()}ViewView } from "../../../bsapp/${BO.getName()}/index";

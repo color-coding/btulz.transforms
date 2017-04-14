@@ -64,5 +64,3 @@ export interface I${BOItem.getName()}s extends IBusinessObjects<I${BOItem.getNam
 $END_BOITEM_RELATION_IS_ONETOMANY$
 
 $END_BOITEM$
-
-
