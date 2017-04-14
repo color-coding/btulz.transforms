@@ -10,3 +10,10 @@
 $BEGIN_BO$
 export * from "./${BO.getName()}";
 $END_BO$
+
+// 注册业务对象到工厂
+import * as ibas from "ibas/index";
+$BEGIN_BO$
+import { ${BO.getName()} } from "./${BO.getName()}";
+ibas.boFactory.register(${BO.getName()});
+$END_BO$

@@ -21,20 +21,6 @@ export class DataConverter4${Domain.getName()} extends ibas.DataConverter4ibas {
 /** ${Domain.getName()} 模块的业务对象转换者 */
 class ${Domain.getName()}BOConverter extends ibas.BOConverter {
 
-    constructor() {
-        super();
-        this.init();
-    }
-
-    private init() {
-        // 注册业务对象映射
-$BEGIN_BO$
-        this.mappingBOs("${BO.getName()}", bo.${BO.getName()});
-$END_BO$
-        // 注册枚举映射
-        
-    }
-
     /**
      * 自定义解析
      * @param data 远程数据
@@ -62,22 +48,8 @@ $END_BO$
      * @param property 属性名称
      * @param value 值
      * @returns 解析的值
-    */
+     */
     protected parsingData(boName: string, property: string, value: any): any {
-        if (typeof value === "string") {
-            // 日期类型，直接转换
-            if (value.indexOf("T") > 0 && value.indexOf("-") > 0 && value.indexOf(":") > 0) {
-                // 字符格式为日期，yyyy-MM-ddThh:mm:ss
-                return this.parsingDate(value);
-            }
-$BEGIN_BO$
-            if (boName.startsWith(bo.${BO.getName()}.name)) {
-                // ${BO.getDescription()}
-
-            }
-$END_BO$
-        }
-        // 不做处理，原始返回
-        return value;
+        return super.parsingData(boName, property, value);
     }
 }

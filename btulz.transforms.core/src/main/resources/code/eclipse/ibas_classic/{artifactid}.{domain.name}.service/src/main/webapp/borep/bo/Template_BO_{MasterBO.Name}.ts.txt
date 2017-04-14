@@ -119,7 +119,7 @@ export class ${BOItem.getName()}s extends BusinessObjects<${BOItem.getName()}, $
 
     /** 创建并添加子项 */
     create(): ${BOItem.getName()} {
-        let item = new ${BOItem.getName()}();
+        let item: ${BOItem.getName()} = new ${BOItem.getName()}();
         this.add(item);
         return item;
     }
