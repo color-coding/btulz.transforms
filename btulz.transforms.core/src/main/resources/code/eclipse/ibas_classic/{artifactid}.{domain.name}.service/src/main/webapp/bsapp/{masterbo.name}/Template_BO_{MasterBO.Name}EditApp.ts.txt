@@ -45,7 +45,7 @@ $END_BOITEM$
         this.view.show${BO.getName()}(this.editData);
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
-        this.view.show${BOItem.getName()}s(this.editData.${BOItem.getName(LowerCamelCase)}s);
+        this.view.show${BOItem.getName()}s(this.editData.${BOItem.getName(LowerCamelCase)}s.filterDeleted());
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
     }
@@ -124,13 +124,13 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
     /** 添加${BOItem.getDescription()}事件 */
     add${BOItem.getName()}(): void {
         this.editData.${BOItem.getName(LowerCamelCase)}s.create();
-        this.view.show${BOItem.getName()}s(this.editData.${BOItem.getName(LowerCamelCase)}s);
+        this.view.show${BOItem.getName()}s(this.editData.${BOItem.getName(LowerCamelCase)}s.filterDeleted());
     }
     /** 删除${BOItem.getDescription()}事件 */
     remove${BOItem.getName()}(item: bo.${BOItem.getName()}): void {
         if (this.editData.${BOItem.getName(LowerCamelCase)}s.indexOf(item) >= 0) {
             this.editData.${BOItem.getName(LowerCamelCase)}s.remove(item);
-            this.view.show${BOItem.getName()}s(this.editData.${BOItem.getName(LowerCamelCase)}s);
+            this.view.show${BOItem.getName()}s(this.editData.${BOItem.getName(LowerCamelCase)}s.filterDeleted());
         }
     }
 

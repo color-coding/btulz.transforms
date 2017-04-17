@@ -38,7 +38,10 @@ export class ${BO.getName()}ChooseView extends ibas.BOChooseView implements I${B
                 type: sap.m.ButtonType.Transparent,
                 // icon: "sap-icon://accept",
                 press: function (): void {
-                    that.fireViewEvents(that.chooseDataEvent);
+                    that.fireViewEvents(that.chooseDataEvent,
+                        // 获取表格选中的对象
+                        utils.getTableSelecteds<bo.Customer>(that.table)
+                    );
                 }
             }),
             new sap.m.Button("", {
