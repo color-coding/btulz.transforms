@@ -74,6 +74,13 @@ export class ${BO.getName()}ListApp extends ibas.BOListApplication<I${BO.getName
     }
     /** 查看数据，参数：目标数据 */
     protected viewData(data: bo.${BO.getName()}): void {
+        // 检查目标数据
+        if (ibas.objects.isNull(data)){
+            this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("sys_shell_ui_please_chooose_data",
+                ibas.i18n.prop("sys_shell_ui_data_view")
+            ));
+            return;
+        }
         let app = new ${BO.getName()}ViewApp();
         app.navigation = this.navigation;
         app.viewShower = this.viewShower;
@@ -82,6 +89,13 @@ export class ${BO.getName()}ListApp extends ibas.BOListApplication<I${BO.getName
     }
     /** 编辑数据，参数：目标数据 */
     protected editData(data: bo.${BO.getName()}): void {
+        // 检查目标数据
+        if (ibas.objects.isNull(data)){
+            this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("sys_shell_ui_please_chooose_data",
+                ibas.i18n.prop("sys_shell_ui_data_edit")
+            ));
+            return;
+        }
         let app = new ${BO.getName()}EditApp();
         app.navigation = this.navigation;
         app.viewShower = this.viewShower;
@@ -89,6 +103,13 @@ export class ${BO.getName()}ListApp extends ibas.BOListApplication<I${BO.getName
     }
     /** 删除数据，参数：目标数据集合 */
     protected deleteData(data: bo.${BO.getName()}): void {
+        // 检查目标数据
+        if (ibas.objects.isNull(data)){
+            this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("sys_shell_ui_please_chooose_data",
+                ibas.i18n.prop("sys_shell_ui_data_delete")
+            ));
+            return;
+        }
         let beDeleteds:ibas.ArrayList<bo.${BO.getName()}> = new ibas.ArrayList<bo.${BO.getName()}>();
         if (data instanceof Array ) {
             for (let item of data) {

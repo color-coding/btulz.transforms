@@ -49,7 +49,7 @@ $END_BO$
         // 获取根地址
         let rootUrl: string = ibas.url.rootUrl(Console.ROOT_FILE_NAME);
         // 加载语言-框架默认
-        ibas.i18n.load(ibas.string.format("{0}/resources/languages/${Domain.getName().toLowerCase()}.{1}.json", rootUrl, ibas.i18n.language));
+        ibas.i18n.load(ibas.strings.format("{0}/resources/languages/${Domain.getName().toLowerCase()}.{1}.json", rootUrl, ibas.i18n.language));
         // 设置资源属性
         this.description = ibas.i18n.prop(this.name.toLowerCase());
         this.icon = ibas.i18n.prop(this.name.toLowerCase() + "_icon");

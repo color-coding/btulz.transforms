@@ -93,6 +93,9 @@ public class XmlTransformerDom4j extends XmlTransformer {
 		if (property.isUniqueKey()) {
 			element.addAttribute("UniqueKey", String.valueOf(emYesNo.valueOf(property.isUniqueKey())));
 		}
+		if (property.getLinked() != null) {
+			element.addAttribute("Linked", property.getLinked());
+		}
 	}
 
 	protected void writeElement(IBusinessObject bo, Element element) {

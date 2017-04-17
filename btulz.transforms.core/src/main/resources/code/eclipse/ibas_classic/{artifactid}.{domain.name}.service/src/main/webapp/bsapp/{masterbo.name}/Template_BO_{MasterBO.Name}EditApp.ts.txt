@@ -52,11 +52,11 @@ $END_BOITEM$
     /** 运行,覆盖原方法 */
     run(...args: any[]): void {
         // 尝试设置编辑对象
-        if (!ibas.object.isNull(args) && args.length === 1 && args[0] instanceof bo.${BO.getName()}) {
+        if (!ibas.objects.isNull(args) && args.length === 1 && args[0] instanceof bo.${BO.getName()}) {
             this.editData = args[0];
         }
         // 创建编辑对象实例
-        if (ibas.object.isNull(this.editData)) {
+        if (ibas.objects.isNull(this.editData)) {
             this.editData = new bo.${BO.getName()}();
 
         }

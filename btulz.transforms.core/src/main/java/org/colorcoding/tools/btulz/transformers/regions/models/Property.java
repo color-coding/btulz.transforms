@@ -134,6 +134,16 @@ public class Property implements IProperty {
 	}
 
 	@Override
+	public String getLinked() {
+		return this.property.getMapped();
+	}
+
+	@Override
+	public void setLinked(String linked) {
+		this.property.setMapped(linked);
+	}
+
+	@Override
 	public IProperty clone() {
 		return null;
 	}

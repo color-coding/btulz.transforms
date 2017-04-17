@@ -141,6 +141,19 @@ public class Property implements IProperty {
 		this.mapped = mapped;
 	}
 
+	@XmlAttribute(name = "Linked")
+	private String linked;
+
+	@Override
+	public String getLinked() {
+		return this.linked;
+	}
+
+	@Override
+	public void setLinked(String linked) {
+		this.linked = linked;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("property:%s type:%s", this.getName(), this.getDeclaredType());

@@ -137,6 +137,20 @@ public interface IProperty {
 	void setMapped(String mapped);
 
 	/**
+	 * 获取-连接的
+	 * 
+	 * @return
+	 */
+	String getLinked();
+
+	/**
+	 * 设置-连接的
+	 * 
+	 * @param linked
+	 */
+	void setLinked(String linked);
+
+	/**
 	 * 深度克隆
 	 * 
 	 * @return

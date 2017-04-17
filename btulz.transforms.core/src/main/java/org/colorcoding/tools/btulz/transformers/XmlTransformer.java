@@ -201,6 +201,9 @@ public class XmlTransformer extends FileTransformer {
 		if (property.isUniqueKey()) {
 			element.setAttribute("UniqueKey", String.valueOf(emYesNo.valueOf(property.isUniqueKey())));
 		}
+		if (property.getLinked() != null) {
+			element.setAttribute("Linked", property.getLinked());
+		}
 	}
 
 	protected void writeElement(IBusinessObject bo, Element element) {

@@ -289,6 +289,8 @@ class XmlParser1 extends XmlParser {
 				object.setPrimaryKey(this.convert(boolean.class, node.getNodeValue()));
 			} else if (node.getNodeName().equals("IsUnique")) {
 				object.setUniqueKey(this.convert(boolean.class, node.getNodeValue()));
+			} else if (node.getNodeName().equals("Linked")) {
+				object.setLinked(this.convert(String.class, node.getNodeValue()));
 			} else if (node.getNodeName().equals("FixedDataType")) {
 				if (node.getNodeValue() != null) {
 					String value = node.getNodeValue();

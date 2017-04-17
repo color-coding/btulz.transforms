@@ -9,18 +9,20 @@
 import * as ibas from "ibas/index";
 import * as bo from "./bo/index";
 import { IBORepository${Domain.getName()} } from "api/borepository.d";
-import { DataConverter4${Domain.getName()} } from "./DataConverters";
+import { DataConverterOnline, DataConverterOffline } from "./DataConverters";
 
 /** <%Domain.Name%> 业务仓库 */
 export class BORepository${Domain.getName()} extends ibas.BORepositoryApplication implements IBORepository${Domain.getName()} {
 
-    private converter: DataConverter4${Domain.getName()};
     /** 创建此模块的后端与前端数据的转换者 */
     protected createConverter(): ibas.IDataConverter {
-        if (ibas.object.isNull(this.converter)) {
-            this.converter = new DataConverter4${Domain.getName()}();
+        if (this.offline) {
+            // 离线状态
+            return new DataConverterOffline();
+        } else {
+            return new DataConverterOnline();
+
         }
-        return this.converter;
     }
 
 $BEGIN_BO$

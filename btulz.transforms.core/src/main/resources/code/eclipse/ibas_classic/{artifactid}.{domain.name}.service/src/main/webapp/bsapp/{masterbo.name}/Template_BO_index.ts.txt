@@ -7,8 +7,8 @@
  */
 
 // 模块索引文件，此文件集中导出类
-export * from './${BO.getName()}Func';
-export * from './${BO.getName()}ListApp';
-export * from './${BO.getName()}ChooseApp';
-export * from './${BO.getName()}ViewApp';
-export * from './${BO.getName()}EditApp';
+export * from "./${BO.getName()}Func";
+export * from "./${BO.getName()}ListApp";
+export * from "./${BO.getName()}ChooseApp";
+export * from "./${BO.getName()}ViewApp";
+export * from "./${BO.getName()}EditApp";
