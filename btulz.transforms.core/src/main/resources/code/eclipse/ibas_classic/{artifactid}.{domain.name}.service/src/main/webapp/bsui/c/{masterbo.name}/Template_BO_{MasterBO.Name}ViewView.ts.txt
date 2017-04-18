@@ -26,14 +26,14 @@ export class ${BO.getName()}ViewView extends ibas.BOViewView implements I${BO.ge
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
         this.form.addContent(new sap.ui.core.Title("", { text: ibas.i18n.prop("bo_${BOItem.getName().toLowerCase()}") }));
-        this.table = new sap.ui.table.Table("", {
+        this.table${BOItem.getName()} = new sap.ui.table.Table("", {
             enableSelectAll: false,
             visibleRowCount: 6,
             rows: "{/}",
             columns: [
             ]
         });
-        this.form.addContent(this.table);
+        this.form.addContent(this.table${BOItem.getName()});
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
         this.page = new sap.m.Page("", {
@@ -85,7 +85,11 @@ $END_BOITEM$
     }
     private page: sap.m.Page;
     private form: sap.ui.layout.form.SimpleForm;
-    private table: sap.ui.table.Table;
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+    private table${BOItem.getName()}: sap.ui.table.Table;
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
 
     /** 显示数据 */
     show${BO.getName()}(data: bo.${BO.getName()}): void {
@@ -95,7 +99,7 @@ $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
     /** 显示数据 */
     show${BOItem.getName()}s(datas: bo.${BOItem.getName()}[]): void {
-        this.table.setModel(new sap.ui.model.json.JSONModel(datas));
+        this.table${BOItem.getName()}.setModel(new sap.ui.model.json.JSONModel(datas));
     }
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
