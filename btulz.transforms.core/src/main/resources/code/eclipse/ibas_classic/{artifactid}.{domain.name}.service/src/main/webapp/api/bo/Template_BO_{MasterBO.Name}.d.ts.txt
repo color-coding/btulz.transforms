@@ -12,19 +12,24 @@ import {
     emBOStatus,
     emApprovalStatus,
     IBusinessObject,
-    IBusinessObjects
+    IBusinessObjects,
+    IBOMasterData,
+    IBOMasterDataLine,
+    IBODocument,
+    IBODocumentLine,
+    IBOSimple,
+    IBOSimpleLine
 } from "ibas/index";
 
-/** ${BO.getDescription()} */
-export interface I${BO.getName()} extends IBusinessObject {
-
 $BEGIN_BO_MODEL$
+/** ${Model.getDescription()} */
+export interface I${Model.getName()} extends IBO${Model.getModelType()} {
+
 $BEGIN_MODEL_PROPERTY$
     /** ${Property.getDescription()} */
     ${Property.getName(LowerCamelCase)}: ${Property.getDeclaredType()};
 
 $END_MODEL_PROPERTY$
-$END_BO_MODEL$
 
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
@@ -40,19 +45,19 @@ $BEGIN_BOITEM_RELATION_IS_ONETOONE$
 $END_BOITEM_RELATION_IS_ONETOONE$
 $END_BOITEM$
 }
+$END_BO_MODEL$
 
 $BEGIN_BOITEM$
-/** ${BOItem.getDescription()} */
-export interface I${BOItem.getName()} extends IBusinessObject {
-
 $BEGIN_BOITEM_MODEL$
+/** ${Model.getDescription()} */
+export interface I${Model.getName()} extends IBO${Model.getModelType()} {
+
 $BEGIN_MODEL_PROPERTY$
     /** ${Property.getDescription()} */
     ${Property.getName(LowerCamelCase)}: ${Property.getDeclaredType()};
-
 $END_MODEL_PROPERTY$
-$END_BOITEM_MODEL$
 }
+$END_BOITEM_MODEL$
 
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
 /** ${BOItem.getDescription()} 集合 */

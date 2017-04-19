@@ -12,12 +12,19 @@ import {
     emBOStatus,
     emApprovalStatus,
     BusinessObject,
-    BusinessObjects
+    BusinessObjects,
+    BOMasterData,
+    BOMasterDataLine,
+    BODocument,
+    BODocumentLine,
+    BOSimple,
+    BOSimpleLine,
 } from "ibas/index";
 import * as api from "api/bo/index.d";
 
-/** ${BO.getDescription()} */
-export class ${BO.getName()} extends BusinessObject<${BO.getName()}> implements api.I${BO.getName()} {
+$BEGIN_BO_MODEL$
+/** ${Model.getDescription()} */
+export class ${Model.getName()} extends BO${Model.getModelType()}<${Model.getName()}> implements api.I${Model.getName()} {
 
     /** 业务对象编码 */
     static BUSINESS_OBJECT_CODE: string = "${MasterBO.getShortName()}";
@@ -25,7 +32,6 @@ export class ${BO.getName()} extends BusinessObject<${BO.getName()}> implements 
     constructor() {
         super();
     }
-$BEGIN_BO_MODEL$
 $BEGIN_MODEL_PROPERTY$
     /** 映射的属性名称-${Property.getDescription()} */
     static PROPERTY_${Property.getName().toUpperCase()}_NAME: string = "${Property.getName()}";
@@ -39,7 +45,6 @@ $BEGIN_MODEL_PROPERTY$
     }
 
 $END_MODEL_PROPERTY$
-$END_BO_MODEL$
 
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
@@ -83,16 +88,17 @@ $END_BOITEM$
         this.objectCode = ${BO.getName()}.BUSINESS_OBJECT_CODE;
     }
 }
+$END_BO_MODEL$
 
 $BEGIN_BOITEM$
-/** ${BOItem.getDescription()} */
-export class ${BOItem.getName()} extends BusinessObject<${BOItem.getName()}> implements api.I${BOItem.getName()} {
+$BEGIN_BOITEM_MODEL$
+/** ${Model.getDescription()} */
+export class ${Model.getName()} extends BO${Model.getModelType()}<${Model.getName()}> implements api.I${Model.getName()} {
 
     /** 构造函数 */
     constructor() {
         super();
     }
-$BEGIN_BOITEM_MODEL$
 $BEGIN_MODEL_PROPERTY$
     /** 映射的属性名称-${Property.getDescription()} */
     static PROPERTY_${Property.getName().toUpperCase()}_NAME: string = "${Property.getName()}";
@@ -106,12 +112,12 @@ $BEGIN_MODEL_PROPERTY$
     }
 
 $END_MODEL_PROPERTY$
-$END_BOITEM_MODEL$
 
     /** 初始化数据 */
     protected init(): void {
     }
 }
+$END_BOITEM_MODEL$
 
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
 /** ${BOItem.getDescription()} 集合 */
