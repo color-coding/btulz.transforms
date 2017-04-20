@@ -49,7 +49,7 @@ $BEGIN_MODEL_PROPERTY$
         </Step>
         <Step Name="create field ${Model.getMapped()}.${Property.getMapped()}" RunOnValue="0">
             <Script>
-                 alter table "${DbName}"."${Model.getMapped()}" add "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getNullType()}
+                 alter table "${DbName}"."${Model.getMapped()}" add ("${Property.getMapped()}" ${Property.getMappedType()} ${Property.getNullType()})
             </Script>
         </Step>
 $END_MODEL_PROPERTY$
