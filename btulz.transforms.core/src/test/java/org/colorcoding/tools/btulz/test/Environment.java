@@ -21,6 +21,12 @@ public final class Environment extends org.colorcoding.tools.btulz.Environment {
 				File.separator);
 	}
 
+	public static String getCodeFolder() {
+		File file = new File(Environment.getWorkingFolder());
+		file = file.getParentFile().getParentFile().getParentFile().getParentFile();
+		return file.getPath();
+	}
+
 	public static String getExcelModelsFile() {
 		return "//classes//templates//domain_models_template_v4.0.xlsx".replace("//", File.separator);
 	}

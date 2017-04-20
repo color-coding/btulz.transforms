@@ -1,5 +1,6 @@
 package org.colorcoding.tools.btulz.test.transformers;
 
+import java.io.File;
 import java.util.UUID;
 
 import org.colorcoding.tools.btulz.templates.Parameter;
@@ -24,13 +25,12 @@ public class testCodeTransformer extends TestCase {
 		codeTransformer.addParameters(new Parameter("ProjectId", UUID.randomUUID().toString()));
 		// codeTransformer.addDomains(Environment.getWorkingFolder() +
 		// File.separator + Environment.getXmlModelsFileOld());
-
-		codeTransformer.addDomains("E:\\MyWorks\\ColorCoding\\DS_TrainingTesting.xml");
-		// codeTransformer.addDomains(
-		// "E:\\MyWorks\\ColorCoding\\ibas.initialfantasy\\ibas.initialfantasy\\src\\main\\resources\\datastructures");
-		// codeTransformer.addDomains(Environment.getWorkingFolder()
-		// +
-		// "/out/TrainingTesting/ibas.trainingtesting/src/main/resources/datastructures".replace("/",
+		codeTransformer.addDomains(Environment.getCodeFolder() + String.format(
+				"%1$sibas-typescript%1$stest%1$sapps%1$strainingtesting%1$sresources%1$sDS_TrainingTesting.xml",
+				File.separator));
+		// codeTransformer.addDomains(Environment.getCodeFolder() +
+		// String.format(
+		// "%1$sibas.initialfantasy%1$ssrc%1$smain%1$sresources%1$sdatastructures",
 		// File.separator));
 		codeTransformer.transform();
 	}
