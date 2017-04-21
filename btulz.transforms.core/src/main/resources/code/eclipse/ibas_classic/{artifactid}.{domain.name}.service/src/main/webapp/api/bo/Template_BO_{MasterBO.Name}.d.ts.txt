@@ -22,7 +22,7 @@ import {
 } from "ibas/index";
 import {
 
-} from "../Datas.d";
+} from "../Datas";
 
 $BEGIN_BO_MODEL$
 /** ${Model.getDescription()} */

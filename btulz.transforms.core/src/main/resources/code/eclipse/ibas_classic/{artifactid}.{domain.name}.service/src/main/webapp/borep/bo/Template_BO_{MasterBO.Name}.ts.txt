@@ -32,7 +32,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
     I${BOItem.getName()}s,
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
-} from "api/index.d";
+} from "../../api/index";
 
 $BEGIN_BO_MODEL$
 /** ${Model.getDescription()} */
