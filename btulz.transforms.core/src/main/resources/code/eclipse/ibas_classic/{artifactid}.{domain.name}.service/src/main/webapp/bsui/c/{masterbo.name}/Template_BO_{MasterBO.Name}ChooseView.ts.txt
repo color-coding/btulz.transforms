@@ -38,7 +38,7 @@ export class ${BO.getName()}ChooseView extends ibas.BOChooseView implements I${B
                 press: function (): void {
                     that.fireViewEvents(that.chooseDataEvent,
                         // 获取表格选中的对象
-                        utils.getTableSelecteds<bo.Customer>(that.table)
+                        utils.getTableSelecteds<bo.${BO.getName()}>(that.table)
                     );
                 }
             }),

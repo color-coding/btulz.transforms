@@ -8,7 +8,7 @@
 
 import * as ibas from "ibas/index";
 import * as bo from "./bo/index";
-import { IBORepository${Domain.getName()} } from "api/borepository.d";
+import { IBORepository${Domain.getName()} } from "api/index.d";
 import { DataConverterOnline, DataConverterOffline } from "./DataConverters";
 
 /** <%Domain.Name%> 业务仓库 */

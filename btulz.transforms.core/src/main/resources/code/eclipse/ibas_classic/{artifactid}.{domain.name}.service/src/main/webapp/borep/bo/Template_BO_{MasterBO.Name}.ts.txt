@@ -20,11 +20,23 @@ import {
     BOSimple,
     BOSimpleLine,
 } from "ibas/index";
-import * as api from "api/bo/index.d";
+import {
+$BEGIN_BO_MODEL$
+    I${Model.getName()},
+$END_BO_MODEL$
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_MODEL$
+    I${Model.getName()},
+$END_BOITEM_MODEL$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+    I${BOItem.getName()}s,
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+} from "api/index.d";
 
 $BEGIN_BO_MODEL$
 /** ${Model.getDescription()} */
-export class ${Model.getName()} extends BO${Model.getModelType()}<${Model.getName()}> implements api.I${Model.getName()} {
+export class ${Model.getName()} extends BO${Model.getModelType()}<${Model.getName()}> implements I${Model.getName()} {
 
     /** 业务对象编码 */
     static BUSINESS_OBJECT_CODE: string = "${MasterBO.getShortName()}";
@@ -93,7 +105,7 @@ $END_BO_MODEL$
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_MODEL$
 /** ${Model.getDescription()} */
-export class ${Model.getName()} extends BO${Model.getModelType()}<${Model.getName()}> implements api.I${Model.getName()} {
+export class ${Model.getName()} extends BO${Model.getModelType()}<${Model.getName()}> implements I${Model.getName()} {
 
     /** 构造函数 */
     constructor() {
@@ -121,7 +133,7 @@ $END_BOITEM_MODEL$
 
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
 /** ${BOItem.getDescription()} 集合 */
-export class ${BOItem.getName()}s extends BusinessObjects<${BOItem.getName()}, ${BO.getName()}> implements api.I${BOItem.getName()}s {
+export class ${BOItem.getName()}s extends BusinessObjects<${BOItem.getName()}, ${BO.getName()}> implements I${BOItem.getName()}s {
 
     /** 创建并添加子项 */
     create(): ${BOItem.getName()} {

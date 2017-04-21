@@ -20,6 +20,9 @@ import {
     IBOSimple,
     IBOSimpleLine
 } from "ibas/index";
+import {
+
+} from "../Datas.d";
 
 $BEGIN_BO_MODEL$
 /** ${Model.getDescription()} */
