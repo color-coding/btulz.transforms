@@ -11,7 +11,7 @@ import * as bo from "./bo/index";
 import { IBORepository${Domain.getName()} } from "../api/index";
 import { DataConverterOnline, DataConverterOffline } from "./DataConverters";
 
-/** <%Domain.Name%> 业务仓库 */
+/** ${Domain.getName()} 业务仓库 */
 export class BORepository${Domain.getName()} extends ibas.BORepositoryApplication implements IBORepository${Domain.getName()} {
 
     /** 创建此模块的后端与前端数据的转换者 */
