@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
@@ -38,6 +39,7 @@ public class DataTransformer4Jar extends DataTransformer {
 				ISerializer<?> serializer = SerializerFactory.create().createManager().create("xml");
 				Enumeration<JarEntry> jarEntries = jarFile.entries();
 				if (jarEntries != null) {
+					ArrayList<JarEntry> JarEntryList = new ArrayList<>();
 					while (jarEntries.hasMoreElements()) {
 						JarEntry jarEntry = (JarEntry) jarEntries.nextElement();
 						if (jarEntry.isDirectory()) {
@@ -53,6 +55,19 @@ public class DataTransformer4Jar extends DataTransformer {
 						if (!name.endsWith(".xml")) {
 							continue;
 						}
+						JarEntryList.add(jarEntry);
+					}
+					// 排序，创建数据结构需要顺序
+					JarEntryList.sort(new Comparator<JarEntry>() {
+						@Override
+						public int compare(JarEntry o1, JarEntry o2) {
+							String name1 = o1.getName().toLowerCase();
+							String name2 = o2.getName().toLowerCase();
+							return name1.compareTo(name2);
+						}
+					});
+					// 读取内容
+					for (JarEntry jarEntry : JarEntryList) {
 						InputStream inputStream = jarFile.getInputStream(jarEntry);
 						String boName = this.getClassName(inputStream);
 						Class<?> boType = this.getClass(boName);
