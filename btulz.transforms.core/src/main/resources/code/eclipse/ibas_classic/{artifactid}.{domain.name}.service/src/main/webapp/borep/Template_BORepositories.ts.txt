@@ -9,20 +9,14 @@
 import * as ibas from "ibas/index";
 import * as bo from "./bo/index";
 import { IBORepository${Domain.getName()} } from "../api/index";
-import { DataConverterOnline, DataConverterOffline } from "./DataConverters";
+import { DataConverter4${Domain.getShortName().toLowerCase()} } from "./DataConverters";
 
 /** ${Domain.getName()} 业务仓库 */
 export class BORepository${Domain.getName()} extends ibas.BORepositoryApplication implements IBORepository${Domain.getName()} {
 
     /** 创建此模块的后端与前端数据的转换者 */
     protected createConverter(): ibas.IDataConverter {
-        if (this.offline) {
-            // 离线状态
-            return new DataConverterOffline();
-        } else {
-            return new DataConverterOnline();
-
-        }
+        return new DataConverter4${Domain.getShortName().toLowerCase()};
     }
 
 $BEGIN_BO$
@@ -30,14 +24,14 @@ $BEGIN_BO$
      * 查询 ${BO.getDescription()}
      * @param fetcher 查询者
      */
-    fetch${BO.getName()}(fetcher: ibas.FetchCaller<bo.${BO.getName()}>):void {
+    fetch${BO.getName()}(fetcher: ibas.FetchCaller<bo.${BO.getName()}>): void {
         super.fetch(bo.${BO.getName()}.name, fetcher);
     }
     /**
      * 保存 ${BO.getDescription()}
      * @param saver 保存者
      */
-    save${BO.getName()}(saver: ibas.SaveCaller<bo.${BO.getName()}>):void {
+    save${BO.getName()}(saver: ibas.SaveCaller<bo.${BO.getName()}>): void {
         super.save(bo.${BO.getName()}.name, saver);
     }
 
