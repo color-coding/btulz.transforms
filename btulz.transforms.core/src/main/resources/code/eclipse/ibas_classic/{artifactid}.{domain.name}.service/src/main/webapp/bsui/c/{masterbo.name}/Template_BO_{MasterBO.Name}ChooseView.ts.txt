@@ -58,7 +58,7 @@ export class ${BO.getName()}ChooseView extends ibas.BOChooseView implements I${B
         this.table = new sap.ui.table.Table("", {
             enableSelectAll: false,
             visibleRowCount: ibas.config.get(utils.CONFIG_ITEM_LIST_TABLE_VISIBLE_ROW_COUNT, 15),
-            rows: "{/}",
+            rows: "{/rows}",
             columns: [
             ]
         });
@@ -98,7 +98,7 @@ export class ${BO.getName()}ChooseView extends ibas.BOChooseView implements I${B
         }
         if (!done) {
             // 没有显示数据
-            this.table.setModel(new sap.ui.model.json.JSONModel(datas));
+            this.table.setModel(new sap.ui.model.json.JSONModel({rows: datas}));
         }
         this.table.setBusy(false);
     }
