@@ -2,12 +2,14 @@
   "appSettings": {
     "debug": true,
     "language": "zh_CN",
-    "offline": true,
+    "offline": false,
+    "offline|BORepositoryShell": true,
     "disablePlatformView": false,
     "defaultUser": "admin",
     "defaultPassword": "1q2w3e",
-    "repositoryAddress|BORepositoryShellOffLine": "./test/repository",
-    "repositoryAddress|BORepositoryShell": "http://localhost:8080/initialfantasy/services/rest/data"
+    "repositoryAddress|BORepositoryShell": "http://localhost:8080/initialfantasy/services/rest/data",
+    "repositoryAddress|BORepositoryShellOffline": ".../test/repository",
+    "repositoryAddress|BORepository${Domain.getName()}Offline": ".../test/repository"
   },
   "languages": [
     "zh_CN",
