@@ -15,8 +15,6 @@ export class ${BO.getName()}Func extends ibas.ModuleFunction {
     static FUNCTION_ID = "${ID.newUUID()}";
     /** 功能名称 */
     static FUNCTION_NAME = "${Domain.Name().toLowerCase()}_func_${BO.getName().toLowerCase()}";
-    /** 根文件名称 */
-    static ROOT_FILE_NAME: string = "${Domain.getName().toLowerCase()}/index";
     /** 构造函数 */
     constructor() {
         super();
