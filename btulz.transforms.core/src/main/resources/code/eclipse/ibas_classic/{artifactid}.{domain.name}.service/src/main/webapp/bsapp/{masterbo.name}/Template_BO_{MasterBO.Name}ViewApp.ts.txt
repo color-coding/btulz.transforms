@@ -47,11 +47,11 @@ export class ${BO.getName()}ViewApp extends ibas.BOViewService<I${BO.getName()}V
     }
     /** 运行,覆盖原方法 */
     run(...args: any[]): void {
-        if (!ibas.objects.isNull(args) && args.length === 1 && args[0] instanceof bo.${BO.getName()}) {
-            this.viewData = args[0];
+        if (arguments[0] instanceof bo.${BO.getName()}) {
+            this.viewData = arguments[0];
             this.show();
         } else {
-            super.run(args);
+            super.run();
         }
     }
     private viewData: bo.${BO.getName()};
