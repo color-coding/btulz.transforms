@@ -44,8 +44,8 @@ export class ${BO.getName()}ListApp extends ibas.BOListApplication<I${BO.getName
     protected fetchData(criteria: ibas.ICriteria): void {
         try {
             this.busy(true);
-            let that = this;
-            let boRepository = new BORepository${Domain.getName()}();
+            let that: this = this;
+            let boRepository: BORepository${Domain.getName()} = new BORepository${Domain.getName()}();
             boRepository.fetch${BO.getName()}({
                 criteria: criteria,
                 onCompleted(opRslt: ibas.IOperationResult<bo.${BO.getName()}>): void {
@@ -123,7 +123,7 @@ export class ${BO.getName()}ListApp extends ibas.BOListApplication<I${BO.getName
         if (beDeleteds.length === 0) {
             return;
         }
-        let that = this;
+        let that: this = this;
         this.messages({
             type: ibas.emMessageType.QUESTION,
             title: ibas.i18n.prop(this.name),

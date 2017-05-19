@@ -41,7 +41,7 @@ export class ${BO.getName()}ChooseApp extends ibas.BOChooseService<I${BO.getName
     protected fetchData(criteria: ibas.ICriteria): void {
         try {
             this.busy(true);
-            let that = this;
+            let that: this = this;
             let boRepository: BORepository${Domain.getName()} = new BORepository${Domain.getName()}();
             boRepository.fetch${BO.getName()}({
                 criteria: criteria,
