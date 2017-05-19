@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!DOCTYPE ApplicationModule>
 <ns:ApplicationModule xmlns:ns="http://colorcoding.org/ibas/initialfantasy/bo">
-	<Activated>YES</Activated>
-	<ModuleId>${ProjectId}</ModuleId>
-	<ModuleName>${ArtifactId}.${Domain.getName().toLowerCase()}</ModuleName>
-	<PlatformId>COMBINATION</PlatformId>
+    <Activated>YES</Activated>
+    <ModuleId>${ProjectId}</ModuleId>
+    <ModuleName>${Domain.getName()}</ModuleName>
+    <PlatformId>COMBINATION</PlatformId>
 </ns:ApplicationModule>
