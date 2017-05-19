@@ -40,7 +40,7 @@ export class ${BO.getName()}ViewApp extends ibas.BOViewService<I${BO.getName()}V
     }
     /** 编辑数据，参数：目标数据 */
     protected editData(): void {
-        let app = new ${BO.getName()}EditApp();
+        let app: ${BO.getName()}EditApp = new ${BO.getName()}EditApp();
         app.navigation = this.navigation;
         app.viewShower = this.viewShower;
         app.run(this.viewData);

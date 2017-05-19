@@ -50,7 +50,7 @@ export class ${BO.getName()}ChooseView extends ibas.BOChooseView implements I${B
                     that.fireViewEvents(that.closeEvent);
                 }
             }),
-        ]
+        ];
     }
     /** 绘制视图 */
     darw(): any {

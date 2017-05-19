@@ -77,7 +77,7 @@ export class ${BO.getName()}ChooseApp extends ibas.BOChooseService<I${BO.getName
         // 关闭自身
         this.destroy();
         // 调用编辑应用
-        let app = new ${BO.getName()}EditApp();
+        let app: ${BO.getName()}EditApp = new ${BO.getName()}EditApp();
         app.navigation = this.navigation;
         app.viewShower = this.viewShower;
         app.run();

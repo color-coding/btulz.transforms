@@ -67,7 +67,7 @@ export class ${BO.getName()}ListApp extends ibas.BOListApplication<I${BO.getName
     }
     /** 新建数据 */
     protected newData(): void {
-        let app = new ${BO.getName()}EditApp();
+        let app: ${BO.getName()}EditApp = new ${BO.getName()}EditApp();
         app.navigation = this.navigation;
         app.viewShower = this.viewShower;
         app.run();
@@ -81,7 +81,7 @@ export class ${BO.getName()}ListApp extends ibas.BOListApplication<I${BO.getName
             ));
             return;
         }
-        let app = new ${BO.getName()}ViewApp();
+        let app: ${BO.getName()}ViewApp = new ${BO.getName()}ViewApp();
         app.navigation = this.navigation;
         app.viewShower = this.viewShower;
         app.run(data);
@@ -96,7 +96,7 @@ export class ${BO.getName()}ListApp extends ibas.BOListApplication<I${BO.getName
             ));
             return;
         }
-        let app = new ${BO.getName()}EditApp();
+        let app: ${BO.getName()}EditApp = new ${BO.getName()}EditApp();
         app.navigation = this.navigation;
         app.viewShower = this.viewShower;
         app.run(data);
