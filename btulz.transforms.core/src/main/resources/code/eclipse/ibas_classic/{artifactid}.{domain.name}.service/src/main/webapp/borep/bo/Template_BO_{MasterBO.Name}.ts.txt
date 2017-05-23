@@ -32,6 +32,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
     I${BOItem.getName()}s,
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
+    BO_CODE_${BO.getName().toUpperCase()},
 } from "../../api/index";
 
 $BEGIN_BO_MODEL$
@@ -39,7 +40,7 @@ $BEGIN_BO_MODEL$
 export class ${Model.getName()} extends BO${Model.getModelType()}<${Model.getName()}> implements I${Model.getName()} {
 
     /** 业务对象编码 */
-    static BUSINESS_OBJECT_CODE: string = "${MasterBO.getShortName()}";
+    static BUSINESS_OBJECT_CODE: string = BO_CODE_${BO.getName().toUpperCase()};
     /** 构造函数 */
     constructor() {
         super();

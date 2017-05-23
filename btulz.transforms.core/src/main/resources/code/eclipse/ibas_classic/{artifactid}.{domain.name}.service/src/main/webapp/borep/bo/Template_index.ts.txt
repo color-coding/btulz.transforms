@@ -15,5 +15,5 @@ $END_BO$
 import * as ibas from "ibas/index";
 $BEGIN_BO$
 import { ${BO.getName()} } from "./${BO.getName()}";
-ibas.boFactory.register(${BO.getName()});
+ibas.boFactory.register(${BO.getName()}.BUSINESS_OBJECT_CODE, ${BO.getName()});
 $END_BO$

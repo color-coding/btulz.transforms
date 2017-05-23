@@ -6,10 +6,30 @@ import java.util.UUID;
 import org.colorcoding.tools.btulz.templates.Parameter;
 import org.colorcoding.tools.btulz.test.Environment;
 import org.colorcoding.tools.btulz.transformers.CodeTransformer;
+import org.colorcoding.tools.btulz.util.NamingRules;
 
 import junit.framework.TestCase;
 
 public class testCodeTransformer extends TestCase {
+
+	public void testNaming() {
+
+		System.out.println(NamingRules.RULES_NAME_CAMEL_CASE_LOWER + ":");
+		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_LOWER, "BOCode"));
+		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_LOWER, "BOE"));
+		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_LOWER, "ItemCode"));
+		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_LOWER, "itemName"));
+		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_LOWER, "boCode"));
+		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_LOWER, "boe"));
+
+		System.out.println(NamingRules.RULES_NAME_CAMEL_CASE_UPPER + ":");
+		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_UPPER, "BOCode"));
+		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_UPPER, "BOE"));
+		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_UPPER, "ItemCode"));
+		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_UPPER, "itemName"));
+		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_UPPER, "boCode"));
+		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_UPPER, "boe"));
+	}
 
 	public void testEclipseCode() throws Exception {
 		CodeTransformer codeTransformer = new CodeTransformer();

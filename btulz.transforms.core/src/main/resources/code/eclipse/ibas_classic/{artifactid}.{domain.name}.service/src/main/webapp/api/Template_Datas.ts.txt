@@ -9,3 +9,10 @@
 // 共享的数据
 import {
 } from "ibas/index";
+
+/** 业务仓库名称 */
+export const BO_REPOSITORY_${Domain.getName().toUpperCase()}: string = "BORepository${Domain.getName()}";
+$BEGIN_BO$
+/** 业务对象编码-${BO.getDescription()} */
+export const BO_CODE_${BO.getName().toUpperCase()}: string = "${BO.getShortName()}";
+$END_BO$

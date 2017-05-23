@@ -8,10 +8,10 @@
 
 import * as ibas from "ibas/index";
 import * as bo from "./bo/index";
-import { IBORepository${Domain.getName()} } from "../api/index";
+import { IBORepository${Domain.getName()}, BO_REPOSITORY_${Domain.getName().toUpperCase()} } from "../api/index";
 import { DataConverter4${Domain.getShortName().toLowerCase()} } from "./DataConverters";
 
-/** ${Domain.getName()} 业务仓库 */
+/** 业务对象仓库 */
 export class BORepository${Domain.getName()} extends ibas.BORepositoryApplication implements IBORepository${Domain.getName()} {
 
     /** 创建此模块的后端与前端数据的转换者 */
@@ -37,3 +37,5 @@ $BEGIN_BO$
 
 $END_BO$
 }
+// 注册业务对象仓库到工厂
+ibas.boFactory.register(BO_REPOSITORY_${Domain.getName().toUpperCase()}, BORepository${Domain.getName()});

@@ -12,7 +12,7 @@ import {
 } from "ibas/index";
 import * as bo from "./bo/index"
 
-/** ${Domain.getName()} 业务仓库 */
+/** 业务仓库 */
 export interface IBORepository${Domain.getName()} {
 
 $BEGIN_BO$
