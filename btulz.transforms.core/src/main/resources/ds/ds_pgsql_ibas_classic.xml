@@ -136,7 +136,7 @@ $BEGIN_MODEL_PROPERTY$
         </Step>
         <Step Name="register business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${Company}_SYS_BOI1" ("Name", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${Model.getName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isPrimaryKey(DB)}', N'Y')
+                insert into "${Company}_SYS_BOI1" ("Name", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${Model.getName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'Y')
             </Script>
         </Step>
 $END_MODEL_PROPERTY$
@@ -173,7 +173,7 @@ $BEGIN_MODEL_PROPERTY$
         </Step>
         <Step Name="register business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${Company}_SYS_BOI1" ("Name", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${Model.getName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isPrimaryKey(DB)}', N'Y')
+                insert into "${Company}_SYS_BOI1" ("Name", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${Model.getName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'Y')
             </Script>
         </Step>
 $END_MODEL_PROPERTY$

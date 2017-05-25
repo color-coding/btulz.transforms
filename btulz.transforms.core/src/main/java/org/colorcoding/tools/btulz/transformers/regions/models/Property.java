@@ -88,6 +88,13 @@ public class Property implements IProperty {
 			return "N";
 	}
 
+	public String isSearched(String type) {
+		if (this.isPrimaryKey() || this.isUniqueKey()) {
+			return "Y";
+		}
+		return "N";
+	}
+
 	@Override
 	public void setUniqueKey(boolean value) {
 		this.property.setUniqueKey(value);
