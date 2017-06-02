@@ -10,7 +10,7 @@ import * as ibas from "ibas/index";
 import * as bo from "../../borep/bo/index";
 import { BORepository${Domain.getName()} } from "../../borep/BORepositories";
 
-/** 应用-${BO.getDescription()} */
+/** 编辑应用-${BO.getDescription()} */
 export class ${BO.getName()}EditApp extends ibas.BOEditApplication<I${BO.getName()}EditView, bo.${BO.getName()}> {
 
     /** 应用标识 */

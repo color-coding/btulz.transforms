@@ -12,7 +12,7 @@ import * as bo from "../../../borep/bo/index";
 import { I${BO.getName()}ListView } from "../../../bsapp/${BO.getName().toLowerCase()}/index";
 
 /**
- * 视图-${BO.getName()}
+ * 列表视图-${BO.getDescription()}
  */
 export class ${BO.getName()}ListView extends ibas.BOListView implements I${BO.getName()}ListView {
     /** 返回查询的对象 */

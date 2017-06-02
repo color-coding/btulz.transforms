@@ -12,7 +12,7 @@ import * as bo from "../../../borep/bo/index";
 import { I${BO.getName()}ChooseView } from "../../../bsapp/${BO.getName().toLowerCase()}/index";
 
 /**
- * 视图-${BO.getName()}
+ * 选择视图-${BO.getDescription()}
  */
 export class ${BO.getName()}ChooseView extends ibas.BOChooseView implements I${BO.getName()}ChooseView {
     /** 返回查询的对象 */

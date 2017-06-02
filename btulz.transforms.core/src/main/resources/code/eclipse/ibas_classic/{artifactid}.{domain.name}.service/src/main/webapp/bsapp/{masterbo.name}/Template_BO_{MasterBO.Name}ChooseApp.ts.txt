@@ -11,7 +11,7 @@ import * as bo from "../../borep/bo/index";
 import { BORepository${Domain.getName()} } from "../../borep/BORepositories";
 import { ${BO.getName()}EditApp } from "./${BO.getName()}EditApp";
 
-/** 应用-${BO.getDescription()} */
+/** 选择应用-${BO.getDescription()} */
 export class ${BO.getName()}ChooseApp extends ibas.BOChooseService<I${BO.getName()}ChooseView, bo.${BO.getName()}> {
 
     /** 应用标识 */

@@ -12,7 +12,7 @@ import * as bo from "../../../borep/bo/index";
 import { I${BO.getName()}EditView } from "../../../bsapp/${BO.getName().toLowerCase()}/index";
 
 /**
- * 视图-${BO.getName()}
+ * 编辑视图-${BO.getDescription()}
  */
 export class ${BO.getName()}EditView extends ibas.BOEditView implements I${BO.getName()}EditView {
     /** 删除数据事件 */
