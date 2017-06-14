@@ -27,5 +27,5 @@
             </Item>
         </Items>
     </Item>
-    <Item Content="-Release" Description="释放资源" />
+    <Item Content="-Release" Description="释放资源" Editable="false" Optional="true" />
 </ns2:CommandBuilder>

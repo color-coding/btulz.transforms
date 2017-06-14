@@ -21,7 +21,7 @@ public class CommandItem {
 
 	public CommandItem() {
 		this.setOptional(false);
-		this.setSelected(false);
+		this.setSelected(true);
 		this.setEditable(true);
 	}
 

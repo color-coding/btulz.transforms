@@ -375,7 +375,7 @@ public class CommandTab extends WorkingTab {
 		JCheckBox checkBox = new JCheckBox();
 		checkBox.setName(control_name_checkbox + commandItem.hashCode());
 		checkBox.setToolTipText("selected and run it");
-		checkBox.setSelected(true);
+		checkBox.setSelected(commandItem.isSelected());
 		if (!commandItem.isOptional()) {
 			checkBox.setEnabled(false);
 		}
