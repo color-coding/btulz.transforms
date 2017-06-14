@@ -17,6 +17,7 @@ import org.colorcoding.ibas.bobas.MyConfiguration;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBusinessObject;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
+import org.colorcoding.ibas.bobas.core.Daemon;
 import org.colorcoding.ibas.bobas.core.RepositoryException;
 import org.colorcoding.ibas.bobas.serialization.ISerializer;
 import org.colorcoding.ibas.bobas.serialization.SerializerFactory;
@@ -115,6 +116,8 @@ public class DataTransformer extends Transformer {
 			if (oldLoader != null) {
 				Thread.currentThread().setContextClassLoader(oldLoader);
 			}
+			// 结束ibas线程
+			Daemon.destory();
 		}
 	}
 
