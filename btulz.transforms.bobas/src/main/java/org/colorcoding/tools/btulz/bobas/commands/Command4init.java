@@ -43,6 +43,7 @@ public class Command4init extends Command<Command4init> {
 		arguments.add(new Argument("-data", "数据文件，支持解析jar文件"));
 		arguments.add(new Argument("-config", "配置文件"));
 		arguments.add(new Argument("-classes", "加载的类库，多个时用“;”分隔"));
+		arguments.add(new Argument("-ignore", "忽略错误"));
 		arguments.add(new Argument("-test", "测试"));
 		return arguments.toArray(new Argument[] {});
 	}
@@ -62,6 +63,8 @@ public class Command4init extends Command<Command4init> {
 		stringBuilder.append("-config=D:\\tomcat\\config\\app.xml");
 		stringBuilder.append(" ");
 		stringBuilder.append("-classes=D:\\tomcat\\lib\\a.jar;D:\\tomcat\\lib\\b.jar;D:\\tomcat\\lib\\classes");
+		stringBuilder.append(" ");
+		stringBuilder.append("-ignore");
 		super.moreHelps(stringBuilder);
 	}
 
@@ -76,6 +79,7 @@ public class Command4init extends Command<Command4init> {
 		try {
 			String argData = "";
 			String argConfig = "";
+			boolean ignore = false;
 			List<URL> argClasses = new ArrayList<>();
 			boolean test = false;
 			for (Argument argument : arguments) {
@@ -87,6 +91,8 @@ public class Command4init extends Command<Command4init> {
 					argData = argument.getValue();
 				} else if (argument.getName().equalsIgnoreCase("-test")) {
 					test = true;
+				} else if (argument.getName().equalsIgnoreCase("-ignore")) {
+					ignore = true;
 				} else if (argument.getName().equalsIgnoreCase("-config")) {
 					argConfig = argument.getValue();
 				} else if (argument.getName().equalsIgnoreCase("-classes")) {
@@ -115,7 +121,9 @@ public class Command4init extends Command<Command4init> {
 			Environment.getLogger().debug(
 					String.format("DataTransformer loaded by %s.", dtType.getClassLoader().getClass().getSimpleName()));
 			Object transformer = dtType.newInstance();
-			Method method = dtType.getMethod("setConfigFile", String.class);
+			Method method = dtType.getMethod("setIgnoreErrors", boolean.class);
+			method.invoke(transformer, ignore);
+			method = dtType.getMethod("setConfigFile", String.class);
 			method.invoke(transformer, argConfig);
 			method = dtType.getMethod("setDataFile", String.class);
 			method.invoke(transformer, argData);

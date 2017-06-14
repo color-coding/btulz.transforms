@@ -240,6 +240,16 @@ public class DataTransformer extends Transformer {
 		throw new ClassNotFoundException(name);
 	}
 
+	private boolean ignoreErrors;
+
+	public final boolean isIgnoreErrors() {
+		return ignoreErrors;
+	}
+
+	public final void setIgnoreErrors(boolean ignoreErrors) {
+		this.ignoreErrors = ignoreErrors;
+	}
+
 	/**
 	 * 保存数据
 	 * 
@@ -255,13 +265,16 @@ public class DataTransformer extends Transformer {
 			boRepository.beginTransaction();// 开启事务
 			for (IBusinessObject data : datas) {
 				opRslt = boRepository.save(data);
-				if (opRslt.getError() != null) {
-					throw opRslt.getError();
-				}
 				if (opRslt.getResultCode() != 0) {
-					throw new Exception(opRslt.getMessage());
+					// 保存失败
+					Environment.getLogger().error(String.format("save faild [%s].", opRslt.getMessage()));
+					if (!this.isIgnoreErrors()) {
+						throw new Exception(opRslt.getMessage());
+					}
+				} else {
+					// 保存成功
+					Environment.getLogger().info(String.format("save successfully [%s].", data.toString()));
 				}
-				Environment.getLogger().info(String.format("successfully saved [%s].", data.toString()));
 			}
 			boRepository.commitTransaction();// 提交事务
 		} catch (Exception e) {
