@@ -7,5 +7,7 @@
 
   * 以上建议通过操作系统文件链接指令映射，不要拷贝物理文件。
   * 链接指令示例：
-      windows: mklink /d ibas E:\MyWorks\ColorCoding\ibas-typescript\ibas
-      linux： ln -s ibas /mnt/e/MyWorks/ColorCoding/ibas-typescript/ibas
+      windows: mklink /d ibas ..\..\..\..\..\..\ibas-typescript\ibas
+               mklink /d openui5 ..\..\..\..\..\..\ibas-typescript\openui5
+      linux： ln -s ../../../../../../ibas-typescript/ibas ibas
+              ln -s ../../../../../../ibas-typescript/openui5 openui5

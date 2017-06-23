@@ -14,7 +14,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<ibas.version>0.1.2</ibas.version>
-		<btulz.core.version>0.1.0</btulz.core.version>
+		<btulz.core.version>0.1.1</btulz.core.version>
 	</properties>
 	<build>
 		<plugins>

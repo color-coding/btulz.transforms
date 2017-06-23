@@ -121,12 +121,12 @@ $BEGIN_BO_MODEL$
         </Step>
         <Step Name="delete business object ${Model.getName()}'s informations" RunOnValue="1">
             <Script>
-                delete from "${DbName}"."${Company}_SYS_OBOI" where "Name" = N'${Model.getName()}'
+                delete from "${DbName}"."${Company}_SYS_OBOI" where "Code" = N'${BO.getShortName()}'
             </Script>
         </Step>
         <Step Name="register business object ${Model.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${DbName}"."${Company}_SYS_OBOI"("Name", "Code", "Descrp", "Mapped", "ObjectType") values (N'${Model.getName()}',N'${BO.getShortName()}',N'${Model.getDescription()}',N'${Model.getMapped().toUpperCase()}',N'${Model.getModelType()}')
+                insert into "${DbName}"."${Company}_SYS_OBOI"("Code", "Name", "Descrp", "Mapped", "ObjectType") values (N'${BO.getShortName()}', N'${Model.getName()}', N'${Model.getDescription()}', N'${Model.getMapped().toUpperCase()}', N'${Model.getModelType()}')
             </Script>
         </Step>
         <Step Name="check business object properties informations table exists">
@@ -137,12 +137,12 @@ $BEGIN_BO_MODEL$
 $BEGIN_MODEL_PROPERTY$
         <Step Name="delete business object property ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
-                delete from "${DbName}"."${Company}_SYS_BOI1" where "Name" = N'${Model.getName()}' and "Property" = N'${Property.getName()}'
+                delete from "${DbName}"."${Company}_SYS_BOI1" where "Code" = N'${BO.getShortName()}' and "Property" = N'${Property.getName()}'
             </Script>
         </Step>
         <Step Name="register business object property ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${DbName}"."${Company}_SYS_BOI1" ("Name", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${Model.getName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'Y')
+                insert into "${DbName}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${BO.getShortName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'Y')
             </Script>
         </Step>
 $END_MODEL_PROPERTY$
@@ -158,12 +158,12 @@ $BEGIN_BOITEM_MODEL$
         </Step>
         <Step Name="delete business object ${Model.getName()}'s informations" RunOnValue="1">
             <Script>
-                delete from "${DbName}"."${Company}_SYS_OBOI" where "Name" = N'${Model.getName()}'
+                delete from "${DbName}"."${Company}_SYS_OBOI" where "Code" = N'${BO.getShortName()}.${BOItem.getIndex()}'
             </Script>
         </Step>
         <Step Name="register business object ${Model.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${DbName}"."${Company}_SYS_OBOI"("Name", "Code", "Descrp", "Mapped", "ObjectType") values (N'${Model.getName()}',N'${BO.getShortName()}.${BOItem.getIndex()}',N'${Model.getDescription()}',N'${Model.getMapped().toUpperCase()}',N'${Model.getModelType()}')
+                insert into "${DbName}"."${Company}_SYS_OBOI"("Code", "Name", "Descrp", "Mapped", "ObjectType") values (N'${BO.getShortName()}.${BOItem.getIndex()}',N'${Model.getName()}',N'${Model.getDescription()}',N'${Model.getMapped().toUpperCase()}',N'${Model.getModelType()}')
             </Script>
         </Step>
         <Step Name="check business object properties informations table exists">
@@ -174,12 +174,12 @@ $BEGIN_BOITEM_MODEL$
 $BEGIN_MODEL_PROPERTY$
         <Step Name="delete business object property ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
-                delete from "${DbName}"."${Company}_SYS_BOI1" where "Name" = N'${Model.getName()}' and "Property" = N'${Property.getName()}'
+                delete from "${DbName}"."${Company}_SYS_BOI1" where "Code" = N'${BO.getShortName()}.${BOItem.getIndex()}' and "Property" = N'${Property.getName()}'
             </Script>
         </Step>
         <Step Name="register business object property ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${DbName}"."${Company}_SYS_BOI1" ("Name", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${Model.getName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'Y')
+                insert into "${DbName}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${BO.getShortName()}.${BOItem.getIndex()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'Y')
             </Script>
         </Step>
 $END_MODEL_PROPERTY$
