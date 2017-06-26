@@ -49,7 +49,6 @@ public class XmlTransformerDom4j extends XmlTransformer {
 			for (IBusinessObjectItem boItem : businessObject.getRelatedBOs()) {
 				Element biElement = boElement.addElement("RelatedBO");
 				this.writeElement(boItem, biElement);
-				boElement.appendContent(biElement);
 			}
 		}
 		OutputFormat xmlFormat = OutputFormat.createCompactFormat();

@@ -25,7 +25,7 @@ public class RegionModelHasPrimary extends RegionBase {
 	}
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters(Parameters parameters) {
+	protected Iterator<Parameter> getRegionParameters(Parameters parameters) {
 		IModel model = parameters.getValue(RegionModel.REGION_PARAMETER_NAME, IModel.class);
 		if (model != null) {
 			ArrayList<IProperty> primaryProperty = new ArrayList<>();
@@ -34,27 +34,20 @@ public class RegionModelHasPrimary extends RegionBase {
 					primaryProperty.add(iProperty);
 				}
 			}
-			return new Iterable<Parameter>() {
+			return new Iterator<Parameter>() {
+				int curIndex = 0;
+
 				@Override
-				public Iterator<Parameter> iterator() {
-
-					return new Iterator<Parameter>() {
-						int curIndex = 0;
-
-						@Override
-						public boolean hasNext() {
-							return curIndex < primaryProperty.size() ? true : false;
-						}
-
-						@Override
-						public Parameter next() {
-							// 返回一次，没有额外变量
-							curIndex = primaryProperty.size();
-							return null;
-						}
-					};
+				public boolean hasNext() {
+					return curIndex < primaryProperty.size() ? true : false;
 				}
 
+				@Override
+				public Parameter next() {
+					// 返回一次，没有额外变量
+					curIndex = primaryProperty.size();
+					return null;
+				}
 			};
 		}
 		return null;

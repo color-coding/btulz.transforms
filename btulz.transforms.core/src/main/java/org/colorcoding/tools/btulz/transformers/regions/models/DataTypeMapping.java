@@ -86,4 +86,9 @@ public class DataTypeMapping {
 		}
 		return mapValue;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("{data mapping: %s %s}", this.getMapped(), this.getDataType());
+	}
 }

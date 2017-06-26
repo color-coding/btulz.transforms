@@ -1,3 +1,3 @@
 @echo off
 SET WORK_FOLDER=%~dp0
-start /b /min java -jar "%WORK_FOLDER%btulz.transforms.shell-0.1.0.jar"
+start /b /min java -jar "%WORK_FOLDER%btulz.transforms.shell-0.1.1.jar"

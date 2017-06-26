@@ -103,7 +103,9 @@ $END_BOITEM$
 }
 $END_BO_MODEL$
 
+$BEGIN_BOITEMS$
 $BEGIN_BOITEM$
+
 $BEGIN_BOITEM_MODEL$
 /** ${Model.getDescription()} */
 export class ${Model.getName()} extends BO${Model.getModelType()}<${Model.getName()}> implements I${Model.getName()} {
@@ -134,7 +136,7 @@ $END_BOITEM_MODEL$
 
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
 /** ${BOItem.getDescription()} 集合 */
-export class ${BOItem.getName()}s extends BusinessObjects<${BOItem.getName()}, ${BO.getName()}> implements I${BOItem.getName()}s {
+export class ${BOItem.getName()}s extends BusinessObjects<${BOItem.getName()}, ${BOItem.getParent().getName()}> implements I${BOItem.getName()}s {
 
     /** 创建并添加子项 */
     create(): ${BOItem.getName()} {
@@ -145,3 +147,4 @@ export class ${BOItem.getName()}s extends BusinessObjects<${BOItem.getName()}, $
 }
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
+$END_BOITEMS$

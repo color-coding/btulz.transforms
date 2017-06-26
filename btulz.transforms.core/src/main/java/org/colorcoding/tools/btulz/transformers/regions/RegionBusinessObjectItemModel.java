@@ -31,7 +31,7 @@ public class RegionBusinessObjectItemModel extends RegionBase {
 	}
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters(Parameters parameters) {
+	protected Iterator<Parameter> getRegionParameters(Parameters parameters) {
 		// 根据当前业务对象在领域中查询子对象模型
 		IDomain domain = parameters.getValue(RegionDomain.REGION_PARAMETER_NAME, IDomain.class);
 		if (domain != null) {
@@ -48,29 +48,22 @@ public class RegionBusinessObjectItemModel extends RegionBase {
 						boModels.add(iModel);
 					}
 				}
-				return new Iterable<Parameter>() {
+				return new Iterator<Parameter>() {
+					int curIndex = 0;
+
 					@Override
-					public Iterator<Parameter> iterator() {
-
-						return new Iterator<Parameter>() {
-							int curIndex = 0;
-
-							@Override
-							public boolean hasNext() {
-								return curIndex < 1 && boModels.size() > 0;
-							}
-
-							@Override
-							public Parameter next() {
-								Parameter parameter = new Parameter();
-								parameter.setName(REGION_PARAMETER_NAME);
-								parameter.setValue(boModels.get(curIndex));
-								curIndex++;
-								return parameter;
-							}
-						};
+					public boolean hasNext() {
+						return curIndex < 1 && boModels.size() > 0;
 					}
 
+					@Override
+					public Parameter next() {
+						Parameter parameter = new Parameter();
+						parameter.setName(REGION_PARAMETER_NAME);
+						parameter.setValue(boModels.get(curIndex));
+						curIndex++;
+						return parameter;
+					}
 				};
 			}
 		}

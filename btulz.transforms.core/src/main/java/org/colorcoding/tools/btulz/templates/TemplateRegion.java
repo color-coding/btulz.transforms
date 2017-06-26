@@ -3,6 +3,7 @@ package org.colorcoding.tools.btulz.templates;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.colorcoding.tools.btulz.Environment;
@@ -133,13 +134,14 @@ public abstract class TemplateRegion implements ITemplateData {
 				// 重复区域，需要循环输出
 				// 输出模板数据
 				TemplateRegion region = (TemplateRegion) tpltLine;
-				Iterable<Parameter> regionPars = region.getRegionParameters(parameters);
+				Iterator<Parameter> regionPars = region.getRegionParameters(parameters);
 				if (regionPars == null) {
 					throw new InvalidParameterException(String.format("invalid parameter between %s and %s.",
 							region.getBeginDelimiter(), region.getEndDelimiter()));
 				}
 				Environment.getLogger().debug(String.format("template: begin export region [%s].", region));
-				for (Parameter regionPar : regionPars) {
+				while (regionPars.hasNext()) {
+					Parameter regionPar = regionPars.next();
 					// 替换区域变量
 					Parameters newParameters = new Parameters(parameters);
 					if (regionPar != null) {
@@ -165,5 +167,5 @@ public abstract class TemplateRegion implements ITemplateData {
 	 * @return 本区域参数迭代器
 	 * @throws InvalidParameterException
 	 */
-	protected abstract Iterable<Parameter> getRegionParameters(Parameters pars) throws InvalidParameterException;
+	protected abstract Iterator<Parameter> getRegionParameters(Parameters pars) throws InvalidParameterException;
 }

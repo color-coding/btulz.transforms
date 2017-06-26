@@ -148,6 +148,7 @@ $BEGIN_MODEL_PROPERTY$
 $END_MODEL_PROPERTY$
     </Action>
 $END_BO_MODEL$
+$BEGIN_BOITEMS$
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_MODEL$
     <Action Name="register business object informations">
@@ -158,12 +159,12 @@ $BEGIN_BOITEM_MODEL$
         </Step>
         <Step Name="delete business object ${Model.getName()}'s informations" RunOnValue="1">
             <Script>
-                delete from "${DbName}"."${Company}_SYS_OBOI" where "Code" = N'${BO.getShortName()}.${BOItem.getIndex()}'
+                delete from "${DbName}"."${Company}_SYS_OBOI" where "Code" = N'${BOItem.getShortName(index)}'
             </Script>
         </Step>
         <Step Name="register business object ${Model.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${DbName}"."${Company}_SYS_OBOI"("Code", "Name", "Descrp", "Mapped", "ObjectType") values (N'${BO.getShortName()}.${BOItem.getIndex()}',N'${Model.getName()}',N'${Model.getDescription()}',N'${Model.getMapped().toUpperCase()}',N'${Model.getModelType()}')
+                insert into "${DbName}"."${Company}_SYS_OBOI"("Code", "Name", "Descrp", "Mapped", "ObjectType") values (N'${BOItem.getShortName(index)}',N'${Model.getName()}',N'${Model.getDescription()}',N'${Model.getMapped().toUpperCase()}',N'${Model.getModelType()}')
             </Script>
         </Step>
         <Step Name="check business object properties informations table exists">
@@ -174,17 +175,18 @@ $BEGIN_BOITEM_MODEL$
 $BEGIN_MODEL_PROPERTY$
         <Step Name="delete business object property ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
-                delete from "${DbName}"."${Company}_SYS_BOI1" where "Code" = N'${BO.getShortName()}.${BOItem.getIndex()}' and "Property" = N'${Property.getName()}'
+                delete from "${DbName}"."${Company}_SYS_BOI1" where "Code" = N'${BOItem.getShortName(index)}' and "Property" = N'${Property.getName()}'
             </Script>
         </Step>
         <Step Name="register business object property ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${DbName}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${BO.getShortName()}.${BOItem.getIndex()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'Y')
+                insert into "${DbName}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${BOItem.getShortName(index)}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'Y')
             </Script>
         </Step>
 $END_MODEL_PROPERTY$
 $END_BOITEM_MODEL$
     </Action>
 $END_BOITEM$
+$END_BOITEMS$
 $END_BO$
 </ns2:DataStructureOrchestration>

@@ -23,30 +23,23 @@ public class RegionBusinessObjectHasItem extends RegionBase {
 	}
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters(Parameters parameters) {
+	protected Iterator<Parameter> getRegionParameters(Parameters parameters) {
 		IBusinessObject businessObject = parameters.getValue(RegionBusinessObject.REGION_PARAMETER_NAME,
 				IBusinessObject.class);
 		if (businessObject != null) {
-			return new Iterable<Parameter>() {
+			return new Iterator<Parameter>() {
+				int curIndex = 0;
+
 				@Override
-				public Iterator<Parameter> iterator() {
-
-					return new Iterator<Parameter>() {
-						int curIndex = 0;
-
-						@Override
-						public boolean hasNext() {
-							return curIndex < 1 && businessObject.getRelatedBOs().size() > 0;
-						}
-
-						@Override
-						public Parameter next() {
-							curIndex++;
-							return null;
-						}
-					};
+				public boolean hasNext() {
+					return curIndex < 1 && businessObject.getRelatedBOs().size() > 0;
 				}
 
+				@Override
+				public Parameter next() {
+					curIndex++;
+					return null;
+				}
 			};
 		}
 		return null;

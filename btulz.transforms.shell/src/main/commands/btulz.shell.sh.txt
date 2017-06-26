@@ -1,3 +1,3 @@
 #!/bin/bash
 WORK_FOLDER=`dirname "$0"`
-java -jar "${WORK_FOLDER}/btulz.transforms.shell-0.1.0.jar"
+java -jar "${WORK_FOLDER}/btulz.transforms.shell-0.1.1.jar"

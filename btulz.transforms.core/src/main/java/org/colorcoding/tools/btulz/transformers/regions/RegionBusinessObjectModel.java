@@ -30,7 +30,7 @@ public class RegionBusinessObjectModel extends RegionBase {
 	}
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters(Parameters parameters) {
+	protected Iterator<Parameter> getRegionParameters(Parameters parameters) {
 		// 先获取领域，然后获取业务对象，再找业务对象的模型
 		IDomain domain = parameters.getValue(RegionDomain.REGION_PARAMETER_NAME, IDomain.class);
 		if (domain != null) {
@@ -45,29 +45,22 @@ public class RegionBusinessObjectModel extends RegionBase {
 						boModels.add(iModel);
 					}
 				}
-				return new Iterable<Parameter>() {
+				return new Iterator<Parameter>() {
+					int curIndex = 0;
+
 					@Override
-					public Iterator<Parameter> iterator() {
-
-						return new Iterator<Parameter>() {
-							int curIndex = 0;
-
-							@Override
-							public boolean hasNext() {
-								return curIndex < 1 && boModels.size() > 0;
-							}
-
-							@Override
-							public Parameter next() {
-								Parameter parameter = new Parameter();
-								parameter.setName(REGION_PARAMETER_NAME);
-								parameter.setValue(boModels.get(curIndex));
-								curIndex++;
-								return parameter;
-							}
-						};
+					public boolean hasNext() {
+						return curIndex < 1 && boModels.size() > 0;
 					}
 
+					@Override
+					public Parameter next() {
+						Parameter parameter = new Parameter();
+						parameter.setName(REGION_PARAMETER_NAME);
+						parameter.setValue(boModels.get(curIndex));
+						curIndex++;
+						return parameter;
+					}
 				};
 			}
 		}

@@ -28,32 +28,25 @@ public class RegionBusinessObject extends RegionBase {
 	}
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters(Parameters parameters) {
+	protected Iterator<Parameter> getRegionParameters(Parameters parameters) {
 		IDomain domain = parameters.getValue(RegionDomain.REGION_PARAMETER_NAME, IDomain.class);
 		if (domain != null) {
-			return new Iterable<Parameter>() {
+			return new Iterator<Parameter>() {
+				int curIndex = 0;
+
 				@Override
-				public Iterator<Parameter> iterator() {
-
-					return new Iterator<Parameter>() {
-						int curIndex = 0;
-
-						@Override
-						public boolean hasNext() {
-							return curIndex < domain.getBusinessObjects().size() ? true : false;
-						}
-
-						@Override
-						public Parameter next() {
-							Parameter parameter = new Parameter();
-							parameter.setName(REGION_PARAMETER_NAME);
-							parameter.setValue(domain.getBusinessObjects().get(curIndex));
-							curIndex++;
-							return parameter;
-						}
-					};
+				public boolean hasNext() {
+					return curIndex < domain.getBusinessObjects().size() ? true : false;
 				}
 
+				@Override
+				public Parameter next() {
+					Parameter parameter = new Parameter();
+					parameter.setName(REGION_PARAMETER_NAME);
+					parameter.setValue(domain.getBusinessObjects().get(curIndex));
+					curIndex++;
+					return parameter;
+				}
 			};
 		}
 		return null;

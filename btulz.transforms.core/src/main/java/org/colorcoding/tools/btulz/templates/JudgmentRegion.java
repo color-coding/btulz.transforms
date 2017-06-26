@@ -21,7 +21,7 @@ public class JudgmentRegion extends TemplateRegion {
 	public static final String REGION_DELIMITER = "_IS_";
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters(Parameters parameters) {
+	protected Iterator<Parameter> getRegionParameters(Parameters parameters) {
 		String[] regionValues = this.getBeginDelimiter().replace(REGION_SIGN_BEGIN, "").replace(REGION_SIGN, "")
 				.split("_");
 		if (regionValues != null && regionValues.length > 1) {
@@ -65,47 +65,33 @@ public class JudgmentRegion extends TemplateRegion {
 				}
 				if (done) {
 					// 与区域值一致
-					return new Iterable<Parameter>() {
+					return new Iterator<Parameter>() {
+						int curIndex = 1;
+
 						@Override
-						public Iterator<Parameter> iterator() {
-
-							return new Iterator<Parameter>() {
-								int curIndex = 1;
-
-								@Override
-								public boolean hasNext() {
-									return curIndex > 0;
-								}
-
-								@Override
-								public Parameter next() {
-									curIndex--;
-									return null;
-								}
-							};
+						public boolean hasNext() {
+							return curIndex > 0;
 						}
 
+						@Override
+						public Parameter next() {
+							curIndex--;
+							return null;
+						}
 					};
 				} else {
 					// 与区域值不一致
-					return new Iterable<Parameter>() {
+					return new Iterator<Parameter>() {
+
 						@Override
-						public Iterator<Parameter> iterator() {
-
-							return new Iterator<Parameter>() {
-
-								@Override
-								public boolean hasNext() {
-									return false;
-								}
-
-								@Override
-								public Parameter next() {
-									return null;
-								}
-							};
+						public boolean hasNext() {
+							return false;
 						}
 
+						@Override
+						public Parameter next() {
+							return null;
+						}
 					};
 				}
 			}

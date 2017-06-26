@@ -1,6 +1,8 @@
 package org.colorcoding.tools.btulz.transformers.regions;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.colorcoding.tools.btulz.models.IBusinessObject;
 import org.colorcoding.tools.btulz.models.IBusinessObjectItem;
@@ -14,66 +16,67 @@ import org.colorcoding.tools.btulz.transformers.regions.models.BusinessObjectIte
  * @author Niuren.Zhu
  *
  */
-public class RegionBusinessObjectItem extends RegionBase {
+public class RegionBusinessObjectItems extends RegionBase {
 	/**
 	 * 此区域标记
 	 */
-	public static final String REGION_DELIMITER = "BOITEM";
+	public static final String REGION_DELIMITER = "BOITEMS";
 
 	/**
 	 * 此区域变量名称
 	 */
 	public static final String REGION_PARAMETER_NAME = "BOItem";
 
-	public RegionBusinessObjectItem() {
+	public RegionBusinessObjectItems() {
 		super(REGION_DELIMITER);
 	}
 
 	@Override
 	protected Iterator<Parameter> getRegionParameters(Parameters parameters) {
-		// 已存在变量
-		IBusinessObjectItem businessObjectItem = parameters.getValue(RegionBusinessObjectItem.REGION_PARAMETER_NAME,
-				IBusinessObjectItem.class);
-		if (businessObjectItem != null) {
-			return new Iterator<Parameter>() {
-				int curIndex = 0;
-
-				@Override
-				public boolean hasNext() {
-					return curIndex < 1 ? true : false;
-				}
-
-				@Override
-				public Parameter next() {
-					Parameter parameter = new Parameter();
-					parameter.setName(REGION_PARAMETER_NAME);
-					parameter.setValue(businessObjectItem);
-					curIndex++;
-					return parameter;
-				}
-			};
-		}
-		// 不存在变量，通过计算获取
 		IBusinessObject businessObject = parameters.getValue(RegionBusinessObject.REGION_PARAMETER_NAME,
 				IBusinessObject.class);
 		if (businessObject != null) {
 			return new Iterator<Parameter>() {
+				private List<BusinessObjectItem> getBOItems(IBusinessObject bo) {
+					List<BusinessObjectItem> boItems = new ArrayList<>();
+					// 当前层
+					for (IBusinessObjectItem item : bo.getRelatedBOs()) {
+						BusinessObjectItem boItem = new BusinessObjectItem(item);
+						boItem.setParent(bo);
+						boItems.add(boItem);
+					}
+					// 下一层
+					for (IBusinessObjectItem item : bo.getRelatedBOs()) {
+						boItems.addAll(this.getBOItems(item));
+					}
+					return boItems;
+				}
+
+				private List<BusinessObjectItem> allItems;
+
+				protected List<BusinessObjectItem> getAllItems() {
+					if (this.allItems == null) {
+						this.allItems = this.getBOItems(businessObject);
+						for (int i = 0; i < this.allItems.size(); i++) {
+							BusinessObjectItem boItem = this.allItems.get(i);
+							boItem.setIndex(i + 1);
+						}
+					}
+					return this.allItems;
+				}
+
 				int curIndex = 0;
 
 				@Override
 				public boolean hasNext() {
-					return curIndex < businessObject.getRelatedBOs().size() ? true : false;
+					return curIndex < this.getAllItems().size() ? true : false;
 				}
 
 				@Override
 				public Parameter next() {
-					BusinessObjectItem boItem = new BusinessObjectItem(businessObject.getRelatedBOs().get(curIndex));
-					boItem.setIndex(curIndex + 1);
-					boItem.setParent(businessObject);
-
 					Parameter parameter = new Parameter();
 					parameter.setName(REGION_PARAMETER_NAME);
-					parameter.setValue(boItem);
+					parameter.setValue(this.getAllItems().get(curIndex));
 					curIndex++;
 					return parameter;
 				}

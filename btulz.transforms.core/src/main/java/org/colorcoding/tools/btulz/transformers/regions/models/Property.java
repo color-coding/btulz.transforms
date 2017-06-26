@@ -165,10 +165,6 @@ public class Property implements IProperty {
 		this.last = last;
 	}
 
-	public String toString() {
-		return String.format("RegionProperty %s", this.getName());
-	}
-
 	private List<DataTypeMapping> declaredTypeMappings;
 
 	public List<DataTypeMapping> getDeclaredTypeMappings() {
@@ -386,4 +382,8 @@ public class Property implements IProperty {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return String.format("{property: %s %s}", this.getName(), this.getDataType());
+	}
 }

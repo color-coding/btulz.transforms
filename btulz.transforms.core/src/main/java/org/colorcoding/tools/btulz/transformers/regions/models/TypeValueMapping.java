@@ -72,4 +72,9 @@ public class TypeValueMapping {
 		}
 		return mapValue;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("{type mapping: %s %s}", this.getMapped(), this.getDataType());
+	}
 }

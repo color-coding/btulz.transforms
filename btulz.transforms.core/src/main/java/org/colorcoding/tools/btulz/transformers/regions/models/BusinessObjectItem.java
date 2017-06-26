@@ -1,5 +1,6 @@
 package org.colorcoding.tools.btulz.transformers.regions.models;
 
+import org.colorcoding.tools.btulz.models.IBusinessObject;
 import org.colorcoding.tools.btulz.models.IBusinessObjectItem;
 import org.colorcoding.tools.btulz.models.IBusinessObjectItems;
 import org.colorcoding.tools.btulz.models.IModel;
@@ -10,11 +11,6 @@ public class BusinessObjectItem implements IBusinessObjectItem {
 
 	public BusinessObjectItem(IBusinessObjectItem boItem) {
 		this.boItem = boItem;
-	}
-
-	public BusinessObjectItem(IBusinessObjectItem boItem, int index) {
-		this.boItem = boItem;
-		this.index = index;
 	}
 
 	private IBusinessObjectItem boItem;
@@ -45,7 +41,21 @@ public class BusinessObjectItem implements IBusinessObjectItem {
 
 	@Override
 	public String getShortName() {
-		return this.boItem.getShortName();
+		String name = this.boItem.getShortName();
+		if ((name == null || name.isEmpty()) && this.getParent() != null) {
+			name = this.getParent().getShortName();
+		}
+		if (name == null || name.isEmpty()) {
+			name = this.boItem.getName().toUpperCase();
+		}
+		return name;
+	}
+
+	public String getShortName(String type) {
+		if (type != null && type.equalsIgnoreCase("index")) {
+			return String.format("%s.%s", this.getShortName(), this.getIndex());
+		}
+		return this.getShortName();
 	}
 
 	@Override
@@ -83,6 +93,11 @@ public class BusinessObjectItem implements IBusinessObjectItem {
 		this.boItem.setRelation(relation);
 	}
 
+	@Override
+	public IBusinessObjectItem clone() {
+		return null;
+	}
+
 	private int index;
 
 	public final int getIndex() {
@@ -93,9 +108,18 @@ public class BusinessObjectItem implements IBusinessObjectItem {
 		this.index = index;
 	}
 
-	@Override
-	public IBusinessObjectItem clone() {
-		return null;
+	private IBusinessObject parent;
+
+	public final IBusinessObject getParent() {
+		return this.parent;
 	}
 
+	public final void setParent(IBusinessObject parent) {
+		this.parent = parent;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("{bo item: %s %s}", this.getName(), this.getRelation());
+	}
 }

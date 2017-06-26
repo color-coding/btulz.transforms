@@ -51,6 +51,8 @@ public class RegionsFactory {
 				return new RegionBusinessObjectItem();
 			} else if (RegionBusinessObjectItemModel.REGION_DELIMITER.equals(delimiter)) {
 				return new RegionBusinessObjectItemModel();
+			} else if (RegionBusinessObjectItems.REGION_DELIMITER.equals(delimiter)) {
+				return new RegionBusinessObjectItems();
 			}
 		}
 		return null;

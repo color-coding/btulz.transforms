@@ -45,13 +45,13 @@ public class testCodeTransformer extends TestCase {
 		codeTransformer.addParameters(new Parameter("ProjectId", UUID.randomUUID().toString()));
 		// codeTransformer.addDomains(Environment.getWorkingFolder() +
 		// File.separator + Environment.getXmlModelsFileOld());
-		codeTransformer.addDomains(Environment.getCodeFolder() + String.format(
-				"%1$sibas-typescript%1$stest%1$sapps%1$strainingtesting%1$sresources%1$sDS_TrainingTesting.xml",
-				File.separator));
 		// codeTransformer.addDomains(Environment.getCodeFolder() +
 		// String.format(
-		// "%1$sibas.initialfantasy%1$ssrc%1$smain%1$sresources%1$sdatastructures",
+		// "%1$sibas-typescript%1$stest%1$sapps%1$strainingtesting%1$sresources%1$sDS_TrainingTesting.xml",
 		// File.separator));
+		codeTransformer.addDomains(Environment.getCodeFolder() + String.format(
+				"%1$sibas.initialfantasy%1$sibas.initialfantasy%1$ssrc%1$smain%1$sresources%1$sdatastructures",
+				File.separator));
 		codeTransformer.transform();
 	}
 

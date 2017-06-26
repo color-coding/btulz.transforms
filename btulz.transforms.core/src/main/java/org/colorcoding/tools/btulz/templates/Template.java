@@ -162,27 +162,21 @@ public class Template extends TemplateRegion {
 	}
 
 	@Override
-	protected Iterable<Parameter> getRegionParameters(Parameters pars) throws InvalidParameterException {
-		return new Iterable<Parameter>() {
+	protected Iterator<Parameter> getRegionParameters(Parameters pars) throws InvalidParameterException {
+		// 仅运行一次，且空值
+		return new Iterator<Parameter>() {
+			boolean done = false;// 是否运行过
+
 			@Override
-			public Iterator<Parameter> iterator() {
-				// 仅运行一次，且空值
-				return new Iterator<Parameter>() {
-					boolean done = false;// 是否运行过
-
-					@Override
-					public boolean hasNext() {
-						return !done;
-					}
-
-					@Override
-					public Parameter next() {
-						done = true;// 返回一次值，则标记运行过
-						return null;
-					}
-				};
+			public boolean hasNext() {
+				return !done;
 			}
 
+			@Override
+			public Parameter next() {
+				done = true;// 返回一次值，则标记运行过
+				return null;
+			}
 		};
 	}
 
