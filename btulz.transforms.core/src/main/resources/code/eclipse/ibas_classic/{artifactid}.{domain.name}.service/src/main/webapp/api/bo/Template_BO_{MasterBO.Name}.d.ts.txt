@@ -51,17 +51,6 @@ $END_BOITEM$
 $END_BO_MODEL$
 
 $BEGIN_BOITEM$
-$BEGIN_BOITEM_MODEL$
-/** ${Model.getDescription()} */
-export interface I${Model.getName()} extends IBO${Model.getModelType()} {
-
-$BEGIN_MODEL_PROPERTY$
-    /** ${Property.getDescription()} */
-    ${Property.getName(LowerCamelCase)}: ${Property.getDeclaredType()};
-$END_MODEL_PROPERTY$
-}
-$END_BOITEM_MODEL$
-
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
 /** ${BOItem.getDescription()} 集合 */
 export interface I${BOItem.getName()}s extends IBusinessObjects<I${BOItem.getName()}, I${BO.getName()}> {
@@ -70,5 +59,44 @@ export interface I${BOItem.getName()}s extends IBusinessObjects<I${BOItem.getNam
     create(): I${BOItem.getName()};
 }
 $END_BOITEM_RELATION_IS_ONETOMANY$
-
 $END_BOITEM$
+
+$BEGIN_BOITEMS$
+$BEGIN_BO_MODEL$
+/** ${Model.getDescription()} */
+export interface I${Model.getName()} extends IBO${Model.getModelType()} {
+
+$BEGIN_MODEL_PROPERTY$
+    /** ${Property.getDescription()} */
+    ${Property.getName(LowerCamelCase)}: ${Property.getDeclaredType()};
+
+$END_MODEL_PROPERTY$
+
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+    /** ${BOItem.getDescription()}集合 */
+    ${BOItem.getName(LowerCamelCase)}s: I${BOItem.getName()}s;
+
+$END_BOITEM_RELATION_IS_ONETOMANY$
+
+$BEGIN_BOITEM_RELATION_IS_ONETOONE$
+    /** ${BOItem.getDescription()} */
+    ${BOItem.getName(LowerCamelCase)}: I${BOItem.getName()};
+
+$END_BOITEM_RELATION_IS_ONETOONE$
+$END_BOITEM$
+}
+$END_BO_MODEL$
+
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+/** ${BOItem.getDescription()} 集合 */
+export interface I${BOItem.getName()}s extends IBusinessObjects<I${BOItem.getName()}, I${BO.getName()}> {
+
+    /** 创建并添加子项 */
+    create(): I${BOItem.getName()};
+}
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+
+$END_BOITEMS$

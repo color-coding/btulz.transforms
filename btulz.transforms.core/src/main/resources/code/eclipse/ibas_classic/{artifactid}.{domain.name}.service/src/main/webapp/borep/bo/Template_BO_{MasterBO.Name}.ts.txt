@@ -25,13 +25,26 @@ $BEGIN_BO_MODEL$
     I${Model.getName()},
 $END_BO_MODEL$
 $BEGIN_BOITEM$
-$BEGIN_BOITEM_MODEL$
-    I${Model.getName()},
-$END_BOITEM_MODEL$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
     I${BOItem.getName()}s,
 $END_BOITEM_RELATION_IS_ONETOMANY$
+$BEGIN_BOITEM_RELATION_IS_ONETOONE$
+    I${BOItem.getName()},
+$END_BOITEM_RELATION_IS_ONETOONE$
 $END_BOITEM$
+$BEGIN_BOITEMS$
+$BEGIN_BO_MODEL$
+    I${Model.getName()},
+$END_BO_MODEL$
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+    I${BOItem.getName()}s,
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$BEGIN_BOITEM_RELATION_IS_ONETOONE$
+    I${BOItem.getName()},
+$END_BOITEM_RELATION_IS_ONETOONE$
+$END_BOITEM$
+$END_BOITEMS$
     BO_CODE_${BO.getName().toUpperCase()},
 } from "../../api/index";
 
@@ -103,10 +116,23 @@ $END_BOITEM$
 }
 $END_BO_MODEL$
 
-$BEGIN_BOITEMS$
 $BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+/** ${BOItem.getDescription()} 集合 */
+export class ${BOItem.getName()}s extends BusinessObjects<${BOItem.getName()}, ${BOItem.getParent().getName()}> implements I${BOItem.getName()}s {
 
-$BEGIN_BOITEM_MODEL$
+    /** 创建并添加子项 */
+    create(): ${BOItem.getName()} {
+        let item: ${BOItem.getName()} = new ${BOItem.getName()}();
+        this.add(item);
+        return item;
+    }
+}
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+
+$BEGIN_BOITEMS$
+$BEGIN_BO_MODEL$
 /** ${Model.getDescription()} */
 export class ${Model.getName()} extends BO${Model.getModelType()}<${Model.getName()}> implements I${Model.getName()} {
 
@@ -119,21 +145,59 @@ $BEGIN_MODEL_PROPERTY$
     static PROPERTY_${Property.getName().toUpperCase()}_NAME: string = "${Property.getName()}";
     /** 获取-${Property.getDescription()} */
     get ${Property.getName(LowerCamelCase)}(): ${Property.getDeclaredType()} {
-        return this.getProperty<${Property.getDeclaredType()}>(${BOItem.getName()}.PROPERTY_${Property.getName().toUpperCase()}_NAME);
+        return this.getProperty<${Property.getDeclaredType()}>(${BO.getName()}.PROPERTY_${Property.getName().toUpperCase()}_NAME);
     }
     /** 设置-${Property.getDescription()} */
     set ${Property.getName(LowerCamelCase)}(value: ${Property.getDeclaredType()}) {
-        this.setProperty(${BOItem.getName()}.PROPERTY_${Property.getName().toUpperCase()}_NAME, value);
+        this.setProperty(${BO.getName()}.PROPERTY_${Property.getName().toUpperCase()}_NAME, value);
     }
 
 $END_MODEL_PROPERTY$
 
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+    /** 映射的属性名称-${BOItem.getDescription()}集合 */
+    static PROPERTY_${BOItem.getName().toUpperCase()}S_NAME: string = "${BOItem.getName()}s";
+    /** 获取-${BOItem.getDescription()}集合 */
+    get ${BOItem.getName(LowerCamelCase)}s(): ${BOItem.getName()}s {
+        return this.getProperty<${BOItem.getName()}s>(${BO.getName()}.PROPERTY_${BOItem.getName().toUpperCase()}S_NAME);
+    }
+    /** 设置-${BOItem.getDescription()}集合 */
+    set ${BOItem.getName(LowerCamelCase)}s(value: ${BOItem.getName()}s) {
+        this.setProperty(${BO.getName()}.PROPERTY_${BOItem.getName().toUpperCase()}S_NAME, value);
+    }
+
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$BEGIN_BOITEM_RELATION_IS_ONETOONE$
+    /** 映射的属性名称-${BOItem.getDescription()}集合 */
+    static PROPERTY_${BOItem.getName().toUpperCase()}_NAME: string = "${BOItem.getName()}";
+    /** 获取-${BOItem.getDescription()}集合 */
+    get ${BOItem.getName(LowerCamelCase)}(): ${BOItem.getName()} {
+        return this.getProperty<${BOItem.getName()}>(${BO.getName()}.PROPERTY_${BOItem.getName().toUpperCase()}_NAME);
+    }
+    /** 设置-${BOItem.getDescription()}集合 */
+    set ${BOItem.getName(LowerCamelCase)}(value: ${BOItem.getName()}) {
+        this.setProperty(${BO.getName()}.PROPERTY_${BOItem.getName().toUpperCase()}_NAME, value);
+    }
+
+$END_BOITEM_RELATION_IS_ONETOONE$
+$END_BOITEM$
+
     /** 初始化数据 */
     protected init(): void {
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+        this.${BOItem.getName(LowerCamelCase)}s = new ${BOItem.getName()}s(this);
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$BEGIN_BOITEM_RELATION_IS_ONETOONE$
+        this.${BOItem.getName(LowerCamelCase)} = new ${BOItem.getName()}();
+$END_BOITEM_RELATION_IS_ONETOONE$
+$END_BOITEM$
     }
 }
-$END_BOITEM_MODEL$
+$END_BO_MODEL$
 
+$BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
 /** ${BOItem.getDescription()} 集合 */
 export class ${BOItem.getName()}s extends BusinessObjects<${BOItem.getName()}, ${BOItem.getParent().getName()}> implements I${BOItem.getName()}s {

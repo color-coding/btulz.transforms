@@ -3,7 +3,6 @@ package org.colorcoding.tools.btulz.transformers.regions;
 import java.util.Iterator;
 
 import org.colorcoding.tools.btulz.models.IBusinessObject;
-import org.colorcoding.tools.btulz.models.IBusinessObjectItem;
 import org.colorcoding.tools.btulz.templates.Parameter;
 import org.colorcoding.tools.btulz.templates.Parameters;
 import org.colorcoding.tools.btulz.transformers.regions.models.BusinessObjectItem;
@@ -31,29 +30,6 @@ public class RegionBusinessObjectItem extends RegionBase {
 
 	@Override
 	protected Iterator<Parameter> getRegionParameters(Parameters parameters) {
-		// 已存在变量
-		IBusinessObjectItem businessObjectItem = parameters.getValue(RegionBusinessObjectItem.REGION_PARAMETER_NAME,
-				IBusinessObjectItem.class);
-		if (businessObjectItem != null) {
-			return new Iterator<Parameter>() {
-				int curIndex = 0;
-
-				@Override
-				public boolean hasNext() {
-					return curIndex < 1 ? true : false;
-				}
-
-				@Override
-				public Parameter next() {
-					Parameter parameter = new Parameter();
-					parameter.setName(REGION_PARAMETER_NAME);
-					parameter.setValue(businessObjectItem);
-					curIndex++;
-					return parameter;
-				}
-			};
-		}
-		// 不存在变量，通过计算获取
 		IBusinessObject businessObject = parameters.getValue(RegionBusinessObject.REGION_PARAMETER_NAME,
 				IBusinessObject.class);
 		if (businessObject != null) {

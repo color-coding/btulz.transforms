@@ -331,7 +331,8 @@ public class CodeTransformer extends Transformer {
 		if (tpltFolder == null || !tpltFolder.exists()) {
 			return;
 		}
-		Environment.getLogger().info(String.format("transform folder [%s].", tpltFolder.getName()));
+		Environment.getLogger().info(String.format("transform folder [.%s].",
+				tpltFolder.getAbsolutePath().replace(this.getTemplateFolder(), "")));
 		// 文件排序，先文件后目录
 		List<File> files = Arrays.asList(tpltFolder.listFiles());
 		Collections.sort(files, new Comparator<File>() {
@@ -361,8 +362,8 @@ public class CodeTransformer extends Transformer {
 		// 遍历处理文件清单
 		for (File file : files) {
 			if (file.isDirectory()) {
-				// 子文件夹处理，每个文件夹一组变量避免冲突
-				this.transform(file, rootFolder, new Parameters(parameters));
+				// 子文件夹处理
+				this.transform(file, rootFolder, parameters);
 			} else if (file.isFile()) {
 				if (file.getName().startsWith(TEMPLATE_FILE_PARAMETER)) {
 					// ~ 开始文件，为参数文件
@@ -381,8 +382,8 @@ public class CodeTransformer extends Transformer {
 						}
 					}
 				} else if (file.getName().startsWith(TEMPLATE_FILE)) {
-					// 转换文件
-					this.transformFile(file, outFolder, parameters);
+					// 转换文件，每个文件一组变量避免冲突
+					this.transformFile(file, outFolder, new Parameters(parameters));
 				} else {
 					// 仅复制文件
 					this.copyFile(file, outFolder);

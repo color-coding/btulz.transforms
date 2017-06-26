@@ -25,7 +25,7 @@ public class RegionBusinessObjectItems extends RegionBase {
 	/**
 	 * 此区域变量名称
 	 */
-	public static final String REGION_PARAMETER_NAME = "BOItem";
+	public static final String REGION_PARAMETER_NAME = "BO";
 
 	public RegionBusinessObjectItems() {
 		super(REGION_DELIMITER);
