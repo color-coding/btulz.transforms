@@ -53,6 +53,10 @@ public class BusinessObjectItem implements IBusinessObjectItem {
 
 	public String getShortName(String type) {
 		if (type != null && type.equalsIgnoreCase("index")) {
+			if (this.getParent() instanceof BusinessObjectItem) {
+				BusinessObjectItem parent = (BusinessObjectItem) this.getParent();
+				return String.format("%s.%s", parent.getShortName("index"), this.getIndex());
+			}
 			return String.format("%s.%s", this.getShortName(), this.getIndex());
 		}
 		return this.getShortName();

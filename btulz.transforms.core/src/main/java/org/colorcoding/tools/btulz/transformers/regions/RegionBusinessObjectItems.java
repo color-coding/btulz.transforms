@@ -40,14 +40,14 @@ public class RegionBusinessObjectItems extends RegionBase {
 				private List<BusinessObjectItem> getBOItems(IBusinessObject bo) {
 					List<BusinessObjectItem> boItems = new ArrayList<>();
 					// 当前层
-					for (IBusinessObjectItem item : bo.getRelatedBOs()) {
+					for (int i = 0; i < bo.getRelatedBOs().size(); i++) {
+						IBusinessObjectItem item = bo.getRelatedBOs().get(i);
 						BusinessObjectItem boItem = new BusinessObjectItem(item);
 						boItem.setParent(bo);
+						boItem.setIndex(i + 1);
 						boItems.add(boItem);
-					}
-					// 下一层
-					for (IBusinessObjectItem item : bo.getRelatedBOs()) {
-						boItems.addAll(this.getBOItems(item));
+						// 下一层
+						boItems.addAll(this.getBOItems(boItem));
 					}
 					return boItems;
 				}
@@ -57,10 +57,6 @@ public class RegionBusinessObjectItems extends RegionBase {
 				protected List<BusinessObjectItem> getAllItems() {
 					if (this.allItems == null) {
 						this.allItems = this.getBOItems(businessObject);
-						for (int i = 0; i < this.allItems.size(); i++) {
-							BusinessObjectItem boItem = this.allItems.get(i);
-							boItem.setIndex(i + 1);
-						}
 					}
 					return this.allItems;
 				}

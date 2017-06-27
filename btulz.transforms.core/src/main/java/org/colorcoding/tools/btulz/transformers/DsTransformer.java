@@ -140,6 +140,7 @@ public class DsTransformer extends DbTransformer {
 		long startTime = System.currentTimeMillis();
 		Environment.getLogger().info(String.format("begin transform data structures."));
 		for (IDomain domain : this.getDomains()) {
+			domain.buildMapping();// 构建关系
 			this.currentDomain = domain;
 			Environment.getLogger()
 					.info(String.format("changed working domain to [%s].", this.currentDomain.getName()));
