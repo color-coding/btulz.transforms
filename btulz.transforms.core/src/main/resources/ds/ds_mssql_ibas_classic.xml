@@ -121,7 +121,7 @@ $BEGIN_BO_MODEL$
         </Step>
         <Step Name="delete business object ${Model.getName()}'s informations" RunOnValue="1">
             <Script>
-                delete from "${DbName}"."${DbSchema}"."${Company}_SYS_OBOI" where "Code" = N'${BO.getName()}'
+                delete from "${DbName}"."${DbSchema}"."${Company}_SYS_OBOI" where "Code" = N'${BO.getShortName()}'
             </Script>
         </Step>
         <Step Name="register business object ${Model.getName()}'s informations" RunOnValue="1">
@@ -158,7 +158,7 @@ $BEGIN_BO_MODEL$
         </Step>
         <Step Name="delete business object ${Model.getName()}'s informations" RunOnValue="1">
             <Script>
-                delete from "${DbName}"."${DbSchema}"."${Company}_SYS_OBOI" where "Code" = N'${BO.getName()}'
+                delete from "${DbName}"."${DbSchema}"."${Company}_SYS_OBOI" where "Code" = N'${BO.getShortName(index)}'
             </Script>
         </Step>
         <Step Name="register business object ${Model.getName()}'s informations" RunOnValue="1">
