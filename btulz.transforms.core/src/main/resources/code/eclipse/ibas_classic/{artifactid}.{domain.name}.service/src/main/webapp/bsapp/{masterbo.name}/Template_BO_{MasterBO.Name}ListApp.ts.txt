@@ -9,6 +9,7 @@
 import * as ibas from "ibas/index";
 import * as bo from "../../borep/bo/index";
 import { BORepository${Domain.getName()} } from "../../borep/BORepositories";
+import { DataConverter4${Domain.getShortName().toLowerCase()} } from "../../borep/DataConverters";
 import { ${BO.getName()}ViewApp } from "./${BO.getName()}ViewApp";
 import { ${BO.getName()}EditApp } from "./${BO.getName()}EditApp";
 
@@ -168,7 +169,12 @@ export class ${BO.getName()}ListApp extends ibas.BOListApplication<I${BO.getName
     }
     /** 获取服务的契约 */
     protected getServiceProxies(): ibas.IServiceProxy<ibas.IServiceContract>[] {
-        return [];
+        return [
+            new ibas.BOListServiceProxy({
+                data: this.view.getSelecteds(),
+                converter: new DataConverter4${Domain.getShortName().toLowerCase()}()
+            })
+        ];
     }
 }
 /** 视图-${BO.getDescription()} */
@@ -179,4 +185,6 @@ export interface I${BO.getName()}ListView extends ibas.IBOListView {
     deleteDataEvent: Function;
     /** 显示数据 */
     showData(datas: bo.${BO.getName()}[]): void;
+    /** 获取选择的数据 */
+    getSelecteds(): bo.${BO.getName()}[];
 }

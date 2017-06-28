@@ -177,4 +177,8 @@ export class ${BO.getName()}ListView extends ibas.BOListView implements I${BO.ge
             this.table.setModel(null);
         }
     }
+    /** 获取选择的数据 */
+    getSelecteds(): bo.${BO.getName()}[] {
+        return utils.getTableSelecteds<bo.${BO.getName()}>(this.table);
+    }
 }
