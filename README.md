@@ -12,10 +12,11 @@
 #### 命令符调用
 * 支持的命令详见：
 ~~~
-java -jar btulz.transforms.core-0.1.0.jar   code -help     生成代码，详见帮助。
-java -jar btulz.transforms.core-0.1.0.jar   ds -help       创建数据结构，详见帮助。
-java -jar btulz.transforms.core-0.1.0.jar   sql -help      运行sql命令，详见帮助。
+java -jar btulz.transforms.core-0.1.0.jar   code  -help    生成代码，详见帮助。
+java -jar btulz.transforms.core-0.1.0.jar   ds    -help    创建数据结构，详见帮助。
+java -jar btulz.transforms.core-0.1.0.jar   sql   -help    运行sql命令，详见帮助。
 java -jar btulz.transforms.core-0.1.0.jar   dsJar -help    分析jar包处理其中数据结构和sql，详见帮助。
+java -jar btulz.transforms.core-0.1.0.jar   init  -help    处理初始化数据命令，详见帮助。
 java -jar btulz.transforms.core-0.1.0.jar   excel -help    解析excel中的领域模型并输出xml，不兼容旧版，详见帮助。
 java -jar btulz.transforms.shell-0.1.0.jar                 使用命令执行UI，详见帮助。
 btulz.shell.sh/bat                                         快速启动脚本UI脚本。
