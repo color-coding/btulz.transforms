@@ -32,6 +32,7 @@ $END_BOITEM$
     darw(): any {
         let that: this = this;
         this.form = new sap.ui.layout.form.SimpleForm("", {
+            editable: true, // 编辑模式影响行高
             content: [
             ]
         });
