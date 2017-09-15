@@ -4,12 +4,12 @@ import java.beans.PropertyChangeEvent;
 import javax.xml.bind.annotation.*;
 import org.colorcoding.ibas.bobas.common.*;
 import org.colorcoding.ibas.bobas.bo.*;
-import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.MyConsts;
+import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.MyConfiguration;
 
 /**
 * ${BOItem.getDescription()} 集合
 */
-@XmlType(name = ${BOItem.getName()}s.BUSINESS_OBJECT_NAME, namespace = MyConsts.NAMESPACE_BO)
+@XmlType(name = ${BOItem.getName()}s.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @XmlSeeAlso({ ${BOItem.getName()}.class })
 public class ${BOItem.getName()}s extends BusinessObjects<I${BOItem.getName()}, I${BO.getName()}> implements I${BOItem.getName()}s {
 

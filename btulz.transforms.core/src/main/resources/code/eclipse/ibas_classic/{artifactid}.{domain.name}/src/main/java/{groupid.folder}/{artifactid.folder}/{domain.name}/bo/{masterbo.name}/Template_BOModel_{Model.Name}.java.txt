@@ -6,7 +6,7 @@ import org.colorcoding.ibas.bobas.core.*;
 import org.colorcoding.ibas.bobas.mapping.*;
 import org.colorcoding.ibas.bobas.bo.*;
 import org.colorcoding.ibas.bobas.data.*;
-import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.MyConsts;
+import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.MyConfiguration;
 import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.data.*;
 
 /**
@@ -14,17 +14,17 @@ import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.data.*;
 * 
 */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name = ${Model.getName()}.BUSINESS_OBJECT_NAME, namespace = MyConsts.NAMESPACE_BO)
+@XmlType(name = ${Model.getName()}.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 $BEGIN_MODEL_MODELTYPE_IS_DOCUMENT$
-@XmlRootElement(name = ${Model.getName()}.BUSINESS_OBJECT_NAME, namespace = MyConsts.NAMESPACE_BO)
+@XmlRootElement(name = ${Model.getName()}.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BOCode(${Model.getName()}.BUSINESS_OBJECT_CODE)
 $END_MODEL_MODELTYPE_IS_DOCUMENT$
 $BEGIN_MODEL_MODELTYPE_IS_MASTERDATA$
-@XmlRootElement(name = ${Model.getName()}.BUSINESS_OBJECT_NAME, namespace = MyConsts.NAMESPACE_BO)
+@XmlRootElement(name = ${Model.getName()}.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BOCode(${Model.getName()}.BUSINESS_OBJECT_CODE)
 $END_MODEL_MODELTYPE_IS_MASTERDATA$
 $BEGIN_MODEL_MODELTYPE_IS_SIMPLE$
-@XmlRootElement(name = ${Model.getName()}.BUSINESS_OBJECT_NAME, namespace = MyConsts.NAMESPACE_BO)
+@XmlRootElement(name = ${Model.getName()}.BUSINESS_OBJECT_NAME, namespace = MyConfiguration.NAMESPACE_BO)
 @BOCode(${Model.getName()}.BUSINESS_OBJECT_CODE)
 $END_MODEL_MODELTYPE_IS_SIMPLE$
 public class ${Model.getName()} extends BusinessObject<${Model.getName()}> implements I${Model.getName()} {
