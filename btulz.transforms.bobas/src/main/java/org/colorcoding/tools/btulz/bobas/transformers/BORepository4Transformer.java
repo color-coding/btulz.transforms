@@ -19,7 +19,6 @@ import org.colorcoding.ibas.bobas.repository.BORepositoryLogicService;
 public class BORepository4Transformer extends BORepositoryLogicService implements IBORepository4Transformer {
 
 	public BORepository4Transformer() {
-		this.setUseCache(false); // 不使用缓存
 		this.setCheckApprovalProcess(false);// 不使用审批流程
 		// 使用系统用户
 		IOrganizationManager orgManager = OrganizationFactory.create().createManager();
