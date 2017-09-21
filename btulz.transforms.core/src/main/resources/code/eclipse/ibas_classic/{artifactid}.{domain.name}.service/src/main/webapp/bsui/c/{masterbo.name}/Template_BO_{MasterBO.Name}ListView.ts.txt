@@ -55,7 +55,7 @@ export class ${BO.getName()}ListView extends ibas.BOListView implements I${BO.ge
                         press: function (): void {
                             that.fireViewEvents(that.viewDataEvent,
                                 // 获取表格选中的对象
-                                utils.getTableSelecteds<bo.${BO.getName()}>(that.table).firstOrDefault()
+                                utils.getSelecteds<bo.${BO.getName()}>(that.table).firstOrDefault()
                             );
                         }
                     }),
@@ -66,7 +66,7 @@ export class ${BO.getName()}ListView extends ibas.BOListView implements I${BO.ge
                         press: function (): void {
                             that.fireViewEvents(that.editDataEvent,
                                 // 获取表格选中的对象
-                                utils.getTableSelecteds<bo.${BO.getName()}>(that.table).firstOrDefault()
+                                utils.getSelecteds<bo.${BO.getName()}>(that.table).firstOrDefault()
                             );
                         }
                     }),
@@ -78,7 +78,7 @@ export class ${BO.getName()}ListView extends ibas.BOListView implements I${BO.ge
                         press: function (): void {
                             that.fireViewEvents(that.deleteDataEvent,
                                 // 获取表格选中的对象
-                                utils.getTableSelecteds<bo.${BO.getName()}>(that.table)
+                                utils.getSelecteds<bo.${BO.getName()}>(that.table)
                             );
                         }
                     }),
@@ -179,6 +179,6 @@ export class ${BO.getName()}ListView extends ibas.BOListView implements I${BO.ge
     }
     /** 获取选择的数据 */
     getSelecteds(): bo.${BO.getName()}[] {
-        return utils.getTableSelecteds<bo.${BO.getName()}>(this.table);
+        return utils.getSelecteds<bo.${BO.getName()}>(this.table);
     }
 }

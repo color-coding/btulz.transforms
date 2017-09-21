@@ -57,7 +57,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
                         press: function (): void {
                             that.fireViewEvents(that.remove${BOItem.getName()}Event,
                                 // 获取表格选中的对象
-                                utils.getTableSelecteds<bo.${BOItem.getName()}>(that.table${BOItem.getName()})
+                                utils.getSelecteds<bo.${BOItem.getName()}>(that.table${BOItem.getName()})
                             );
                         }
                     })
