@@ -39,7 +39,7 @@ do
     then
       # 网站，编译war包
       echo --开始编译[${line}]
-      mvn clean package -Dmaven.test.skip=true -f ${WORK_FOLDER}/${line} >>$LOGFILE
+      mvn clean package -Dmaven.test.skip=true -f ${WORK_FOLDER}/${line}/pom.xml >>$LOGFILE
 
       if [ -e ${WORK_FOLDER}/${line}/target/*.war ]
       then
@@ -48,7 +48,7 @@ do
     else
       # 非网站，编译jar包并安装到本地
       echo --开始编译[${line}]+安装
-      mvn clean package install -Dmaven.test.skip=true -f ${WORK_FOLDER}/${line} >>$LOGFILE
+      mvn clean package install -Dmaven.test.skip=true -f ${WORK_FOLDER}/${line}/pom.xml >>$LOGFILE
     
       if [ -e ${WORK_FOLDER}/${line}/target/*.jar ]
       then
