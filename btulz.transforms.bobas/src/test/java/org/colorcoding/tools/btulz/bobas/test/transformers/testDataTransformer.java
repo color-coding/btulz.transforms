@@ -23,6 +23,7 @@ import junit.framework.TestCase;
 
 public class testDataTransformer extends TestCase {
 
+	@SuppressWarnings("unused")
 	public void testClassLoader()
 			throws ClassNotFoundException, IOException, InstantiationException, IllegalAccessException {
 		File folder = new File(MyConfiguration.getStartupFolder());

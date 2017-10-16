@@ -264,7 +264,7 @@ public class DataTransformer extends Transformer {
 		try {
 			boRepository.beginTransaction();// 开启事务
 			for (IBusinessObject data : datas) {
-				opRslt = boRepository.save(data);
+				opRslt = boRepository.saveData(data);
 				if (opRslt.getResultCode() != 0) {
 					// 保存失败
 					Environment.getLogger().error(String.format("save faild [%s].", opRslt.getMessage()));

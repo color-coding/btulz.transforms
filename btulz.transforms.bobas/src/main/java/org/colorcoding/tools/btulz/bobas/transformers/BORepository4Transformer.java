@@ -55,7 +55,7 @@ public class BORepository4Transformer extends BORepositoryLogicService implement
 	}
 
 	@Override
-	public <P extends IBusinessObject> OperationResult<P> save(P bo) {
+	public <P extends IBusinessObject> OperationResult<P> saveData(P bo) {
 		String token = this.getCurrentUser().getToken();
 		return super.save(bo, token);
 	}

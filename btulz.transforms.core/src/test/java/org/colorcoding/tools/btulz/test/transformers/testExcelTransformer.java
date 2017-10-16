@@ -75,7 +75,7 @@ public class testExcelTransformer extends TestCase {
 				// 行单元格
 				for (Cell cell : row) {
 					cellValue = "";
-					CellType cellType = CellType.forInt(cell.getCellType());
+					CellType cellType = cell.getCellTypeEnum();// CellType.forInt(cell.getCellType());
 					if (cellType == CellType.STRING) {
 						cellValue = cell.getRichStringCellValue().getString();
 					} else if (cellType == CellType.NUMERIC) {

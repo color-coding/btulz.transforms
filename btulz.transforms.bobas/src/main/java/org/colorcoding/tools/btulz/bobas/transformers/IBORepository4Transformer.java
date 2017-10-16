@@ -55,6 +55,6 @@ public interface IBORepository4Transformer {
 	 *            业务对象
 	 * @return
 	 */
-	<P extends IBusinessObject> OperationResult<P> save(P bo);
+	<P extends IBusinessObject> OperationResult<P> saveData(P bo);
 
 }
