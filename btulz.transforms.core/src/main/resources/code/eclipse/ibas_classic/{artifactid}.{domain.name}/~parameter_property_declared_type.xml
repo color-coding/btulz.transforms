@@ -7,6 +7,7 @@
     <Mapping DataType="Numeric" Mapped="Integer"/>
     <Mapping DataType="Decimal" Mapped="Decimal"/>
     <Mapping DataType="Date" SubType="Default" Mapped="DateTime"/>
+    <Mapping DataType="Date" SubType="Date" Mapped="DateTime"/>
     <Mapping DataType="Date" SubType="Time" Mapped="Short"/>
     <Mapping DataType="Bytes" Mapped="byte[]"/>
 </ns2:DataTypeMappings>
