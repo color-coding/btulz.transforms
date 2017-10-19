@@ -486,6 +486,28 @@ public class ExcelParser implements IExcelParser {
 			if (value != null && !value.isEmpty()) {
 				property.setDeclaredType(value);
 			}
+			// 标记主键
+			if (model.getModelType() == emModelType.Document && property.getName().equals("DocEntry")) {
+				property.setPrimaryKey(true);
+			} else if (model.getModelType() == emModelType.DocumentLine
+					&& (property.getName().equals("DocEntry") || property.getName().equals("LineId"))) {
+				property.setPrimaryKey(true);
+			} else if (model.getModelType() == emModelType.MasterData
+					&& ((property.getName().equals("Code") || property.getName().equals("DocEntry")))) {
+				property.setPrimaryKey(true);
+			} else if (model.getModelType() == emModelType.MasterDataLine
+					&& (property.getName().equals("Code") || property.getName().equals("LineId"))) {
+				property.setPrimaryKey(true);
+			} else if (model.getModelType() == emModelType.Simple && (property.getName().equals("ObjectKey"))) {
+				property.setPrimaryKey(true);
+			} else if (model.getModelType() == emModelType.SimpleLine
+					&& (property.getName().equals("ObjectKey") || property.getName().equals("LineId"))) {
+				property.setPrimaryKey(true);
+			}
+			// 标记唯一索引
+			if (model.getModelType() == emModelType.MasterData && property.getName().equals("Code")) {
+				property.setUniqueKey(true);
+			}
 			return useCount;
 		}
 	}
