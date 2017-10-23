@@ -33,9 +33,6 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.0.2</version>
                 <configuration>
-                      <includes>
-                        <include>**/*.*</include>
-                      </includes>
                 </configuration>
             </plugin>
         </plugins>

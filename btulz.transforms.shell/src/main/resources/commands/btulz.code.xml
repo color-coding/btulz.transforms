@@ -12,7 +12,7 @@
     </Item>
     <Item Content="-GroupId=${VALUE}" Description="组标记" Value="org.colorcoding" />
     <Item Content="-ArtifactId=${VALUE}" Description="项目标记" Value="ibas" />
-    <Item Content="-ProjectVersion=${VALUE}" Description="项目标记" Value="0.0.1" />
+    <Item Content="-ProjectVersion=${VALUE}" Description="项目标记" Value="0.1.0" />
     <Item Content="-ProjectUrl=${VALUE}" Description="项目地址" Value="http://colorcoding.org" />
     <Item Content="-Domains=${VALUE}" Description="模型文件" Value="${WORK_FOLDER}domains" >
         <ValidValues ClassName="javax.swing.JFileChooser"/>
@@ -21,7 +21,7 @@
         <Items>
             <Item Content="{&quot;name&quot;:&quot;Company&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="公司标识" Value="CC" />
             <Item Content=",{&quot;name&quot;:&quot;ibasVersion&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="ibas版本" Value="0.1.2" />
-            <Item Content=",{&quot;name&quot;:&quot;ibasIfVersion&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="最初模块版本" Value="0.0.1" />
+            <Item Content=",{&quot;name&quot;:&quot;ibasIfVersion&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="最初模块版本" Value="0.1.0" />
             <Item Content=",{&quot;name&quot;:&quot;ProjectId&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="项目标识" >
                 <ValidValues ClassName="java.util.UUID"/>
             </Item>
