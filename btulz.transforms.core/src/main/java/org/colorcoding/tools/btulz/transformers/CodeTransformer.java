@@ -334,59 +334,62 @@ public class CodeTransformer extends Transformer {
 		Environment.getLogger().info(String.format("transform folder [.%s].",
 				tpltFolder.getAbsolutePath().replace(this.getTemplateFolder(), "")));
 		// 文件排序，先文件后目录
-		List<File> files = Arrays.asList(tpltFolder.listFiles());
-		Collections.sort(files, new Comparator<File>() {
-			@Override
-			public int compare(File o1, File o2) {
-				if (o1.isDirectory() && o2.isFile())
-					return 1;
-				if (o1.isFile() && o2.isDirectory())
-					return -1;
-				if (o1.getName().startsWith(TEMPLATE_FILE_PARAMETER)
-						&& !o2.getName().startsWith(TEMPLATE_FILE_PARAMETER))
-					return -1;
-				if (!o1.getName().startsWith(TEMPLATE_FILE_PARAMETER)
-						&& o2.getName().startsWith(TEMPLATE_FILE_PARAMETER))
-					return 1;
-				return o1.getName().compareTo(o2.getName());
+		File[] tmpfiles = tpltFolder.listFiles();
+		if (tmpfiles != null) {
+			List<File> files = Arrays.asList(tmpfiles);
+			Collections.sort(files, new Comparator<File>() {
+				@Override
+				public int compare(File o1, File o2) {
+					if (o1.isDirectory() && o2.isFile())
+						return 1;
+					if (o1.isFile() && o2.isDirectory())
+						return -1;
+					if (o1.getName().startsWith(TEMPLATE_FILE_PARAMETER)
+							&& !o2.getName().startsWith(TEMPLATE_FILE_PARAMETER))
+						return -1;
+					if (!o1.getName().startsWith(TEMPLATE_FILE_PARAMETER)
+							&& o2.getName().startsWith(TEMPLATE_FILE_PARAMETER))
+						return 1;
+					return o1.getName().compareTo(o2.getName());
+				}
+			});
+			String tmpFolder = tpltFolder.getPath().replace(this.getTemplateFolder(), "");
+			tmpFolder = this.replaceVariables(tmpFolder, parameters);
+			File outFolder = new File(
+					tmpFolder == null ? rootFolder.getPath() : rootFolder.getPath() + File.separator + tmpFolder);
+			if (!outFolder.exists() && outFolder.getPath().indexOf("{") < 0) {
+				// 输出文件夹不存在，且不存在变量是创建文件夹。
+				outFolder.mkdirs();
 			}
-		});
-		String tmpFolder = tpltFolder.getPath().replace(this.getTemplateFolder(), "");
-		tmpFolder = this.replaceVariables(tmpFolder, parameters);
-		File outFolder = new File(
-				tmpFolder == null ? rootFolder.getPath() : rootFolder.getPath() + File.separator + tmpFolder);
-		if (!outFolder.exists() && outFolder.getPath().indexOf("{") < 0) {
-			// 输出文件夹不存在，且不存在变量是创建文件夹。
-			outFolder.mkdirs();
-		}
-		// 遍历处理文件清单
-		for (File file : files) {
-			if (file.isDirectory()) {
-				// 子文件夹处理
-				this.transform(file, rootFolder, parameters);
-			} else if (file.isFile()) {
-				if (file.getName().startsWith(TEMPLATE_FILE_PARAMETER)) {
-					// ~ 开始文件，为参数文件
-					parameters.add(this.loadParameters(file));
-				} else if (file.getName().equalsIgnoreCase("putout_domain_models.txt")) {
-					// 输出数据结构在此
-					for (Parameter parameter : parameters) {
-						if (parameter.getName().equalsIgnoreCase(RegionDomain.REGION_PARAMETER_NAME)) {
-							if (parameter.getValue() instanceof IDomain) {
-								IDomain domain = (IDomain) parameter.getValue();
-								XmlTransformer xmlTransformer = new XmlTransformerDom4j();
-								xmlTransformer.setInterruptOnError(true);
-								xmlTransformer.load(domain);
-								xmlTransformer.save(outFolder.getPath());
+			// 遍历处理文件清单
+			for (File file : files) {
+				if (file.isDirectory()) {
+					// 子文件夹处理
+					this.transform(file, rootFolder, parameters);
+				} else if (file.isFile()) {
+					if (file.getName().startsWith(TEMPLATE_FILE_PARAMETER)) {
+						// ~ 开始文件，为参数文件
+						parameters.add(this.loadParameters(file));
+					} else if (file.getName().equalsIgnoreCase("putout_domain_models.txt")) {
+						// 输出数据结构在此
+						for (Parameter parameter : parameters) {
+							if (parameter.getName().equalsIgnoreCase(RegionDomain.REGION_PARAMETER_NAME)) {
+								if (parameter.getValue() instanceof IDomain) {
+									IDomain domain = (IDomain) parameter.getValue();
+									XmlTransformer xmlTransformer = new XmlTransformerDom4j();
+									xmlTransformer.setInterruptOnError(true);
+									xmlTransformer.load(domain);
+									xmlTransformer.save(outFolder.getPath());
+								}
 							}
 						}
+					} else if (file.getName().startsWith(TEMPLATE_FILE)) {
+						// 转换文件，每个文件一组变量避免冲突
+						this.transformFile(file, outFolder, new Parameters(parameters));
+					} else {
+						// 仅复制文件
+						this.copyFile(file, outFolder);
 					}
-				} else if (file.getName().startsWith(TEMPLATE_FILE)) {
-					// 转换文件，每个文件一组变量避免冲突
-					this.transformFile(file, outFolder, new Parameters(parameters));
-				} else {
-					// 仅复制文件
-					this.copyFile(file, outFolder);
 				}
 			}
 		}

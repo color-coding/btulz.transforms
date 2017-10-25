@@ -152,7 +152,7 @@ public class Property implements IProperty {
 
 	@Override
 	public IProperty clone() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	private boolean last;
@@ -350,6 +350,10 @@ public class Property implements IProperty {
 			}
 		}
 		return defaultValue;
+	}
+
+	public void setDefaultValue(String value) {
+		this.defaultValue = value;
 	}
 
 	private List<TypeValueMapping> defaultValueMappings;

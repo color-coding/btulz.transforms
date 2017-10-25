@@ -13,7 +13,7 @@ import org.colorcoding.tools.btulz.Serializer;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "Domain", namespace = Environment.NAMESPACE_BTULZ_MODELS)
 @XmlRootElement(name = "Domain", namespace = Environment.NAMESPACE_BTULZ_MODELS)
-public class Domain implements IDomain {
+public class Domain implements IDomain, Cloneable {
 
 	public static final String FILE_NAME_SEPARATOR = "_";
 
@@ -27,6 +27,11 @@ public class Domain implements IDomain {
 	@Override
 	public boolean equals(Object model) {
 		return this.equals((IDomain) model);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 
 	public Domain() {

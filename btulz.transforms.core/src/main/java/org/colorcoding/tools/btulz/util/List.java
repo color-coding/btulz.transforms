@@ -30,5 +30,5 @@ public interface List<E> extends java.util.List<E> {
 	 * 
 	 * @return 元素实例
 	 */
-	E lastOrfault(Predicate<? super E> filter);
+	E lastOrDefault(Predicate<? super E> filter);
 }

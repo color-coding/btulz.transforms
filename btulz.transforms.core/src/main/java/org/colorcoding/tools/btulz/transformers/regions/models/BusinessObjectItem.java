@@ -7,7 +7,7 @@ import org.colorcoding.tools.btulz.models.IModel;
 import org.colorcoding.tools.btulz.models.data.emBORelation;
 import org.colorcoding.tools.btulz.util.NamingRules;
 
-public class BusinessObjectItem implements IBusinessObjectItem {
+public class BusinessObjectItem implements IBusinessObjectItem, Cloneable {
 
 	public BusinessObjectItem(IBusinessObjectItem boItem) {
 		this.boItem = boItem;
@@ -99,7 +99,7 @@ public class BusinessObjectItem implements IBusinessObjectItem {
 
 	@Override
 	public IBusinessObjectItem clone() {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	private int index;

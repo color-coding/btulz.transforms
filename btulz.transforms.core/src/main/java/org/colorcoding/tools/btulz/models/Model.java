@@ -14,7 +14,7 @@ import org.colorcoding.tools.btulz.models.data.emModelType;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "Model", namespace = Environment.NAMESPACE_BTULZ_MODELS)
 @XmlRootElement(name = "Model", namespace = Environment.NAMESPACE_BTULZ_MODELS)
-public class Model implements IModel {
+public class Model implements IModel, Cloneable {
 
 	public boolean equals(IModel model) {
 		if (this.getName() != null && model != null && this.getName().equals(model.getName())) {
@@ -26,6 +26,11 @@ public class Model implements IModel {
 	@Override
 	public boolean equals(Object model) {
 		return this.equals((IModel) model);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 
 	public Model() {

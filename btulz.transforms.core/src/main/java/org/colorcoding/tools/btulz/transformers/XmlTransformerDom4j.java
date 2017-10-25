@@ -61,12 +61,12 @@ public class XmlTransformerDom4j extends XmlTransformer {
 		writer.close();
 	}
 
-	protected void writeElement(IDomain domain, Element element) {
+	private void writeElement(IDomain domain, Element element) {
 		element.addAttribute("Name", domain.getName());
 		element.addAttribute("ShortName", domain.getShortName());
 	}
 
-	protected void writeElement(IModel model, Element element) {
+	private void writeElement(IModel model, Element element) {
 		element.addAttribute("Name", model.getName());
 		element.addAttribute("Description", model.getDescription());
 		element.addAttribute("ModelType", String.valueOf(model.getModelType()));
@@ -76,7 +76,7 @@ public class XmlTransformerDom4j extends XmlTransformer {
 		}
 	}
 
-	protected void writeElement(IProperty property, Element element) {
+	private void writeElement(IProperty property, Element element) {
 		element.addAttribute("Name", property.getName());
 		element.addAttribute("Description", property.getDescription());
 		element.addAttribute("DataType", String.valueOf(property.getDataType()));
@@ -97,7 +97,7 @@ public class XmlTransformerDom4j extends XmlTransformer {
 		}
 	}
 
-	protected void writeElement(IBusinessObject bo, Element element) {
+	private void writeElement(IBusinessObject bo, Element element) {
 		if (bo.getName() != null && bo.getName().equals(bo.getMappedModel())) {
 			element.addAttribute("MappedModel", bo.getMappedModel());
 			element.addAttribute("ShortName", bo.getShortName());
@@ -110,7 +110,7 @@ public class XmlTransformerDom4j extends XmlTransformer {
 		}
 	}
 
-	protected void writeElement(IBusinessObjectItem boItem, Element element) {
+	private void writeElement(IBusinessObjectItem boItem, Element element) {
 		element.addAttribute("Relation", String.valueOf(boItem.getRelation()));
 		if (boItem.getName() != null && boItem.getName().equals(boItem.getMappedModel())) {
 			element.addAttribute("MappedModel", boItem.getMappedModel());

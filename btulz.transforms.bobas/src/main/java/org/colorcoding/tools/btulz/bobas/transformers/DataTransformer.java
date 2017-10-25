@@ -136,8 +136,11 @@ public class DataTransformer extends Transformer {
 			throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, TransformException {
 		ArrayList<IBusinessObject> bos = new ArrayList<>();
 		if (file.isDirectory()) {
-			for (File item : file.listFiles()) {
-				bos.addAll(this.analysisData(item));
+			File[] files = file.listFiles();
+			if (files != null) {
+				for (File item : files) {
+					bos.addAll(this.analysisData(item));
+				}
 			}
 		} else if (file.isFile()) {
 			ISerializer<?> serializer = SerializerFactory.create().createManager().create("xml");

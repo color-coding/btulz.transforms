@@ -78,7 +78,7 @@ public class XmlTransformer extends FileTransformer {
 		return new IDomain[] {};
 	}
 
-	protected IDomain[] load(Document document) throws Exception {
+	private IDomain[] load(Document document) throws Exception {
 		ArrayList<IDomain> domains = new ArrayList<>();
 		IXmlParser xmlParser = null;
 		Environment.getLogger().info(String.format("begin transform xml document to domain."));
@@ -170,12 +170,12 @@ public class XmlTransformer extends FileTransformer {
 		Environment.getLogger().info(String.format("end transform domain to file."));
 	}
 
-	protected void writeElement(IDomain domain, Element element) {
+	private void writeElement(IDomain domain, Element element) {
 		element.setAttribute("Name", domain.getName());
 		element.setAttribute("ShortName", domain.getShortName());
 	}
 
-	protected void writeElement(IModel model, Element element) {
+	private void writeElement(IModel model, Element element) {
 		element.setAttribute("Name", model.getName());
 		element.setAttribute("Description", model.getDescription());
 		element.setAttribute("ModelType", String.valueOf(model.getModelType()));
@@ -185,7 +185,7 @@ public class XmlTransformer extends FileTransformer {
 		}
 	}
 
-	protected void writeElement(IProperty property, Element element) {
+	private void writeElement(IProperty property, Element element) {
 		element.setAttribute("Name", property.getName());
 		element.setAttribute("Description", property.getDescription());
 		element.setAttribute("DataType", String.valueOf(property.getDataType()));
@@ -206,7 +206,7 @@ public class XmlTransformer extends FileTransformer {
 		}
 	}
 
-	protected void writeElement(IBusinessObject bo, Element element) {
+	private void writeElement(IBusinessObject bo, Element element) {
 		if (bo.getName() != null && bo.getName().equals(bo.getMappedModel())) {
 			element.setAttribute("MappedModel", bo.getMappedModel());
 			element.setAttribute("ShortName", bo.getShortName());

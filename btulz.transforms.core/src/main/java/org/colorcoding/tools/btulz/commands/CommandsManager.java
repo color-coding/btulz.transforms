@@ -75,20 +75,22 @@ public class CommandsManager {
 	}
 
 	public int run(String[] args) {
-		StringBuilder stringBuilder = new StringBuilder();
-		for (String arg : args) {
-			if (stringBuilder.length() > 0) {
-				stringBuilder.append(" ");
+		if (args != null && args.length > 0) {
+			StringBuilder stringBuilder = new StringBuilder();
+			for (String arg : args) {
+				if (stringBuilder.length() > 0) {
+					stringBuilder.append(" ");
+				}
+				stringBuilder.append("{");
+				stringBuilder.append(arg);
+				stringBuilder.append("}");
 			}
-			stringBuilder.append("{");
-			stringBuilder.append(arg);
-			stringBuilder.append("}");
+			Environment.getLogger().debug(String.format("input in command args %s.", stringBuilder));
 		}
-		Environment.getLogger().debug(String.format("input in command args %s.", stringBuilder));
 		if (args == null || args.length == 0
 				|| (args.length == 1 && args[0].trim().equals(Command.ARGUMENT_NAME_HELP))) {
 			// 没有提供参数，则输出已注册的所有命令
-			stringBuilder = new StringBuilder();
+			StringBuilder stringBuilder = new StringBuilder();
 			for (String name : this.getCommands().keySet()) {
 				if (stringBuilder.length() > 0) {
 					stringBuilder.append(" | ");

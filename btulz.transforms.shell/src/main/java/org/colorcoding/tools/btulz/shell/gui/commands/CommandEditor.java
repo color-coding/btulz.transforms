@@ -78,17 +78,20 @@ public class CommandEditor extends JPanel {
 		}
 		File folder = new File(this.getWorkFolder());
 		if (folder.isDirectory() && folder.exists()) {
-			for (File file : folder.listFiles()) {
-				if (!file.isFile()) {
-					continue;
+			File[] files = folder.listFiles();
+			if (files != null) {
+				for (File file : files) {
+					if (!file.isFile()) {
+						continue;
+					}
+					if (!file.getName().endsWith(".xml")) {
+						continue;
+					}
+					if (!file.getName().startsWith(name)) {
+						continue;
+					}
+					count++;
 				}
-				if (!file.getName().endsWith(".xml")) {
-					continue;
-				}
-				if (!file.getName().startsWith(name)) {
-					continue;
-				}
-				count++;
 			}
 		}
 		this.textField = new JTextField(String.format("%s_%s.xml", this.getBuilder().getName(), count));

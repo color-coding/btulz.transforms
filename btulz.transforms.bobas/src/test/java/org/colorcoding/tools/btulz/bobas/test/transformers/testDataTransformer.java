@@ -78,9 +78,12 @@ public class testDataTransformer extends TestCase {
 		transformer.setConfigFile(config);
 		transformer.setDataFile(data);
 		transformer.addLibrary(new File(classes).toURI().toURL());
-		for (File item : new File(ibas).listFiles()) {
-			if (item.getName().endsWith(".jar")) {
-				transformer.addLibrary(item.toURI().toURL());
+		File[] files = new File(ibas).listFiles();
+		if (files != null) {
+			for (File item : files) {
+				if (item.getName().endsWith(".jar")) {
+					transformer.addLibrary(item.toURI().toURL());
+				}
 			}
 		}
 		transformer.transform();
@@ -92,9 +95,12 @@ public class testDataTransformer extends TestCase {
 		transformer.setConfigFile(config);
 		transformer.setDataFile(data);
 		transformer.addLibrary(new File(classes).toURI().toURL());
-		for (File item : new File(ibas).listFiles()) {
-			if (item.getName().endsWith(".jar")) {
-				transformer.addLibrary(item.toURI().toURL());
+		files = new File(ibas).listFiles();
+		if (files != null) {
+			for (File item : files) {
+				if (item.getName().endsWith(".jar")) {
+					transformer.addLibrary(item.toURI().toURL());
+				}
 			}
 		}
 		// transformer.transform();

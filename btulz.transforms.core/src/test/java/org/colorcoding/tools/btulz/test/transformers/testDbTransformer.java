@@ -104,18 +104,21 @@ public class testDbTransformer extends TestCase {
 	public void testDsJar() throws Exception {
 		System.err.println("运行请清理test-classes目录的历史文件。");
 		File folder = new File(Environment.getSqlsFolder());
-		for (File file : folder.listFiles()) {
-			DsTransformer4Jar dsTransformer = new DsTransformer4Jar();
-			dsTransformer.setTemplateFile("ds_mssql_ibas_classic.xml");
-			dsTransformer.addDomains(file);
-			dsTransformer.setCompany("CC");
-			dsTransformer.setDbServer("ibas-dev-mssql");
-			dsTransformer.setDbPort("1433");
-			dsTransformer.setDbSchema("dbo");
-			dsTransformer.setDbName("ibas_demo" + "_" + this.hashCode());
-			dsTransformer.setDbUser("sa");
-			dsTransformer.setDbPassword("1q2w3e");
-			dsTransformer.transform();
+		File[] files = folder.listFiles();
+		if (files != null) {
+			for (File file : files) {
+				DsTransformer4Jar dsTransformer = new DsTransformer4Jar();
+				dsTransformer.setTemplateFile("ds_mssql_ibas_classic.xml");
+				dsTransformer.addDomains(file);
+				dsTransformer.setCompany("CC");
+				dsTransformer.setDbServer("ibas-dev-mssql");
+				dsTransformer.setDbPort("1433");
+				dsTransformer.setDbSchema("dbo");
+				dsTransformer.setDbName("ibas_demo" + "_" + this.hashCode());
+				dsTransformer.setDbUser("sa");
+				dsTransformer.setDbPassword("1q2w3e");
+				dsTransformer.transform();
+			}
 		}
 	}
 
@@ -127,18 +130,21 @@ public class testDbTransformer extends TestCase {
 	public void testSqlJar() throws Exception {
 		System.err.println("运行请清理test-classes目录的历史文件。");
 		File folder = new File(Environment.getSqlsFolder());
-		for (File file : folder.listFiles()) {
-			SqlTransformer4Jar sqlTransformer = new SqlTransformer4Jar();
-			sqlTransformer.setSqlFilter("sql_mssql");
-			sqlTransformer.setSqlFile(file.getPath());
-			sqlTransformer.setCompany("CC");
-			sqlTransformer.setDbServer("ibas-dev-mssql");
-			sqlTransformer.setDbPort("1433");
-			sqlTransformer.setDbName("ibas_demo" + "_" + this.hashCode());
-			sqlTransformer.setDbSchema("dbo");
-			sqlTransformer.setDbUser("sa");
-			sqlTransformer.setDbPassword("1q2w3e");
-			sqlTransformer.transform();
+		File[] files = folder.listFiles();
+		if (files != null) {
+			for (File file : files) {
+				SqlTransformer4Jar sqlTransformer = new SqlTransformer4Jar();
+				sqlTransformer.setSqlFilter("sql_mssql");
+				sqlTransformer.setSqlFile(file.getPath());
+				sqlTransformer.setCompany("CC");
+				sqlTransformer.setDbServer("ibas-dev-mssql");
+				sqlTransformer.setDbPort("1433");
+				sqlTransformer.setDbName("ibas_demo" + "_" + this.hashCode());
+				sqlTransformer.setDbSchema("dbo");
+				sqlTransformer.setDbUser("sa");
+				sqlTransformer.setDbPassword("1q2w3e");
+				sqlTransformer.transform();
+			}
 		}
 	}
 
@@ -150,20 +156,23 @@ public class testDbTransformer extends TestCase {
 	public void testJar() throws Exception {
 		System.err.println("运行请清理test-classes目录的历史文件。");
 		File folder = new File(Environment.getSqlsFolder());
-		for (File file : folder.listFiles()) {
-			if (file.getName().endsWith(".jar")) {
-				JarTransformer jarTransformer = new JarTransformer();
-				jarTransformer.setDsTemplate("ds_mssql_ibas_classic.xml");
-				jarTransformer.setSqlFilter("sql_mssql");
-				jarTransformer.setJarFile(file.getPath());
-				jarTransformer.setCompany("CC");
-				jarTransformer.setDbServer("ibas-dev-mssql");
-				jarTransformer.setDbPort("1433");
-				jarTransformer.setDbName("ibas_demo" + "_" + this.hashCode());
-				jarTransformer.setDbSchema("dbo");
-				jarTransformer.setDbUser("sa");
-				jarTransformer.setDbPassword("1q2w3e");
-				jarTransformer.transform();
+		File[] files = folder.listFiles();
+		if (files != null) {
+			for (File file : files) {
+				if (file.getName().endsWith(".jar")) {
+					JarTransformer jarTransformer = new JarTransformer();
+					jarTransformer.setDsTemplate("ds_mssql_ibas_classic.xml");
+					jarTransformer.setSqlFilter("sql_mssql");
+					jarTransformer.setJarFile(file.getPath());
+					jarTransformer.setCompany("CC");
+					jarTransformer.setDbServer("ibas-dev-mssql");
+					jarTransformer.setDbPort("1433");
+					jarTransformer.setDbName("ibas_demo" + "_" + this.hashCode());
+					jarTransformer.setDbSchema("dbo");
+					jarTransformer.setDbUser("sa");
+					jarTransformer.setDbPassword("1q2w3e");
+					jarTransformer.transform();
+				}
 			}
 		}
 	}

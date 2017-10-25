@@ -13,7 +13,7 @@ import org.colorcoding.tools.btulz.Serializer;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "BusinessObject", namespace = Environment.NAMESPACE_BTULZ_MODELS)
 @XmlRootElement(name = "BusinessObject", namespace = Environment.NAMESPACE_BTULZ_MODELS)
-public class BusinessObject implements IBusinessObject {
+public class BusinessObject implements IBusinessObject, Cloneable {
 
 	public boolean equals(IBusinessObject businessObject) {
 		if (this.getName() != null && businessObject != null && this.getName().equals(businessObject.getName())) {
@@ -25,6 +25,11 @@ public class BusinessObject implements IBusinessObject {
 	@Override
 	public boolean equals(Object property) {
 		return this.equals((IBusinessObject) property);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 
 	public BusinessObject() {

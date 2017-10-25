@@ -46,7 +46,7 @@ public class ArrayList<E> extends java.util.ArrayList<E> implements List<E> {
 		return null;
 	}
 
-	public E lastOrfault(Predicate<? super E> filter) {
+	public E lastOrDefault(Predicate<? super E> filter) {
 		Objects.requireNonNull(filter);
 		for (int i = this.size() - 1; i >= 0; i--) {
 			E item = this.get(i);

@@ -124,12 +124,15 @@ public abstract class FileTransformer extends Transformer implements IFileTransf
 				}
 			}
 		} else if (file.isDirectory()) {
-			for (File subFile : file.listFiles()) {
-				if (subFile.isFile()) {
-					this.loadFile(subFile, false);
-				} else if (subFile.isDirectory()) {
-					if (includingSubFolder) {
-						this.loadFile(subFile, true);
+			File[] files = file.listFiles();
+			if (files != null) {
+				for (File subFile : files) {
+					if (subFile.isFile()) {
+						this.loadFile(subFile, false);
+					} else if (subFile.isDirectory()) {
+						if (includingSubFolder) {
+							this.loadFile(subFile, true);
+						}
 					}
 				}
 			}

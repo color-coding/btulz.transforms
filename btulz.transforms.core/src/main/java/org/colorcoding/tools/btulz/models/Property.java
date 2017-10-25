@@ -14,7 +14,7 @@ import org.colorcoding.tools.btulz.models.data.emDataType;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "Property", namespace = Environment.NAMESPACE_BTULZ_MODELS)
 @XmlRootElement(name = "Property", namespace = Environment.NAMESPACE_BTULZ_MODELS)
-public class Property implements IProperty {
+public class Property implements IProperty, Cloneable {
 
 	public boolean equals(IProperty property) {
 		if (this.getName() != null && property != null && this.getName().equals(property.getName())) {
@@ -26,6 +26,11 @@ public class Property implements IProperty {
 	@Override
 	public boolean equals(Object property) {
 		return this.equals((IProperty) property);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 
 	public Property() {

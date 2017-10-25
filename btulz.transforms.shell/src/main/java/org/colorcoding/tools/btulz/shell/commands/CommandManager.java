@@ -160,11 +160,14 @@ public class CommandManager {
 					e.printStackTrace();
 				}
 			} else {
-				for (File fileItem : file.listFiles()) {
-					if (!fileItem.getName().endsWith(".xml")) {
-						continue;
+				File[] files = file.listFiles();
+				if (files != null) {
+					for (File fileItem : files) {
+						if (!fileItem.getName().endsWith(".xml")) {
+							continue;
+						}
+						this.loadResources(fileItem.getPath());
 					}
-					this.loadResources(fileItem.getPath());
 				}
 			}
 		}

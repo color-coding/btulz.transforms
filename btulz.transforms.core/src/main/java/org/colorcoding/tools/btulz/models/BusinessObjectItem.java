@@ -14,7 +14,7 @@ import org.colorcoding.tools.btulz.models.data.emModelType;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "BusinessObjectItem", namespace = Environment.NAMESPACE_BTULZ_MODELS)
 @XmlRootElement(name = "BusinessObjectItem", namespace = Environment.NAMESPACE_BTULZ_MODELS)
-public class BusinessObjectItem extends BusinessObject implements IBusinessObjectItem {
+public class BusinessObjectItem extends BusinessObject implements IBusinessObjectItem, Cloneable {
 
 	@XmlAttribute(name = "Relation")
 	private emBORelation relation;

@@ -21,10 +21,12 @@ public class testCommands extends TestCase {
 		String config = String.format("%s%2$sibas.initialfantasy%2$sapp.xml", ifFolder, File.separator);
 		String data = String.format("%s%2$srelease%2$sibas.initialfantasy-0.0.1.jar", ifFolder, File.separator);
 		String classes = String.format("%s%2$srelease%2$sibas.initialfantasy-0.0.1.jar", ifFolder, File.separator);
-
-		for (File item : new File(ibas).listFiles()) {
-			if (item.getName().endsWith(".jar")) {
-				classes = classes + ";" + item.toURI().toURL().getPath();
+		File[] files = new File(ibas).listFiles();
+		if (files != null) {
+			for (File item : files) {
+				if (item.getName().endsWith(".jar")) {
+					classes = classes + ";" + item.toURI().toURL().getPath();
+				}
 			}
 		}
 		args.add(String.format(Command4init.COMMAND_PROMPT));

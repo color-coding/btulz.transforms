@@ -61,46 +61,49 @@ public abstract class TemplateGetter implements ValidValuesGetter {
 	private List<ValidValue> getJars() {
 		ArrayList<ValidValue> values = new ArrayList<>();
 		File workFolder = new File(this.getWorkFolder());
-		for (File file : workFolder.listFiles()) {
-			if (!file.isFile()) {
-				continue;
-			}
-			if (!file.getName().toLowerCase().endsWith(".jar")) {
-				continue;
-			}
-			// 判断jar包是否分析
-			boolean done = false;
-			String fileName = file.getName().toLowerCase();
-			for (String string : this.getJarFiles()) {
-				if (fileName.startsWith(string)) {
-					done = true;
-					break;
+		File[] files = workFolder.listFiles();
+		if (files != null) {
+			for (File file : files) {
+				if (!file.isFile()) {
+					continue;
 				}
-			}
-			if (!done) {
-				continue;
-			}
-			// 开始分析jar包
-			JarFile jarFile = null;
-			try {
-				jarFile = new JarFile(file);
-				Enumeration<JarEntry> jarEntries = jarFile.entries();
-				if (jarEntries != null) {
-					while (jarEntries.hasMoreElements()) {
-						ValidValue validValue = this.getValidValue((JarEntry) jarEntries.nextElement());
-						if (validValue != null) {
-							values.add(validValue);
-						}
+				if (!file.getName().toLowerCase().endsWith(".jar")) {
+					continue;
+				}
+				// 判断jar包是否分析
+				boolean done = false;
+				String fileName = file.getName().toLowerCase();
+				for (String string : this.getJarFiles()) {
+					if (fileName.startsWith(string)) {
+						done = true;
+						break;
 					}
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				if (jarFile != null) {
-					try {
-						jarFile.close();
-					} catch (IOException e) {
-						e.printStackTrace();
+				if (!done) {
+					continue;
+				}
+				// 开始分析jar包
+				JarFile jarFile = null;
+				try {
+					jarFile = new JarFile(file);
+					Enumeration<JarEntry> jarEntries = jarFile.entries();
+					if (jarEntries != null) {
+						while (jarEntries.hasMoreElements()) {
+							ValidValue validValue = this.getValidValue((JarEntry) jarEntries.nextElement());
+							if (validValue != null) {
+								values.add(validValue);
+							}
+						}
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+					if (jarFile != null) {
+						try {
+							jarFile.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
@@ -114,13 +117,16 @@ public abstract class TemplateGetter implements ValidValuesGetter {
 
 	private List<ValidValue> getFolders(File workFolder) {
 		ArrayList<ValidValue> values = new ArrayList<>();
-		for (File file : workFolder.listFiles()) {
-			ValidValue validValue = this.getValidValue(file);
-			if (validValue != null) {
-				values.add(validValue);
-			}
-			if (file.isDirectory()) {
-				values.addAll(this.getFolders(file));
+		File[] files = workFolder.listFiles();
+		if (files != null) {
+			for (File file : files) {
+				ValidValue validValue = this.getValidValue(file);
+				if (validValue != null) {
+					values.add(validValue);
+				}
+				if (file.isDirectory()) {
+					values.addAll(this.getFolders(file));
+				}
 			}
 		}
 		return values;

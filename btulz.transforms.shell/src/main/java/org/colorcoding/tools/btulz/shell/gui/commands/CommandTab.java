@@ -565,38 +565,41 @@ public class CommandTab extends WorkingTab {
 		File folder = new File(this.getHistoryFolder());
 		if (folder.exists()) {
 			File[] files = folder.listFiles();
-			Arrays.sort(files, new Comparator<File>() {
-				public int compare(File f1, File f2) {
-					long diff = f1.lastModified() - f2.lastModified();
-					if (diff > 0)
-						return 1;
-					else if (diff == 0)
-						return 0;
-					else
-						return -1;
-				}
+			if (files != null) {
 
-				public boolean equals(Object obj) {
-					return true;
+				Arrays.sort(files, new Comparator<File>() {
+					public int compare(File f1, File f2) {
+						long diff = f1.lastModified() - f2.lastModified();
+						if (diff > 0)
+							return 1;
+						else if (diff == 0)
+							return 0;
+						else
+							return -1;
+					}
+
+					public boolean equals(Object obj) {
+						return super.equals(obj);
+					}
+				});
+				for (File file : files) {
+					if (values.size() > MAX_HISTORY_LIST) {
+						break;
+					}
+					if (!file.isFile()) {
+						continue;
+					}
+					if (file.length() == 0) {
+						continue;
+					}
+					if (!file.getName().endsWith(".xml")) {
+						continue;
+					}
+					if (!file.getName().startsWith(this.getBuilder().getName())) {
+						continue;
+					}
+					values.add(new ComboxItem(file.getName(), file.getName()));
 				}
-			});
-			for (File file : files) {
-				if (values.size() > MAX_HISTORY_LIST) {
-					break;
-				}
-				if (!file.isFile()) {
-					continue;
-				}
-				if (file.length() == 0) {
-					continue;
-				}
-				if (!file.getName().endsWith(".xml")) {
-					continue;
-				}
-				if (!file.getName().startsWith(this.getBuilder().getName())) {
-					continue;
-				}
-				values.add(new ComboxItem(file.getName(), file.getName()));
 			}
 		}
 		return values.toArray(new ComboxItem[] {});

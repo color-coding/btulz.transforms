@@ -37,10 +37,7 @@ public class Parameter {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj != null && obj instanceof Parameter) {
-			return this.equals((Parameter) obj);
-		}
-		return super.equals(obj);
+		return this.equals((Parameter) obj);
 	}
 
 	public boolean equals(Parameter obj) {
@@ -48,6 +45,11 @@ public class Parameter {
 			return this.getName().equals(obj.getName());
 		}
 		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 
 	public Parameter() {

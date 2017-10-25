@@ -17,7 +17,7 @@ public class CommentRegion extends TemplateRegion {
 
 	@Override
 	public String toString() {
-		return String.format("RegionComment", this.getBeginDelimiter(), this.getEndDelimiter());
+		return String.format("RegionComment between %s and %s", this.getBeginDelimiter(), this.getEndDelimiter());
 	}
 
 	@Override

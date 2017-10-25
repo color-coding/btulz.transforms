@@ -54,10 +54,13 @@ public class SqlTransformer extends DbTransformer {
 				this.transform(sqlFile);
 			}
 		} else if (sqlFile.isDirectory()) {
-			for (File file : sqlFile.listFiles()) {
-				String fileName = file.getName().toLowerCase();
-				if (fileName.indexOf(this.getSqlFilter()) >= 0 && fileName.endsWith(".xml")) {
-					this.transform(file);
+			File[] files = sqlFile.listFiles();
+			if (files != null) {
+				for (File file : files) {
+					String fileName = file.getName().toLowerCase();
+					if (fileName.indexOf(this.getSqlFilter()) >= 0 && fileName.endsWith(".xml")) {
+						this.transform(file);
+					}
 				}
 			}
 		}
