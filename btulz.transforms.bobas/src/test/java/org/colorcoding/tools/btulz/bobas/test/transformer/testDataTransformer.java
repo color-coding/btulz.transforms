@@ -1,4 +1,4 @@
-package org.colorcoding.tools.btulz.bobas.test.transformers;
+package org.colorcoding.tools.btulz.bobas.test.transformer;
 
 import java.io.File;
 import java.io.IOException;
