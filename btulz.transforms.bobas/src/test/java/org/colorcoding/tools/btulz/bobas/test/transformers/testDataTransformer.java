@@ -13,10 +13,10 @@ import org.colorcoding.ibas.bobas.common.ICriteria;
 import org.colorcoding.ibas.bobas.core.RepositoryException;
 import org.colorcoding.ibas.bobas.organization.IOrganizationManager;
 import org.colorcoding.tools.btulz.Environment;
-import org.colorcoding.tools.btulz.bobas.transformers.ClassLoader4Transformer;
-import org.colorcoding.tools.btulz.bobas.transformers.DataTransformer;
-import org.colorcoding.tools.btulz.bobas.transformers.DataTransformer4Jar;
-import org.colorcoding.tools.btulz.transformers.TransformException;
+import org.colorcoding.tools.btulz.bobas.transformer.ClassLoader4Transformer;
+import org.colorcoding.tools.btulz.bobas.transformer.DataTransformer;
+import org.colorcoding.tools.btulz.bobas.transformer.DataTransformer4Jar;
+import org.colorcoding.tools.btulz.transformer.TransformException;
 import org.xml.sax.SAXException;
 
 import junit.framework.TestCase;

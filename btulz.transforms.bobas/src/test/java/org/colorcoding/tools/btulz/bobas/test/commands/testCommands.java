@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.colorcoding.ibas.bobas.MyConfiguration;
 import org.colorcoding.tools.btulz.bobas.Console;
-import org.colorcoding.tools.btulz.bobas.commands.Command4init;
+import org.colorcoding.tools.btulz.bobas.command.Command4init;
 
 import junit.framework.TestCase;
 

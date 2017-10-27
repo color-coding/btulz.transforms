@@ -1,0 +1,33 @@
+package org.colorcoding.tools.btulz.model;
+
+import org.colorcoding.tools.btulz.model.data.emBORelation;
+
+/**
+ * 业务对象子项
+ * 
+ * @author Niuren.Zhu
+ *
+ */
+public interface IBusinessObjectItem extends IBusinessObject {
+	/**
+	 * 获取-对象关系
+	 * 
+	 * @return
+	 */
+	emBORelation getRelation();
+
+	/**
+	 * 设置-对象关系
+	 * 
+	 * @param relation
+	 */
+	void setRelation(emBORelation relation);
+
+	/**
+	 * 深度克隆
+	 * 
+	 * @return
+	 */
+	@Override
+	IBusinessObjectItem clone();
+}

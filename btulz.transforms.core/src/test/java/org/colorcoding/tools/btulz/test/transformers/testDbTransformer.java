@@ -3,11 +3,11 @@ package org.colorcoding.tools.btulz.test.transformers;
 import java.io.File;
 
 import org.colorcoding.tools.btulz.test.Environment;
-import org.colorcoding.tools.btulz.transformers.DsTransformer;
-import org.colorcoding.tools.btulz.transformers.DsTransformer4Jar;
-import org.colorcoding.tools.btulz.transformers.JarTransformer;
-import org.colorcoding.tools.btulz.transformers.SqlTransformer;
-import org.colorcoding.tools.btulz.transformers.SqlTransformer4Jar;
+import org.colorcoding.tools.btulz.transformer.DsTransformer;
+import org.colorcoding.tools.btulz.transformer.DsTransformer4Jar;
+import org.colorcoding.tools.btulz.transformer.JarTransformer;
+import org.colorcoding.tools.btulz.transformer.SqlTransformer;
+import org.colorcoding.tools.btulz.transformer.SqlTransformer4Jar;
 
 import junit.framework.TestCase;
 

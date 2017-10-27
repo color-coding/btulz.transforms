@@ -6,15 +6,15 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import org.colorcoding.tools.btulz.models.Domain;
-import org.colorcoding.tools.btulz.models.IBusinessObject;
-import org.colorcoding.tools.btulz.models.IBusinessObjectItem;
-import org.colorcoding.tools.btulz.models.IDomain;
-import org.colorcoding.tools.btulz.models.IModel;
-import org.colorcoding.tools.btulz.models.IProperty;
-import org.colorcoding.tools.btulz.models.data.emBORelation;
-import org.colorcoding.tools.btulz.models.data.emDataType;
-import org.colorcoding.tools.btulz.models.data.emModelType;
+import org.colorcoding.tools.btulz.model.Domain;
+import org.colorcoding.tools.btulz.model.IBusinessObject;
+import org.colorcoding.tools.btulz.model.IBusinessObjectItem;
+import org.colorcoding.tools.btulz.model.IDomain;
+import org.colorcoding.tools.btulz.model.IModel;
+import org.colorcoding.tools.btulz.model.IProperty;
+import org.colorcoding.tools.btulz.model.data.emBORelation;
+import org.colorcoding.tools.btulz.model.data.emDataType;
+import org.colorcoding.tools.btulz.model.data.emModelType;
 
 import junit.framework.TestCase;
 

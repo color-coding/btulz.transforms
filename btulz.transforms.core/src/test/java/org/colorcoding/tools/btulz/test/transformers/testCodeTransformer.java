@@ -3,9 +3,9 @@ package org.colorcoding.tools.btulz.test.transformers;
 import java.io.File;
 import java.util.UUID;
 
-import org.colorcoding.tools.btulz.templates.Parameter;
+import org.colorcoding.tools.btulz.template.Parameter;
 import org.colorcoding.tools.btulz.test.Environment;
-import org.colorcoding.tools.btulz.transformers.CodeTransformer;
+import org.colorcoding.tools.btulz.transformer.CodeTransformer;
 import org.colorcoding.tools.btulz.util.NamingRules;
 
 import junit.framework.TestCase;

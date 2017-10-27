@@ -7,14 +7,14 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import org.colorcoding.tools.btulz.models.Domain;
-import org.colorcoding.tools.btulz.models.IDomain;
+import org.colorcoding.tools.btulz.model.Domain;
+import org.colorcoding.tools.btulz.model.IDomain;
 import org.colorcoding.tools.btulz.test.Environment;
 import org.colorcoding.tools.btulz.test.models.testModels;
-import org.colorcoding.tools.btulz.transformers.MultiTransformException;
-import org.colorcoding.tools.btulz.transformers.TransformException;
-import org.colorcoding.tools.btulz.transformers.XmlTransformer;
-import org.colorcoding.tools.btulz.transformers.XmlTransformerDom4j;
+import org.colorcoding.tools.btulz.transformer.MultiTransformException;
+import org.colorcoding.tools.btulz.transformer.TransformException;
+import org.colorcoding.tools.btulz.transformer.XmlTransformer;
+import org.colorcoding.tools.btulz.transformer.XmlTransformerDom4j;
 
 import junit.framework.TestCase;
 

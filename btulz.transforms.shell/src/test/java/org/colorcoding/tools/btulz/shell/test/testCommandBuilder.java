@@ -5,17 +5,17 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import org.colorcoding.tools.btulz.shell.Serializer;
-import org.colorcoding.tools.btulz.shell.commands.CodeTemplateGetter;
-import org.colorcoding.tools.btulz.shell.commands.Command;
-import org.colorcoding.tools.btulz.shell.commands.CommandBuilder;
-import org.colorcoding.tools.btulz.shell.commands.CommandItem;
-import org.colorcoding.tools.btulz.shell.commands.CommandListener;
-import org.colorcoding.tools.btulz.shell.commands.CommandManager;
-import org.colorcoding.tools.btulz.shell.commands.CommandMessageEvent;
-import org.colorcoding.tools.btulz.shell.commands.DSTemplateGetter;
-import org.colorcoding.tools.btulz.shell.commands.MessageType;
-import org.colorcoding.tools.btulz.shell.commands.ValidValue;
-import org.colorcoding.tools.btulz.shell.commands.ValidValues;
+import org.colorcoding.tools.btulz.shell.command.CodeTemplateGetter;
+import org.colorcoding.tools.btulz.shell.command.Command;
+import org.colorcoding.tools.btulz.shell.command.CommandBuilder;
+import org.colorcoding.tools.btulz.shell.command.CommandItem;
+import org.colorcoding.tools.btulz.shell.command.CommandListener;
+import org.colorcoding.tools.btulz.shell.command.CommandManager;
+import org.colorcoding.tools.btulz.shell.command.CommandMessageEvent;
+import org.colorcoding.tools.btulz.shell.command.DSTemplateGetter;
+import org.colorcoding.tools.btulz.shell.command.MessageType;
+import org.colorcoding.tools.btulz.shell.command.ValidValue;
+import org.colorcoding.tools.btulz.shell.command.ValidValues;
 
 import junit.framework.TestCase;
 

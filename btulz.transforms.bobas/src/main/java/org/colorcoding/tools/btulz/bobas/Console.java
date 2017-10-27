@@ -1,7 +1,7 @@
 package org.colorcoding.tools.btulz.bobas;
 
-import org.colorcoding.tools.btulz.bobas.commands.Command4init;
-import org.colorcoding.tools.btulz.commands.CommandsManager;
+import org.colorcoding.tools.btulz.bobas.command.Command4init;
+import org.colorcoding.tools.btulz.command.CommandsManager;
 
 /**
  * 命令控制台

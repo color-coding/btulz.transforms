@@ -19,10 +19,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.colorcoding.tools.btulz.models.Domain;
-import org.colorcoding.tools.btulz.models.IDomain;
+import org.colorcoding.tools.btulz.model.Domain;
+import org.colorcoding.tools.btulz.model.IDomain;
 import org.colorcoding.tools.btulz.test.Environment;
-import org.colorcoding.tools.btulz.transformers.ExcelTransformer;
+import org.colorcoding.tools.btulz.transformer.ExcelTransformer;
 
 import junit.framework.TestCase;
 

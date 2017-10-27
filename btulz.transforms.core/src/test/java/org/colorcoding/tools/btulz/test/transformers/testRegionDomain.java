@@ -7,18 +7,18 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.colorcoding.tools.btulz.Serializer;
-import org.colorcoding.tools.btulz.models.IDomain;
-import org.colorcoding.tools.btulz.models.data.emDataSubType;
-import org.colorcoding.tools.btulz.models.data.emDataType;
-import org.colorcoding.tools.btulz.templates.Parameter;
-import org.colorcoding.tools.btulz.templates.Parameters;
+import org.colorcoding.tools.btulz.model.IDomain;
+import org.colorcoding.tools.btulz.model.data.emDataSubType;
+import org.colorcoding.tools.btulz.model.data.emDataType;
+import org.colorcoding.tools.btulz.template.Parameter;
+import org.colorcoding.tools.btulz.template.Parameters;
 import org.colorcoding.tools.btulz.test.Environment;
-import org.colorcoding.tools.btulz.transformers.DataStructureOrchestration;
-import org.colorcoding.tools.btulz.transformers.XmlTransformer;
-import org.colorcoding.tools.btulz.transformers.regions.RegionDomain;
-import org.colorcoding.tools.btulz.transformers.regions.models.DataTypeMapping;
-import org.colorcoding.tools.btulz.transformers.regions.models.DataTypeMappings;
-import org.colorcoding.tools.btulz.transformers.regions.models.Property;
+import org.colorcoding.tools.btulz.transformer.DataStructureOrchestration;
+import org.colorcoding.tools.btulz.transformer.XmlTransformer;
+import org.colorcoding.tools.btulz.transformer.region.RegionDomain;
+import org.colorcoding.tools.btulz.transformer.region.model.DataTypeMapping;
+import org.colorcoding.tools.btulz.transformer.region.model.DataTypeMappings;
+import org.colorcoding.tools.btulz.transformer.region.model.Property;
 
 import junit.framework.TestCase;
 

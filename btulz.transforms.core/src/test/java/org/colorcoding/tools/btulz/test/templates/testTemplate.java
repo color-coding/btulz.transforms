@@ -2,16 +2,16 @@ package org.colorcoding.tools.btulz.test.templates;
 
 import java.io.File;
 
-import org.colorcoding.tools.btulz.models.IBusinessObject;
-import org.colorcoding.tools.btulz.models.IDomain;
-import org.colorcoding.tools.btulz.models.IModel;
-import org.colorcoding.tools.btulz.templates.Parameter;
-import org.colorcoding.tools.btulz.templates.Parameters;
+import org.colorcoding.tools.btulz.model.IBusinessObject;
+import org.colorcoding.tools.btulz.model.IDomain;
+import org.colorcoding.tools.btulz.model.IModel;
+import org.colorcoding.tools.btulz.template.Parameter;
+import org.colorcoding.tools.btulz.template.Parameters;
 import org.colorcoding.tools.btulz.test.Environment;
-import org.colorcoding.tools.btulz.transformers.XmlTransformer;
-import org.colorcoding.tools.btulz.transformers.regions.RegionBusinessObject;
-import org.colorcoding.tools.btulz.transformers.regions.RegionDomain;
-import org.colorcoding.tools.btulz.transformers.regions.RegionModel;
+import org.colorcoding.tools.btulz.transformer.XmlTransformer;
+import org.colorcoding.tools.btulz.transformer.region.RegionBusinessObject;
+import org.colorcoding.tools.btulz.transformer.region.RegionDomain;
+import org.colorcoding.tools.btulz.transformer.region.RegionModel;
 
 import junit.framework.TestCase;
 

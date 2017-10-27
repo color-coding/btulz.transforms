@@ -1,6 +1,6 @@
 package org.colorcoding.tools.btulz.shell.gui;
 
-import org.colorcoding.tools.btulz.shell.gui.commands.MainFrame;
+import org.colorcoding.tools.btulz.shell.gui.command.MainFrame;
 
 /**
  * 用户图形界面控制台
