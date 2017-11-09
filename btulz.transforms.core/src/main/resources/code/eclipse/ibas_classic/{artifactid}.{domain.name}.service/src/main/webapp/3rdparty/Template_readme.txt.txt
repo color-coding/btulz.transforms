@@ -4,6 +4,7 @@
      a. ./ibas：下载地址（https://github.com/color-coding/ibas-typescript/ibas/）
      b. ./openui5： 下载地址（https://github.com/color-coding/ibas-typescript/openui5/）
      c. ./openui5/resources: 下载地址（http://openui5.org/download.html）
+  3. 注意ibas及openui5目录不会签入代码管理器。
 
   * 以上建议通过操作系统文件链接指令映射，不要拷贝物理文件。
   * 链接指令示例：
