@@ -7,7 +7,7 @@
  */
 
 import * as ibas from "ibas/index";
-import { utils } from "openui5/typings/ibas.utils";
+import * as openui5 from "openui5/index";
 import * as bo from "../../../borep/bo/index";
 import { I${BO.getName()}ChooseView } from "../../../bsapp/${BO.getName().toLowerCase()}/index";
 
@@ -24,7 +24,7 @@ export class ${BO.getName()}ChooseView extends ibas.BOChooseView implements I${B
         let that: this = this;
         this.table = new sap.ui.table.Table("", {
             enableSelectAll: false,
-            selectionMode: utils.toSelectionMode(this.chooseType),
+            selectionMode: openui5.utils.toSelectionMode(this.chooseType),
             visibleRowCount: ibas.config.get(utils.CONFIG_ITEM_LIST_TABLE_VISIBLE_ROW_COUNT, 15),
             rows: "{/rows}",
             columns: [
@@ -32,7 +32,7 @@ export class ${BO.getName()}ChooseView extends ibas.BOChooseView implements I${B
         });
         this.id = this.table.getId();
         // 添加列表自动查询事件
-        utils.triggerNextResults({
+        openui5.utils.triggerNextResults({
             listener: this.table,
             next(data: any): void {
                 if (ibas.objects.isNull(that.lastCriteria)) {
@@ -68,7 +68,7 @@ export class ${BO.getName()}ChooseView extends ibas.BOChooseView implements I${B
                     press: function (): void {
                         that.fireViewEvents(that.chooseDataEvent,
                             // 获取表格选中的对象
-                            utils.getSelecteds<bo.${BO.getName()}>(that.table)
+                            openui5.utils.getSelecteds<bo.${BO.getName()}>(that.table)
                         );
                     }
                 }),

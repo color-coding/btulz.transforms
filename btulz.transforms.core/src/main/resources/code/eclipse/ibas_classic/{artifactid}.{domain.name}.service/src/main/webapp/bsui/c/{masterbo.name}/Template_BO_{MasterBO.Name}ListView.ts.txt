@@ -7,7 +7,7 @@
  */
 
 import * as ibas from "ibas/index";
-import { utils } from "openui5/typings/ibas.utils";
+import * as openui5 from "openui5/index";
 import * as bo from "../../../borep/bo/index";
 import { I${BO.getName()}ListView } from "../../../bsapp/${BO.getName().toLowerCase()}/index";
 
@@ -55,7 +55,7 @@ export class ${BO.getName()}ListView extends ibas.BOListView implements I${BO.ge
                         press: function (): void {
                             that.fireViewEvents(that.viewDataEvent,
                                 // 获取表格选中的对象
-                                utils.getSelecteds<bo.${BO.getName()}>(that.table).firstOrDefault()
+                                openui5.utils.getSelecteds<bo.${BO.getName()}>(that.table).firstOrDefault()
                             );
                         }
                     }),
@@ -66,7 +66,7 @@ export class ${BO.getName()}ListView extends ibas.BOListView implements I${BO.ge
                         press: function (): void {
                             that.fireViewEvents(that.editDataEvent,
                                 // 获取表格选中的对象
-                                utils.getSelecteds<bo.${BO.getName()}>(that.table).firstOrDefault()
+                                openui5.utils.getSelecteds<bo.${BO.getName()}>(that.table).firstOrDefault()
                             );
                         }
                     }),
@@ -78,7 +78,7 @@ export class ${BO.getName()}ListView extends ibas.BOListView implements I${BO.ge
                         press: function (): void {
                             that.fireViewEvents(that.deleteDataEvent,
                                 // 获取表格选中的对象
-                                utils.getSelecteds<bo.${BO.getName()}>(that.table)
+                                openui5.utils.getSelecteds<bo.${BO.getName()}>(that.table)
                             );
                         }
                     }),
@@ -120,7 +120,7 @@ export class ${BO.getName()}ListView extends ibas.BOListView implements I${BO.ge
         });
         this.id = this.page.getId();
         // 添加列表自动查询事件
-        utils.triggerNextResults({
+        openui5.utils.triggerNextResults({
             listener: this.table,
             next(data: any): void {
                 if (ibas.objects.isNull(that.lastCriteria)) {
@@ -177,6 +177,6 @@ export class ${BO.getName()}ListView extends ibas.BOListView implements I${BO.ge
     }
     /** 获取选择的数据 */
     getSelecteds(): bo.${BO.getName()}[] {
-        return utils.getSelecteds<bo.${BO.getName()}>(this.table);
+        return openui5.utils.getSelecteds<bo.${BO.getName()}>(this.table);
     }
 }
