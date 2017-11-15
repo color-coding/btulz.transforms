@@ -30,4 +30,9 @@ public class MyConfiguration extends org.colorcoding.ibas.bobas.MyConfiguration 
     */
     public static final String NAMESPACE_SERVICE = NAMESPACE_ROOT + "service";
 
+    /**
+     * 配置项目-文件文件夹
+     */
+    public final static String CONFIG_ITEM_${Domain.getName().toUpperCase()}_FILE_FOLDER = "${Domain.getName()}FileFolder";
+
 }
