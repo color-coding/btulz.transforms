@@ -2,7 +2,6 @@ package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${MasterBO
 
 import org.colorcoding.ibas.bobas.bo.*;
 import org.colorcoding.ibas.bobas.data.*;
-import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.data.*;
 
 /**
 * ${Model.getDescription()} 接口

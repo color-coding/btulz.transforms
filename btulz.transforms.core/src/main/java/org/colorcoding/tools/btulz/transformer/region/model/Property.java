@@ -8,60 +8,43 @@ import org.colorcoding.tools.btulz.model.IProperty;
 import org.colorcoding.tools.btulz.model.data.emDataSubType;
 import org.colorcoding.tools.btulz.model.data.emDataType;
 import org.colorcoding.tools.btulz.template.Parameter;
-import org.colorcoding.tools.btulz.util.NamingRules;
 
-public class Property implements IProperty {
-	/**
-	 * 数据库字段映射类型
-	 */
-	public static final String PARAMETER_NAME_MAPPED_TYPE = "MappedType";
-	/**
-	 * 开发语言属性映射类型
-	 */
-	public static final String PARAMETER_NAME_DECLARED_TYPE = "DeclaredType";
-	/**
-	 * 默认值映射
-	 */
-	public static final String PARAMETER_NAME_DEFAULT_VALUE = "DefaultValue";
+public class Property extends Entity implements IProperty {
 
-	public Property(org.colorcoding.tools.btulz.model.IProperty property) {
-		this.property = property;
+	public Property(IProperty property) {
+		this.entity = property;
 	}
 
-	private IProperty property;
+	private IProperty entity;
 
 	@Override
 	public String getName() {
-		return this.property.getName();
-	}
-
-	public String getName(String type) {
-		return NamingRules.format(type, this.property.getName());
+		return this.entity.getName();
 	}
 
 	@Override
 	public void setName(String name) {
-		this.property.setName(name);
+		this.entity.setName(name);
 	}
 
 	@Override
 	public String getDescription() {
-		return this.property.getDescription();
+		return this.entity.getDescription();
 	}
 
 	@Override
 	public void setDescription(String description) {
-		this.property.setDescription(description);
+		this.entity.setDescription(description);
 	}
 
 	@Override
 	public void setDeclaredType(String declaredType) {
-		this.property.setDeclaredType(declaredType);
+		this.entity.setDeclaredType(declaredType);
 	}
 
 	@Override
 	public boolean isPrimaryKey() {
-		return this.property.isPrimaryKey();
+		return this.entity.isPrimaryKey();
 	}
 
 	public String isPrimaryKey(String type) {
@@ -73,12 +56,12 @@ public class Property implements IProperty {
 
 	@Override
 	public void setPrimaryKey(boolean value) {
-		this.property.setPrimaryKey(value);
+		this.entity.setPrimaryKey(value);
 	}
 
 	@Override
 	public boolean isUniqueKey() {
-		return this.property.isUniqueKey();
+		return this.entity.isUniqueKey();
 	}
 
 	public String isUniqueKey(String type) {
@@ -97,62 +80,62 @@ public class Property implements IProperty {
 
 	@Override
 	public void setUniqueKey(boolean value) {
-		this.property.setUniqueKey(value);
+		this.entity.setUniqueKey(value);
 	}
 
 	@Override
 	public emDataType getDataType() {
-		return this.property.getDataType();
+		return this.entity.getDataType();
 	}
 
 	@Override
 	public void setDataType(emDataType dataType) {
-		this.property.setDataType(dataType);
+		this.entity.setDataType(dataType);
 	}
 
 	@Override
 	public emDataSubType getDataSubType() {
-		return this.property.getDataSubType();
+		return this.entity.getDataSubType();
 	}
 
 	@Override
 	public void setDataSubType(emDataSubType dataSubType) {
-		this.property.setDataSubType(dataSubType);
+		this.entity.setDataSubType(dataSubType);
 	}
 
 	@Override
 	public int getEditSize() {
-		return this.property.getEditSize();
+		return this.entity.getEditSize();
 	}
 
 	@Override
 	public void setEditSize(int editSize) {
-		this.property.setEditSize(editSize);
+		this.entity.setEditSize(editSize);
 	}
 
 	@Override
 	public String getMapped() {
-		return this.property.getMapped();
+		return this.entity.getMapped();
 	}
 
 	@Override
 	public void setMapped(String mapped) {
-		this.property.setMapped(mapped);
+		this.entity.setMapped(mapped);
 	}
 
 	@Override
 	public String getLinked() {
-		return this.property.getMapped();
+		return this.entity.getMapped();
 	}
 
 	@Override
 	public void setLinked(String linked) {
-		this.property.setMapped(linked);
+		this.entity.setMapped(linked);
 	}
 
 	@Override
 	public IProperty clone() {
-		throw new UnsupportedOperationException();
+		return (IProperty) super.clone();
 	}
 
 	private boolean last;
@@ -198,8 +181,8 @@ public class Property implements IProperty {
 	@Override
 	public String getDeclaredType() {
 		// 优先定义
-		if (this.property.getDeclaredType() != null) {
-			return this.property.getDeclaredType();
+		if (this.entity.getDeclaredType() != null) {
+			return this.entity.getDeclaredType();
 		}
 		// 未发现定义使用映射
 		for (DataTypeMapping mapping : this.getDeclaredTypeMappings()) {
@@ -219,7 +202,7 @@ public class Property implements IProperty {
 				Environment.getLogger().error(e);
 			}
 		}
-		return this.property.getDeclaredType();
+		return this.entity.getDeclaredType();
 	}
 
 	private List<DataTypeMapping> mappedTypeMappings;

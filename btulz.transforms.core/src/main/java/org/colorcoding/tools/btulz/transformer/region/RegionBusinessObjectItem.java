@@ -5,7 +5,6 @@ import java.util.Iterator;
 import org.colorcoding.tools.btulz.model.IBusinessObject;
 import org.colorcoding.tools.btulz.template.Parameter;
 import org.colorcoding.tools.btulz.template.Parameters;
-import org.colorcoding.tools.btulz.transformer.region.model.BusinessObjectItem;
 
 /**
  * 区域-业务对象模型
@@ -43,15 +42,9 @@ public class RegionBusinessObjectItem extends RegionBase {
 
 				@Override
 				public Parameter next() {
-					BusinessObjectItem boItem = new BusinessObjectItem(businessObject.getRelatedBOs().get(curIndex));
-					boItem.setIndex(curIndex + 1);
-					boItem.setParent(businessObject);
-
-					Parameter parameter = new Parameter();
-					parameter.setName(REGION_PARAMETER_NAME);
-					parameter.setValue(boItem);
 					curIndex++;
-					return parameter;
+					return ParametersFactory.create().createParameter(businessObject.getRelatedBOs().get(curIndex - 1),
+							businessObject, curIndex);
 				}
 			};
 		}

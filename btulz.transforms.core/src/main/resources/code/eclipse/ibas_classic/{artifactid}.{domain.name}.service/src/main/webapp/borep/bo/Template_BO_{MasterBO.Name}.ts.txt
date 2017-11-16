@@ -84,7 +84,6 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
     set ${BOItem.getName(LowerCamelCase)}s(value: ${BOItem.getName()}s) {
         this.setProperty(${BO.getName()}.PROPERTY_${BOItem.getName().toUpperCase()}S_NAME, value);
     }
-
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $BEGIN_BOITEM_RELATION_IS_ONETOONE$
     /** 映射的属性名称-${BOItem.getDescription()}集合 */
@@ -97,7 +96,6 @@ $BEGIN_BOITEM_RELATION_IS_ONETOONE$
     set ${BOItem.getName(LowerCamelCase)}(value: ${BOItem.getName()}) {
         this.setProperty(${BO.getName()}.PROPERTY_${BOItem.getName().toUpperCase()}_NAME, value);
     }
-
 $END_BOITEM_RELATION_IS_ONETOONE$
 $END_BOITEM$
 
@@ -182,7 +180,6 @@ $BEGIN_BOITEM_RELATION_IS_ONETOONE$
 
 $END_BOITEM_RELATION_IS_ONETOONE$
 $END_BOITEM$
-
     /** 初始化数据 */
     protected init(): void {
 $BEGIN_BOITEM$

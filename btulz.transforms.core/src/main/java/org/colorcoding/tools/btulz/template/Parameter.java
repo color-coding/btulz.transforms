@@ -35,6 +35,15 @@ public class Parameter {
 		return null;
 	}
 
+	public Parameter() {
+
+	}
+
+	public Parameter(String name, Object value) {
+		this.setName(name);
+		this.setValue(value);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		return this.equals((Parameter) obj);
@@ -50,15 +59,6 @@ public class Parameter {
 	@Override
 	public int hashCode() {
 		return super.hashCode();
-	}
-
-	public Parameter() {
-
-	}
-
-	public Parameter(String name, Object value) {
-		this.setName(name);
-		this.setValue(value);
 	}
 
 	private String name;

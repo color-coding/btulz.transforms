@@ -27,12 +27,10 @@ import org.colorcoding.tools.btulz.model.data.emBORelation;
 import org.colorcoding.tools.btulz.template.Parameter;
 import org.colorcoding.tools.btulz.template.Parameters;
 import org.colorcoding.tools.btulz.template.Variable;
+import org.colorcoding.tools.btulz.transformer.region.ParametersFactory;
 import org.colorcoding.tools.btulz.transformer.region.RegionBusinessObject;
-import org.colorcoding.tools.btulz.transformer.region.RegionBusinessObjectItem;
-import org.colorcoding.tools.btulz.transformer.region.RegionBusinessObjectModel;
 import org.colorcoding.tools.btulz.transformer.region.RegionDomain;
 import org.colorcoding.tools.btulz.transformer.region.model.DataTypeMappings;
-import org.colorcoding.tools.btulz.transformer.region.model.Property;
 import org.colorcoding.tools.btulz.transformer.region.model.TypeValueMappings;
 
 /**
@@ -216,13 +214,13 @@ public class CodeTransformer extends Transformer {
 	 */
 	protected Parameters getRuntimeParameters() {
 		Parameters parameters = new Parameters();
-		parameters.add(new Parameter("AppName", "btulz.transforms"));
-		parameters.add(new Parameter("GroupId", this.getGroupId()));
-		parameters.add(new Parameter("ArtifactId", this.getArtifactId()));
-		parameters.add(new Parameter("ProjectId", this.getProjectId()));
-		parameters.add(new Parameter("ProjectVersion", this.getProjectVersion()));
-		parameters.add(new Parameter("ProjectUrl", this.getProjectUrl()));
-		parameters.add(new Parameter("ID", new RuntimeParameter()));
+		parameters.add(ParametersFactory.create().createParameter("AppName", "btulz.transforms"));
+		parameters.add(ParametersFactory.create().createParameter("GroupId", this.getGroupId()));
+		parameters.add(ParametersFactory.create().createParameter("ArtifactId", this.getArtifactId()));
+		parameters.add(ParametersFactory.create().createParameter("ProjectId", this.getProjectId()));
+		parameters.add(ParametersFactory.create().createParameter("ProjectVersion", this.getProjectVersion()));
+		parameters.add(ParametersFactory.create().createParameter("ProjectUrl", this.getProjectUrl()));
+		parameters.add(ParametersFactory.create().createParameter("ID", new RuntimeParameter()));
 		parameters.addAll(this.getParameters());
 		return parameters;
 	}
@@ -252,7 +250,7 @@ public class CodeTransformer extends Transformer {
 			domain.buildMapping();// 构建关系
 			File outFolder = new File(this.getOutputFolder() + File.separator + domain.getName());
 			Parameters parameters = this.getRuntimeParameters();
-			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, domain));
+			parameters.add(ParametersFactory.create().createParameter(domain));
 			this.transform(new File(this.getTemplateFolder()), outFolder, parameters);
 			Environment.getLogger().info(String.format("end transform codes."));
 		}
@@ -455,8 +453,9 @@ public class CodeTransformer extends Transformer {
 				|| source.getName().startsWith(TEMPLATE_FILE_BO_MODEL)) {
 			// 和业务对象输出相关的
 			for (IBusinessObject businessObject : domain.getBusinessObjects()) {
-				parameters.add(new Parameter(RegionBusinessObject.REGION_PARAMETER_NAME, businessObject));
-				parameters.add(new Parameter("Master" + RegionBusinessObject.REGION_PARAMETER_NAME, businessObject));
+				parameters.add(ParametersFactory.create().createParameter(businessObject));
+				parameters.add(ParametersFactory.create()
+						.createParameter("Master" + RegionBusinessObject.REGION_PARAMETER_NAME, businessObject));
 				if (source.getName().startsWith(TEMPLATE_FILE_BO)) {
 					RegionDomain template = new RegionDomain();
 					template.setTemplateFile(source.getPath());
@@ -482,24 +481,25 @@ public class CodeTransformer extends Transformer {
 		if (domain == null) {
 			return;
 		}
-		for (IBusinessObjectItem businessObjectItem : businessObject.getRelatedBOs()) {
+		for (int i = 0; i < businessObject.getRelatedBOs().size(); i++) {
+			IBusinessObjectItem businessObjectItem = businessObject.getRelatedBOs().get(i);
 			if (businessObjectItem.getRelation() != emBORelation.OneToMany) {
 				// 非1：n关系不生产
 				continue;
 			}
-			parameters.add(new Parameter(RegionBusinessObjectItem.REGION_PARAMETER_NAME, businessObjectItem));
+			parameters.add(ParametersFactory.create().createParameter(businessObjectItem, businessObject, i + 1));
 			for (IModel model : domain.getModels()) {
 				if (!businessObjectItem.getMappedModel().equals(model.getName())) {
 					continue;
 				}
-				parameters.add(new Parameter(RegionBusinessObjectModel.REGION_PARAMETER_NAME, model));
+				parameters.add(ParametersFactory.create().createParameter(model));
 				RegionDomain template = new RegionDomain();
 				template.setTemplateFile(source.getPath());
 				template.export(parameters,
 						this.getFilePath(output, source.getName().replace(TEMPLATE_FILE_BO_ITEM, ""), parameters));
 				// 如果有子项继续
 				Parameters nParameters = new Parameters(parameters);
-				nParameters.add(new Parameter(RegionBusinessObject.REGION_PARAMETER_NAME, businessObjectItem));
+				nParameters.add(ParametersFactory.create().createParameter((IBusinessObject) businessObjectItem));
 				this.transformFileBOItems(source, output, nParameters, businessObjectItem);
 			}
 		}
@@ -513,18 +513,19 @@ public class CodeTransformer extends Transformer {
 		}
 		for (IModel model : domain.getModels()) {
 			if (businessObject.getMappedModel().equals(model.getName())) {
-				parameters.add(new Parameter(RegionBusinessObjectModel.REGION_PARAMETER_NAME, model));
+				Parameters usingParameters = new Parameters(parameters);
+				usingParameters.add(ParametersFactory.create().createParameter(model));
 				RegionDomain template = new RegionDomain();
 				template.setTemplateFile(source.getPath());
-				template.export(parameters,
-						this.getFilePath(output, source.getName().replace(TEMPLATE_FILE_BO_MODEL, ""), parameters));
+				template.export(usingParameters, this.getFilePath(output,
+						source.getName().replace(TEMPLATE_FILE_BO_MODEL, ""), usingParameters));
 			}
 		}
 		for (IBusinessObjectItem businessObjectItem : businessObject.getRelatedBOs()) {
 			// 如果有子项继续
-			parameters = new Parameters(parameters);
-			parameters.add(new Parameter(RegionBusinessObject.REGION_PARAMETER_NAME, businessObjectItem));
-			this.transformFileBOModels(source, output, parameters, businessObjectItem);
+			Parameters usingParameters = new Parameters(parameters);
+			usingParameters.add(ParametersFactory.create().createParameter((IBusinessObject) businessObjectItem));
+			this.transformFileBOModels(source, output, usingParameters, businessObjectItem);
 		}
 	}
 
@@ -538,14 +539,15 @@ public class CodeTransformer extends Transformer {
 		if (source.getName().equals("~parameter_property_declared_type.xml")) {
 			// 属性的定义类型说明
 			try {
-				return new Parameter(Property.PARAMETER_NAME_DECLARED_TYPE, DataTypeMappings.create(source));
+				return ParametersFactory.create().createParameter(ParametersFactory.PARAMETER_NAME_DECLARED_TYPE,
+						DataTypeMappings.create(source));
 			} catch (JAXBException e) {
 				Environment.getLogger().error(e);
 			}
 		} else if (source.getName().equals("~parameter_property_default_value.xml")) {
 			// 属性的定义类型说明
 			try {
-				return new Parameter(Property.PARAMETER_NAME_DEFAULT_VALUE, TypeValueMappings.create(source));
+				return ParametersFactory.create().createParameter(TypeValueMappings.create(source));
 			} catch (JAXBException e) {
 				Environment.getLogger().error(e);
 			}

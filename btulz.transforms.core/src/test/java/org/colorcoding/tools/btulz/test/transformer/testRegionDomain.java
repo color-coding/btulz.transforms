@@ -15,10 +15,10 @@ import org.colorcoding.tools.btulz.template.Parameters;
 import org.colorcoding.tools.btulz.test.Environment;
 import org.colorcoding.tools.btulz.transformer.DataStructureOrchestration;
 import org.colorcoding.tools.btulz.transformer.XmlTransformer;
+import org.colorcoding.tools.btulz.transformer.region.ParametersFactory;
 import org.colorcoding.tools.btulz.transformer.region.RegionDomain;
 import org.colorcoding.tools.btulz.transformer.region.model.DataTypeMapping;
 import org.colorcoding.tools.btulz.transformer.region.model.DataTypeMappings;
-import org.colorcoding.tools.btulz.transformer.region.model.Property;
 
 import junit.framework.TestCase;
 
@@ -93,7 +93,7 @@ public class testRegionDomain extends TestCase {
 			parameters.add(new Parameter("DbUser", "root"));
 			parameters.add(new Parameter("DbPassword", "1q2w3e"));
 			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, domain));
-			parameters.add(new Parameter(Property.PARAMETER_NAME_MAPPED_TYPE, dataTypeMappings));
+			parameters.add(new Parameter(ParametersFactory.PARAMETER_NAME_MAPPED_TYPE, dataTypeMappings));
 			template.export(parameters, outputFile);
 			DataStructureOrchestration orchestration = (DataStructureOrchestration) unmarshaller.unmarshal(outputFile);
 			System.out.println("orchestration: ");
@@ -134,7 +134,7 @@ public class testRegionDomain extends TestCase {
 			parameters.add(new Parameter("DbUser", "postgres"));
 			parameters.add(new Parameter("DbPassword", "1q2w3e"));
 			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, domain));
-			parameters.add(new Parameter(Property.PARAMETER_NAME_MAPPED_TYPE, dataTypeMappings));
+			parameters.add(new Parameter(ParametersFactory.PARAMETER_NAME_MAPPED_TYPE, dataTypeMappings));
 			template.export(parameters, outputFile);
 			DataStructureOrchestration orchestration = (DataStructureOrchestration) unmarshaller.unmarshal(outputFile);
 			System.out.println("orchestration: ");
@@ -176,7 +176,7 @@ public class testRegionDomain extends TestCase {
 			parameters.add(new Parameter("DbPassword", "AVAtech2015!"));
 			parameters.add(new Parameter("DbTableType", "COLUMN"));
 			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, domain));
-			parameters.add(new Parameter(Property.PARAMETER_NAME_MAPPED_TYPE, dataTypeMappings));
+			parameters.add(new Parameter(ParametersFactory.PARAMETER_NAME_MAPPED_TYPE, dataTypeMappings));
 			template.export(parameters, outputFile);
 			DataStructureOrchestration orchestration = (DataStructureOrchestration) unmarshaller.unmarshal(outputFile);
 			System.out.println("orchestration: ");

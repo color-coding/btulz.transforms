@@ -24,7 +24,7 @@ public class RegionBusinessObjectItemModel extends RegionBase {
 	/**
 	 * 此区域变量名称
 	 */
-	public static final String REGION_PARAMETER_NAME = "Model";
+	public static final String REGION_PARAMETER_NAME = RegionModel.REGION_PARAMETER_NAME;
 
 	public RegionBusinessObjectItemModel() {
 		super(REGION_DELIMITER);
@@ -58,11 +58,8 @@ public class RegionBusinessObjectItemModel extends RegionBase {
 
 					@Override
 					public Parameter next() {
-						Parameter parameter = new Parameter();
-						parameter.setName(REGION_PARAMETER_NAME);
-						parameter.setValue(boModels.get(curIndex));
 						curIndex++;
-						return parameter;
+						return ParametersFactory.create().createParameter(boModels.get(curIndex - 1));
 					}
 				};
 			}

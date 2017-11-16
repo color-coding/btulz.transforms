@@ -40,11 +40,8 @@ public class RegionModel extends RegionBase {
 
 				@Override
 				public Parameter next() {
-					Parameter parameter = new Parameter();
-					parameter.setName(REGION_PARAMETER_NAME);
-					parameter.setValue(domain.getModels().get(curIndex));
 					curIndex++;
-					return parameter;
+					return ParametersFactory.create().createParameter(domain.getModels().get(curIndex - 1));
 				}
 			};
 		}

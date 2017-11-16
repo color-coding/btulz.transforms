@@ -10,6 +10,7 @@ import org.colorcoding.tools.btulz.model.IProperty;
 import org.colorcoding.tools.btulz.model.data.emDataSubType;
 import org.colorcoding.tools.btulz.template.Parameter;
 import org.colorcoding.tools.btulz.template.Variable;
+import org.colorcoding.tools.btulz.transformer.region.ParametersFactory;
 
 /**
  * 数据类型映射
@@ -60,9 +61,7 @@ public class TypeValueMapping {
 		String mapValue = this.getMapped();
 		Variable[] variables = Variable.discerning(this.getMapped());
 		if (variables.length > 0) {
-			Parameter parameter = new Parameter();
-			parameter.setName("Property");
-			parameter.setValue(property);
+			Parameter parameter = ParametersFactory.create().createParameter(property);
 			for (Variable variable : variables) {
 				Object value = parameter.getValue(variable.getValuePath());
 				if (value != null) {

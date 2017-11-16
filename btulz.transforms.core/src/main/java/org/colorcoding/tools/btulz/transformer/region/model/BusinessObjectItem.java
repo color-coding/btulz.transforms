@@ -2,51 +2,25 @@ package org.colorcoding.tools.btulz.transformer.region.model;
 
 import org.colorcoding.tools.btulz.model.IBusinessObject;
 import org.colorcoding.tools.btulz.model.IBusinessObjectItem;
-import org.colorcoding.tools.btulz.model.IBusinessObjectItems;
-import org.colorcoding.tools.btulz.model.IModel;
 import org.colorcoding.tools.btulz.model.data.emBORelation;
-import org.colorcoding.tools.btulz.util.NamingRules;
 
-public class BusinessObjectItem implements IBusinessObjectItem, Cloneable {
+public class BusinessObjectItem extends BusinessObject implements IBusinessObjectItem, Cloneable {
 
 	public BusinessObjectItem(IBusinessObjectItem boItem) {
-		this.boItem = boItem;
+		super(boItem);
+		this.entity = boItem;
 	}
 
-	private IBusinessObjectItem boItem;
-
-	@Override
-	public String getName() {
-		return this.boItem.getName();
-	}
-
-	public String getName(String type) {
-		return NamingRules.format(type, this.boItem.getName());
-	}
-
-	@Override
-	public void setName(String name) {
-		this.boItem.setName(name);
-	}
-
-	@Override
-	public String getDescription() {
-		return this.boItem.getDescription();
-	}
-
-	@Override
-	public void setDescription(String description) {
-		this.boItem.setDescription(description);
-	}
+	private IBusinessObjectItem entity;
 
 	@Override
 	public String getShortName() {
-		String name = this.boItem.getShortName();
+		String name = this.entity.getShortName();
 		if ((name == null || name.isEmpty()) && this.getParent() != null) {
 			name = this.getParent().getShortName();
 		}
 		if (name == null || name.isEmpty()) {
-			name = this.boItem.getName().toUpperCase();
+			name = this.entity.getName().toUpperCase();
 		}
 		return name;
 	}
@@ -63,43 +37,13 @@ public class BusinessObjectItem implements IBusinessObjectItem, Cloneable {
 	}
 
 	@Override
-	public void setShortName(String name) {
-		this.boItem.setShortName(name);
-	}
-
-	@Override
-	public String getMappedModel() {
-		return this.boItem.getMappedModel();
-	}
-
-	@Override
-	public void setMappedModel(String name) {
-		this.boItem.setMappedModel(name);
-	}
-
-	@Override
-	public void setMappedModel(IModel model) {
-		this.boItem.setMappedModel(model);
-	}
-
-	@Override
-	public IBusinessObjectItems getRelatedBOs() {
-		return this.boItem.getRelatedBOs();
-	}
-
-	@Override
 	public emBORelation getRelation() {
-		return this.boItem.getRelation();
+		return this.entity.getRelation();
 	}
 
 	@Override
 	public void setRelation(emBORelation relation) {
-		this.boItem.setRelation(relation);
-	}
-
-	@Override
-	public IBusinessObjectItem clone() {
-		throw new UnsupportedOperationException();
+		this.entity.setRelation(relation);
 	}
 
 	private int index;

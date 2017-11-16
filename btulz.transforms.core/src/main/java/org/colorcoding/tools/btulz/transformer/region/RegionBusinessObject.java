@@ -41,11 +41,8 @@ public class RegionBusinessObject extends RegionBase {
 
 				@Override
 				public Parameter next() {
-					Parameter parameter = new Parameter();
-					parameter.setName(REGION_PARAMETER_NAME);
-					parameter.setValue(domain.getBusinessObjects().get(curIndex));
 					curIndex++;
-					return parameter;
+					return ParametersFactory.create().createParameter(domain.getBusinessObjects().get(curIndex - 1));
 				}
 			};
 		}

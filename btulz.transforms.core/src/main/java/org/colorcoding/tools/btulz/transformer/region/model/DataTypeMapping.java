@@ -11,6 +11,7 @@ import org.colorcoding.tools.btulz.model.data.emDataSubType;
 import org.colorcoding.tools.btulz.model.data.emDataType;
 import org.colorcoding.tools.btulz.template.Parameter;
 import org.colorcoding.tools.btulz.template.Variable;
+import org.colorcoding.tools.btulz.transformer.region.ParametersFactory;
 
 /**
  * 数据类型映射
@@ -21,10 +22,6 @@ import org.colorcoding.tools.btulz.template.Variable;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "DataTypeMapping", namespace = Environment.NAMESPACE_BTULZ_TRANSFORMERS)
 public class DataTypeMapping {
-	/**
-	 * 变量名称
-	 */
-	// public static final String PARAMETER_NAME = "DataTypeMapping";
 
 	public DataTypeMapping() {
 
@@ -74,9 +71,7 @@ public class DataTypeMapping {
 		String mapValue = this.getMapped();
 		Variable[] variables = Variable.discerning(this.getMapped());
 		if (variables.length > 0) {
-			Parameter parameter = new Parameter();
-			parameter.setName("Property");
-			parameter.setValue(property);
+			Parameter parameter = ParametersFactory.create().createParameter(property);
 			for (Variable variable : variables) {
 				Object value = parameter.getValue(variable.getValuePath());
 				if (value != null) {

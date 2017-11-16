@@ -1,10 +1,9 @@
 package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.test.bo;
 
 import junit.framework.TestCase;
-import org.colorcoding.ibas.bobas.data.*;
 import org.colorcoding.ibas.bobas.common.*;
 import org.colorcoding.ibas.bobas.repository.*;
-import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.data.*;
+import org.colorcoding.ibas.bobas.organization.OrganizationFactory;
 import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${BO.getName().toLowerCase()}.*;
 import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.repository.*;
 
@@ -17,7 +16,7 @@ public class test${BO.getName()} extends TestCase {
      * 获取连接口令
     */
     String getToken() {
-        return "";
+        return OrganizationFactory.SYSTEM_USER.getToken();
     }
     
     /**
@@ -25,20 +24,23 @@ public class test${BO.getName()} extends TestCase {
      * @throws Exception 
     */
     public void testBasicItems() throws Exception {
-        ${BO.getName()} bo = new ${BO.getName()}();
+        ${BO.getName()} ${BO.getName(LowerCamelCase)} = new ${BO.getName()}();
+        System.out.println(String.format("new bo: %s", ${BO.getName(LowerCamelCase)}.toString()));
         // 测试属性赋值
 
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
         // 测试${BOItem.getDescription()}
-        I${BOItem.getName()} ${BOItem.getName().toLowerCase()} = bo.get${BOItem.getName()}s().create();
+        I${BOItem.getName()} ${BOItem.getName(LowerCamelCase)} = ${BO.getName(LowerCamelCase)}.get${BOItem.getName()}s().create();
+        System.out.println(String.format("new item: %s", ${BOItem.getName(LowerCamelCase)}.toString()));
         // 测试属性赋值
         
 $END_BOITEM_RELATION_IS_ONETOMANY$
 
 $BEGIN_BOITEM_RELATION_IS_ONETOONE$
         // 测试${BOItem.getDescription()}
-        I${BOItem.getName()} ${BOItem.getName().toLowerCase()} = bo.get${BOItem.getName()}();
+        I${BOItem.getName()} ${BOItem.getName(LowerCamelCase)} = ${BO.getName(LowerCamelCase)}.get${BOItem.getName()}();
+        System.out.println(String.format("item: %s", ${BOItem.getName(LowerCamelCase)}.toString()));
         // 测试属性赋值
         
 $END_BOITEM_RELATION_IS_ONETOONE$
@@ -52,7 +54,7 @@ $END_BOITEM$
         boRepository.setUserToken(this.getToken());
 
         // 测试保存
-        operationResult = boRepository.save${BO.getName()}(bo);
+        operationResult = boRepository.save${BO.getName()}(${BO.getName(LowerCamelCase)});
         assertEquals(operationResult.getMessage(), operationResult.getResultCode(), 0);
         ${BO.getName()} boSaved = (${BO.getName()})operationResult.getResultObjects().firstOrDefault();
 

@@ -31,12 +31,12 @@ public class RegionsFactory {
 			}
 			if (RegionModel.REGION_DELIMITER.equals(delimiter)) {
 				return new RegionModel();
-			} else if (RegionModelProperty.REGION_DELIMITER.equals(delimiter)) {
-				return new RegionModelProperty();
-			} else if (RegionModelPrimaryProperty.REGION_DELIMITER.equals(delimiter)) {
-				return new RegionModelPrimaryProperty();
-			} else if (RegionModelUniqueProperty.REGION_DELIMITER.equals(delimiter)) {
-				return new RegionModelUniqueProperty();
+			} else if (RegionProperty.REGION_DELIMITER.equals(delimiter)) {
+				return new RegionProperty();
+			} else if (RegionPrimaryProperty.REGION_DELIMITER.equals(delimiter)) {
+				return new RegionPrimaryProperty();
+			} else if (RegionUniqueProperty.REGION_DELIMITER.equals(delimiter)) {
+				return new RegionUniqueProperty();
 			} else if (RegionModelHasPrimary.REGION_DELIMITER.equals(delimiter)) {
 				return new RegionModelHasPrimary();
 			} else if (RegionModelHasUnique.REGION_DELIMITER.equals(delimiter)) {

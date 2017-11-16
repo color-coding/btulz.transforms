@@ -8,8 +8,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.colorcoding.tools.btulz.Environment;
-import org.colorcoding.tools.btulz.template.Parameter;
 import org.colorcoding.tools.btulz.template.Parameters;
+import org.colorcoding.tools.btulz.transformer.region.ParametersFactory;
 
 /**
  * 数据库相关的转换器
@@ -104,14 +104,14 @@ public abstract class DbTransformer extends Transformer {
 	 */
 	protected Parameters getRuntimeParameters() {
 		Parameters parameters = new Parameters();
-		parameters.add(new Parameter("AppName", "btulz.transforms"));
-		parameters.add(new Parameter("DbServer", this.getDbServer()));
-		parameters.add(new Parameter("DbPort", this.getDbPort()));
-		parameters.add(new Parameter("DbName", this.getDbName()));
-		parameters.add(new Parameter("DbUser", this.getDbUser()));
-		parameters.add(new Parameter("DbPassword", this.getDbPassword()));
-		parameters.add(new Parameter("DbSchema", this.getDbSchema()));
-		parameters.add(new Parameter("Company", this.getCompany()));
+		parameters.add(ParametersFactory.create().createParameter("AppName", "btulz.transforms"));
+		parameters.add(ParametersFactory.create().createParameter("DbServer", this.getDbServer()));
+		parameters.add(ParametersFactory.create().createParameter("DbPort", this.getDbPort()));
+		parameters.add(ParametersFactory.create().createParameter("DbName", this.getDbName()));
+		parameters.add(ParametersFactory.create().createParameter("DbUser", this.getDbUser()));
+		parameters.add(ParametersFactory.create().createParameter("DbPassword", this.getDbPassword()));
+		parameters.add(ParametersFactory.create().createParameter("DbSchema", this.getDbSchema()));
+		parameters.add(ParametersFactory.create().createParameter("Company", this.getCompany()));
 		return parameters;
 	}
 

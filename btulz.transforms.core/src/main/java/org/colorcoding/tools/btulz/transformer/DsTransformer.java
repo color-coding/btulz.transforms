@@ -7,11 +7,10 @@ import java.util.List;
 
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.model.IDomain;
-import org.colorcoding.tools.btulz.template.Parameter;
 import org.colorcoding.tools.btulz.template.Parameters;
+import org.colorcoding.tools.btulz.transformer.region.ParametersFactory;
 import org.colorcoding.tools.btulz.transformer.region.RegionDomain;
 import org.colorcoding.tools.btulz.transformer.region.model.DataTypeMappings;
-import org.colorcoding.tools.btulz.transformer.region.model.Property;
 
 /**
  * 数据结构与模型的转换器
@@ -123,10 +122,11 @@ public class DsTransformer extends DbTransformer {
 	@Override
 	protected Parameters getRuntimeParameters() {
 		Parameters parameters = super.getRuntimeParameters();
-		if (currentDomain != null) {
-			parameters.add(new Parameter(RegionDomain.REGION_DELIMITER, currentDomain));
+		if (this.currentDomain != null) {
+			parameters.add(ParametersFactory.create().createParameter(this.currentDomain));
 		}
-		parameters.add(new Parameter(Property.PARAMETER_NAME_MAPPED_TYPE, this.getDataTypeMappings()));
+		parameters.add(ParametersFactory.create().createParameter(ParametersFactory.PARAMETER_NAME_MAPPED_TYPE,
+				this.getDataTypeMappings()));
 		return parameters;
 	}
 
