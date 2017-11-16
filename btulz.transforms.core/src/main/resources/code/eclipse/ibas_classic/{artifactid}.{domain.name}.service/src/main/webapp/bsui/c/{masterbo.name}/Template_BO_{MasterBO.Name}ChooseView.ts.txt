@@ -95,7 +95,6 @@ export class ${BO.getName()}ChooseView extends ibas.BOChooseView implements I${B
                     hDatas.rows.push(item);
                 }
                 model.refresh(false);                done = true;
-                done = true;
             }
         }
         if (!done) {
