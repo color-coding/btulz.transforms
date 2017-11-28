@@ -243,16 +243,6 @@ public class DataTransformer extends Transformer {
 		throw new ClassNotFoundException(name);
 	}
 
-	private boolean ignoreErrors;
-
-	public final boolean isIgnoreErrors() {
-		return ignoreErrors;
-	}
-
-	public final void setIgnoreErrors(boolean ignoreErrors) {
-		this.ignoreErrors = ignoreErrors;
-	}
-
 	/**
 	 * 保存数据
 	 * 
@@ -271,7 +261,7 @@ public class DataTransformer extends Transformer {
 				if (opRslt.getResultCode() != 0) {
 					// 保存失败
 					Environment.getLogger().error(String.format("save faild [%s].", opRslt.getMessage()));
-					if (!this.isIgnoreErrors()) {
+					if (this.isInterruptOnError()) {
 						throw new Exception(opRslt.getMessage());
 					}
 				} else {

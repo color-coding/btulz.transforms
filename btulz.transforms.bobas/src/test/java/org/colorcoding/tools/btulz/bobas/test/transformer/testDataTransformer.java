@@ -30,7 +30,7 @@ public class testDataTransformer extends TestCase {
 		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();
 		File classFolder = new File(String.format("%1$s%2$s%3$s%2$s%3$s%2$starget%2$sclasses", folder.getPath(),
 				File.separator, "ibas.initialfantasy"));
-		classFolder = new File(String.format("%1$s%2$s%3$s%2$srelease%2$sibas.initialfantasy-0.0.1.jar",
+		classFolder = new File(String.format("%1$s%2$s%3$s%2$srelease%2$sibas.initialfantasy-0.1.0.jar",
 				folder.getPath(), File.separator, "ibas.initialfantasy"));
 		File jarFile = new File(String.format("%1$s%2$s%3$s%2$srelease%2$sbobas.businessobjectscommon-0.1.2.jar",
 				folder.getPath(), File.separator, "ibas-framework"));
@@ -72,8 +72,8 @@ public class testDataTransformer extends TestCase {
 		String ifFolder = folder.getPath() + File.separator + "ibas.initialfantasy";
 		String ibas = String.format("%1$s%2$s%3$s%2$srelease%2$s", folder.getPath(), File.separator, "ibas-framework");
 		String config = String.format("%s%2$sibas.initialfantasy%2$sapp.xml", ifFolder, File.separator);
-		String data = String.format("%s%2$srelease%2$sibas.initialfantasy-0.0.1.jar", ifFolder, File.separator);
-		String classes = String.format("%s%2$srelease%2$sibas.initialfantasy-0.0.1.jar", ifFolder, File.separator);
+		String data = String.format("%s%2$srelease%2$sibas.initialfantasy-0.1.0.jar", ifFolder, File.separator);
+		String classes = String.format("%s%2$srelease%2$sibas.initialfantasy-0.1.0.jar", ifFolder, File.separator);
 		DataTransformer transformer = new DataTransformer4Jar();
 		transformer.setConfigFile(config);
 		transformer.setDataFile(data);

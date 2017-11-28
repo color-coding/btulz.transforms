@@ -121,8 +121,8 @@ public class Command4init extends Command<Command4init> {
 			Environment.getLogger().debug(
 					String.format("DataTransformer loaded by %s.", dtType.getClassLoader().getClass().getSimpleName()));
 			Object transformer = dtType.newInstance();
-			Method method = dtType.getMethod("setIgnoreErrors", boolean.class);
-			method.invoke(transformer, ignore);
+			Method method = dtType.getMethod("setInterruptOnError", boolean.class);
+			method.invoke(transformer, !ignore);
 			method = dtType.getMethod("setConfigFile", String.class);
 			method.invoke(transformer, argConfig);
 			method = dtType.getMethod("setDataFile", String.class);
