@@ -9,7 +9,7 @@ import org.colorcoding.ibas.bobas.data.*;
 import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.MyConfiguration;
 
 /**
-* 获取-${Model.getDescription()}
+* ${Model.getDescription()}
 * 
 */
 @XmlAccessorType(XmlAccessType.NONE)
