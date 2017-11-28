@@ -7,24 +7,19 @@
  */
 
 import * as ibas from "ibas/index";
+import { CONSOLE_ID, CONSOLE_NAME, CONSOLE_VERSION } from "../api/index";
 $BEGIN_BO$
 import { ${BO.getName()}Func, ${BO.getName()}ChooseServiceMapping, ${BO.getName()}LinkServiceMapping } from "./${BO.getName().toLowerCase()}/index";
 $END_BO$
 
 /** 模块控制台 */
 export class Console extends ibas.ModuleConsole {
-    /** 模块-标识 */
-    static CONSOLE_ID: string = "${ProjectId}";
-    /** 模块-名称 */
-    static CONSOLE_NAME: string = "${Domain.Name()}";
-    /** 模块-版本 */
-    static CONSOLE_VERSION: string = "${ProjectVersion}";
     /** 构造函数 */
     constructor() {
         super();
-        this.id = Console.CONSOLE_ID;
-        this.name = Console.CONSOLE_NAME;
-        this.version = Console.CONSOLE_VERSION;
+        this.id = CONSOLE_ID;
+        this.name = CONSOLE_NAME;
+        this.version = CONSOLE_VERSION;
     }
     private _navigation: ibas.IViewNavigation;
     /** 创建视图导航 */

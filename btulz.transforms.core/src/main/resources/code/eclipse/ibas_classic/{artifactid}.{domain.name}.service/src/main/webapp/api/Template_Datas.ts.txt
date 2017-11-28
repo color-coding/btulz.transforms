@@ -8,10 +8,18 @@
 
 // 共享的数据
 import {
+    strings,
+    MODULE_REPOSITORY_NAME_TEMPLATE,
 } from "ibas/index";
 
+/** 模块-标识 */
+export const CONSOLE_ID: string = "${ProjectId}";
+/** 模块-名称 */
+export const CONSOLE_NAME: string = "${Domain.Name()}";
+/** 模块-版本 */
+export const CONSOLE_VERSION: string = "${ProjectVersion}";
 /** 业务仓库名称 */
-export const BO_REPOSITORY_${Domain.getName().toUpperCase()}: string = "BORepository${Domain.getName()}";
+export const BO_REPOSITORY_${Domain.getName().toUpperCase()}: string = strings.format(MODULE_REPOSITORY_NAME_TEMPLATE, CONSOLE_NAME);
 $BEGIN_BO$
 /** 业务对象编码-${BO.getDescription()} */
 export const BO_CODE_${BO.getName().toUpperCase()}: string = "${BO.getShortName()}";
