@@ -16,6 +16,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.colorcoding.ibas.bobas.MyConfiguration;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBusinessObject;
+import org.colorcoding.ibas.bobas.common.ICriteria;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
 import org.colorcoding.ibas.bobas.core.Daemon;
 import org.colorcoding.ibas.bobas.core.RepositoryException;
@@ -38,6 +39,21 @@ import org.xml.sax.SAXException;
  *
  */
 public class DataTransformer extends Transformer {
+
+	private boolean forceSave;
+
+	/**
+	 * 强制保存，不做任何检查
+	 * 
+	 * @return
+	 */
+	public final boolean isForceSave() {
+		return forceSave;
+	}
+
+	public final void setForceSave(boolean forceSave) {
+		this.forceSave = forceSave;
+	}
 
 	private List<URL> library;
 
@@ -257,6 +273,38 @@ public class DataTransformer extends Transformer {
 		try {
 			boRepository.beginTransaction();// 开启事务
 			for (IBusinessObject data : datas) {
+				// 处理已存在数据
+				ICriteria criteria = data.getCriteria();
+				if (criteria != null && !criteria.getConditions().isEmpty()) {
+					opRslt = boRepository.fetchData(criteria, data.getClass());
+					if (!opRslt.getResultObjects().isEmpty()) {
+						// 已存在数据
+						if (this.isForceSave()) {
+							// 强制保存，删除旧数据
+							for (Object item : opRslt.getResultObjects()) {
+								if (item instanceof IBusinessObject) {
+									IBusinessObject boItem = (IBusinessObject) item;
+									boItem.delete();
+									Environment.getLogger()
+											.info(String.format("delete exists data [%s].", boItem.toString()));
+									opRslt = boRepository.saveData(boItem);
+									if (opRslt.getResultCode() != 0) {
+										// 保存失败
+										Environment.getLogger()
+												.error(String.format("delete faild [%s].", opRslt.getMessage()));
+										if (this.isInterruptOnError()) {
+											throw new Exception(opRslt.getMessage());
+										}
+									}
+								}
+							}
+						} else {
+							// 非强制保存，跳过
+							continue;
+						}
+					}
+				}
+				// 开始保存正数据
 				opRslt = boRepository.saveData(data);
 				if (opRslt.getResultCode() != 0) {
 					// 保存失败
@@ -275,4 +323,5 @@ public class DataTransformer extends Transformer {
 			throw new TransformException(e);
 		}
 	}
+
 }

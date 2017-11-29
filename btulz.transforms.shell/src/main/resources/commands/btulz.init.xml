@@ -12,5 +12,6 @@
     <Item Content="-classes=${VALUE}" Description="类库文件（;）">
       <ValidValues ClassName="javax.swing.JFileChooser" Definitions="MultiSelectionEnabled=true" />
     </Item>
+    <Item Content="-force" Description="替换已存在数据" Editable="false" Optional="true" />
     <Item Content="-ignore" Description="忽略错误" Editable="false" Optional="true" />
 </ns2:CommandBuilder>

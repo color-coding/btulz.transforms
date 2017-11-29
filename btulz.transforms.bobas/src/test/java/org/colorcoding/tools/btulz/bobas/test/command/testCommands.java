@@ -34,6 +34,7 @@ public class testCommands extends TestCase {
 		args.add(String.format("-config=%s", config));
 		args.add(String.format("-classes=%s", classes));
 		args.add("-ignore");
+		args.add("-force");
 		Console.main(args.toArray(new String[] {}));
 	}
 }

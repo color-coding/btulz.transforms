@@ -1,6 +1,7 @@
 package org.colorcoding.tools.btulz.bobas.transformer;
 
 import org.colorcoding.ibas.bobas.bo.IBusinessObject;
+import org.colorcoding.ibas.bobas.common.ICriteria;
 import org.colorcoding.ibas.bobas.common.OperationResult;
 import org.colorcoding.ibas.bobas.core.RepositoryException;
 import org.colorcoding.ibas.bobas.organization.OrganizationFactory;
@@ -51,5 +52,11 @@ public class BORepository4Transformer extends BORepositoryLogicService implement
 	public <P extends IBusinessObject> OperationResult<P> saveData(P bo) {
 		String token = this.getCurrentUser().getToken();
 		return super.save(bo, token);
+	}
+
+	@Override
+	public <P extends IBusinessObject> OperationResult<P> fetchData(ICriteria criteria, Class<P> boType) {
+		String token = this.getCurrentUser().getToken();
+		return super.fetch(criteria, token, boType);
 	}
 }

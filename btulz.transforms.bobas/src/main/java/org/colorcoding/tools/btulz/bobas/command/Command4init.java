@@ -43,6 +43,7 @@ public class Command4init extends Command<Command4init> {
 		arguments.add(new Argument("-data", "数据文件，支持解析jar文件"));
 		arguments.add(new Argument("-config", "配置文件"));
 		arguments.add(new Argument("-classes", "加载的类库，多个时用“;”分隔"));
+		arguments.add(new Argument("-force", "替换已存在的数据"));
 		arguments.add(new Argument("-ignore", "忽略错误"));
 		arguments.add(new Argument("-test", "测试"));
 		return arguments.toArray(new Argument[] {});
@@ -65,6 +66,7 @@ public class Command4init extends Command<Command4init> {
 		stringBuilder.append("-classes=D:\\tomcat\\lib\\a.jar;D:\\tomcat\\lib\\b.jar;D:\\tomcat\\lib\\classes");
 		stringBuilder.append(" ");
 		stringBuilder.append("-ignore");
+		stringBuilder.append("-force");
 		super.moreHelps(stringBuilder);
 	}
 
@@ -81,7 +83,7 @@ public class Command4init extends Command<Command4init> {
 			String argConfig = "";
 			boolean ignore = false;
 			List<URL> argClasses = new ArrayList<>();
-			boolean test = false;
+			boolean test = false, force = false;
 			for (Argument argument : arguments) {
 				if (!argument.isInputed()) {
 					// 没有输出的参数不做处理
@@ -93,6 +95,8 @@ public class Command4init extends Command<Command4init> {
 					test = true;
 				} else if (argument.getName().equalsIgnoreCase("-ignore")) {
 					ignore = true;
+				} else if (argument.getName().equalsIgnoreCase("-force")) {
+					force = true;
 				} else if (argument.getName().equalsIgnoreCase("-config")) {
 					argConfig = argument.getValue();
 				} else if (argument.getName().equalsIgnoreCase("-classes")) {
@@ -123,6 +127,8 @@ public class Command4init extends Command<Command4init> {
 			Object transformer = dtType.newInstance();
 			Method method = dtType.getMethod("setInterruptOnError", boolean.class);
 			method.invoke(transformer, !ignore);
+			method = dtType.getMethod("setForceSave", boolean.class);
+			method.invoke(transformer, force);
 			method = dtType.getMethod("setConfigFile", String.class);
 			method.invoke(transformer, argConfig);
 			method = dtType.getMethod("setDataFile", String.class);
