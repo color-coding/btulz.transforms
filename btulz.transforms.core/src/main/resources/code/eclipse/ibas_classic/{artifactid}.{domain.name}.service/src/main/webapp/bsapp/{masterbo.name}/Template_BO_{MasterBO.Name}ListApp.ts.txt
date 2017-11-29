@@ -63,6 +63,10 @@ export class ${BO.getName()}ListApp extends ibas.BOListApplication<I${BO.getName
                     if (opRslt.resultCode !== 0) {
                         throw new Error(opRslt.message);
                     }
+                    if (!that.isViewShowed()) {
+                        // 没显示视图，先显示
+                        that.show();
+                    }
                     that.view.showData(opRslt.resultObjects);
                     that.busy(false);
                 } catch (error) {
