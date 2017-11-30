@@ -58,9 +58,9 @@ $END_BOITEM$
     /** 运行,覆盖原方法 */
     run(...args: any[]): void {
         let that: this = this;
-        if (ibas.objects.instanceOf(arguments[0], bo.${BO.getName()})) {
+        if (ibas.objects.instanceOf(args[0], bo.${BO.getName()})) {
             // 尝试重新查询编辑对象
-            let criteria: ibas.ICriteria = arguments[0].criteria();
+            let criteria: ibas.ICriteria = args[0].criteria();
             if (!ibas.objects.isNull(criteria) && criteria.conditions.length > 0) {
                 // 有效的查询对象查询
                 let boRepository: BORepository${Domain.getName()} = new BORepository${Domain.getName()}();
@@ -87,11 +87,10 @@ $END_BOITEM$
                         }
                     }
                 });
-                // 开始查询数据
-                return;
+                return; // 退出
             }
         }
-        super.run();
+        super.run.apply(args);
     }
     /** 待编辑的数据 */
     protected editData: bo.${BO.getName()};
