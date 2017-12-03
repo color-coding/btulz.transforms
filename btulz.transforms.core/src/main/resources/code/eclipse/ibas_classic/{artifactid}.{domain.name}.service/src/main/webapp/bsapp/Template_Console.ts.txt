@@ -44,6 +44,7 @@ $END_BO$
     run(): void {
         // 加载语言-框架默认
         ibas.i18n.load(this.rootUrl + "resources/languages/${Domain.getName().toLowerCase()}.json");
+        ibas.i18n.load(this.rootUrl + "resources/languages/enums.json");
 $BEGIN_BO$
         ibas.i18n.load(this.rootUrl + "resources/languages/bo/${BO.getName().toLowerCase()}.json");
 $END_BO$
