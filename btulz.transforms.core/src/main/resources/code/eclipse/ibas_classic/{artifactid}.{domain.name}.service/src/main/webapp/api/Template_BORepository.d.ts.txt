@@ -12,11 +12,12 @@ import {
     UploadFileCaller,
     DownloadFileCaller,
     FileData,
+    IBORepositoryApplication,
 } from "ibas/index";
 import * as bo from "./bo/index"
 
 /** 业务仓库 */
-export interface IBORepository${Domain.getName()} {
+export interface IBORepository${Domain.getName()} extends IBORepositoryApplication {
 
     /**
      * 上传文件
