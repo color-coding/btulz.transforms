@@ -98,6 +98,7 @@ $END_BOITEM$
     /** 显示数据 */
     show${BO.getName()}(data: bo.${BO.getName()}): void {
         this.form.setModel(new sap.ui.model.json.JSONModel(data));
+        this.form.bindObject("/");
     }
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
