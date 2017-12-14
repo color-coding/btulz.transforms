@@ -50,6 +50,17 @@ for /f %%m in (%WORKFOLDER%compile_order.txt) do (
     )
   )
 )
+REM 发布工具包集合
+if exist %WORK_FOLDER%\release\btulz.transforms.tar (
+  call mvn deploy:deploy-file ^
+    -DgroupId=org.colorcoding.tools ^
+    -DartifactId=btulz.transforms ^
+    -Durl=%REPOSITORY_URL% ^
+    -DrepositoryId=%REPOSITORY_ID% ^
+    -Dfile=%WORK_FOLDER%\release\btulz.transforms.tar ^
+    -Dpackaging=tar ^
+    -Dversion=latest
+)
 echo --操作完成
 
 goto :EOF
