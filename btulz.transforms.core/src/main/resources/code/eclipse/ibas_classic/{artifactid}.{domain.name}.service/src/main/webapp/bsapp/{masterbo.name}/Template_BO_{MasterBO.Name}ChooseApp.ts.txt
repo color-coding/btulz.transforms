@@ -98,7 +98,7 @@ export class ${BO.getName()}ChooseServiceMapping extends ibas.BOChooseServiceMap
         this.description = ibas.i18n.prop(this.name);
     }
     /** 创建服务实例 */
-    create(): ibas.IService<ibas.IBOChooseServiceCaller<bo.${BO.getName()}>> {
+    create(): ibas.IBOChooseService<bo.${BO.getName()}> {
         return new ${BO.getName()}ChooseApp();
     }
 }

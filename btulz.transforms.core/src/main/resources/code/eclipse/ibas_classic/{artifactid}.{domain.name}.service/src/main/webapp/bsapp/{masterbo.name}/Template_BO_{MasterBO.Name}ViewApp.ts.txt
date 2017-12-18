@@ -103,7 +103,7 @@ export class ${BO.getName()}LinkServiceMapping extends ibas.BOLinkServiceMapping
         this.description = ibas.i18n.prop(this.name);
     }
     /** 创建服务实例 */
-    create(): ibas.IService<ibas.IBOLinkServiceCaller> {
+    create(): ibas.IBOLinkService {
         return new ${BO.getName()}ViewApp();
     }
 }
