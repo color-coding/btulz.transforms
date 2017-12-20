@@ -7,6 +7,7 @@
  */
 
 // 模块索引文件，此文件集中导出类
+export * from "../../api/Datas";
 $BEGIN_BO$
 export * from "./${BO.getName()}";
 $END_BO$
