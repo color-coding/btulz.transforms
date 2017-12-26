@@ -61,6 +61,17 @@ if exist %WORK_FOLDER%\release\btulz.transforms.tar (
     -Dpackaging=tar ^
     -Dversion=latest
 )
+REM 发布closure-compiler.jar
+if exist %WORK_FOLDER%\release\closure-compiler-latest.jar (
+  call mvn deploy:deploy-file ^
+    -DgroupId=org.colorcoding.tools ^
+    -DartifactId=closure-compiler ^
+    -Durl=%REPOSITORY_URL% ^
+    -DrepositoryId=%REPOSITORY_ID% ^
+    -Dfile=%WORK_FOLDER%\release\closure-compiler-latest.jar ^
+    -Dpackaging=tar ^
+    -Dversion=latest
+)
 echo --操作完成
 
 goto :EOF
