@@ -118,7 +118,6 @@ export class ${BO.getName()}ListView extends ibas.BOListView implements I${BO.ge
             }),
             content: [this.form]
         });
-        this.id = this.page.getId();
         // 添加列表自动查询事件
         openui5.utils.triggerNextResults({
             listener: this.table,
