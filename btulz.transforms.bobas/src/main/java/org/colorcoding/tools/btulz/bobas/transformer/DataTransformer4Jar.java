@@ -32,7 +32,8 @@ public class DataTransformer4Jar extends DataTransformer {
 	@Override
 	protected List<IBusinessObject> analysisData(File file)
 			throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException, TransformException {
-		if (file.isFile() && file.getName().toLowerCase().endsWith(".jar")) {
+		if (file.isFile()
+				&& (file.getName().toLowerCase().endsWith(".jar") || file.getName().toLowerCase().endsWith(".war"))) {
 			ArrayList<IBusinessObject> bos = new ArrayList<>();
 			JarFile jarFile = new JarFile(file);
 			try {
