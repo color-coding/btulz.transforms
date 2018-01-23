@@ -56,7 +56,7 @@ export class ${BO.getName()}ViewApp extends ibas.BOViewService<I${BO.getName()}V
             super.run.apply(this, arguments);
         }
     }
-    private viewData: bo.${BO.getName()};
+    protected viewData: bo.${BO.getName()};
     /** 查询数据 */
     protected fetchData(criteria: ibas.ICriteria | string): void {
         this.busy(true);

@@ -186,13 +186,13 @@ $END_BOITEM$
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
     /** 添加${BOItem.getDescription()}事件 */
-    add${BOItem.getName()}(): void {
+    protected add${BOItem.getName()}(): void {
         this.editData.${BOItem.getName(LowerCamelCase)}s.create();
         // 仅显示没有标记删除的
         this.view.show${BOItem.getName()}s(this.editData.${BOItem.getName(LowerCamelCase)}s.filterDeleted());
     }
     /** 删除${BOItem.getDescription()}事件 */
-    remove${BOItem.getName()}(items: bo.${BOItem.getName()}[]): void {
+    protected remove${BOItem.getName()}(items: bo.${BOItem.getName()}[]): void {
         // 非数组，转为数组
         if (!(items instanceof Array)) {
             items = [items];
