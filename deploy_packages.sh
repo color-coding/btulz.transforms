@@ -60,7 +60,8 @@ do
   fi
 done < ${WORK_FOLDER}/compile_order.txt | sed 's/\r//g'
 # 发布工具包集合
-if [ -e ${WORK_FOLDER}/release/btulz.transforms.tar ] (
+if [ -e ${WORK_FOLDER}/release/btulz.transforms.tar ]
+then
   mvn deploy:deploy-file \
     -DgroupId=org.colorcoding.tools \
     -DartifactId=btulz.transforms \
@@ -69,5 +70,5 @@ if [ -e ${WORK_FOLDER}/release/btulz.transforms.tar ] (
     -Dfile=${WORK_FOLDER}/release/btulz.transforms.tar \
     -Dpackaging=tar \
     -Dversion=latest
-)
+fi
 echo --操作完成
