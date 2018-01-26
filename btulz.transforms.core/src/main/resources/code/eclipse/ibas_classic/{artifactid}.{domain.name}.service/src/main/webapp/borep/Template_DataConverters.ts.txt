@@ -5,23 +5,22 @@
  * Use of this source code is governed by an Apache License, Version 2.0
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
-
 import * as ibas from "ibas/index";
 import * as bo from "./bo/index";
 import {
 } from "../api/index";
 
 /** 数据转换者 */
-export class DataConverter4${Domain.getShortName().toLowerCase()} extends ibas.DataConverter4j {
+export class DataConverter4${Domain.getShortName()} extends ibas.DataConverter4j {
 
     /** 创建业务对象转换者 */
     protected createConverter(): ibas.BOConverter {
-        return new BOConverter4${Domain.getShortName().toLowerCase()};
+        return new BOConverter4${Domain.getShortName()};
     }
 }
 
 /** 业务对象转换者 */
-class BOConverter4${Domain.getShortName().toLowerCase()} extends ibas.BOConverter {
+class BOConverter4${Domain.getShortName()} extends ibas.BOConverter {
 
     /**
      * 自定义解析

@@ -5,11 +5,10 @@
  * Use of this source code is governed by an Apache License, Version 2.0
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
-
 import * as ibas from "ibas/index";
 import * as bo from "../../borep/bo/index";
 import { BORepository${Domain.getName()} } from "../../borep/BORepositories";
-import { DataConverter4${Domain.getShortName().toLowerCase()} } from "../../borep/DataConverters";
+import { DataConverter4${Domain.getShortName()} } from "../../borep/DataConverters";
 import { ${BO.getName()}ViewApp } from "./${BO.getName()}ViewApp";
 import { ${BO.getName()}EditApp } from "./${BO.getName()}EditApp";
 
@@ -183,7 +182,7 @@ export class ${BO.getName()}ListApp extends ibas.BOListApplication<I${BO.getName
         return [
             new ibas.BOListServiceProxy({
                 data: this.view.getSelecteds(),
-                converter: new DataConverter4${Domain.getShortName().toLowerCase()}()
+                converter: new DataConverter4${Domain.getShortName()}()
             })
         ];
     }

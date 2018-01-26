@@ -5,8 +5,356 @@
  * Use of this source code is governed by an Apache License, Version 2.0
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
-
 import * as ibas from "ibas/index";
 import * as openui5 from "openui5/index";
 import * as bo from "../../../borep/bo/index";
 import { I${BO.getName()}EditView } from "../../../bsapp/${BO.getName().toLowerCase()}/index";
+
+/**
+ * 编辑视图-${BO.getDescription()}
+ */
+export class ${BO.getName()}EditView extends ibas.BOEditView implements I${BO.getName()}EditView {
+    /** 删除数据事件 */
+    deleteDataEvent: Function;
+    /** 新建数据事件，参数1：是否克隆 */
+    createDataEvent: Function;
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+    /** 添加${BOItem.getDescription()}事件 */
+    add${BOItem.getName()}Event: Function;
+    /** 删除${BOItem.getDescription()}事件 */
+    remove${BOItem.getName()}Event: Function;
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+    /** 绘制视图 */
+    draw(): any {
+        let that: this = this;
+        this.page${BO.getName()} = new sap.m.Page("", {
+            showHeader: false,
+            showfooter: false,
+            content: [
+                new sap.ui.layout.form.SimpleForm("", {
+                    editable: true,
+                    content: [
+                    ]
+                })
+            ]
+        });
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+        this.list${BOItem.getName()} = new sap.m.List("", {
+            inset: false,
+            growing: true,
+            growingThreshold: ibas.config.get(openui5.utils.CONFIG_ITEM_LIST_TABLE_VISIBLE_ROW_COUNT, 5),
+            growingScrollToLoad: true,
+            visibleRowCountMode: sap.ui.table.VisibleRowCountMode.Auto,
+            mode: sap.m.ListMode.None,
+            selectionMode: sap.ui.table.SelectionMode.None,
+            swipeContent: new sap.m.FlexBox("", {
+                height: "100%",
+                mode: sap.m.ListMode.None,
+                swipeDirection: sap.m.SwipeDirection.RightToLeft,
+                width: "6rem",
+                items: [
+                    new sap.m.SegmentedButton("", {
+                        items: [
+                            new sap.m.SegmentedButtonItem("", {
+                                width: "3rem",
+                                icon: "sap-icon://delete",
+                                press(oEvent: any): void {
+                                    that.fireViewEvents(that.remove${BOItem.getName()}Event,
+                                        // 获取表格选中的对象
+                                        openui5.utils.getSelecteds<bo.${BOItem.getName()}>(that.list${BOItem.getName()})
+                                    );
+                                    that.list${BOItem.getName()}.swipeOut(null);
+                                }
+                            }),
+                            new sap.m.SegmentedButtonItem("", {
+                                width: "3rem",
+                                icon: "sap-icon://edit",
+                                press(oEvent: any): void {
+                                    that.show${BOItem.getName()}(
+                                        openui5.utils.getSelecteds<bo.${BOItem.getName()}>(that.list${BOItem.getName()}).firstOrDefault()
+                                    );
+                                    that.list${BOItem.getName()}.swipeOut(null);
+                                }
+                            })
+                        ]
+                    })
+                ]
+            }).addStyleClass("sapUiSmallMarginTop"),
+            items: {
+                path: "/rows",
+                template: new sap.m.ObjectListItem("", {
+                    type: sap.m.ListType.Active,
+                    title: {
+                        path: ""
+                    },
+                    attributes: [
+                    ]
+                }),
+            }
+        });
+        this.page${BOItem.getName()}List = new sap.m.Page("", {
+            showHeader: false,
+            floatingFooter: true,
+            footer: new sap.m.Toolbar("", {
+                content: [
+                    new sap.m.Button("", {
+                        text: ibas.i18n.prop("shell_back"),
+                        width: "50%",
+                        press: function (): void {
+                            that.toPage(that.page${BO.getName()}, true);
+                            that.list${BOItem.getName()}.swipeOut(null);
+                        }
+                    }),
+                    new sap.m.Button("", {
+                        text: ibas.i18n.prop("shell_data_new"),
+                        width: "50%",
+                        press: function (): void {
+                            that.fireViewEvents(that.add${BOItem.getName()}Event);
+                            let datas: any = (<any>that.list${BOItem.getName()}.getModel()).getData().rows;
+                            if (datas.length > 0) {
+                                let newItem: bo.${BOItem.getName()} = datas[datas.length - 1];
+                                if (!ibas.objects.isNull(newItem)) {
+                                    that.show${BOItem.getName()}(newItem);
+                                }
+                            }
+                            that.list${BOItem.getName()}.swipeOut(null);
+                        }
+                    }),
+                ]
+            }),
+            content: [
+                this.list${BOItem.getName()},
+            ]
+        });
+        this.page${BOItem.getName()} = new sap.m.Page("", {
+            showHeader: false,
+            floatingFooter: true,
+            footer: new sap.m.Toolbar("", {
+                content: [
+                    // 编辑子对象完成
+                    new sap.m.Button("", {
+                        width: "100%",
+                        text: ibas.i18n.prop("shell_confirm"),
+                        type: sap.m.ButtonType.Transparent,
+                        press: function (): void {
+                            that.toPage(that.page${BOItem.getName()}List, true);
+                        }
+                    }),
+                ]
+            }),
+            content: [
+                new sap.ui.layout.form.SimpleForm("", {
+                    editable: true,
+                    content: [
+                    ]
+                })
+            ]
+        });
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+        this.navContainer = new sap.m.NavContainer("", {
+            pages: [
+                this.page${BO.getName()},
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+                this.page${BOItem.getName()}List,
+                this.page${BOItem.getName()}List,
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+            ]
+        });
+        this.page = new sap.m.Page("", {
+            showHeader: false,
+            subHeader: new sap.m.Toolbar("", {
+                content: [
+                    new sap.m.Button("", {
+                        text: ibas.i18n.prop("shell_data_save"),
+                        type: sap.m.ButtonType.Transparent,
+                        icon: "sap-icon://save",
+                        press: function (): void {
+                            that.fireViewEvents(that.saveDataEvent);
+                        }
+                    }),
+                    new sap.m.Button("", {
+                        text: ibas.i18n.prop("shell_data_delete"),
+                        type: sap.m.ButtonType.Transparent,
+                        icon: "sap-icon://delete",
+                        press: function (): void {
+                            that.fireViewEvents(that.deleteDataEvent);
+                        }
+                    }),
+                    new sap.m.ToolbarSeparator(""),
+                    new sap.m.Button("", {
+                        text: ibas.strings.format("{0}/{1}",
+                            ibas.i18n.prop("shell_data_new"), ibas.i18n.prop("shell_data_clone")),
+                        icon: "sap-icon://create",
+                        type: sap.m.ButtonType.Transparent,
+                        press: function (event: any): void {
+                            let popover: sap.m.Popover = new sap.m.Popover("", {
+                                showHeader: false,
+                                placement: sap.m.PlacementType.Bottom,
+                            });
+                            popover.addContent(new sap.m.Button("", {
+                                text: ibas.i18n.prop("shell_data_new"),
+                                icon: "sap-icon://create",
+                                type: sap.m.ButtonType.Transparent,
+                                press: function (): void {
+                                    // 创建新的对象
+                                    that.fireViewEvents(that.createDataEvent, false);
+                                    popover.close();
+                                }
+                            }));
+                            popover.addContent(new sap.m.Button("", {
+                                text: ibas.i18n.prop("shell_data_clone"),
+                                icon: "sap-icon://copy",
+                                type: sap.m.ButtonType.Transparent,
+                                press: function (): void {
+                                    // 复制当前对象
+                                    that.fireViewEvents(that.createDataEvent, true);
+                                    popover.close();
+                                }
+                            }));
+                            popover.addStyleClass("sapMOTAPopover sapTntToolHeaderPopover");
+                            popover.openBy(event.getSource(), true);
+                        }
+                    }),
+                    new sap.m.ToolbarSpacer(""),
+                    this.navButton = new sap.m.Button("", {
+                        type: sap.m.ButtonType.Transparent,
+                        icon: "sap-icon://overflow",
+                        press: function (event: any): void {
+                            let popover: sap.m.Popover = new sap.m.Popover("", {
+                                showHeader: false,
+                                placement: sap.m.PlacementType.Bottom,
+                            });
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+                            popover.addContent(new sap.m.Button({
+                                text: ibas.i18n.prop("bo_${BOItem.getName().toLowerCase()}"),
+                                type: sap.m.ButtonType.Transparent,
+                                icon: "sap-icon://folder",
+                                press: function (): void {
+                                    that.toPage(that.page${BOItem.getName()}List);
+                                    popover.close();
+                                }
+                            }));
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+                            (<any>popover).addStyleClass("sapMOTAPopover sapTntToolHeaderPopover");
+                            popover.openBy(event.getSource(), true);
+                        }
+                    }),
+                ]
+            }),
+            content: [this.navContainer]
+        });
+        this.toPage(this.page${BO.getName()});
+        return this.page;
+    }
+
+    private page: sap.m.Page;
+    private page${BO.getName()}: sap.m.Page;
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+    private list${BOItem.getName()}: sap.m.List;
+    private page${BOItem.getName()}List: sap.m.Page;
+    private page${BOItem.getName()}: sap.m.Page;
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+    private currentPage: sap.m.Page;
+    private navContainer: sap.m.NavContainer;
+    private navButton: sap.m.Button;
+    /** 切换页面 */
+    private toPage(page: sap.m.Page, leftToRight?: boolean): void {
+        switch (page) {
+            case this.page${BO.getName()}:
+                this.navButton.setVisible(true);
+                this.currentPage = this.page${BO.getName()};
+                break;
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+            case this.page${BOItem.getName()}List:
+                this.navButton.setVisible(false);
+                this.currentPage = this.page${BOItem.getName()}List;
+                break;
+            case this.page${BOItem.getName()}:
+                this.navButton.setVisible(false);
+                this.currentPage = this.page${BOItem.getName()};
+                break;
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+            default:
+                break;
+        }
+        if (!ibas.objects.isNull(this.currentPage)) {
+            if (leftToRight) {
+                this.navContainer.backToPage(this.currentPage.getId());
+            } else {
+                this.navContainer.to(this.currentPage.getId());
+            }
+        }
+    }
+    /** 手指触控滑动 */
+    onTouchMove(direction: ibas.emTouchMoveDirection, event: TouchEvent): void {
+        if (!ibas.objects.isNull(this.currentPage)
+            && !ibas.objects.isNull(this.currentPage.getFooter())) {
+            if (direction === ibas.emTouchMoveDirection.UP) {
+                this.currentPage.setShowFooter(false);
+            } else if (direction === ibas.emTouchMoveDirection.DOWN) {
+                this.currentPage.setShowFooter(true);
+            }
+        }
+    }
+
+    /** 改变视图状态 */
+    private changeViewStatus(data: bo.${BO.getName()}): void {
+        if (ibas.objects.isNull(data)) {
+            return;
+        }
+        // 新建时：禁用删除，
+        if (data.isNew) {
+            if (this.page.getSubHeader() instanceof sap.m.Toolbar) {
+                openui5.utils.changeToolbarDeletable(<sap.m.Toolbar>this.page.getSubHeader(), false);
+            }
+        }
+        // 不可编辑：已批准，
+        if (data.approvalStatus === ibas.emApprovalStatus.APPROVED) {
+            if (this.page.getSubHeader() instanceof sap.m.Toolbar) {
+                openui5.utils.changeToolbarSavable(<sap.m.Toolbar>this.page.getSubHeader(), false);
+                openui5.utils.changeToolbarDeletable(<sap.m.Toolbar>this.page.getSubHeader(), false);
+            }
+            openui5.utils.changeFormEditable(this.page${BO.getName()}, false);
+        }
+    }
+
+    /** 显示数据 */
+    show${BO.getName()}(data: bo.${BO.getName()}): void {
+        this.page${BO.getName()}.setModel(new sap.ui.model.json.JSONModel(data));
+        this.page${BO.getName()}.bindObject("/");
+        // 监听属性改变，并更新控件
+        openui5.utils.refreshModelChanged(this.page${BO.getName()}, data);
+        // 改变视图状态
+        this.changeViewStatus(data);
+    }
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+    /** 显示数据（${BOItem.getDescription()}） */
+    show${BOItem.getName()}s(datas: bo.${BOItem.getName()}[]): void {
+        this.list${BOItem.getName()}.setModel(new sap.ui.model.json.JSONModel({ rows: datas }));
+        // 监听属性改变，并更新控件
+        openui5.utils.refreshModelChanged(this.list${BOItem.getName()}, datas);
+    }
+    /** 显示数据行（${BOItem.getDescription()}） */
+    show${BOItem.getName()}(data: bo.${BOItem.getName()}): void {
+        this.page${BOItem.getName()}.setModel(new sap.ui.model.json.JSONModel(data));
+        this.page${BOItem.getName()}.bindObject("/");
+        // 监听属性改变，并更新控件
+        openui5.utils.refreshModelChanged(this.page${BOItem.getName()}, data);
+        this.toPage(this.page${BOItem.getName()});
+    }
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+}
