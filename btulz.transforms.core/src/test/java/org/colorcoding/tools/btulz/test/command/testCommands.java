@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import org.colorcoding.tools.btulz.Console;
 import org.colorcoding.tools.btulz.command.Command4Code;
-import org.colorcoding.tools.btulz.command.Command4DSJar;
+import org.colorcoding.tools.btulz.command.Command4DsJar;
 import org.colorcoding.tools.btulz.command.Command4Ds;
 import org.colorcoding.tools.btulz.command.Command4Excel;
 import org.colorcoding.tools.btulz.command.Command4Sql;
@@ -107,7 +107,7 @@ public class testCommands extends TestCase {
 
 	public void testCommandDSJar() {
 		ArrayList<String> args = new ArrayList<>();
-		args.add(String.format(Command4DSJar.COMMAND_PROMPT)); // 命令
+		args.add(String.format(Command4DsJar.COMMAND_PROMPT)); // 命令
 		args.add(String.format("-DsTemplate=%s", "ds_mysql_ibas_classic.xml")); // 使用的模板
 		args.add(String.format("-JarFile=%s", System.getenv("ibasWorkspace") + File.separator + "initialization"
 				+ File.separator + "ibas.trainingtesting-0.0.1.jar")); // 待分析jar包
@@ -121,7 +121,7 @@ public class testCommands extends TestCase {
 		args.add(String.format("-DbPassword=%s", "1q2w3e")); // 密码
 		args.add(String.format("-Release")); // 释放资源
 		System.out.println("显示帮助信息：");
-		Console.main(new String[] { Command4DSJar.COMMAND_PROMPT, Command4DSJar.ARGUMENT_NAME_HELP });
+		Console.main(new String[] { Command4DsJar.COMMAND_PROMPT, Command4DsJar.ARGUMENT_NAME_HELP });
 		System.out.println("开始运行：");
 		Console.main(args.toArray(new String[] {}));
 	}

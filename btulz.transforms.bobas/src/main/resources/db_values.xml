@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- 数据库值说明文件 -->
+<ns:DbValues xmlns:ns="http://colorcoding.org/btulz/bobas">
+	<DbValue Name="MSSQL">
+		<DbValueItem Key="DsTemplate" Value="ds_mssql_ibas_classic.xml" />
+		<DbValueItem Key="SqlFilter" Value="sql_mssql_" />
+		<DbValueItem Key="DbPort" Value="1433" />
+		<DbValueItem Key="DbSchema" Value="dbo" />
+	</DbValue>
+	<DbValue Name="MYSQL">
+		<DbValueItem Key="DsTemplate" Value="ds_mysql_ibas_classic.xml" />
+		<DbValueItem Key="SqlFilter" Value="sql_mysql_" />
+		<DbValueItem Key="DbPort" Value="3306" />
+		<DbValueItem Key="DbSchema" Value="" />
+	</DbValue>
+	<DbValue Name="PGSQL">
+		<DbValueItem Key="DsTemplate" Value="ds_pgsql_ibas_classic.xml" />
+		<DbValueItem Key="SqlFilter" Value="sql_pgsql_" />
+		<DbValueItem Key="DbPort" Value="5432" />
+		<DbValueItem Key="DbSchema" Value="" />
+	</DbValue>
+	<DbValue Name="HANA">
+		<DbValueItem Key="DsTemplate" Value="ds_hana_ibas_classic.xml" />
+		<DbValueItem Key="SqlFilter" Value="sql_hana_" />
+		<DbValueItem Key="DbPort" Value="30015" />
+		<DbValueItem Key="DbSchema" Value="" />
+	</DbValue>
+</ns:DbValues>

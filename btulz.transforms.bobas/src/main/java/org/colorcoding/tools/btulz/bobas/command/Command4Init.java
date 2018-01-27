@@ -23,15 +23,15 @@ import org.colorcoding.tools.btulz.command.Prompt;
  * @author Niuren.Zhu
  *
  */
-@Prompt(Command4init.COMMAND_PROMPT)
-public class Command4init extends Command<Command4init> {
+@Prompt(Command4Init.COMMAND_PROMPT)
+public class Command4Init extends Command<Command4Init> {
 
 	/**
 	 * 命令符
 	 */
 	public final static String COMMAND_PROMPT = "init";
 
-	public Command4init() {
+	public Command4Init() {
 		this.setName(COMMAND_PROMPT);
 		this.setDescription("导入初始化数据");
 	}
@@ -40,7 +40,7 @@ public class Command4init extends Command<Command4init> {
 	protected Argument[] createArguments() {
 		ArrayList<Argument> arguments = new ArrayList<>();
 		// 添加自身参数
-		arguments.add(new Argument("-data", "数据文件，支持解析jar文件"));
+		arguments.add(new Argument("-data", "数据文件，待解析jar文件"));
 		arguments.add(new Argument("-config", "配置文件"));
 		arguments.add(new Argument("-classes", "加载的类库，多个时用“;”分隔"));
 		arguments.add(new Argument("-force", "替换已存在的数据"));
@@ -59,7 +59,7 @@ public class Command4init extends Command<Command4init> {
 		stringBuilder.append("  ");
 		stringBuilder.append(COMMAND_PROMPT);
 		stringBuilder.append(" ");
-		stringBuilder.append("-data=D:\\tomcat\\data\\");
+		stringBuilder.append("-data=D:\\tomcat\\data\\ibas.app.jar");
 		stringBuilder.append(" ");
 		stringBuilder.append("-config=D:\\tomcat\\config\\app.xml");
 		stringBuilder.append(" ");

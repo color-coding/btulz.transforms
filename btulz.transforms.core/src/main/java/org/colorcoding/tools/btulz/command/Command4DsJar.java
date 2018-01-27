@@ -13,8 +13,8 @@ import org.colorcoding.tools.btulz.transformer.JarTransformer;
  * @author Niuren.Zhu
  *
  */
-@Prompt(Command4DSJar.COMMAND_PROMPT)
-public class Command4DSJar extends Command4Release<Command4DSJar> {
+@Prompt(Command4DsJar.COMMAND_PROMPT)
+public class Command4DsJar extends Command4Release<Command4DsJar> {
 
 	/**
 	 * 命令符
@@ -26,7 +26,7 @@ public class Command4DSJar extends Command4Release<Command4DSJar> {
 	 */
 	public static final int RETURN_VALUE_TRANSFORM_FAILD = 300;
 
-	public Command4DSJar() {
+	public Command4DsJar() {
 		this.setName(COMMAND_PROMPT);
 		this.setDescription("执行jar包中的数据结构和SQL说明");
 	}
