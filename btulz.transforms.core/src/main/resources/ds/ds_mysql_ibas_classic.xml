@@ -164,8 +164,8 @@ $END_BOITEM$
     </Action>
 $END_BO_MODEL$
 $BEGIN_BOITEMS$
-$BEGIN_BO_MODEL$
     <Action Name="register business object informations">
+$BEGIN_BO_MODEL$
         <Step Name="check business object ${Model.getName()}'s informations table exists">
             <Script>
                 select count(0) from `information_schema`.`tables` where `TABLE_SCHEMA` = '${DbName}' and `TABLE_NAME` = '${Company}_SYS_OBOI'
