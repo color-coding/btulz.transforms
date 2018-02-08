@@ -69,7 +69,7 @@ if exist %WORK_FOLDER%\release\closure-compiler-latest.jar (
     -Durl=%REPOSITORY_URL% ^
     -DrepositoryId=%REPOSITORY_ID% ^
     -Dfile=%WORK_FOLDER%\release\closure-compiler-latest.jar ^
-    -Dpackaging=tar ^
+    -Dpackaging=jar ^
     -Dversion=latest
 )
 echo --²Ù×÷Íê³É

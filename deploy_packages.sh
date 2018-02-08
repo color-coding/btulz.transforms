@@ -71,4 +71,16 @@ then
     -Dpackaging=tar \
     -Dversion=latest
 fi
+# 发布closure-compiler.jar
+if [ -e ${WORK_FOLDER}/release/closure-compiler-latest.jar ]
+then
+  mvn deploy:deploy-file \
+    -DgroupId=org.colorcoding.tools \
+    -DartifactId=closure-compiler \
+    -Durl=${REPOSITORY_URL} \
+    -DrepositoryId=${REPOSITORY_ID} \
+    -Dfile=${WORK_FOLDER}/release/closure-compiler-latest.jar \
+    -Dpackaging=jar \
+    -Dversion=latest
+fi
 echo --操作完成

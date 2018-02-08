@@ -6,4 +6,4 @@ start /b /min java -jar "%WORK_FOLDER%btulz.transforms.shell-0.1.1.jar"
 echo please download packages by yourself and copy to this folder.
 echo *********************************
 echo closure-compiler
-echo http://maven.colorcoding.org/repository/maven-releases/org/colorcoding/tools/closure-compiler/latest/closure-compiler-latest.tar
+echo http://maven.colorcoding.org/repository/maven-releases/org/colorcoding/tools/closure-compiler/latest/closure-compiler-latest.jar
