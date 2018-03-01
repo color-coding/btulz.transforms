@@ -1,0 +1,80 @@
+/**
+ * @license
+ * Copyright color-coding studio. All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache License, Version 2.0
+ * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ */
+/// <reference path="../../3rdparty/ibas/index.d.ts" />
+/// <reference path="../Data.ts" />
+
+namespace ${Domain.getName().toLowerCase()} {
+    export namespace bo {
+$BEGIN_BO_MODEL$
+        /** ${Model.getDescription()} */
+        export interface I${Model.getName()} extends ibas.IBO${Model.getModelType()} {
+$BEGIN_MODEL_PROPERTY$
+            /** ${Property.getDescription()} */
+            ${Property.getName(LowerCamelCase)}: ${Property.getDeclaredType()};
+$END_MODEL_PROPERTY$
+
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+            /** ${BOItem.getDescription()}集合 */
+            ${BOItem.getName(LowerCamelCase)}s: I${BOItem.getName()}s;
+$END_BOITEM_RELATION_IS_ONETOMANY$
+
+$BEGIN_BOITEM_RELATION_IS_ONETOONE$
+            /** ${BOItem.getDescription()} */
+            ${BOItem.getName(LowerCamelCase)}: I${BOItem.getName()};
+$END_BOITEM_RELATION_IS_ONETOONE$
+$END_BOITEM$
+        }
+$END_BO_MODEL$
+
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+        /** ${BOItem.getDescription()} 集合 */
+        export interface I${BOItem.getName()}s extends ibas.IBusinessObjects<I${BOItem.getName()}> {
+            /** 创建并添加子项 */
+            create(): I${BOItem.getName()};
+        }
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+
+$BEGIN_BOITEMS$
+$BEGIN_BO_MODEL$
+        /** ${Model.getDescription()} */
+        export interface I${Model.getName()} extends ibas.IBO${Model.getModelType()} {
+$BEGIN_MODEL_PROPERTY$
+            /** ${Property.getDescription()} */
+            ${Property.getName(LowerCamelCase)}: ${Property.getDeclaredType()};
+$END_MODEL_PROPERTY$
+
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+            /** ${BOItem.getDescription()}集合 */
+            ${BOItem.getName(LowerCamelCase)}s: I${BOItem.getName()}s;
+$END_BOITEM_RELATION_IS_ONETOMANY$
+
+$BEGIN_BOITEM_RELATION_IS_ONETOONE$
+            /** ${BOItem.getDescription()} */
+            ${BOItem.getName(LowerCamelCase)}: I${BOItem.getName()};
+$END_BOITEM_RELATION_IS_ONETOONE$
+$END_BOITEM$
+        }
+$END_BO_MODEL$
+
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+        /** ${BOItem.getDescription()} 集合 */
+        export interface I${BOItem.getName()}s extends ibas.IBusinessObjects<I${BOItem.getName()}> {
+            /** 创建并添加子项 */
+            create(): I${BOItem.getName()};
+        }
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+
+$END_BOITEMS$
+    }
+}

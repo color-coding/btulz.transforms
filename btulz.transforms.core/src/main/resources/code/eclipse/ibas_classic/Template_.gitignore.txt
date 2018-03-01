@@ -17,7 +17,8 @@ hs_err_pid*
 *.class
 *.js
 *.glf
-
+*.map
+*.d.ts
 
 # work folder
 /target/

@@ -5,9 +5,8 @@
  * Use of this source code is governed by an Apache License, Version 2.0
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
-// 模块索引文件，此文件集中导出类
-export * from "./${BO.getName()}Func";
-export * from "./${BO.getName()}ListApp";
-export * from "./${BO.getName()}ChooseApp";
-export * from "./${BO.getName()}ViewApp";
-export * from "./${BO.getName()}EditApp";
+/// <reference path="./${BO.getName()}Func.ts" />
+/// <reference path="./${BO.getName()}ListApp.ts" />
+/// <reference path="./${BO.getName()}ChooseApp.ts" />
+/// <reference path="./${BO.getName()}ViewApp.ts" />
+/// <reference path="./${BO.getName()}EditApp.ts" />

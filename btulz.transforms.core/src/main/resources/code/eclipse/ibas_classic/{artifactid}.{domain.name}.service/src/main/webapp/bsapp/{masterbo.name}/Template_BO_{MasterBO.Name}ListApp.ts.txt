@@ -5,196 +5,198 @@
  * Use of this source code is governed by an Apache License, Version 2.0
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
-import * as ibas from "ibas/index";
-import * as bo from "../../borep/bo/index";
-import { BORepository${Domain.getName()} } from "../../borep/BORepositories";
-import { DataConverter4${Domain.getShortName()} } from "../../borep/DataConverters";
-import { ${BO.getName()}ViewApp } from "./${BO.getName()}ViewApp";
-import { ${BO.getName()}EditApp } from "./${BO.getName()}EditApp";
+/// <reference path="../../3rdparty/ibas/index.d.ts" />
+/// <reference path="../../borep/index.ts" />
+/// <reference path="./${BO.getName()}EditApp.ts" />
+/// <reference path="./${BO.getName()}ViewApp.ts" />
 
-/** 列表应用-${BO.getDescription()} */
-export class ${BO.getName()}ListApp extends ibas.BOListApplication<I${BO.getName()}ListView, bo.${BO.getName()}> {
+namespace ${Domain.getName().toLowerCase()} {
+    export namespace app {
+        /** 列表应用-${BO.getDescription()} */
+        export class ${BO.getName()}ListApp extends ibas.BOListApplication<I${BO.getName()}ListView, bo.${BO.getName()}> {
 
-    /** 应用标识 */
-    static APPLICATION_ID: string = "${ID.newUUID()}";
-    /** 应用名称 */
-    static APPLICATION_NAME: string = "${Domain.Name().toLowerCase()}_app_${BO.getName().toLowerCase()}_list";
-    /** 业务对象编码 */
-    static BUSINESS_OBJECT_CODE: string = bo.${BO.getName()}.BUSINESS_OBJECT_CODE;
-    /** 构造函数 */
-    constructor() {
-        super();
-        this.id = ${BO.getName()}ListApp.APPLICATION_ID;
-        this.name = ${BO.getName()}ListApp.APPLICATION_NAME;
-        this.boCode = ${BO.getName()}ListApp.BUSINESS_OBJECT_CODE;
-        this.description = ibas.i18n.prop(this.name);
-    }
-    /** 注册视图 */
-    protected registerView(): void {
-        super.registerView();
-        // 其他事件
-        this.view.editDataEvent = this.editData;
-        this.view.deleteDataEvent = this.deleteData;
-    }
-    /** 视图显示后 */
-    protected viewShowed(): void {
-        // 视图加载完成
-    }
-    /** 查询数据 */
-    protected fetchData(criteria: ibas.ICriteria): void {
-        this.busy(true);
-        let that: this = this;
-        let boRepository: BORepository${Domain.getName()} = new BORepository${Domain.getName()}();
-        boRepository.fetch${BO.getName()}({
-            criteria: criteria,
-            onCompleted(opRslt: ibas.IOperationResult<bo.${BO.getName()}>): void {
-                try {
-                    if (opRslt.resultCode !== 0) {
-                        throw new Error(opRslt.message);
+            /** 应用标识 */
+            static APPLICATION_ID: string = "${ID.newUUID()}";
+            /** 应用名称 */
+            static APPLICATION_NAME: string = "${Domain.Name().toLowerCase()}_app_${BO.getName().toLowerCase()}_list";
+            /** 业务对象编码 */
+            static BUSINESS_OBJECT_CODE: string = bo.${BO.getName()}.BUSINESS_OBJECT_CODE;
+            /** 构造函数 */
+            constructor() {
+                super();
+                this.id = ${BO.getName()}ListApp.APPLICATION_ID;
+                this.name = ${BO.getName()}ListApp.APPLICATION_NAME;
+                this.boCode = ${BO.getName()}ListApp.BUSINESS_OBJECT_CODE;
+                this.description = ibas.i18n.prop(this.name);
+            }
+            /** 注册视图 */
+            protected registerView(): void {
+                super.registerView();
+                // 其他事件
+                this.view.editDataEvent = this.editData;
+                this.view.deleteDataEvent = this.deleteData;
+            }
+            /** 视图显示后 */
+            protected viewShowed(): void {
+                // 视图加载完成
+            }
+            /** 查询数据 */
+            protected fetchData(criteria: ibas.ICriteria): void {
+                this.busy(true);
+                let that: this = this;
+                let boRepository: bo.BORepository${Domain.getName()} = new bo.BORepository${Domain.getName()}();
+                boRepository.fetch${BO.getName()}({
+                    criteria: criteria,
+                    onCompleted(opRslt: ibas.IOperationResult<bo.${BO.getName()}>): void {
+                        try {
+                            if (opRslt.resultCode !== 0) {
+                                throw new Error(opRslt.message);
+                            }
+                            if (!that.isViewShowed()) {
+                                // 没显示视图，先显示
+                                that.show();
+                            }
+                            if (opRslt.resultObjects.length === 0) {
+                                that.proceeding(ibas.emMessageType.INFORMATION, ibas.i18n.prop("shell_data_fetched_none"));
+                            }
+                            that.view.showData(opRslt.resultObjects);
+                            that.busy(false);
+                        } catch (error) {
+                            that.messages(error);
+                        }
                     }
-                    if (!that.isViewShowed()) {
-                        // 没显示视图，先显示
-                        that.show();
-                    }
-                    if (opRslt.resultObjects.length === 0) {
-                        that.proceeding(ibas.emMessageType.INFORMATION, ibas.i18n.prop("shell_data_fetched_none"));
-                    }
-                    that.view.showData(opRslt.resultObjects);
-                    that.busy(false);
-                } catch (error) {
-                    that.messages(error);
+                });
+                this.proceeding(ibas.emMessageType.INFORMATION, ibas.i18n.prop("shell_fetching_data"));
+            }
+            /** 新建数据 */
+            protected newData(): void {
+                let app: ${BO.getName()}EditApp = new ${BO.getName()}EditApp();
+                app.navigation = this.navigation;
+                app.viewShower = this.viewShower;
+                app.run();
+            }
+            /** 查看数据，参数：目标数据 */
+            protected viewData(data: bo.${BO.getName()}): void {
+                // 检查目标数据
+                if (ibas.objects.isNull(data)) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
+                        ibas.i18n.prop("shell_data_view")
+                    ));
+                    return;
                 }
-            }
-        });
-        this.proceeding(ibas.emMessageType.INFORMATION, ibas.i18n.prop("shell_fetching_data"));
-    }
-    /** 新建数据 */
-    protected newData(): void {
-        let app: ${BO.getName()}EditApp = new ${BO.getName()}EditApp();
-        app.navigation = this.navigation;
-        app.viewShower = this.viewShower;
-        app.run();
-    }
-    /** 查看数据，参数：目标数据 */
-    protected viewData(data: bo.${BO.getName()}): void {
-        // 检查目标数据
-        if (ibas.objects.isNull(data)) {
-            this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
-                ibas.i18n.prop("shell_data_view")
-            ));
-            return;
-        }
-        let app: ${BO.getName()}ViewApp = new ${BO.getName()}ViewApp();
-        app.navigation = this.navigation;
-        app.viewShower = this.viewShower;
-        app.run(data);
+                let app: ${BO.getName()}ViewApp = new ${BO.getName()}ViewApp();
+                app.navigation = this.navigation;
+                app.viewShower = this.viewShower;
+                app.run(data);
 
-    }
-    /** 编辑数据，参数：目标数据 */
-    protected editData(data: bo.${BO.getName()}): void {
-        // 检查目标数据
-        if (ibas.objects.isNull(data)) {
-            this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
-                ibas.i18n.prop("shell_data_edit")
-            ));
-            return;
-        }
-        let app: ${BO.getName()}EditApp = new ${BO.getName()}EditApp();
-        app.navigation = this.navigation;
-        app.viewShower = this.viewShower;
-        app.run(data);
-    }
-    /** 删除数据，参数：目标数据集合 */
-    protected deleteData(data: bo.${BO.getName()} | bo.${BO.getName()}[]): void {
-        // 检查目标数据
-        if (ibas.objects.isNull(data)) {
-            this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
-                ibas.i18n.prop("shell_data_delete")
-            ));
-            return;
-        }
-        let beDeleteds: ibas.ArrayList<bo.${BO.getName()}> = new ibas.ArrayList<bo.${BO.getName()}>();
-        if (data instanceof Array ) {
-            for (let item of data) {
-                item.delete();
-                beDeleteds.add(item);
             }
-        } else {
-            data.delete();
-            beDeleteds.add(data);
-        }
-        // 没有选择删除的对象
-        if (beDeleteds.length === 0) {
-            this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
-                ibas.i18n.prop("shell_data_delete")
-            ));
-            return;
-        }
-        let that: this = this;
-        this.messages({
-            type: ibas.emMessageType.QUESTION,
-            title: ibas.i18n.prop(this.name),
-            message: ibas.i18n.prop("shell_whether_to_delete", beDeleteds.length),
-            actions: [ibas.emMessageAction.YES, ibas.emMessageAction.NO],
-            onCompleted(action: ibas.emMessageAction): void {
-                if (action === ibas.emMessageAction.YES) {
-                    try {
-                        let boRepository: BORepository${Domain.getName()} = new BORepository${Domain.getName()}();
-                        let saveMethod: Function = function(beSaved: bo.${BO.getName()}):void {
-                            boRepository.save${BO.getName()}({
-                                beSaved: beSaved,
-                                onCompleted(opRslt: ibas.IOperationResult<bo.${BO.getName()}>): void {
-                                    try {
-                                        if (opRslt.resultCode !== 0) {
-                                            throw new Error(opRslt.message);
-                                        }
-                                        // 保存下一个数据
-                                        let index: number = beDeleteds.indexOf(beSaved) + 1;
-                                        if (index > 0 && index < beDeleteds.length) {
-                                            saveMethod(beDeleteds[index]);
-                                        } else {
-                                            // 处理完成
-                                            that.busy(false);
-                                            that.messages(ibas.emMessageType.SUCCESS,
-                                            ibas.i18n.prop("shell_data_delete") + ibas.i18n.prop("shell_sucessful"));
-                                        }
-                                    } catch (error) {
-                                        that.messages(ibas.emMessageType.ERROR,
-                                            ibas.i18n.prop("shell_data_delete_error", beSaved, error.message));
-                                    }
-                                }
-                            });
-                            that.proceeding(ibas.emMessageType.INFORMATION, ibas.i18n.prop("shell_data_deleting", beSaved));
-                        };
-                        that.busy(true);
-                        // 开始保存
-                        saveMethod(beDeleteds.firstOrDefault());
-                    } catch (error) {
-                        that.busy(false);
-                        that.messages(error);
-                    }
+            /** 编辑数据，参数：目标数据 */
+            protected editData(data: bo.${BO.getName()}): void {
+                // 检查目标数据
+                if (ibas.objects.isNull(data)) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
+                        ibas.i18n.prop("shell_data_edit")
+                    ));
+                    return;
                 }
+                let app: ${BO.getName()}EditApp = new ${BO.getName()}EditApp();
+                app.navigation = this.navigation;
+                app.viewShower = this.viewShower;
+                app.run(data);
             }
-        });
+            /** 删除数据，参数：目标数据集合 */
+            protected deleteData(data: bo.${BO.getName()} | bo.${BO.getName()}[]): void {
+                // 检查目标数据
+                if (ibas.objects.isNull(data)) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
+                        ibas.i18n.prop("shell_data_delete")
+                    ));
+                    return;
+                }
+                let beDeleteds: ibas.ArrayList<bo.${BO.getName()}> = new ibas.ArrayList<bo.${BO.getName()}>();
+                if (data instanceof Array ) {
+                    for (let item of data) {
+                        item.delete();
+                        beDeleteds.add(item);
+                    }
+                } else {
+                    data.delete();
+                    beDeleteds.add(data);
+                }
+                // 没有选择删除的对象
+                if (beDeleteds.length === 0) {
+                    this.messages(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_please_chooose_data",
+                        ibas.i18n.prop("shell_data_delete")
+                    ));
+                    return;
+                }
+                let that: this = this;
+                this.messages({
+                    type: ibas.emMessageType.QUESTION,
+                    title: ibas.i18n.prop(this.name),
+                    message: ibas.i18n.prop("shell_whether_to_delete", beDeleteds.length),
+                    actions: [ibas.emMessageAction.YES, ibas.emMessageAction.NO],
+                    onCompleted(action: ibas.emMessageAction): void {
+                        if (action === ibas.emMessageAction.YES) {
+                            try {
+                                let boRepository: bo.BORepository${Domain.getName()} = new bo.BORepository${Domain.getName()}();
+                                let saveMethod: Function = function(beSaved: bo.${BO.getName()}):void {
+                                    boRepository.save${BO.getName()}({
+                                        beSaved: beSaved,
+                                        onCompleted(opRslt: ibas.IOperationResult<bo.${BO.getName()}>): void {
+                                            try {
+                                                if (opRslt.resultCode !== 0) {
+                                                    throw new Error(opRslt.message);
+                                                }
+                                                // 保存下一个数据
+                                                let index: number = beDeleteds.indexOf(beSaved) + 1;
+                                                if (index > 0 && index < beDeleteds.length) {
+                                                    saveMethod(beDeleteds[index]);
+                                                } else {
+                                                    // 处理完成
+                                                    that.busy(false);
+                                                    that.messages(ibas.emMessageType.SUCCESS,
+                                                    ibas.i18n.prop("shell_data_delete") + ibas.i18n.prop("shell_sucessful"));
+                                                }
+                                            } catch (error) {
+                                                that.messages(ibas.emMessageType.ERROR,
+                                                    ibas.i18n.prop("shell_data_delete_error", beSaved, error.message));
+                                            }
+                                        }
+                                    });
+                                    that.proceeding(ibas.emMessageType.INFORMATION, ibas.i18n.prop("shell_data_deleting", beSaved));
+                                };
+                                that.busy(true);
+                                // 开始保存
+                                saveMethod(beDeleteds.firstOrDefault());
+                            } catch (error) {
+                                that.busy(false);
+                                that.messages(error);
+                            }
+                        }
+                    }
+                });
+            }
+            /** 获取服务的契约 */
+            protected getServiceProxies(): ibas.IServiceProxy<ibas.IServiceContract>[] {
+                return [
+                    new ibas.BOListServiceProxy({
+                        data: this.view.getSelecteds(),
+                        converter: new bo.DataConverter4${Domain.getShortName()}()
+                    })
+                ];
+            }
+        }
+        /** 视图-${BO.getDescription()} */
+        export interface I${BO.getName()}ListView extends ibas.IBOListView {
+            /** 编辑数据事件，参数：编辑对象 */
+            editDataEvent: Function;
+            /** 删除数据事件，参数：删除对象集合 */
+            deleteDataEvent: Function;
+            /** 显示数据 */
+            showData(datas: bo.${BO.getName()}[]): void;
+            /** 获取选择的数据 */
+            getSelecteds(): bo.${BO.getName()}[];
+        }
     }
-    /** 获取服务的契约 */
-    protected getServiceProxies(): ibas.IServiceProxy<ibas.IServiceContract>[] {
-        return [
-            new ibas.BOListServiceProxy({
-                data: this.view.getSelecteds(),
-                converter: new DataConverter4${Domain.getShortName()}()
-            })
-        ];
-    }
-}
-/** 视图-${BO.getDescription()} */
-export interface I${BO.getName()}ListView extends ibas.IBOListView {
-    /** 编辑数据事件，参数：编辑对象 */
-    editDataEvent: Function;
-    /** 删除数据事件，参数：删除对象集合 */
-    deleteDataEvent: Function;
-    /** 显示数据 */
-    showData(datas: bo.${BO.getName()}[]): void;
-    /** 获取选择的数据 */
-    getSelecteds(): bo.${BO.getName()}[];
 }

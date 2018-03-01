@@ -55,6 +55,17 @@ public class DataTypeMapping {
 		this.subType = subType;
 	}
 
+	private String declaredType;
+
+	@XmlAttribute(name = "DeclaredType")
+	public final String getDeclaredType() {
+		return declaredType;
+	}
+
+	public final void setDeclaredType(String declaredType) {
+		this.declaredType = declaredType;
+	}
+
 	private String mapped;
 
 	@XmlAttribute(name = "Mapped")

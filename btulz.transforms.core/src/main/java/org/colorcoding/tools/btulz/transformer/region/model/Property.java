@@ -182,6 +182,21 @@ public class Property extends Entity implements IProperty {
 	public String getDeclaredType() {
 		// 优先定义
 		if (this.entity.getDeclaredType() != null) {
+			// 已定义类型的转换
+			for (DataTypeMapping mapping : this.getDeclaredTypeMappings()) {
+				if (mapping == null) {
+					continue;
+				}
+				if (!this.entity.getDeclaredType().equals(mapping.getDeclaredType())) {
+					continue;
+				}
+				// 存在映射
+				try {
+					return mapping.getMapped(this);
+				} catch (Exception e) {
+					Environment.getLogger().error(e);
+				}
+			}
 			return this.entity.getDeclaredType();
 		}
 		// 未发现定义使用映射
