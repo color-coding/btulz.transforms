@@ -41,6 +41,5 @@ REM 查询当前目录的tsconfig文件
 for /f %%l in ('dir /b tsconfig*.json') DO (
   SET TS_CONFIG=%%l
   echo --开始编译：!TS_CONFIG!
-REM 运行编译命令
   call !COMMOND! -p !TS_CONFIG!
 )
