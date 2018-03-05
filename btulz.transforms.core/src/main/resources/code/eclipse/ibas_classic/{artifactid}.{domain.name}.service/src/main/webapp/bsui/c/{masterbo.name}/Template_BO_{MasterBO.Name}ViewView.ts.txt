@@ -12,9 +12,7 @@
 namespace ${Domain.getName().toLowerCase()} {
     export namespace ui {
         export namespace c {
-            /**
-            * 查看视图-${BO.getDescription()}
-            */
+            /** 查看视图-${BO.getDescription()} */
             export class ${BO.getName()}ViewView extends ibas.BOViewView implements app.I${BO.getName()}ViewView {
 
                 /** 绘制视图 */

@@ -20,10 +20,10 @@ namespace ${Domain.getName().toLowerCase()} {
                 return new DataConverter4${Domain.getShortName()};
             }
             /**
-            * 上传文件
-            * @param caller 调用者
-            */
-            upload(caller: ibas.UploadFileCaller<ibas.FileData>): void {
+             * 上传文件
+             * @param caller 调用者
+             */
+            upload(caller: ibas.IUploadFileCaller<ibas.FileData>): void {
                 if (!this.address.endsWith("/")) { this.address += "/"; }
                 let fileRepository: ibas.FileRepositoryUploadAjax = new ibas.FileRepositoryUploadAjax();
                 fileRepository.address = this.address.replace("/services/rest/data/", "/services/rest/file/");
@@ -32,10 +32,10 @@ namespace ${Domain.getName().toLowerCase()} {
                 fileRepository.upload("upload", caller);
             }
             /**
-            * 下载文件
-            * @param caller 调用者
-            */
-            download(caller: ibas.DownloadFileCaller<Blob>): void {
+             * 下载文件
+             * @param caller 调用者
+             */
+            download(caller: ibas.IDownloadFileCaller<Blob>): void {
                 if (!this.address.endsWith("/")) { this.address += "/"; }
                 let fileRepository: ibas.FileRepositoryDownloadAjax = new ibas.FileRepositoryDownloadAjax();
                 fileRepository.address = this.address.replace("/services/rest/data/", "/services/rest/file/");
@@ -45,17 +45,17 @@ namespace ${Domain.getName().toLowerCase()} {
             }
 $BEGIN_BO$
             /**
-            * 查询 ${BO.getDescription()}
-            * @param fetcher 查询者
-            */
-            fetch${BO.getName()}(fetcher: ibas.FetchCaller<bo.${BO.getName()}>): void {
+             * 查询 ${BO.getDescription()}
+             * @param fetcher 查询者
+             */
+            fetch${BO.getName()}(fetcher: ibas.IFetchCaller<bo.${BO.getName()}>): void {
                 super.fetch(bo.${BO.getName()}.name, fetcher);
             }
             /**
-            * 保存 ${BO.getDescription()}
-            * @param saver 保存者
-            */
-            save${BO.getName()}(saver: ibas.SaveCaller<bo.${BO.getName()}>): void {
+             * 保存 ${BO.getDescription()}
+             * @param saver 保存者
+             */
+            save${BO.getName()}(saver: ibas.ISaveCaller<bo.${BO.getName()}>): void {
                 super.save(bo.${BO.getName()}.name, saver);
             }
 

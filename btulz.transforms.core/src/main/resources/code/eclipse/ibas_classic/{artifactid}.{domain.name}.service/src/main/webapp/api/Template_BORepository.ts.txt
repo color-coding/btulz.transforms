@@ -12,29 +12,27 @@ namespace ${Domain.getName().toLowerCase()} {
     export namespace bo {
         /** 业务仓库 */
         export interface IBORepository${Domain.getName()} extends ibas.IBORepositoryApplication {
-
             /**
-            * 上传文件
-            * @param caller 调用者
-            */
-            upload(caller: ibas.UploadFileCaller<ibas.FileData>);
+             * 上传文件
+             * @param caller 调用者
+             */
+            upload(caller: ibas.IUploadFileCaller<ibas.FileData>): void;
             /**
-            * 下载文件
-            * @param caller 调用者
-            */
-            download(caller: ibas.DownloadFileCaller<Blob>);
+             * 下载文件
+             * @param caller 调用者
+             */
+            download(caller: ibas.IDownloadFileCaller<Blob>): void;
 $BEGIN_BO$
             /**
-            * 查询 ${BO.getDescription()}
-            * @param fetcher 查询者
-            */
-            fetch${BO.getName()}(fetcher: ibas.FetchCaller<bo.I${BO.getName()}>);
+             * 查询 ${BO.getDescription()}
+             * @param fetcher 查询者
+             */
+            fetch${BO.getName()}(fetcher: ibas.IFetchCaller<bo.I${BO.getName()}>): void;
             /**
-            * 保存 ${BO.getDescription()}
-            * @param saver 保存者
-            */
-            save${BO.getName()}(saver: ibas.SaveCaller<bo.I${BO.getName()}>);
-
+             * 保存 ${BO.getDescription()}
+             * @param saver 保存者
+             */
+            save${BO.getName()}(saver: ibas.ISaveCaller<bo.I${BO.getName()}>): void;
 $END_BO$
 
         }
