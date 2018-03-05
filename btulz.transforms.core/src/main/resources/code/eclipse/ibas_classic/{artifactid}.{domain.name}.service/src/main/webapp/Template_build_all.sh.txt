@@ -11,7 +11,7 @@ echo '**************************************************************************
 # 设置参数变量
 # 工作目录
 WORK_FOLDER=$(cd `dirname $0`; pwd)
-echo --工作的目录：${WORK_FOLDER}
+echo --工作目录：${WORK_FOLDER}
 # 其他参数
 OPTIONS=$1
 COMMOND=tsc
@@ -35,6 +35,10 @@ then
   if [ ! -e "${WORK_FOLDER}/3rdparty/openui5" ]
   then
     ln -s ${IBAS_FOLDER}/openui5 ${WORK_FOLDER}/3rdparty/openui5
+  fi
+  if [ ! -e "${WORK_FOLDER}/3rdparty/shell" ]
+  then
+    ln -s ${IBAS_FOLDER}/shell ${WORK_FOLDER}/3rdparty/shell
   fi
 fi
 
