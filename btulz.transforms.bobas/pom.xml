@@ -6,17 +6,17 @@
   <version>0.1.0</version>
   <packaging>jar</packaging>
   <name>btulz.transforms.bobas</name>
-  <url>http://colorcoding.org/tools/btulz/bobas</url>
+  <url>https://colorcoding.org/tools/btulz/bobas</url>
   <organization>
-    <url>http://colorcoding.org</url>
+    <url>https://colorcoding.org</url>
     <name>Color-Coding Studio</name>
   </organization>
   <developers>
     <developer>
       <name>Niuren Zhu</name>
       <organization>Color-Coding Studio</organization>
-      <organizationUrl>http://colorcoding.org/</organizationUrl>
-      <url>http://colorcoding.org/niurenzhu</url>
+      <organizationUrl>https://colorcoding.org/</organizationUrl>
+      <url>https://colorcoding.org/niurenzhu</url>
     </developer>
   </developers>
   <properties>

@@ -6,17 +6,17 @@
   <version>0.1.1</version>
   <packaging>jar</packaging>
   <name>btulz.transforms.shell</name>
-  <url>http://colorcoding.org/tools/btulz/shell</url>
+  <url>https://colorcoding.org/tools/btulz/shell</url>
   <organization>
-    <url>http://colorcoding.org</url>
+    <url>https://colorcoding.org</url>
     <name>Color-Coding Studio</name>
   </organization>
   <developers>
     <developer>
       <name>Niuren Zhu</name>
       <organization>Color-Coding Studio</organization>
-      <organizationUrl>http://colorcoding.org/</organizationUrl>
-      <url>http://colorcoding.org/niurenzhu</url>
+      <organizationUrl>https://colorcoding.org/</organizationUrl>
+      <url>https://colorcoding.org/niurenzhu</url>
     </developer>
   </developers>
   <properties>

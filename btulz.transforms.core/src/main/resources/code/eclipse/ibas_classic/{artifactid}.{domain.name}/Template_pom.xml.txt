@@ -11,7 +11,7 @@
     <name>${ArtifactId}.${Domain.getName().toLowerCase()}</name>
     <url>${ProjectUrl}/${ArtifactId}/${Domain.getName().toLowerCase()}/</url>
     <organization>
-        <name>colorcoding</name>
+        <name>Color-Coding Studio</name>
         <url>https://colorcoding.org</url>
     </organization>
     <properties>
