@@ -6,21 +6,23 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 /// <reference path="../3rdparty/ibas/index.d.ts" />
-/// <reference path="./bo/index.ts" />
+$BEGIN_BO$
+/// <reference path="./bo/${BO.getName()}.ts" />
+$END_BO$
 
 namespace ${Domain.getName().toLowerCase()} {
     export namespace bo {
         /** 数据转换者 */
-        export class DataConverter4${Domain.getShortName()} extends ibas.DataConverter4j {
+        export class DataConverter extends ibas.DataConverter4j {
 
             /** 创建业务对象转换者 */
             protected createConverter(): ibas.BOConverter {
-                return new BOConverter4${Domain.getShortName()};
+                return new BOConverter;
             }
         }
 
         /** 业务对象转换者 */
-        class BOConverter4${Domain.getShortName()} extends ibas.BOConverter {
+        class BOConverter extends ibas.BOConverter {
 
             /**
              * 自定义解析

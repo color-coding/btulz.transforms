@@ -182,7 +182,7 @@ namespace ${Domain.getName().toLowerCase()} {
                 return [
                     new ibas.BOListServiceProxy({
                         data: this.view.getSelecteds(),
-                        converter: new bo.DataConverter4${Domain.getShortName()}()
+                        converter: new bo.DataConverter()
                     })
                 ];
             }

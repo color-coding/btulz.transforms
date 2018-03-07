@@ -5,7 +5,15 @@
  * Use of this source code is governed by an Apache License, Version 2.0
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
-/// <reference path="../api/index.ts" />
-/// <reference path="./bo/index.ts" />
 /// <reference path="./BORepository.ts" />
-/// <reference path="./DataConverter.ts" />
+
+namespace ${Domain.getName().toLowerCase()} {
+    export namespace bo {
+        // 注册业务对象仓库到工厂
+        ibas.boFactory.register(BO_REPOSITORY_${Domain.getName().toUpperCase()}, BORepository${Domain.getName()});
+        // 注册业务对象到工厂
+$BEGIN_BO$
+        ibas.boFactory.register(${BO.getName()}.BUSINESS_OBJECT_CODE, ${BO.getName()});
+$END_BO$
+    }
+}
