@@ -9,6 +9,7 @@ hs_err_pid*
 # ibas packages
 */src/main/webapp/3rdparty/ibas
 */src/main/webapp/3rdparty/openui5
+*/src/main/webapp/3rdparty/shell
 */src/main/webapp/modules/
 
 # files
