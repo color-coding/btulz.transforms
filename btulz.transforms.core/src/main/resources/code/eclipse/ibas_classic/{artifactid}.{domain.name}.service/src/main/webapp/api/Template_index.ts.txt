@@ -6,4 +6,7 @@
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
 /// <reference path="./Data.ts" />
+$BEGIN_BO$
+/// <reference path="./bo/${BO.getName()}.ts" />
+$END_BO$
 /// <reference path="./BORepository.ts" />

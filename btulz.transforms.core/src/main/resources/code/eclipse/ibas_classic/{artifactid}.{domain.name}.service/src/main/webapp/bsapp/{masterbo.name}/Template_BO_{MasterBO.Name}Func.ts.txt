@@ -5,10 +5,6 @@
  * Use of this source code is governed by an Apache License, Version 2.0
  * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
  */
-/// <reference path="../../3rdparty/ibas/index.d.ts" />
-/// <reference path="../../borep/index.ts" />
-/// <reference path="./${BO.getName()}ListApp.ts" />
-
 namespace ${Domain.getName().toLowerCase()} {
     export namespace app {
         export class ${BO.getName()}Func extends ibas.ModuleFunction {
