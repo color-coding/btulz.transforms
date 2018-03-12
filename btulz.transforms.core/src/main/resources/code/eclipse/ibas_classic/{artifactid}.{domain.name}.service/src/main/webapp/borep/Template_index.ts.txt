@@ -16,10 +16,10 @@ $END_BO$
 namespace ${Domain.getName().toLowerCase()} {
     export namespace bo {
         // 注册业务对象仓库到工厂
-        ibas.boFactory.register(BO_REPOSITORY_${Domain.getName().toUpperCase()}, BORepository${Domain.getName()});
+        boFactory.register(BO_REPOSITORY_${Domain.getName().toUpperCase()}, BORepository${Domain.getName()});
         // 注册业务对象到工厂
 $BEGIN_BO$
-        ibas.boFactory.register(${BO.getName()}.BUSINESS_OBJECT_CODE, ${BO.getName()});
+        boFactory.register(${BO.getName()}.BUSINESS_OBJECT_CODE, ${BO.getName()});
 $END_BO$
     }
 }

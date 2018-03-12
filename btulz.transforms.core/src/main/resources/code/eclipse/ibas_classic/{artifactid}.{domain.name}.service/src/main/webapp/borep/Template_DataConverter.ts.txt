@@ -9,15 +9,20 @@ namespace ${Domain.getName().toLowerCase()} {
     export namespace bo {
         /** 数据转换者 */
         export class DataConverter extends ibas.DataConverter4j {
-
             /** 创建业务对象转换者 */
             protected createConverter(): ibas.BOConverter {
                 return new BOConverter;
             }
         }
 
+        /** 模块业务对象工厂 */
+        export const boFactory: ibas.BOFactory = new ibas.BOFactory();
         /** 业务对象转换者 */
         class BOConverter extends ibas.BOConverter {
+            /** 模块对象工厂 */
+            protected factory(): ibas.BOFactory {
+                return boFactory;
+            }
 
             /**
              * 自定义解析
