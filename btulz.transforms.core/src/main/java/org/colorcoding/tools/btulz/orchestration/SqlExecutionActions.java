@@ -4,9 +4,6 @@ import java.util.ArrayList;
 
 public class SqlExecutionActions extends ArrayList<ISqlExecutionAction> implements ISqlExecutionActions {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3927010628642860016L;
 
 	@Override

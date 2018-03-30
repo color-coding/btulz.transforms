@@ -66,9 +66,6 @@ public class DataTypeMappings extends ArrayList<DataTypeMapping> {
 		return null;
 	}
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -424849332351253868L;
 
 	@XmlElement(name = "Mapping")

@@ -2,9 +2,6 @@ package org.colorcoding.tools.btulz.transformer;
 
 public class TransformException extends Exception {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5270788920435746555L;
 
 	public TransformException() {

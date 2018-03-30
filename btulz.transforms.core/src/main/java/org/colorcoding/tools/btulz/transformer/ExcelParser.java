@@ -492,13 +492,12 @@ public class ExcelParser implements IExcelParser {
 			} else if (model.getModelType() == emModelType.DocumentLine
 					&& (property.getName().equals("DocEntry") || property.getName().equals("LineId"))) {
 				property.setPrimaryKey(true);
-			} else if (model.getModelType() == emModelType.MasterData
-					&& ((property.getName().equals("Code") || property.getName().equals("DocEntry")))) {
+			} else if (model.getModelType() == emModelType.MasterData && property.getName().equals("DocEntry")) {
 				property.setPrimaryKey(true);
 			} else if (model.getModelType() == emModelType.MasterDataLine
 					&& (property.getName().equals("Code") || property.getName().equals("LineId"))) {
 				property.setPrimaryKey(true);
-			} else if (model.getModelType() == emModelType.Simple && (property.getName().equals("ObjectKey"))) {
+			} else if (model.getModelType() == emModelType.Simple && property.getName().equals("ObjectKey")) {
 				property.setPrimaryKey(true);
 			} else if (model.getModelType() == emModelType.SimpleLine
 					&& (property.getName().equals("ObjectKey") || property.getName().equals("LineId"))) {

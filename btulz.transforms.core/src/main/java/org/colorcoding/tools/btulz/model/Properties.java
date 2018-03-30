@@ -10,9 +10,6 @@ import org.colorcoding.tools.btulz.util.ArrayList;
 @XmlSeeAlso({ Property.class })
 public class Properties extends ArrayList<IProperty> implements IProperties {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2215636759503857382L;
 
 	@Override

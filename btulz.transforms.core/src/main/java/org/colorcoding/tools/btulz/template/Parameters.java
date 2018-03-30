@@ -12,9 +12,6 @@ import java.util.List;
  */
 public class Parameters extends ArrayList<Parameter> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 9071904351211197657L;
 
 	public Parameters() {

@@ -18,9 +18,7 @@ import org.colorcoding.tools.btulz.Environment;
 @XmlType(name = "TypeValueMappings", namespace = Environment.NAMESPACE_BTULZ_TRANSFORMERS)
 @XmlSeeAlso({ TypeValueMapping.class })
 public class TypeValueMappings extends ArrayList<TypeValueMapping> {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -1588608213800837521L;
 
 	/**

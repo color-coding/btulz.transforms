@@ -288,7 +288,7 @@ public class Property extends Entity implements IProperty {
 	}
 
 	public String getNullType() {
-		if (this.isPrimaryKey()) {
+		if (this.isPrimaryKey() || this.isUniqueKey()) {
 			return "not null";
 		}
 		return "null";

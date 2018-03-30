@@ -10,9 +10,6 @@ import org.colorcoding.tools.btulz.util.ArrayList;
 @XmlSeeAlso({ BusinessObjectItem.class })
 public class BusinessObjectItems extends ArrayList<IBusinessObjectItem> implements IBusinessObjectItems {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 547175645190234604L;
 
 	@Override

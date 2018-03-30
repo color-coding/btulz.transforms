@@ -10,9 +10,6 @@ import org.colorcoding.tools.btulz.util.ArrayList;
 @XmlSeeAlso({ Model.class })
 public class Models extends ArrayList<IModel> implements IModels {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1104036494465184046L;
 
 	public IModel create() {

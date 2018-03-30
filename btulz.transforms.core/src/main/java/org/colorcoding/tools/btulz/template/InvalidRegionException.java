@@ -8,9 +8,6 @@ package org.colorcoding.tools.btulz.template;
  */
 public class InvalidRegionException extends Exception {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -580802517051513375L;
 
 	public InvalidRegionException() {

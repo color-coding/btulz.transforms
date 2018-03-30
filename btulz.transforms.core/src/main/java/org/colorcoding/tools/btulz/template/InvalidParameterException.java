@@ -2,9 +2,6 @@ package org.colorcoding.tools.btulz.template;
 
 public class InvalidParameterException extends Exception {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3469972994040911138L;
 
 	public InvalidParameterException() {

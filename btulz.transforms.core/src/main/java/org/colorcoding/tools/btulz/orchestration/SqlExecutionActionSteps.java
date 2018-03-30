@@ -4,9 +4,6 @@ import java.util.ArrayList;
 
 public class SqlExecutionActionSteps extends ArrayList<ISqlExecutionActionStep> implements ISqlExecutionActionSteps {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8959103759752136142L;
 
 	@Override
