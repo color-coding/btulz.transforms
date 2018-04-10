@@ -172,15 +172,6 @@ namespace ${Domain.getName().toLowerCase()} {
                     }
                 });
             }
-            /** 获取服务的契约 */
-            protected getServiceProxies(): ibas.IServiceProxy<ibas.IServiceContract>[] {
-                return [
-                    new ibas.BOListServiceProxy({
-                        data: this.view.getSelecteds(),
-                        converter: new bo.DataConverter()
-                    })
-                ];
-            }
         }
         /** 视图-${BO.getDescription()} */
         export interface I${BO.getName()}ListView extends ibas.IBOListView {
@@ -190,8 +181,6 @@ namespace ${Domain.getName().toLowerCase()} {
             deleteDataEvent: Function;
             /** 显示数据 */
             showData(datas: bo.${BO.getName()}[]): void;
-            /** 获取选择的数据 */
-            getSelecteds(): bo.${BO.getName()}[];
         }
     }
 }
