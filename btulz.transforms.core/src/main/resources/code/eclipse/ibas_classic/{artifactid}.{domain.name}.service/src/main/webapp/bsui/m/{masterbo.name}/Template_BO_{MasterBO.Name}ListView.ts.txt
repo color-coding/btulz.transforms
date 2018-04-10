@@ -41,7 +41,7 @@ namespace ${Domain.getName().toLowerCase()} {
                                                 that.page.setShowFooter(true);
                                                 ibas.servicesManager.showServices({
                                                     proxy: new ibas.BOListServiceProxy({
-                                                        data: openui5.utils.getSelecteds(that.table),
+                                                        data: openui5.utils.getSelecteds(that.list),
                                                         converter: new bo.DataConverter(),
                                                     }),
                                                     displayServices(services: ibas.IServiceAgent[]): void {

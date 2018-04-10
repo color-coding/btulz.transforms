@@ -70,7 +70,7 @@ $END_BOITEM$
                                     press: function (event: any): void {
                                         ibas.servicesManager.showServices({
                                             proxy: new ibas.BOListServiceProxy({
-                                                data: (<any>that.form.getModel()).getObject(),
+                                                data: (<any>that.layoutMain.getModel()).getObject(),
                                                 converter: new bo.DataConverter(),
                                             }),
                                             displayServices(services: ibas.IServiceAgent[]): void {
