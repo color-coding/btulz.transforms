@@ -78,10 +78,6 @@ public class CommandBuilder implements Comparable<CommandBuilder> {
 		this.workFolder = workFolder;
 	}
 
-	public String toString() {
-		return String.format("{command builder %s}", this.getName());
-	}
-
 	private List<Variable> variables;
 
 	protected List<Variable> getVariables() {
@@ -145,4 +141,8 @@ public class CommandBuilder implements Comparable<CommandBuilder> {
 		return this.getName().compareTo(o.getName());
 	}
 
+	@Override
+	public String toString() {
+		return String.format("{command builder %s}", this.getName());
+	}
 }

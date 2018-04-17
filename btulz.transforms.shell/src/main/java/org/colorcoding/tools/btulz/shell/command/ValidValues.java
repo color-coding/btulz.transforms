@@ -97,16 +97,15 @@ public class ValidValues implements Iterable<ValidValue> {
 				this.getValues().add(new ValidValue(Boolean.FALSE.toString()));
 			} else if (ValidValuesGetter.class.isAssignableFrom(type)) {
 				// 可选值获取者
-				try {
-					Object object = type.newInstance();
-					if (object instanceof ValidValuesGetter) {
-						ValidValuesGetter getter = (ValidValuesGetter) object;
-						for (ValidValue validValue : getter.get()) {
-							this.getValues().add(validValue);
-						}
+				Object object = type.newInstance();
+				if (object instanceof ValidValuesGetter) {
+					ValidValuesGetter getter = (ValidValuesGetter) object;
+					if (getter instanceof TemplateGetter) {
+						((TemplateGetter) getter).setWorkFile(this.getDefinitions());
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
+					for (ValidValue validValue : getter.get()) {
+						this.getValues().add(validValue);
+					}
 				}
 			}
 		} catch (Exception e) {

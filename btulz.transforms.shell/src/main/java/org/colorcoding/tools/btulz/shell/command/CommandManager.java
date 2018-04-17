@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -42,7 +41,7 @@ public class CommandManager {
 
 	private Map<String, CommandBuilder> commandMaps;
 
-	protected Map<String, CommandBuilder> getCommandMaps() {
+	private Map<String, CommandBuilder> getCommandMaps() {
 		if (this.commandMaps == null) {
 			this.commandMaps = new HashMap<>();
 		}
@@ -56,20 +55,13 @@ public class CommandManager {
 		return commandBuilders;
 	}
 
-	public CommandBuilder getCommands(String name) {
-		if (this.getCommandMaps().containsKey(name)) {
-			return this.getCommandMaps().get(name);
-		}
-		return null;
-	}
-
 	public void addCommands(CommandBuilder command) {
 		this.getCommandMaps().put(command.getName(), command);
 	}
 
-	public void addCommands(InputStream inputStream, String name) {
+	public CommandBuilder addCommands(InputStream inputStream, String name) {
 		if (inputStream == null) {
-			return;
+			return null;
 		}
 		try {
 			Object object = Serializer.fromXmlString(inputStream, CommandBuilder.class);
@@ -79,14 +71,12 @@ public class CommandManager {
 					commandBuilder.setName(name);
 				}
 				this.addCommands(commandBuilder);
+				return commandBuilder;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void addCommands(InputStream inputStream) {
-		this.addCommands(inputStream, null);
+		return null;
 	}
 
 	public void initialize() {
@@ -101,28 +91,31 @@ public class CommandManager {
 	protected void loadResources() {
 		// 加载jar包命令
 		try {
-			Enumeration<URL> dirs = Thread.currentThread().getContextClassLoader().getResources("commands");
-			// 循环迭代下去
-			while (dirs.hasMoreElements()) {
-				// 获取下一个元素
-				URL url = dirs.nextElement();
-				if (url.getProtocol().equals("jar")) {
-					// 加载jar包
-					JarFile jarFile = ((JarURLConnection) url.openConnection()).getJarFile();
-					if (jarFile != null) {
-						this.loadResources(jarFile);
-						jarFile.close();
-					}
-				} else if (url.getProtocol().equals("file")) {
+			// 加载自身资源
+			Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources("commands");
+			while (urls.hasMoreElements()) {
+				URL url = urls.nextElement();
+				if (url.getProtocol().equals("file")) {
 					// 加载工作目录命令
 					this.loadResources(url.getFile());
 				}
 			}
+			// 加载工作目录资源
+			File workFolder = new File(Environment.getWorkingFolder());
+			if (workFolder != null) {
+				for (File file : workFolder.listFiles()) {
+					if (file.getName().endsWith(".jar")) {
+						JarFile jarFile = new JarFile(file);
+						this.loadResources(jarFile);
+						jarFile.close();
+					}
+				}
+			}
+			// 加载工作目录命令
+			this.loadResources(Environment.getCommandsFolder());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		// 加载工作目录命令
-		this.loadResources(Environment.getCommandsFolder());
 	}
 
 	public void loadResources(JarFile jarFile) throws IOException {

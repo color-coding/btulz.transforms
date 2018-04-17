@@ -2,3 +2,5 @@
 *.sh                 text eol=lf
 *.sh.txt             text eol=lf
 *compile_order.txt   text eol=lf
+*.bat                text eol=crlf
+*.bat.txt            text eol=crlf

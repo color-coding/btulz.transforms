@@ -41,11 +41,11 @@ public class CodeTemplateGetter extends TemplateGetter {
 		}
 		String path = file.getPath();
 		String folder_sign = TEMPLATE_FOLDER_SIGN + File.separator;
-		if (!path.startsWith(this.getWorkFolder() + folder_sign)) {
+		if (!path.startsWith(this.getWorkFile() + folder_sign)) {
 			// 不是code目录下的
 			return null;
 		}
-		path = path.replace(this.getWorkFolder(), File.separator);// 工作目录多了一个分隔符
+		path = path.replace(this.getWorkFile(), File.separator);// 工作目录多了一个分隔符
 		int count = 0;
 		char separator = File.separator.toCharArray()[0];
 		for (char item : path.toCharArray()) {
