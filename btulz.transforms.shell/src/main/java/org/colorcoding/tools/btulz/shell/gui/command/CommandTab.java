@@ -322,6 +322,18 @@ public class CommandTab extends WorkingTab {
 					}
 				}
 			});
+			if (commandItem.getValue() != null && !commandItem.getValue().isEmpty()) {
+				for (int i = 0; i < comboBox.getItemCount(); i++) {
+					Object item = comboBox.getItemAt(i);
+					if (item instanceof ComboxItem) {
+						ComboxItem comboxItem = (ComboxItem) item;
+						if (commandItem.getValue().equals(comboxItem.value)) {
+							comboBox.setSelectedItem(item);
+							break;
+						}
+					}
+				}
+			}
 			panel.add(comboBox, gridBagConstraints);
 		} else {
 			JTextField textValue = new JTextField(commandItem.getValue());

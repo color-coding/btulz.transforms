@@ -54,7 +54,7 @@ public class MainFrame extends JFrame {
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.weightx = 16.0;
-		gridBagConstraints.anchor = GridBagConstraints.WEST;
+		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
 		JLabel label = new JLabel("Commands");
 		label.setFont(new java.awt.Font("Dialog", 3, 18));
 		label.setForeground(Color.BLUE);
@@ -93,10 +93,10 @@ public class MainFrame extends JFrame {
 		gridBagConstraints.gridy = 1;
 		gridBagConstraints.weightx = 16.0;
 		gridBagConstraints.weighty = 100.0;
-		gridBagConstraints.anchor = GridBagConstraints.NORTH;
+		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
 		// gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 		JScrollPane scrollPane = new JScrollPane(builderPane, ScrollPaneLayout.VERTICAL_SCROLLBAR_AS_NEEDED,
-				ScrollPaneLayout.HORIZONTAL_SCROLLBAR_NEVER);
+				ScrollPaneLayout.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		this.add(scrollPane, gridBagConstraints);
 		builderPane.addBuilderTabListener(new BuilderTabListener() {
 			@Override

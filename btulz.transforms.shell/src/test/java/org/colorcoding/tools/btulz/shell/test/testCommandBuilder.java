@@ -5,15 +5,14 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import org.colorcoding.tools.btulz.shell.Serializer;
-import org.colorcoding.tools.btulz.shell.command.CodeTemplateGetter;
 import org.colorcoding.tools.btulz.shell.command.Command;
 import org.colorcoding.tools.btulz.shell.command.CommandBuilder;
 import org.colorcoding.tools.btulz.shell.command.CommandItem;
 import org.colorcoding.tools.btulz.shell.command.CommandListener;
 import org.colorcoding.tools.btulz.shell.command.CommandManager;
 import org.colorcoding.tools.btulz.shell.command.CommandMessageEvent;
-import org.colorcoding.tools.btulz.shell.command.DSTemplateGetter;
 import org.colorcoding.tools.btulz.shell.command.MessageType;
+import org.colorcoding.tools.btulz.shell.command.TemplateGetter;
 import org.colorcoding.tools.btulz.shell.command.ValidValue;
 import org.colorcoding.tools.btulz.shell.command.ValidValues;
 
@@ -61,14 +60,7 @@ public class testCommandBuilder extends TestCase {
 		commandItem.setName(String.valueOf(index));
 		commandItem.setDescription("测试代码模板可选值");
 		commandItem.setContent("");
-		commandItem.getValidValues().setClassName(CodeTemplateGetter.class.getName());
-		commandItem.getValidValues().get();
-		index++;
-		commandItem = commandBuilder.getItems().create();
-		commandItem.setName(String.valueOf(index));
-		commandItem.setDescription("测试数据结构模板可选值");
-		commandItem.setContent("");
-		commandItem.getValidValues().setClassName(DSTemplateGetter.class.getName());
+		commandItem.getValidValues().setClassName(TemplateGetter.class.getName());
 		commandItem.getValidValues().get();
 		index++;
 

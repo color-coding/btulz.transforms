@@ -100,10 +100,7 @@ public class ValidValues implements Iterable<ValidValue> {
 				Object object = type.newInstance();
 				if (object instanceof ValidValuesGetter) {
 					ValidValuesGetter getter = (ValidValuesGetter) object;
-					if (getter instanceof TemplateGetter) {
-						((TemplateGetter) getter).setWorkFile(this.getDefinitions());
-					}
-					for (ValidValue validValue : getter.get()) {
+					for (ValidValue validValue : getter.get(this.getDefinitions())) {
 						this.getValues().add(validValue);
 					}
 				}

@@ -11,7 +11,9 @@ public interface ValidValuesGetter {
 	/**
 	 * 获取可选值
 	 * 
+	 * @param definitions
+	 *            参数
 	 * @return
 	 */
-	ValidValue[] get();
+	ValidValue[] get(String definitions);
 }
