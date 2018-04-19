@@ -9,7 +9,8 @@ echo '    2. 当前目录不存在btulz.transforms.shell.jar，则尝试下载�
 echo '    3. 脚本使用curl命令，请提前配置到PATH。                                 '
 echo '****************************************************************************'
 # 设置参数变量
-WORK_FOLDER=`dirname "$0"`
+cd `dirname $0`
+WORK_FOLDER=${PWD}
 BTULZ_SHELL=btulz.transforms.shell-0.1.1.jar
 
 echo --工作目录:[${WORK_FOLDER}]
