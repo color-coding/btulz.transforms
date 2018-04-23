@@ -110,7 +110,11 @@ public class CommandEditor extends JPanel {
 					if (that.textField.getText() == null || that.textField.getText().isEmpty()) {
 						throw new Exception("not input name.");
 					}
-					fileWriter = new FileWriter(that.getWorkFolder() + File.separator + that.textField.getText());
+					File workFolder = new File(that.getWorkFolder());
+					if (!workFolder.exists()) {
+						workFolder.mkdirs();
+					}
+					fileWriter = new FileWriter(workFolder.getPath() + File.separator + that.textField.getText());
 					fileWriter.write(that.textArea.getText());
 					fileWriter.flush();
 					JOptionPane.showMessageDialog(that, "Successfully saved.", "Command Editor",
