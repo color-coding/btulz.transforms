@@ -57,7 +57,6 @@ public class Command4Code extends Command4Release<Command4Code> {
 		arguments.add(new Argument("-OutputFolder", "代码输出的目录"));
 		arguments.add(new Argument("-GroupId", "组命名空间"));
 		arguments.add(new Argument("-ArtifactId", "项目命名空间"));
-		// arguments.add(new Argument("-ProjectId", "项目标记"));
 		arguments.add(new Argument("-ProjectVersion", "版本"));
 		arguments.add(new Argument("-ProjectUrl", "项目的地址"));
 		arguments.add(new Argument("-Domains", "使用的模型目录或文件"));
@@ -82,9 +81,6 @@ public class Command4Code extends Command4Release<Command4Code> {
 		stringBuilder.append("-GroupId=org.colorcoding");// 组标记
 		stringBuilder.append(" ");
 		stringBuilder.append("-ArtifactId=ibas");// 项目标记
-		// stringBuilder.append(" ");
-		// stringBuilder.append("-ProjectId=d42441ec-841e-4585-83f6-eff2a6b0ef45");//
-		// 项目ID
 		stringBuilder.append(" ");
 		stringBuilder.append("-ProjectVersion=0.0.1");// 项目版本
 		stringBuilder.append(" ");
@@ -116,8 +112,6 @@ public class Command4Code extends Command4Release<Command4Code> {
 					codeTransformer.setGroupId(argument.getValue());
 				} else if (argument.getName().equalsIgnoreCase("-ArtifactId")) {
 					codeTransformer.setArtifactId(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-ProjectId")) {
-					codeTransformer.setProjectVersion(argument.getValue());
 				} else if (argument.getName().equalsIgnoreCase("-ProjectVersion")) {
 					codeTransformer.setProjectVersion(argument.getValue());
 				} else if (argument.getName().equalsIgnoreCase("-ProjectUrl")) {

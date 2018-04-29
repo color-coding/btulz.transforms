@@ -37,7 +37,6 @@ public class testCodeTransformer extends TestCase {
 		codeTransformer.setOutputFolder(Environment.getOutputFolder());
 		codeTransformer.setGroupId("org.colorcoding");
 		codeTransformer.setArtifactId("ibas");
-		codeTransformer.setProjectId(UUID.randomUUID().toString());
 		codeTransformer.setProjectVersion("0.0.1");
 		codeTransformer.setProjectUrl("http://colorcoding.org");
 		codeTransformer.addParameters(new Parameter("Company", "CC"));
@@ -59,10 +58,10 @@ public class testCodeTransformer extends TestCase {
 		codeTransformer.setOutputFolder(Environment.getOutputFolder());
 		codeTransformer.setGroupId("org.colorcoding");
 		codeTransformer.setArtifactId("ibas");
-		codeTransformer.setProjectId(UUID.randomUUID().toString());
 		codeTransformer.setProjectVersion("0.0.1");
 		codeTransformer.setProjectUrl("http://colorcoding.org");
 		codeTransformer.addParameters(new Parameter("ibasVersion", "0.1.1"));
+		codeTransformer.addParameters(new Parameter("ProjectId", UUID.randomUUID().toString()));
 		codeTransformer.addDomains(Environment.getDomainFolder());
 		// codeTransformer.addDomain((new testModels()).createDomain());
 

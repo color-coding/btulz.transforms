@@ -155,16 +155,6 @@ public class CodeTransformer extends Transformer {
 		this.artifactId = artifactId;
 	}
 
-	private String projectId;
-
-	public String getProjectId() {
-		return projectId;
-	}
-
-	public void setProjectId(String projectId) {
-		this.projectId = projectId;
-	}
-
 	private String projectVersion;
 
 	public String getProjectVersion() {
@@ -217,7 +207,6 @@ public class CodeTransformer extends Transformer {
 		parameters.add(ParametersFactory.create().createParameter("AppName", "btulz.transforms"));
 		parameters.add(ParametersFactory.create().createParameter("GroupId", this.getGroupId()));
 		parameters.add(ParametersFactory.create().createParameter("ArtifactId", this.getArtifactId()));
-		parameters.add(ParametersFactory.create().createParameter("ProjectId", this.getProjectId()));
 		parameters.add(ParametersFactory.create().createParameter("ProjectVersion", this.getProjectVersion()));
 		parameters.add(ParametersFactory.create().createParameter("ProjectUrl", this.getProjectUrl()));
 		parameters.add(ParametersFactory.create().createParameter("ID", new RuntimeParameter()));
