@@ -40,4 +40,8 @@ public enum emDataType {
 	 * 字节
 	 */
 	Bytes,
+	/**
+	 * 布尔
+	 */
+	Boolean,
 }

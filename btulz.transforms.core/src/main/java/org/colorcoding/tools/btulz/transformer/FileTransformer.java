@@ -1,7 +1,6 @@
 package org.colorcoding.tools.btulz.transformer;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -10,6 +9,7 @@ import org.colorcoding.tools.btulz.model.IBusinessObject;
 import org.colorcoding.tools.btulz.model.IBusinessObjectItem;
 import org.colorcoding.tools.btulz.model.IDomain;
 import org.colorcoding.tools.btulz.model.IModel;
+import org.colorcoding.tools.btulz.util.ArrayList;
 
 public abstract class FileTransformer extends Transformer implements IFileTransformer {
 
@@ -240,12 +240,21 @@ public abstract class FileTransformer extends Transformer implements IFileTransf
 			if (model == null) {
 				continue;
 			}
-			if (model.getName().equals(businessObject.getMappedModel())) {
-				returnModels.add(model.clone());
+			if (!model.getName().equals(businessObject.getMappedModel())) {
+				continue;
 			}
+			if (returnModels.firstOrDefault(c -> c.getName().equals(model.getName())) != null) {
+				continue;
+			}
+			returnModels.add(model.clone());
 		}
 		for (IBusinessObjectItem boItem : businessObject.getRelatedBOs()) {
-			returnModels.addAll(this.getModels(models, boItem));
+			for (IModel item : this.getModels(models, boItem)) {
+				if (returnModels.firstOrDefault(c -> c.getName().equals(item.getName())) != null) {
+					continue;
+				}
+				returnModels.add(item);
+			}
 		}
 		return returnModels;
 	}

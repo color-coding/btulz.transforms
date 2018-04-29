@@ -320,6 +320,9 @@ public class Property extends Entity implements IProperty {
 			case Bytes:
 				this.annotatedType = "BYTES";
 				break;
+			case Boolean:
+				this.annotatedType = "BOOLEAN";
+				break;
 			default:
 				this.annotatedType = "UNKNOWN";
 				break;

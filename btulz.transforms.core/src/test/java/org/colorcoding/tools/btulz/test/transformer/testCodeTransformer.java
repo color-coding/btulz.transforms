@@ -33,7 +33,7 @@ public class testCodeTransformer extends TestCase {
 
 	public void testEclipseCode() throws Exception {
 		CodeTransformer codeTransformer = new CodeTransformer();
-		codeTransformer.setTemplateFolder("eclipse/ibas_classic");
+		codeTransformer.setTemplateFolder("ibas_classic");
 		codeTransformer.setOutputFolder(Environment.getOutputFolder());
 		codeTransformer.setGroupId("org.colorcoding");
 		codeTransformer.setArtifactId("ibas");
