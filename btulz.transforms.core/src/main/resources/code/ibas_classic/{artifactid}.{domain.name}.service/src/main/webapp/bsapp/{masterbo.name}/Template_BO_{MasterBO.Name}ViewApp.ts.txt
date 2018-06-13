@@ -8,7 +8,7 @@
 namespace ${Domain.getName().toLowerCase()} {
     export namespace app {
         /** 查看应用-${BO.getDescription()} */
-        export class ${BO.getName()}ViewApp extends ibas.BOViewService<I${BO.getName()}ViewView> {
+        export class ${BO.getName()}ViewApp extends ibas.BOViewService<I${BO.getName()}ViewView, bo.${BO.getName()}> {
 
             /** 应用标识 */
             static APPLICATION_ID: string = "${ID.newUUID()}";
@@ -58,7 +58,9 @@ namespace ${Domain.getName().toLowerCase()} {
                 this.busy(true);
                 let that: this = this;
                 if (typeof criteria === "string") {
+                    let value: string = criteria;
                     criteria = new ibas.Criteria();
+                    criteria.result = 1;
                     // 添加查询条件
 
                 }
@@ -67,11 +69,17 @@ namespace ${Domain.getName().toLowerCase()} {
                     criteria: criteria,
                     onCompleted(opRslt: ibas.IOperationResult<bo.${BO.getName()}>): void {
                         try {
+                            that.busy(false);
                             if (opRslt.resultCode !== 0) {
                                 throw new Error(opRslt.message);
                             }
                             that.viewData = opRslt.resultObjects.firstOrDefault();
-                            that.viewShowed();
+                            if (!that.isViewShowed()) {
+                                // 没显示视图，先显示
+                                that.show();
+                            } else {
+                                that.viewShowed();
+                            }
                         } catch (error) {
                             that.messages(error);
                         }
