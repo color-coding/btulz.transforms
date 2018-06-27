@@ -4,20 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.colorcoding.ibas.bobas.MyConfiguration;
 import org.colorcoding.ibas.bobas.common.Criteria;
 import org.colorcoding.ibas.bobas.common.ICriteria;
-import org.colorcoding.ibas.bobas.core.RepositoryException;
 import org.colorcoding.ibas.bobas.organization.IOrganizationManager;
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.bobas.transformer.ClassLoader4Transformer;
 import org.colorcoding.tools.btulz.bobas.transformer.DataTransformer;
 import org.colorcoding.tools.btulz.bobas.transformer.DataTransformer4Jar;
-import org.colorcoding.tools.btulz.transformer.TransformException;
-import org.xml.sax.SAXException;
 
 import junit.framework.TestCase;
 
@@ -64,8 +58,7 @@ public class testDataTransformer extends TestCase {
 		loader.close();
 	}
 
-	public void testTransformer() throws ClassNotFoundException, TransformException, RepositoryException, IOException,
-			SAXException, ParserConfigurationException, JAXBException {
+	public void testTransformer() throws Exception {
 		Environment.getLogger().debug("begin test.");
 		File folder = new File(MyConfiguration.getStartupFolder());
 		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();

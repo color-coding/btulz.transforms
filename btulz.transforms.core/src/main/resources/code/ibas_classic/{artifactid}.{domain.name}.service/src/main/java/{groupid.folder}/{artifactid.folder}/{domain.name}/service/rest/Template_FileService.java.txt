@@ -33,7 +33,7 @@ import org.colorcoding.ibas.${Domain.getName().toLowerCase()}.MyConfiguration;
 public class FileService extends FileRepositoryService {
 
     public final static String WORK_FOLDER = MyConfiguration.getConfigValue(
-            MyConfiguration.CONFIG_ITEM_${Domain.getName().toUpperCase()}_FILE_FOLDER,
+            MyConfiguration.CONFIG_ITEM_DOCUMENT_FOLDER,
             MyConfiguration.getDataFolder() + File.separator + "${Domain.getName().toLowerCase()}_files");
 
     public FileService() {

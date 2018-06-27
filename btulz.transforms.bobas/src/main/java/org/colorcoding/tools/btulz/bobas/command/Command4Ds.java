@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.colorcoding.ibas.bobas.MyConfiguration;
-import org.colorcoding.ibas.bobas.configuration.IConfigurationManager;
+import org.colorcoding.ibas.bobas.configuration.ConfigurationManagerFile;
 import org.colorcoding.tools.btulz.command.Argument;
 import org.colorcoding.tools.btulz.command.Command;
 import org.colorcoding.tools.btulz.command.Prompt;
@@ -108,7 +108,9 @@ public class Command4Ds extends Command<Command4Ds> {
 				throw new IOException("invaild config file.");
 			}
 			// 读取配置文件
-			IConfigurationManager config = MyConfiguration.create(file.getPath());
+			ConfigurationManagerFile config = new ConfigurationManagerFile();
+			config.setConfigFile(file.getPath());
+			config.update();
 			// 加载数据库说明值
 			DbValues dbValues = DbValues.create(argDbValue);
 			if (dbValues == null || dbValues.isEmpty()) {
@@ -116,7 +118,7 @@ public class Command4Ds extends Command<Command4Ds> {
 			}
 			// 数据解析模板
 			if (argTemplate == null || argTemplate.isEmpty()) {
-				argTemplate = dbValues.getValue(config.getValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_TYPE),
+				argTemplate = dbValues.getValue(config.getConfigValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_TYPE),
 						"DsTemplate");
 			}
 			if (argTemplate == null || argTemplate.isEmpty()) {
@@ -124,7 +126,7 @@ public class Command4Ds extends Command<Command4Ds> {
 			}
 			// 脚本文件
 			if (argSql == null || argSql.isEmpty()) {
-				argSql = dbValues.getValue(config.getValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_TYPE),
+				argSql = dbValues.getValue(config.getConfigValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_TYPE),
 						"SqlFilter");
 			}
 			if (argSql == null || argSql.isEmpty()) {
@@ -135,39 +137,39 @@ public class Command4Ds extends Command<Command4Ds> {
 				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "JarFile"));
 			}
 			// 公司标记
-			String argCompany = config.getValue(MyConfiguration.CONFIG_ITEM_COMPANY);
+			String argCompany = config.getConfigValue(MyConfiguration.CONFIG_ITEM_COMPANY);
 			if (argCompany == null || argCompany.isEmpty()) {
 				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "Company"));
 			}
 			// 数据库端口
-			String argDbPort = dbValues.getValue(config.getValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_TYPE),
+			String argDbPort = dbValues.getValue(config.getConfigValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_TYPE),
 					"DbPort");
 			if (argDbPort == null || argDbPort.isEmpty()) {
 				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "DbPort"));
 			}
 			// 数据库框架
-			String argDbSchema = dbValues.getValue(config.getValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_TYPE),
-					"DbSchema");
+			String argDbSchema = dbValues
+					.getValue(config.getConfigValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_TYPE), "DbSchema");
 			if (argDbSchema == null) {
 				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "DbSchema"));
 			}
 			// 数据库地址
-			String argDbServer = config.getValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_SERVER);
+			String argDbServer = config.getConfigValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_SERVER);
 			if (argDbServer == null || argDbServer.isEmpty()) {
 				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "DbServer"));
 			}
 			// 数据库名称
-			String argDbName = config.getValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_NAME);
+			String argDbName = config.getConfigValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_NAME);
 			if (argDbName == null || argDbName.isEmpty()) {
 				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "DbName"));
 			}
 			// 数据库用户
-			String argDbUser = config.getValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_USER_ID);
+			String argDbUser = config.getConfigValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_USER_ID);
 			if (argDbUser == null || argDbUser.isEmpty()) {
 				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "DbUser"));
 			}
 			// 数据库用户密码
-			String argDbPassword = config.getValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_USER_PASSWORD);
+			String argDbPassword = config.getConfigValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_USER_PASSWORD);
 			if (argDbPassword == null || argDbPassword.isEmpty()) {
 				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "DbPassword"));
 			}

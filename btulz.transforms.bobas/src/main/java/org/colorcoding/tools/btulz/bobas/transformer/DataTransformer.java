@@ -8,7 +8,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -107,8 +106,7 @@ public class DataTransformer extends Transformer {
 	}
 
 	@Override
-	public final void transform() throws TransformException, RepositoryException, IOException, ClassNotFoundException,
-			SAXException, ParserConfigurationException, JAXBException {
+	public final void transform() throws Exception {
 		ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 		try {
 			Thread.currentThread().setContextClassLoader(this.getClassLoader());
