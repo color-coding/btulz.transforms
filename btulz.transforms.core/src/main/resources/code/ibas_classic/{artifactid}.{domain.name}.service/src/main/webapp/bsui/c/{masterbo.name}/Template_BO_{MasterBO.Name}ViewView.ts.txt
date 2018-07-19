@@ -38,19 +38,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
                     });
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
-                    this.layoutMain = new sap.ui.layout.VerticalLayout("", {
-                        width: "100%",
-                        height: "100%",
-                        content: [
-                            formTop,
-$BEGIN_BOITEM$
-$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
-                            form${BOItem.getName()},
-$END_BOITEM_RELATION_IS_ONETOMANY$
-$END_BOITEM$
-                        ]
-                    });
-                    let page: sap.m.Page = new sap.m.Page("", {
+                    this.page = new sap.m.Page("", {
                         showHeader: false,
                         subHeader: new sap.m.Bar("", {
                             contentLeft: [
@@ -70,7 +58,7 @@ $END_BOITEM$
                                     press: function (event: any): void {
                                         ibas.servicesManager.showServices({
                                             proxy: new ibas.BOServiceProxy({
-                                                data: (<any>that.layoutMain.getModel()).getObject(),
+                                                data: (<any>that.page.getModel()).getObject(),
                                                 converter: new bo.DataConverter(),
                                             }),
                                             displayServices(services: ibas.IServiceAgent[]): void {
@@ -100,21 +88,33 @@ $END_BOITEM$
                                 })
                             ]
                         }),
-                        content: [this.layoutMain]
+                        content: [
+                            new sap.ui.layout.VerticalLayout("", {
+                                width: "100%",
+                                height: "100%",
+                                content: [
+                                    formTop,
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+                                    form${BOItem.getName()},
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+                                ]
+                            })
+                        ]
                     });
-                    return page;
+                    return this.page;
                 }
-                private layoutMain: sap.ui.layout.VerticalLayout;
+                private page: sap.m.Page;
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
                 private table${BOItem.getName()}: sap.ui.table.Table;
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
-
                 /** 显示数据 */
                 show${BO.getName()}(data: bo.${BO.getName()}): void {
-                    this.layoutMain.setModel(new sap.ui.model.json.JSONModel(data));
-                    this.layoutMain.bindObject("/");
+                    this.page.setModel(new sap.ui.model.json.JSONModel(data));
+                    this.page.bindObject("/");
                 }
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$

@@ -45,7 +45,7 @@ namespace ${Domain.getName().toLowerCase()} {
                             that.fireViewEvents(that.fetchDataEvent, criteria);
                         }
                     });
-                    let page: sap.m.Page = new sap.m.Page("", {
+                    return new sap.m.Page("", {
                         showHeader: false,
                         subHeader: new sap.m.Toolbar("", {
                             content: [
@@ -136,7 +136,6 @@ namespace ${Domain.getName().toLowerCase()} {
                             })
                         ]
                     });
-                    return page;
                 }
                 private table: sap.ui.table.Table;
                 /** 显示数据 */

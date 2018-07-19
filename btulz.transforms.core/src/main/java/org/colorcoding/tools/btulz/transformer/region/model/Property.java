@@ -78,6 +78,13 @@ public class Property extends Entity implements IProperty {
 		return "N";
 	}
 
+	public String isSystemed() {
+		if (this.getName() != null && this.getName().startsWith("U_")) {
+			return "N";
+		}
+		return "Y";
+	}
+
 	@Override
 	public void setUniqueKey(boolean value) {
 		this.entity.setUniqueKey(value);
