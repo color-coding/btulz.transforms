@@ -1,5 +1,8 @@
 package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()};
 
+import org.colorcoding.ibas.bobas.configuration.ConfigurationFactory;
+import org.colorcoding.ibas.bobas.configuration.IConfigurationManager;
+
 /**
  * 我的配置项
  */
