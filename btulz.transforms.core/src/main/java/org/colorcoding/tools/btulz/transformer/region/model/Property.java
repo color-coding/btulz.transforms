@@ -75,6 +75,13 @@ public class Property extends Entity implements IProperty {
 		if (this.isPrimaryKey() || this.isUniqueKey()) {
 			return "Y";
 		}
+		if (this.getName() != null) {
+			if (this.getName().equalsIgnoreCase("Code")) {
+				return "Y";
+			} else if (this.getName().equalsIgnoreCase("Name")) {
+				return "Y";
+			}
+		}
 		return "N";
 	}
 
