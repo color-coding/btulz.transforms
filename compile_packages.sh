@@ -79,7 +79,7 @@ echo --压缩编译文件为tar包
 if [ -e ${WORK_FOLDER}/release ]
 then
   cd ${WORK_FOLDER}/release/
-  tar -cvf btulz.transforms.tar btulz.transforms.* bobas.businessobjectscommon-* jaxen-* log4j-* mysql-connector-java-* ngdbc-* postgresql-* sqljdbc* dom4j-* btulz.shell.*
+  tar -cvf btulz.transforms.tar btulz.transforms.* bobas.businessobjectscommon-* jaxen-* log4j-* mysql-connector-java-* ngdbc-* postgresql-* sqljdbc* mssql-jdbc-*.jar dom4j-* btulz.shell.*
 fi
 cd ${WORK_FOLDER}
 

@@ -5,9 +5,9 @@ $$适用于java平台下的ibas框架
     <Name>ds_mysql_ibas</Name>
     <Description>基于MYSQL的结构映射说明</Description>
     <Integrated>true</Integrated>
-    <DriverName>com.mysql.jdbc.Driver</DriverName>
+    <DriverName>com.mysql.cj.jdbc.Driver</DriverName>
 $$因存在创建数据的可能，所以数据库连接默认库。
-    <DbUrl>jdbc:mysql://${DbServer}:${DbPort}/mysql?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false</DbUrl>
+    <DbUrl>jdbc:mysql://${DbServer}:${DbPort}/mysql?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone=UTC</DbUrl>
     <DbUser>${DbUser}</DbUser>
     <DbPassword>${DbPassword}</DbPassword>
 $$"!"表示延迟解析变量，例如${!Property.getEditSize()}
@@ -15,7 +15,7 @@ $$设置为隔离动作（Isolated = true），此动作独立数据库事务，
     <Action Name="create db" Isolated="true">
         <Step Name="check and create db ${DbName}">
             <Script>
-                create database if not exists `${DbName}` character set utf8
+                create database if not exists `${DbName}` character set utf8mb4
             </Script>
         </Step>
     </Action>
