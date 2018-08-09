@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @license
  * Copyright Color-Coding Studio. All Rights Reserved.
  *

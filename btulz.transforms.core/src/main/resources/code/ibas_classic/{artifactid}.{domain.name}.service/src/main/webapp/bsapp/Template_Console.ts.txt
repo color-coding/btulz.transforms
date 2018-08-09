@@ -10,7 +10,6 @@
 $BEGIN_BO$
 /// <reference path="./${BO.getName().toLowerCase()}/index.ts" />
 $END_BO$
-
 namespace ${Domain.getName().toLowerCase()} {
     export namespace app {
         /** 模块控制台 */

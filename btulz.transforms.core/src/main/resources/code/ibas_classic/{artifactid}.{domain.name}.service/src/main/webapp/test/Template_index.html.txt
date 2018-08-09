@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ibas test</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script type="text/javascript" src="../3rdparty/ibas/3rdparty/jquery.js"></script>
+    <script type="text/javascript" src="../3rdparty/ibas/index.js"></script>
+    <script type="text/javascript" src="../index.js"></script>
+    <script type="text/javascript" src="./index.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        (function () {
+            ${Domain.getName().toLowerCase()}.test.run();
+        }());
+    </script>
+</body>
+
+</html>

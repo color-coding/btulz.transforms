@@ -3,11 +3,11 @@
     "debug": true,
     "language": "zh_CN",
     "offline": false,
-    "offline|BORepositoryShell": true,
     "defaultUser": "admin",
     "defaultPassword": "1q2w3e",
     "repositoryAddress|BORepositoryShell": "http://localhost:8080/initialfantasy/services/rest/data",
     "repositoryAddress|BORepositoryShellOffline": ".../test/repository",
+    "repositoryAddress|BORepository${Domain.getName()}": "http://localhost:8080/${Domain.getName().toLowerCase()}/services/rest/data",
     "repositoryAddress|BORepository${Domain.getName()}Offline": ".../test/repository"
   },
   "languages": [

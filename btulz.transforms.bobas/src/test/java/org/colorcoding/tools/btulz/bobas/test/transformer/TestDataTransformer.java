@@ -15,7 +15,7 @@ import org.colorcoding.tools.btulz.bobas.transformer.DataTransformer4Jar;
 
 import junit.framework.TestCase;
 
-public class testDataTransformer extends TestCase {
+public class TestDataTransformer extends TestCase {
 
 	@SuppressWarnings("unused")
 	public void testClassLoader()

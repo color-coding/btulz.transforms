@@ -1,4 +1,4 @@
-package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.test.bo;
+package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.test;
 
 import junit.framework.TestCase;
 import org.colorcoding.ibas.bobas.common.*;
@@ -11,7 +11,7 @@ import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.repository.*;
 * ${BO.getDescription()} 测试
 * 
 */
-public class test${BO.getName()} extends TestCase {
+public class Test${BO.getName()} extends TestCase {
     /**
      * 获取连接口令
     */

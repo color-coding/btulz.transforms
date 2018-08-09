@@ -11,7 +11,7 @@ import org.colorcoding.tools.btulz.bobas.command.Command4Init;
 
 import junit.framework.TestCase;
 
-public class testCommands extends TestCase {
+public class TestCommands extends TestCase {
 
 	public void testInit() throws MalformedURLException {
 		ArrayList<String> args = new ArrayList<>();

@@ -9,7 +9,6 @@ namespace ${Domain.getName().toLowerCase()} {
     export namespace bo {
         /** 业务对象仓库 */
         export class BORepository${Domain.getName()} extends ibas.BORepositoryApplication implements IBORepository${Domain.getName()} {
-
             /** 创建此模块的后端与前端数据的转换者 */
             protected createConverter(): ibas.IDataConverter {
                 return new DataConverter;

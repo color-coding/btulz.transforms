@@ -1,9 +1,0 @@
-[
-  {
-    "Id": "${ProjectId}",
-    "Name": "${Domain.getName()}",
-    "Category": "",
-    "Address": ".../",
-    "Repository": "http://localhost:8080/${Domain.getName().toLowerCase()}/services/rest/data"
-  }
-]

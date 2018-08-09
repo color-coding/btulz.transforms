@@ -10,7 +10,7 @@ import javax.xml.bind.Marshaller;
 import org.colorcoding.tools.btulz.model.Domain;
 import org.colorcoding.tools.btulz.model.IDomain;
 import org.colorcoding.tools.btulz.test.Environment;
-import org.colorcoding.tools.btulz.test.model.testModels;
+import org.colorcoding.tools.btulz.test.model.TestModels;
 import org.colorcoding.tools.btulz.transformer.MultiTransformException;
 import org.colorcoding.tools.btulz.transformer.TransformException;
 import org.colorcoding.tools.btulz.transformer.XmlTransformer;
@@ -18,11 +18,11 @@ import org.colorcoding.tools.btulz.transformer.XmlTransformerDom4j;
 
 import junit.framework.TestCase;
 
-public class testXmlTransformer extends TestCase {
+public class TestXmlTransformer extends TestCase {
 
 	public void testSaveReadXml()
 			throws ClassNotFoundException, TransformException, MultiTransformException, JAXBException {
-		IDomain domain = (new testModels()).createDomain();
+		IDomain domain = (new TestModels()).createDomain();
 		XmlTransformer xmlTransformer = new XmlTransformer();
 		xmlTransformer.load(domain);
 		xmlTransformer.setInterruptOnError(true);
@@ -50,7 +50,7 @@ public class testXmlTransformer extends TestCase {
 			System.out.println(oldXML);
 		}
 		// 测试DOM4J实现，保存时元素顺序不乱
-		domain = (new testModels()).createDomain();
+		domain = (new TestModels()).createDomain();
 		xmlTransformer = new XmlTransformerDom4j();
 		// xmlTransformer.setInterruptOnError(true);
 		xmlTransformer.load(Environment.getXmlModelsFileOld(), false);

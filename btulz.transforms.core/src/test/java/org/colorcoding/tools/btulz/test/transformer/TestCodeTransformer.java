@@ -10,7 +10,7 @@ import org.colorcoding.tools.btulz.util.NamingRules;
 
 import junit.framework.TestCase;
 
-public class testCodeTransformer extends TestCase {
+public class TestCodeTransformer extends TestCase {
 
 	public void testNaming() {
 

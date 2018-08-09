@@ -9,7 +9,6 @@ namespace ${Domain.getName().toLowerCase()} {
     export namespace app {
         /** 列表应用-${BO.getDescription()} */
         export class ${BO.getName()}ListApp extends ibas.BOListApplication<I${BO.getName()}ListView, bo.${BO.getName()}> {
-
             /** 应用标识 */
             static APPLICATION_ID: string = "${ID.newUUID()}";
             /** 应用名称 */

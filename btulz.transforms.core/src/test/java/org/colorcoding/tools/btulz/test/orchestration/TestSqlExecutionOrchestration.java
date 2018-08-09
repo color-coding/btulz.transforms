@@ -7,7 +7,7 @@ import org.colorcoding.tools.btulz.orchestration.SqlExecutionOrchestration;
 
 import junit.framework.TestCase;
 
-public class testSqlExecutionOrchestration extends TestCase {
+public class TestSqlExecutionOrchestration extends TestCase {
 
 	public void testExecution() throws Exception {
 

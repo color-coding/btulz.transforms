@@ -8,7 +8,6 @@
 namespace ${Domain.getName().toLowerCase()} {
     export namespace app {
         export class ${BO.getName()}Func extends ibas.ModuleFunction {
-
             /** 功能标识 */
             static FUNCTION_ID = "${ID.newUUID()}";
             /** 功能名称 */

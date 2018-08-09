@@ -13,7 +13,7 @@ import org.colorcoding.tools.btulz.test.Environment;
 
 import junit.framework.TestCase;
 
-public class testCommands extends TestCase {
+public class TestCommands extends TestCase {
 	public void testConsole() {
 		Console.main(new String[] {});
 	}

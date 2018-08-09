@@ -18,7 +18,7 @@ import org.colorcoding.tools.btulz.shell.command.ValidValues;
 
 import junit.framework.TestCase;
 
-public class testCommandBuilder extends TestCase {
+public class TestCommandBuilder extends TestCase {
 
 	public enum emYesNo {
 		Yes, No

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @license
  * Copyright Color-Coding Studio. All Rights Reserved.
  *
@@ -12,7 +12,6 @@ $BEGIN_BO$
 $END_BO$
 /// <reference path="./DataConverter.ts" />
 /// <reference path="./BORepository.ts" />
-
 namespace ${Domain.getName().toLowerCase()} {
     export namespace bo {
         // 注册业务对象仓库到工厂
