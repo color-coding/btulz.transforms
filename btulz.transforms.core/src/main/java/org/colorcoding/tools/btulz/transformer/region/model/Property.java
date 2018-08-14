@@ -71,8 +71,26 @@ public class Property extends Entity implements IProperty {
 			return "N";
 	}
 
+	@Override
+	public void setUniqueKey(boolean value) {
+		this.entity.setUniqueKey(value);
+	}
+
+	@Override
+	public boolean isSearchKey() {
+		return this.entity.isSearchKey();
+	}
+
+	@Override
+	public void setSearchKey(boolean value) {
+		this.entity.setSearchKey(value);
+	}
+
 	public String isSearched(String type) {
 		if (this.isPrimaryKey() || this.isUniqueKey()) {
+			return "Y";
+		}
+		if (this.isSearchKey()) {
 			return "Y";
 		}
 		if (this.getName() != null) {
@@ -90,11 +108,6 @@ public class Property extends Entity implements IProperty {
 			return "N";
 		}
 		return "Y";
-	}
-
-	@Override
-	public void setUniqueKey(boolean value) {
-		this.entity.setUniqueKey(value);
 	}
 
 	@Override
@@ -405,4 +418,5 @@ public class Property extends Entity implements IProperty {
 	public String toString() {
 		return String.format("{property: %s %s}", this.getName(), this.getDataType());
 	}
+
 }

@@ -31,7 +31,14 @@ namespace ${Domain.getName().toLowerCase()} {
             }
             /** 视图显示后 */
             protected viewShowed(): void {
-                // 视图加载完成
+                // 视图加载完成，基类方法更新地址
+                super.viewShowed();
+                if (ibas.objects.isNull(this.viewData)) {
+                    // 创建编辑对象实例
+                    this.viewData = new bo.${BO.getName()}();
+                    this.proceeding(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_created_new"));
+                }
+                this.view.show${BO.getName()}(this.viewData);
             }
             /** 编辑数据，参数：目标数据 */
             protected editData(): void {

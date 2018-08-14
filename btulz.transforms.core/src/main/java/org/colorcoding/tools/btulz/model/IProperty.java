@@ -81,6 +81,20 @@ public interface IProperty {
 	void setUniqueKey(boolean value);
 
 	/**
+	 * 是否检索
+	 * 
+	 * @return
+	 */
+	boolean isSearchKey();
+
+	/**
+	 * 设置-检索键
+	 * 
+	 * @param dataType
+	 */
+	void setSearchKey(boolean value);
+
+	/**
 	 * 获取-数据类型
 	 * 
 	 * @return

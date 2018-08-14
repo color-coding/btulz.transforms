@@ -96,6 +96,17 @@ public class Property implements IProperty, Cloneable {
 		this.uniqueKey = value;
 	}
 
+	@XmlAttribute(name = "SearchKey")
+	private boolean searchKey;
+
+	public final boolean isSearchKey() {
+		return searchKey;
+	}
+
+	public final void setSearchKey(boolean value) {
+		this.searchKey = value;
+	}
+
 	@XmlAttribute(name = "DataType")
 	private emDataType dataType;
 
