@@ -158,6 +158,12 @@ public class Command4Ds extends Command<Command4Ds> {
 			if (argDbServer == null || argDbServer.isEmpty()) {
 				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "DbServer"));
 			}
+			// 提取端口号
+			if (argDbServer.indexOf(":") > 0) {
+				String values[] = argDbServer.split(":");
+				argDbServer = values[0];
+				argDbPort = values[1];
+			}
 			// 数据库名称
 			String argDbName = config.getConfigValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_NAME);
 			if (argDbName == null || argDbName.isEmpty()) {
