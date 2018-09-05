@@ -21,16 +21,17 @@ public class TestDbTransformer extends TestCase {
 	public void testDS() throws Exception {
 		System.err.println("运行请清理test-classes目录的历史文件。");
 		DsTransformer dsTransformer = new DsTransformer();
-		dsTransformer.setTemplateFile("ds_mssql_ibas_classic.xml");
+		dsTransformer.setTemplateFile("ds_sybase_ibas_classic.xml");
 		// dsTransformer.addDomains(Environment.getWorkingFolder() +
 		// File.separator + Environment.getXmlModelsFileOld());
-		dsTransformer.addDomains("D:\\Downloads\\ds_sys_approvaltemplate.xml");
+		dsTransformer.addDomains(
+				"E:\\MyWorks\\ColorCoding\\ibas.initialfantasy\\ibas.initialfantasy\\src\\main\\resources\\datastructures");
 		dsTransformer.setCompany("CC");
-		dsTransformer.setDbServer("ibas-dev-mssql");
-		dsTransformer.setDbPort("1433");
-		dsTransformer.setDbSchema("dbo");
+		dsTransformer.setDbServer("ibas-db-sybase");
+		dsTransformer.setDbPort("2638");
+		// dsTransformer.setDbSchema("dbo");
 		dsTransformer.setDbName("ibas_demo");
-		dsTransformer.setDbUser("sa");
+		dsTransformer.setDbUser("dba");
 		dsTransformer.setDbPassword("1q2w3e");
 		dsTransformer.transform();
 	}

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- ds_sybase_ibas.xml的数据类型额外映射说明 -->
+<ns2:DataTypeMappings xmlns:ns2="http://colorcoding.org/btulz/transformers">
+    <Mapping DataType="Bytes" SubType="Default" Mapped="varbinary"/>
+</ns2:DataTypeMappings>

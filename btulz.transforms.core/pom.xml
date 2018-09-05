@@ -117,6 +117,11 @@
       <version>2.3</version>
     </dependency>
     <dependency>
+      <groupId>com.sap.jconnect</groupId>
+      <artifactId>jconn4</artifactId>
+      <version>16.3.4</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-ooxml</artifactId>
       <version>3.17</version>

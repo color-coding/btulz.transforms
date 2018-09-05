@@ -20,7 +20,7 @@ $$设置为隔离动作（Isolated = true），此动作独立数据库事务，
         </Step>
         <Step Name="create db ${DbName}" RunOnValue="0">
             <Script>
-                 create database "${DbName}"
+                create database "${DbName}"
             </Script>
         </Step>
     </Action>
@@ -35,7 +35,7 @@ $BEGIN_MODEL$
             <Script>
                 create table "${Model.getMapped()}"(
 $BEGIN_MODEL_PROPERTY$
-                    "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getNullType()} ${Property.getSeparator(,)}
+                   "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getNullType()} ${Property.getSeparator(,)}
 $END_MODEL_PROPERTY$
                 )
             </Script>
@@ -48,7 +48,7 @@ $BEGIN_MODEL_PROPERTY$
         </Step>
         <Step Name="create field ${Model.getMapped()}.${Property.getMapped()}" RunOnValue="0">
             <Script>
-                 alter table "${Model.getMapped()}" add "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getNullType()}
+                alter table "${Model.getMapped()}" add "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getNullType()}
             </Script>
         </Step>
 $END_MODEL_PROPERTY$
@@ -60,11 +60,11 @@ $BEGIN_MODEL_HAS_PRIMARY$
         </Step>
         <Step Name="create ${Model.getMapped()}'s key fields" RunOnValue="0">
             <Script>
-                 alter table "${Model.getMapped()}" add primary key (
+                alter table "${Model.getMapped()}" add primary key (
 $BEGIN_MODEL_PRIMARY_PROPERTY$
-                     "${Property.getMapped()}" ${Property.getSeparator(,)}
+                    "${Property.getMapped()}" ${Property.getSeparator(,)}
 $END_MODEL_PRIMARY_PROPERTY$
-                 )
+                )
             </Script>
         </Step>
 $END_MODEL_HAS_PRIMARY$
@@ -78,9 +78,9 @@ $BEGIN_MODEL_HAS_UNIQUE$
         </Step>
         <Step Name="create table ${Model.getMapped()}'s unique index">
             <Script>
-                 create unique index "${Model.getMapped().toUpperCase()}_UNIQUE_INDEX" on "${Model.getMapped()}" (
+                create unique index "${Model.getMapped().toUpperCase()}_UNIQUE_INDEX" on "${Model.getMapped()}" (
 $BEGIN_MODEL_UNIQUE_PROPERTY$
-                     "${Property.getMapped()}" ${Property.getSeparator(,)}
+                    "${Property.getMapped()}" ${Property.getSeparator(,)}
 $END_MODEL_UNIQUE_PROPERTY$
                 )
             </Script>
@@ -136,7 +136,7 @@ $BEGIN_MODEL_PROPERTY$
         </Step>
         <Step Name="register business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${BO.getShortName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'${Property.isSystemed()}')
+                insert into "${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") values (N'${BO.getShortName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'${Property.isSystemed()}')
             </Script>
         </Step>
 $END_MODEL_PROPERTY$
@@ -149,7 +149,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
         </Step>
         <Step Name="register business object property ${BOItem.getName()}s.${BOItem.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${BOItem.getParent().getShortName()}', N'${BOItem.getName()}s', N'${BOItem.getShortName(index)}', N'${BOItem.getDescription()}', N'${BOItem.getName()}', NULL, -1, N'N', N'Y')
+                insert into "${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") values (N'${BOItem.getParent().getShortName()}', N'${BOItem.getName()}s', N'${BOItem.getShortName(index)}', N'${BOItem.getDescription()}', N'${BOItem.getName()}', NULL, -1, N'N', N'Y')
             </Script>
         </Step>
 $END_BOITEM_RELATION_IS_ONETOMANY$
@@ -161,7 +161,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOONE$
         </Step>
         <Step Name="register business object property ${BOItem.getName()}.${BOItem.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${BOItem.getParent().getShortName()}', N'${BOItem.getName()}', N'${BOItem.getShortName(index)}', N'${BOItem.getDescription()}', N'${BOItem.getName()}', NULL, -1, N'N', N'Y')
+                insert into "${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") values (N'${BOItem.getParent().getShortName()}', N'${BOItem.getName()}', N'${BOItem.getShortName(index)}', N'${BOItem.getDescription()}', N'${BOItem.getName()}', NULL, -1, N'N', N'Y')
             </Script>
         </Step>
 $END_BOITEM_RELATION_IS_ONETOONE$
@@ -199,7 +199,7 @@ $BEGIN_MODEL_PROPERTY$
         </Step>
         <Step Name="register business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${BO.getShortName(index)}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'${Property.isSystemed()}')
+                insert into "${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") values (N'${BO.getShortName(index)}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'${Property.isSystemed()}')
             </Script>
         </Step>
 $END_MODEL_PROPERTY$
@@ -213,7 +213,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
         </Step>
         <Step Name="register business object property ${BOItem.getName()}s.${BOItem.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${BOItem.getParent().getShortName(index)}', N'${BOItem.getName()}s', N'${BOItem.getShortName(index)}', N'${BOItem.getDescription()}', N'${BOItem.getName()}', NULL, -1, N'N', N'Y')
+                insert into "${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") values (N'${BOItem.getParent().getShortName(index)}', N'${BOItem.getName()}s', N'${BOItem.getShortName(index)}', N'${BOItem.getDescription()}', N'${BOItem.getName()}', NULL, -1, N'N', N'Y')
             </Script>
         </Step>
 $END_BOITEM_RELATION_IS_ONETOMANY$
@@ -225,7 +225,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOONE$
         </Step>
         <Step Name="register business object property ${BOItem.getName()}.${BOItem.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${BOItem.getParent().getShortName(index)}', N'${BOItem.getName()}', N'${BOItem.getShortName(index)}', N'${BOItem.getDescription()}', N'${BOItem.getName()}', NULL, -1, N'N', N'Y')
+                insert into "${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") values (N'${BOItem.getParent().getShortName(index)}', N'${BOItem.getName()}', N'${BOItem.getShortName(index)}', N'${BOItem.getDescription()}', N'${BOItem.getName()}', NULL, -1, N'N', N'Y')
             </Script>
         </Step>
 $END_BOITEM_RELATION_IS_ONETOONE$

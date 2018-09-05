@@ -15,12 +15,12 @@ $$设置为隔离动作（Isolated = true），此动作独立数据库事务，
     <Action Name="create db" Isolated="true">
         <Step Name="check db ${DbName} exists">
             <Script>
-                select count(0) from sys.databases where name = '${DbName}'
+                select count(0) from "sys"."databases" where "name" = '${DbName}'
             </Script>
         </Step>
         <Step Name="create db ${DbName}" RunOnValue="0">
             <Script>
-                 create database "${DbName}" 
+                create database "${DbName}" 
             </Script>
         </Step>
     </Action>
@@ -28,7 +28,7 @@ $BEGIN_MODEL$
     <Action Name="create table">
         <Step Name="check table ${Model.getMapped()} exists">
             <Script>
-                select count(0) from "${DbName}".sys.sysobjects where name = '${Model.getMapped()}' and type = 'u'
+                select count(0) from "${DbName}"."sys"."sysobjects" where "name" = '${Model.getMapped()}' and "type" = 'u'
             </Script>
         </Step>
 $$上步返回0时运行（RunOnValue="0"）。
@@ -36,7 +36,7 @@ $$上步返回0时运行（RunOnValue="0"）。
             <Script>
                 create table "${DbName}"."${DbSchema}"."${Model.getMapped()}"(
 $BEGIN_MODEL_PROPERTY$
-                    "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getNullType()} ${Property.getSeparator(,)}
+                   "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getNullType()} ${Property.getSeparator(,)}
 $END_MODEL_PROPERTY$
                 )
             </Script>
@@ -44,28 +44,28 @@ $END_MODEL_PROPERTY$
 $BEGIN_MODEL_PROPERTY$
         <Step Name="check field ${Model.getMapped()}.${Property.getMapped()} exists">
             <Script>
-                select count(0) from "${DbName}".sys.syscolumns where object_name(id,db_id('${DbName}')) = '${Model.getMapped()}' and name = '${Property.getMapped()}'
+                select count(0) from "${DbName}"."sys"."syscolumns" where object_name("id",db_id('${DbName}')) = '${Model.getMapped()}' and "name" = '${Property.getMapped()}'
             </Script>
         </Step>
         <Step Name="create field ${Model.getMapped()}.${Property.getMapped()}" RunOnValue="0">
             <Script>
-                 alter table "${DbName}"."${DbSchema}"."${Model.getMapped()}" add "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getNullType()}
+                alter table "${DbName}"."${DbSchema}"."${Model.getMapped()}" add "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getNullType()}
             </Script>
         </Step>
 $END_MODEL_PROPERTY$
 $BEGIN_MODEL_HAS_PRIMARY$
         <Step Name="check ${Model.getMapped()}'s key fields exists">
             <Script>
-                select count(0) from "${DbName}".sys.sysobjects where xtype = 'PK' AND object_name(id,db_id('${DbName}')) = 'K${Model.getMapped().toUpperCase()}'
+                select count(0) from "${DbName}"."sys"."sysobjects" where "xtype" = 'PK' and object_name("id",db_id('${DbName}')) = 'K${Model.getMapped().toUpperCase()}'
             </Script>
         </Step>
         <Step Name="create ${Model.getMapped()}'s key fields" RunOnValue="0">
             <Script>
-                 alter table "${DbName}"."${DbSchema}"."${Model.getMapped()}" add constraint "K${Model.getMapped().toUpperCase()}" primary key (
+                alter table "${DbName}"."${DbSchema}"."${Model.getMapped()}" add constraint "K${Model.getMapped().toUpperCase()}" primary key (
 $BEGIN_MODEL_PRIMARY_PROPERTY$
-                     "${Property.getMapped()}" ${Property.getSeparator(,)}
+                    "${Property.getMapped()}" ${Property.getSeparator(,)}
 $END_MODEL_PRIMARY_PROPERTY$
-                 )
+                )
             </Script>
         </Step>
 $END_MODEL_HAS_PRIMARY$
@@ -74,7 +74,7 @@ $BEGIN_MODEL_HAS_UNIQUE$
     <Action Name="create table unique index">
         <Step Name="check table ${Model.getMapped()}'s unique index exists">
             <Script>
-                select count(0) from "${DbName}".sys.indexes where object_name(object_id,db_id('${DbName}'))='${Model.getMapped()}' and name = '${Model.getMapped().toUpperCase()}_UNIQUE_INDEX'
+                select count(0) from "${DbName}"."sys"."indexes" where object_name("object_id",db_id('${DbName}'))='${Model.getMapped()}' and "name" = '${Model.getMapped().toUpperCase()}_UNIQUE_INDEX'
             </Script>
         </Step>
         <Step Name="delete table ${Model.getMapped()}'s unique index" RunOnValue="1">
@@ -86,7 +86,7 @@ $BEGIN_MODEL_HAS_UNIQUE$
             <Script>
                 create unique index "${Model.getMapped().toUpperCase()}_UNIQUE_INDEX" on "${DbName}"."${DbSchema}"."${Model.getMapped()}" (
 $BEGIN_MODEL_UNIQUE_PROPERTY$
-                     "${Property.getMapped()}" ${Property.getSeparator(,)}
+                    "${Property.getMapped()}" ${Property.getSeparator(,)}
 $END_MODEL_UNIQUE_PROPERTY$
                 )
             </Script>
@@ -98,7 +98,7 @@ $BEGIN_BO$
     <Action Name="register business object" KeepStepResult="false">
         <Step Name="check number table exists">
             <Script>
-                select count(0) from "${DbName}".sys.sysobjects where name = '${Company}_SYS_ONNM' and type = 'u'
+                select count(0) from "${DbName}"."sys"."sysobjects" where "name" = '${Company}_SYS_ONNM' and "type" = 'u'
             </Script>
         </Step>
         <Step Name="check business object code ${BO.getShortName()} exists" RunOnValue="1">
@@ -116,7 +116,7 @@ $BEGIN_BO_MODEL$
     <Action Name="register business object informations">
         <Step Name="check business object informations table exists">
             <Script>
-                select count(0) from "${DbName}".sys.sysobjects where name = '${Company}_SYS_OBOI' and type = 'u'
+                select count(0) from "${DbName}"."sys"."sysobjects" where "name" = '${Company}_SYS_OBOI' and "type" = 'u'
             </Script>
         </Step>
         <Step Name="delete business object ${Model.getName()}'s informations" RunOnValue="1">
@@ -131,7 +131,7 @@ $BEGIN_BO_MODEL$
         </Step>
         <Step Name="check business object informations table exists">
             <Script>
-                select count(0) from "${DbName}".sys.sysobjects where name = '${Company}_SYS_BOI1' and type = 'u'
+                select count(0) from "${DbName}"."sys"."sysobjects" where "name" = '${Company}_SYS_BOI1' and "type" = 'u'
             </Script>
         </Step>
 $BEGIN_MODEL_PROPERTY$
@@ -142,7 +142,7 @@ $BEGIN_MODEL_PROPERTY$
         </Step>
         <Step Name="register business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${BO.getShortName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'${Property.isSystemed()}')
+                insert into "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") values (N'${BO.getShortName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'${Property.isSystemed()}')
             </Script>
         </Step>
 $END_MODEL_PROPERTY$
@@ -155,7 +155,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
         </Step>
         <Step Name="register business object property ${BOItem.getName()}s.${BOItem.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${BOItem.getParent().getShortName()}', N'${BOItem.getName()}s', N'${BOItem.getShortName(index)}', N'${BOItem.getDescription()}', N'${BOItem.getName()}', NULL, -1, N'N', N'Y')
+                insert into "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") values (N'${BOItem.getParent().getShortName()}', N'${BOItem.getName()}s', N'${BOItem.getShortName(index)}', N'${BOItem.getDescription()}', N'${BOItem.getName()}', NULL, -1, N'N', N'Y')
             </Script>
         </Step>
 $END_BOITEM_RELATION_IS_ONETOMANY$
@@ -167,7 +167,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOONE$
         </Step>
         <Step Name="register business object property ${BOItem.getName()}.${BOItem.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${BOItem.getParent().getShortName()}', N'${BOItem.getName()}', N'${BOItem.getShortName(index)}', N'${BOItem.getDescription()}', N'${BOItem.getName()}', NULL, -1, N'N', N'Y')
+                insert into "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") values (N'${BOItem.getParent().getShortName()}', N'${BOItem.getName()}', N'${BOItem.getShortName(index)}', N'${BOItem.getDescription()}', N'${BOItem.getName()}', NULL, -1, N'N', N'Y')
             </Script>
         </Step>
 $END_BOITEM_RELATION_IS_ONETOONE$
@@ -179,7 +179,7 @@ $BEGIN_BOITEMS$
 $BEGIN_BO_MODEL$
         <Step Name="check business object informations table exists">
             <Script>
-                select count(0) from "${DbName}".sys.sysobjects where name = '${Company}_SYS_OBOI' and type = 'u'
+                select count(0) from "${DbName}"."sys"."sysobjects" where "name" = '${Company}_SYS_OBOI' and "type" = 'u'
             </Script>
         </Step>
         <Step Name="delete business object ${Model.getName()}'s informations" RunOnValue="1">
@@ -194,7 +194,7 @@ $BEGIN_BO_MODEL$
         </Step>
         <Step Name="check business object informations table exists">
             <Script>
-                select count(0) from "${DbName}".sys.sysobjects where name = '${Company}_SYS_BOI1' and type = 'u'
+                select count(0) from "${DbName}"."sys"."sysobjects" where "name" = '${Company}_SYS_BOI1' and "type" = 'u'
             </Script>
         </Step>
 $BEGIN_MODEL_PROPERTY$
@@ -205,7 +205,7 @@ $BEGIN_MODEL_PROPERTY$
         </Step>
         <Step Name="register business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${BO.getShortName(index)}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'${Property.isSystemed()}')
+                insert into "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") values (N'${BO.getShortName(index)}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'${Property.isSystemed()}')
             </Script>
         </Step>
 $END_MODEL_PROPERTY$
@@ -219,19 +219,19 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
         </Step>
         <Step Name="register business object property ${BOItem.getName()}s.${BOItem.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${BOItem.getParent().getShortName(index)}', N'${BOItem.getName()}s', N'${BOItem.getShortName(index)}', N'${BOItem.getDescription()}', N'${BOItem.getName()}', NULL, -1, N'N', N'Y')
+                insert into "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") values (N'${BOItem.getParent().getShortName(index)}', N'${BOItem.getName()}s', N'${BOItem.getShortName(index)}', N'${BOItem.getDescription()}', N'${BOItem.getName()}', NULL, -1, N'N', N'Y')
             </Script>
         </Step>
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $BEGIN_BOITEM_RELATION_IS_ONETOONE$
         <Step Name="delete business object property ${BOItem.getName()}.${BOItem.getName()}'s informations" RunOnValue="1">
             <Script>
-                delete from "${DbName}"."${Company}_SYS_BOI1" where "Code" = N'${BOItem.getParent().getShortName(index)}' and "Property" = N'${BOItem.getName()}'
+                delete from "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" where "Code" = N'${BOItem.getParent().getShortName(index)}' and "Property" = N'${BOItem.getName()}'
             </Script>
         </Step>
         <Step Name="register business object property ${BOItem.getName()}.${BOItem.getName()}'s informations" RunOnValue="1">
             <Script>
-                insert into "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES(N'${BOItem.getParent().getShortName(index)}', N'${BOItem.getName()}', N'${BOItem.getShortName(index)}', N'${BOItem.getDescription()}', N'${BOItem.getName()}', NULL, -1, N'N', N'Y')
+                insert into "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") values (N'${BOItem.getParent().getShortName(index)}', N'${BOItem.getName()}', N'${BOItem.getShortName(index)}', N'${BOItem.getDescription()}', N'${BOItem.getName()}', NULL, -1, N'N', N'Y')
             </Script>
         </Step>
 $END_BOITEM_RELATION_IS_ONETOONE$

@@ -6,7 +6,6 @@
     <Item Content="-Company=${VALUE}" Description="公司" Value="CC" />
     <Item Content="-DbServer=${VALUE}" Description="数据库地址" Value="ibas-db-pgsql" />
     <Item Content="-DbPort=${VALUE}" Description="数据库端口" Value="5432" />
-    <Item Content="-DbSchema=${VALUE}" Description="数据库架构" Value="" />
     <Item Content="-DbName=${VALUE}" Description="数据库名称" Value="ibas_demo" />
     <Item Content="-DbUser=${VALUE}" Description="用户" Value="postgres" />
     <Item Content="-DbPassword=${VALUE}" Description="密码" Value="1q2w3e" />

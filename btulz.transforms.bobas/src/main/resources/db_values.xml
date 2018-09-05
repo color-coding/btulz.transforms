@@ -25,4 +25,10 @@
 		<DbValueItem Key="DbPort" Value="30015" />
 		<DbValueItem Key="DbSchema" Value="" />
 	</DbValue>
+	<DbValue Name="SYBASE">
+		<DbValueItem Key="DsTemplate" Value="ds_sybase_ibas_classic.xml" />
+		<DbValueItem Key="SqlFilter" Value="sql_sybase_" />
+		<DbValueItem Key="DbPort" Value="2638" />
+		<DbValueItem Key="DbSchema" Value="" />
+	</DbValue>
 </ns:DbValues>
