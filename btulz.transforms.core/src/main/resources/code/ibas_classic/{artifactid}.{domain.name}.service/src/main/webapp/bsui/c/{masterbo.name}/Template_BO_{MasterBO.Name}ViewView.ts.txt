@@ -46,6 +46,7 @@ $END_BOITEM$
                                     text: ibas.i18n.prop("shell_data_edit"),
                                     type: sap.m.ButtonType.Transparent,
                                     icon: "sap-icon://edit",
+                                    visible: this.mode === ibas.emViewMode.VIEW ? false : true,
                                     press: function (): void {
                                         that.fireViewEvents(that.editDataEvent);
                                     }

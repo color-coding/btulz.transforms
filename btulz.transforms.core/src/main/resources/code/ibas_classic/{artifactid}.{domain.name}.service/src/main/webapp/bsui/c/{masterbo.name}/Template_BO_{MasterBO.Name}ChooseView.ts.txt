@@ -55,6 +55,7 @@ namespace ${Domain.getName().toLowerCase()} {
                             new sap.m.Button("", {
                                 text: ibas.i18n.prop("shell_data_new"),
                                 type: sap.m.ButtonType.Transparent,
+                                visible: this.mode === ibas.emViewMode.VIEW ? false : true,
                                 press: function (): void {
                                     that.fireViewEvents(that.newDataEvent);
                                 }
