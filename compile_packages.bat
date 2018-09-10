@@ -15,10 +15,6 @@ echo     7. 需要安装7zip并添加到PATH。
 echo ****************************************************************************
 REM 设置参数变量
 SET WORK_FOLDER=%~dp0
-SET h=%time:~0,2%
-SET hh=%h: =0%
-SET OPNAME=%date:~0,4%%date:~5,2%%date:~8,2%_%hh%%time:~3,2%%time:~6,2%
-SET LOGFILE=%WORK_FOLDER%compile_packages_log_%OPNAME%.txt
 
 echo --当前工作的目录是[%WORK_FOLDER%]
 echo --检查编译顺序文件[compile_order.txt]
@@ -35,14 +31,14 @@ for /f %%m in (%WORK_FOLDER%compile_order.txt) do (
     if !MY_PACKAGES_FOLDER:~-8!==.service (
       REM 网站，编译war包
       echo --开始编译[%%m]
-      call "%MAVEN_HOME%\bin\mvn" clean package -Dmaven.test.skip=true -f %WORK_FOLDER%%%m\pom.xml >>%LOGFILE%
-      if exist %WORK_FOLDER%%%m\target\%%m*.war copy /y %WORK_FOLDER%%%m\target\%%m*.war %WORK_FOLDER%release >>%LOGFILE%
+      call "%MAVEN_HOME%\bin\mvn" clean package -Dmaven.test.skip=true -f %WORK_FOLDER%%%m\pom.xml
+      if exist %WORK_FOLDER%%%m\target\%%m*.war copy /y %WORK_FOLDER%%%m\target\%%m*.war %WORK_FOLDER%release
     ) else (
       REM 非网站，编译jar包并安装到本地
       echo --开始编译[%%m]+安装
-      call "%MAVEN_HOME%\bin\mvn" clean package install -Dmaven.test.skip=true -f %WORK_FOLDER%%%m\pom.xml >>%LOGFILE%
-      if exist %WORK_FOLDER%%%m\target\%%m*.jar copy /y %WORK_FOLDER%%%m\target\%%m*.jar %WORK_FOLDER%release >>%LOGFILE%
-      if exist %WORK_FOLDER%%%m\target\lib\*.* copy /y %WORK_FOLDER%%%m\target\lib\*.* %WORK_FOLDER%release\ >>%LOGFILE%
+      call "%MAVEN_HOME%\bin\mvn" clean package install -Dmaven.test.skip=true -f %WORK_FOLDER%%%m\pom.xml
+      if exist %WORK_FOLDER%%%m\target\%%m*.jar copy /y %WORK_FOLDER%%%m\target\%%m*.jar %WORK_FOLDER%release
+      if exist %WORK_FOLDER%%%m\target\lib\*.* copy /y %WORK_FOLDER%%%m\target\lib\*.* %WORK_FOLDER%release\
     )
     REM 检查并复制编译结果
     if exist %WORK_FOLDER%release\%%m*.* (

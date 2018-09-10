@@ -13,8 +13,6 @@ echo '    6. 可在compile_order.txt文件中调整编译顺序。              
 echo '****************************************************************************'
 # 设置参数变量
 WORK_FOLDER=`pwd`
-OPNAME=`date '+%Y%m%d_%H%M%S'`
-LOGFILE=${WORK_FOLDER}/compile_packages_log_${OPNAME}.txt
 
 echo --当前工作的目录是[${WORK_FOLDER}]
 echo --检查编译顺序文件[compile_order.txt]
@@ -40,25 +38,25 @@ do
     then
       # 网站，编译war包
       echo --开始编译[${line}]
-      mvn clean package -Dmaven.test.skip=true -f ${WORK_FOLDER}/${line}/pom.xml >>$LOGFILE
+      mvn clean package -Dmaven.test.skip=true -f ${WORK_FOLDER}/${line}/pom.xml
 
       if [ -e ${WORK_FOLDER}/${line}/target/*.war ]
       then
-        cp -r ${WORK_FOLDER}/${line}/target/*.war ${WORK_FOLDER}/release >>$LOGFILE
+        cp -r ${WORK_FOLDER}/${line}/target/*.war ${WORK_FOLDER}/release
       fi
     else
       # 非网站，编译jar包并安装到本地
       echo --开始编译[${line}]+安装
-      mvn clean package install -Dmaven.test.skip=true -f ${WORK_FOLDER}/${line}/pom.xml >>$LOGFILE
+      mvn clean package install -Dmaven.test.skip=true -f ${WORK_FOLDER}/${line}/pom.xml
 
       if [ -e ${WORK_FOLDER}/${line}/target/*.jar ]
       then
-        cp -r ${WORK_FOLDER}/${line}/target/*.jar ${WORK_FOLDER}/release >>$LOGFILE
+        cp -r ${WORK_FOLDER}/${line}/target/*.jar ${WORK_FOLDER}/release
       fi
       # 复制lib目录
       if [ -e ${WORK_FOLDER}/${line}/target/lib/ ]
       then
-        cp -r ${WORK_FOLDER}/${line}/target/lib/* ${WORK_FOLDER}/release >>$LOGFILE
+        cp -r ${WORK_FOLDER}/${line}/target/lib/* ${WORK_FOLDER}/release
       fi
     fi
     # 检查编译结果
