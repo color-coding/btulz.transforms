@@ -7,7 +7,7 @@ $$适用于java平台下的ibas框架
     <Integrated>true</Integrated>
     <DriverName>com.mysql.cj.jdbc.Driver</DriverName>
 $$因存在创建数据的可能，所以数据库连接默认库。
-    <DbUrl>jdbc:mysql://${DbServer}:${DbPort}/mysql?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone=UTC</DbUrl>
+    <DbUrl>jdbc:mysql://${DbServer}:${DbPort}/mysql?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC</DbUrl>
     <DbUser>${DbUser}</DbUser>
     <DbPassword>${DbPassword}</DbPassword>
 $$"!"表示延迟解析变量，例如${!Property.getEditSize()}
