@@ -21,8 +21,8 @@ echo --检查编译顺序文件[compile_order.txt]
 if not exist %WORK_FOLDER%compile_order.txt dir /a:d /b %WORK_FOLDER% >%WORK_FOLDER%compile_order.txt
 
 echo --清除项目缓存
-if exist %WORK_FOLDER%release\ rd /s /q %WORK_FOLDER%release\
-if not exist %WORK_FOLDER%release md %WORK_FOLDER%release
+if exist %WORK_FOLDER%release\ rd /s /q %WORK_FOLDER%release\ >nul
+if not exist %WORK_FOLDER%release md %WORK_FOLDER%release >nul
 
 echo --开始编译[compile_order.txt]内容
 for /f %%m in (%WORK_FOLDER%compile_order.txt) do (
@@ -31,14 +31,14 @@ for /f %%m in (%WORK_FOLDER%compile_order.txt) do (
     if !MY_PACKAGES_FOLDER:~-8!==.service (
       REM 网站，编译war包
       echo --开始编译[%%m]
-      call "%MAVEN_HOME%\bin\mvn" clean package -Dmaven.test.skip=true -f %WORK_FOLDER%%%m\pom.xml
-      if exist %WORK_FOLDER%%%m\target\%%m*.war copy /y %WORK_FOLDER%%%m\target\%%m*.war %WORK_FOLDER%release
+      call "%MAVEN_HOME%\bin\mvn" -q clean package -Dmaven.test.skip=true -f %WORK_FOLDER%%%m\pom.xml
+      if exist %WORK_FOLDER%%%m\target\%%m*.war copy /y %WORK_FOLDER%%%m\target\%%m*.war %WORK_FOLDER%release >nul
     ) else (
       REM 非网站，编译jar包并安装到本地
       echo --开始编译[%%m]+安装
-      call "%MAVEN_HOME%\bin\mvn" clean package install -Dmaven.test.skip=true -f %WORK_FOLDER%%%m\pom.xml
-      if exist %WORK_FOLDER%%%m\target\%%m*.jar copy /y %WORK_FOLDER%%%m\target\%%m*.jar %WORK_FOLDER%release
-      if exist %WORK_FOLDER%%%m\target\lib\*.* copy /y %WORK_FOLDER%%%m\target\lib\*.* %WORK_FOLDER%release\
+      call "%MAVEN_HOME%\bin\mvn" -q clean package install -Dmaven.test.skip=true -f %WORK_FOLDER%%%m\pom.xml
+      if exist %WORK_FOLDER%%%m\target\%%m*.jar copy /y %WORK_FOLDER%%%m\target\%%m*.jar %WORK_FOLDER%release >nul
+      if exist %WORK_FOLDER%%%m\target\lib\*.* copy /y %WORK_FOLDER%%%m\target\lib\*.* %WORK_FOLDER%release\ >nul
     )
     REM 检查并复制编译结果
     if exist %WORK_FOLDER%release\%%m*.* (
@@ -53,7 +53,7 @@ copy /y %WORK_FOLDER%btulz.transforms.shell\src\main\commands\btulz.shell.bat.tx
 copy /y %WORK_FOLDER%btulz.transforms.shell\src\main\commands\btulz.shell.sh.txt %WORK_FOLDER%release\btulz.shell.sh
 echo --压缩编译文件为tar包
 if exist %WORK_FOLDER%release\*.* (
-  cd /d %WORK_FOLDER%release\
+  cd /d %WORK_FOLDER%release\ >nul
   7z a -ttar btulz.transforms.tar btulz.transforms.*.jar bobas.businessobjectscommon-*.jar jaxen-*.jar log4j-*.jar mysql-connector-java-*.jar ngdbc-*.jar postgresql-*.jar sqljdbc*.jar mssql-jdbc-*.jar jconn4-*.jar dom4j-*.jar btulz.shell.*
 )
 cd /d %WORK_FOLDER%
