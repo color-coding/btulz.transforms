@@ -59,8 +59,7 @@ $END_MODEL_PRIMARY_PROPERTY$
         </Step>
 $END_MODEL_HAS_PRIMARY$
     </Action>
-$BEGIN_MODEL_HAS_UNIQUE$
-    <Action Name="create table unique index">
+    <Action Name="drop table unique index">
         <Step Name="check table ${Model.getMapped()}'s unique index exists">
             <Script>
                 select count(distinct 'INDEX_NAME') from `information_schema`.`statistics` where `TABLE_SCHEMA` = '${DbName}' and `TABLE_NAME` = '${Model.getMapped()}' and `INDEX_NAME` = '${Model.getMapped().toUpperCase()}_UNIQUE_INDEX'
@@ -71,6 +70,9 @@ $BEGIN_MODEL_HAS_UNIQUE$
                 drop index `${Model.getMapped().toUpperCase()}_UNIQUE_INDEX` on `${DbName}`.`${Model.getMapped()}`
             </Script>
         </Step>
+    </Action>
+$BEGIN_MODEL_HAS_UNIQUE$
+    <Action Name="create table unique index">
         <Step Name="create table ${Model.getMapped()}'s unique index">
             <Script>
                 alter table `${DbName}`.`${Model.getMapped()}` add unique `${Model.getMapped().toUpperCase()}_UNIQUE_INDEX` (
