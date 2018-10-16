@@ -13,7 +13,7 @@
     <Item Content="-GroupId=${VALUE}" Description="组标记" Value="org.colorcoding" />
     <Item Content="-ArtifactId=${VALUE}" Description="项目标记" Value="ibas" />
     <Item Content="-ProjectVersion=${VALUE}" Description="项目标记" Value="0.1.0" />
-    <Item Content="-ProjectUrl=${VALUE}" Description="项目地址" Value="https://colorcoding.org" />
+    <Item Content="-ProjectUrl=${VALUE}" Description="项目地址" Value="http://colorcoding.org" />
     <Item Content="-Domains=${VALUE}" Description="模型文件" Value="${WORK_FOLDER}domains" >
         <ValidValues ClassName="javax.swing.JFileChooser"/>
     </Item>

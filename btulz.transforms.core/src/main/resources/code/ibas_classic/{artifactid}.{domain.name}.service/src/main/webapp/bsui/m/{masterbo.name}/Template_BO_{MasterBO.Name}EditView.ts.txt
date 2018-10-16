@@ -27,7 +27,7 @@ $END_BOITEM$
                     let that: this = this;
                     this.page${BO.getName()} = new sap.m.Page("", {
                         showHeader: false,
-                        showfooter: false,
+                        showFooter: false,
                         content: [
                             new sap.ui.layout.form.SimpleForm("", {
                                 editable: true,
@@ -41,15 +41,12 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
                     this.list${BOItem.getName()} = new sap.m.List("", {
                         inset: false,
                         growing: true,
-                        growingThreshold: ibas.config.get(openui5.utils.CONFIG_ITEM_LIST_TABLE_VISIBLE_ROW_COUNT, 5),
                         growingScrollToLoad: true,
-                        visibleRowCountMode: sap.ui.table.VisibleRowCountMode.Auto,
                         mode: sap.m.ListMode.None,
-                        selectionMode: sap.ui.table.SelectionMode.None,
+                        swipeDirection: sap.m.SwipeDirection.RightToLeft,
+                        growingThreshold: ibas.config.get(openui5.utils.CONFIG_ITEM_LIST_TABLE_VISIBLE_ROW_COUNT, 5),
                         swipeContent: new sap.m.FlexBox("", {
                             height: "100%",
-                            mode: sap.m.ListMode.None,
-                            swipeDirection: sap.m.SwipeDirection.RightToLeft,
                             width: "6rem",
                             items: [
                                 new sap.m.SegmentedButton("", {
