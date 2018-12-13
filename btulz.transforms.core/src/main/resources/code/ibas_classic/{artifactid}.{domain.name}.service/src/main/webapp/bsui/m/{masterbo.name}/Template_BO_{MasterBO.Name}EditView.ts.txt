@@ -225,7 +225,7 @@ $END_BOITEM$
                                         });
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
-                                        popover.addContent(new sap.m.Button({
+                                        popover.addContent(new sap.m.Button("", {
                                             text: ibas.i18n.prop("bo_${BOItem.getName().toLowerCase()}"),
                                             type: sap.m.ButtonType.Transparent,
                                             icon: "sap-icon://folder",

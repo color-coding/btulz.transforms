@@ -54,7 +54,7 @@ copy /y %WORK_FOLDER%btulz.transforms.shell\src\main\commands\btulz.shell.sh.txt
 echo --压缩编译文件为tar包
 if exist %WORK_FOLDER%release\*.* (
   cd /d %WORK_FOLDER%release\ >nul
-  7z a -ttar btulz.transforms.tar btulz.transforms.*.jar bobas.businessobjectscommon-*.jar jaxen-*.jar log4j-*.jar mysql-connector-java-*.jar ngdbc-*.jar postgresql-*.jar sqljdbc*.jar mssql-jdbc-*.jar jconn4-*.jar dom4j-*.jar btulz.shell.*
+  7z a -ttar btulz.transforms.tar btulz.transforms.*.jar bobas.businessobjectscommon-*.jar log4j-*.jar mysql-connector-java-*.jar ngdbc-*.jar postgresql-*.jar mssql-jdbc-*.jar jconn4-*.jar dom4j-*.jar btulz.shell.*
 )
 cd /d %WORK_FOLDER%
 

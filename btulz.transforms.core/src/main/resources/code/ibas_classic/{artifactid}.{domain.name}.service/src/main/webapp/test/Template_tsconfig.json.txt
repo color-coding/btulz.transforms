@@ -8,6 +8,9 @@
     "sourceMap": true,
     "outFile": "./index.js"
   },
+  "include": [
+    "../3rdparty/ibas/index.d.ts"
+  ],
   "files": [
     "./index.ts"
   ]
