@@ -1,6 +1,7 @@
 package org.colorcoding.tools.btulz.transformer;
 
 import java.io.File;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import javax.xml.bind.JAXBContext;
@@ -105,6 +106,7 @@ public abstract class DbTransformer extends Transformer {
 	protected Parameters getRuntimeParameters() {
 		Parameters parameters = new Parameters();
 		parameters.add(ParametersFactory.create().createParameter("AppName", "btulz.transforms"));
+		parameters.add(ParametersFactory.create().createParameter("Timezone", TimeZone.getDefault().getID()));
 		parameters.add(ParametersFactory.create().createParameter("DbServer", this.getDbServer()));
 		parameters.add(ParametersFactory.create().createParameter("DbPort", this.getDbPort()));
 		parameters.add(ParametersFactory.create().createParameter("DbName", this.getDbName()));
@@ -154,8 +156,7 @@ public abstract class DbTransformer extends Transformer {
 	/**
 	 * 执行编排
 	 * 
-	 * @param dsFile
-	 *            数据文件
+	 * @param dsFile 数据文件
 	 * @throws Exception
 	 */
 	public void execute(File dsFile) throws Exception {

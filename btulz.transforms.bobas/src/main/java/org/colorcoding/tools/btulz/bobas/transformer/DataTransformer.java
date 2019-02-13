@@ -14,6 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.colorcoding.ibas.bobas.MyConfiguration;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
+import org.colorcoding.ibas.bobas.bo.IBOStorageTag;
 import org.colorcoding.ibas.bobas.bo.IBusinessObject;
 import org.colorcoding.ibas.bobas.common.ICriteria;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
@@ -21,7 +22,7 @@ import org.colorcoding.ibas.bobas.core.Daemon;
 import org.colorcoding.ibas.bobas.core.RepositoryException;
 import org.colorcoding.ibas.bobas.serialization.ISerializer;
 import org.colorcoding.ibas.bobas.serialization.SerializerFactory;
-import org.colorcoding.tools.btulz.Environment;
+import org.colorcoding.tools.btulz.bobas.Environment;
 import org.colorcoding.tools.btulz.transformer.TransformException;
 import org.colorcoding.tools.btulz.transformer.Transformer;
 import org.w3c.dom.Document;
@@ -217,8 +218,7 @@ public class DataTransformer extends Transformer {
 	/**
 	 * 获取数据的类型
 	 * 
-	 * @param name
-	 *            标记的名称
+	 * @param name 标记的名称
 	 * @return
 	 * @throws ClassNotFoundException
 	 * @throws IOException
@@ -260,8 +260,7 @@ public class DataTransformer extends Transformer {
 	/**
 	 * 保存数据
 	 * 
-	 * @param datas
-	 *            数据集合
+	 * @param datas 数据集合
 	 * @throws RepositoryException
 	 * @throws TransformException
 	 */
@@ -271,6 +270,11 @@ public class DataTransformer extends Transformer {
 		try {
 			boRepository.beginTransaction();// 开启事务
 			for (IBusinessObject data : datas) {
+				// 标记数据
+				if (data instanceof IBOStorageTag) {
+					IBOStorageTag tag = (IBOStorageTag) data;
+					tag.setDataSource(Environment.SIGN_DATA_SOURCE);
+				}
 				// 处理已存在数据
 				ICriteria criteria = data.getCriteria();
 				if (criteria != null && !criteria.getConditions().isEmpty()) {
