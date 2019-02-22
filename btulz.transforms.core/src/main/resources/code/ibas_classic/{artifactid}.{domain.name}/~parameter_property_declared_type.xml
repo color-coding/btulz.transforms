@@ -5,7 +5,7 @@
     <Mapping DataType="Alphanumeric" Mapped="String"/>
     <Mapping DataType="Memo" Mapped="String"/>
     <Mapping DataType="Numeric" Mapped="Integer"/>
-    <Mapping DataType="Decimal" Mapped="Decimal"/>
+    <Mapping DataType="Decimal" Mapped="BigDecimal"/>
     <Mapping DataType="Date" SubType="Default" Mapped="DateTime"/>
     <Mapping DataType="Date" SubType="Date" Mapped="DateTime"/>
     <Mapping DataType="Date" SubType="Time" Mapped="Short"/>

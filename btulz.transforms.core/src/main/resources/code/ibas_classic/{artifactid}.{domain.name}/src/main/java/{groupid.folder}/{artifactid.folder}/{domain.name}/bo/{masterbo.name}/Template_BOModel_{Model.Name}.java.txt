@@ -1,5 +1,6 @@
 package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${MasterBO.getName().toLowerCase()};
 
+import java.math.*;
 import javax.xml.bind.annotation.*;
 
 import org.colorcoding.ibas.bobas.core.*;
@@ -84,14 +85,14 @@ $BEGIN_MODEL_PROPERTY$
         this.setProperty(PROPERTY_${Property.getName().toUpperCase()}, value);
     }
 
-$BEGIN_PROPERTY_DECLAREDTYPE_IS_DECIMAL$
+$BEGIN_PROPERTY_DECLAREDTYPE_IS_BIGDECIMAL$
     /**
     * 设置-${Property.getDescription()}
     * 
     * @param value 值
     */
     public final void set${Property.getName()}(String value) {
-        this.set${Property.getName()}(new Decimal(value));
+        this.set${Property.getName()}(Decimal.valueOf(value));
     }
 
     /**
@@ -100,7 +101,7 @@ $BEGIN_PROPERTY_DECLAREDTYPE_IS_DECIMAL$
     * @param value 值
     */
     public final void set${Property.getName()}(int value) {
-        this.set${Property.getName()}(new Decimal(value));
+        this.set${Property.getName()}(Decimal.valueOf(value));
     }
 
     /**
@@ -109,9 +110,9 @@ $BEGIN_PROPERTY_DECLAREDTYPE_IS_DECIMAL$
     * @param value 值
     */
     public final void set${Property.getName()}(double value) {
-        this.set${Property.getName()}(new Decimal(value));
+        this.set${Property.getName()}(Decimal.valueOf(value));
     }
-$END_PROPERTY_DECLAREDTYPE_IS_DECIMAL$
+$END_PROPERTY_DECLAREDTYPE_IS_BIGDECIMAL$
 
 $END_MODEL_PROPERTY$
 

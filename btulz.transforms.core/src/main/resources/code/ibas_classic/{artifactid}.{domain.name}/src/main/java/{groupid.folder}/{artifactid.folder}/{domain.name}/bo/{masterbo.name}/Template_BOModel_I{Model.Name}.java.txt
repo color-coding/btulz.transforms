@@ -1,5 +1,7 @@
 package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${MasterBO.getName().toLowerCase()};
 
+import java.math.*;
+
 import org.colorcoding.ibas.bobas.bo.*;
 import org.colorcoding.ibas.bobas.data.*;
 
@@ -24,7 +26,7 @@ $BEGIN_MODEL_PROPERTY$
     */
     void set${Property.getName()}(${Property.getDeclaredType()} value);
 
-$BEGIN_PROPERTY_DECLAREDTYPE_IS_DECIMAL$
+$BEGIN_PROPERTY_DECLAREDTYPE_IS_BIGDECIMAL$
 
     /**
     * 设置-${Property.getDescription()}
@@ -46,7 +48,7 @@ $BEGIN_PROPERTY_DECLAREDTYPE_IS_DECIMAL$
     * @param value 值
     */
     void set${Property.getName()}(double value);
-$END_PROPERTY_DECLAREDTYPE_IS_DECIMAL$
+$END_PROPERTY_DECLAREDTYPE_IS_BIGDECIMAL$
 
 $END_MODEL_PROPERTY$
 
