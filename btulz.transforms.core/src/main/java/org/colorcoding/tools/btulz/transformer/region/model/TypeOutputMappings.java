@@ -14,67 +14,67 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
 
-@XmlRootElement(name = "TypeValueMappings", namespace = Environment.NAMESPACE_BTULZ_TRANSFORMERS)
-@XmlType(name = "TypeValueMappings", namespace = Environment.NAMESPACE_BTULZ_TRANSFORMERS)
-@XmlSeeAlso({ TypeValueMapping.class })
-public class TypeValueMappings extends ArrayList<TypeValueMapping> {
+@XmlRootElement(name = "TypeOutputMappings", namespace = Environment.NAMESPACE_BTULZ_TRANSFORMERS)
+@XmlType(name = "TypeOutputMappings", namespace = Environment.NAMESPACE_BTULZ_TRANSFORMERS)
+@XmlSeeAlso({ TypeOutputMapping.class })
+public class TypeOutputMappings extends ArrayList<TypeOutputMapping> {
 
 	private static final long serialVersionUID = -1588608213800837521L;
 
 	/**
-	 * 创建类型值映射集合
+	 * 创建数据映射集合
 	 * 
 	 * @param fileName 数据文件路径
 	 * @return
 	 * @throws JAXBException
 	 */
-	public static TypeValueMappings create(String fileName) throws JAXBException {
+	public static TypeOutputMappings create(String fileName) throws JAXBException {
 		return create(new File(fileName));
 	}
 
 	/**
-	 * 创建类型值映射集合
+	 * 创建数据映射集合
 	 * 
 	 * @param file 数据文件
 	 * @return
 	 * @throws JAXBException
 	 */
-	public static TypeValueMappings create(File file) throws JAXBException {
+	public static TypeOutputMappings create(File file) throws JAXBException {
 		if (file.exists() && file.isFile()) {
-			JAXBContext context = JAXBContext.newInstance(TypeValueMappings.class, TypeValueMapping.class);
+			JAXBContext context = JAXBContext.newInstance(TypeOutputMappings.class, TypeOutputMapping.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
-			TypeValueMappings mappings = (TypeValueMappings) unmarshaller.unmarshal(file);
+			TypeOutputMappings mappings = (TypeOutputMappings) unmarshaller.unmarshal(file);
 			return mappings;
 		}
 		return null;
 	}
 
 	/**
-	 * 创建类型值映射集合
+	 * 创建数据映射集合
 	 * 
 	 * @param file 数据文件
 	 * @return
 	 * @throws JAXBException
 	 */
-	public static TypeValueMappings create(InputStream inputStream) throws JAXBException {
+	public static TypeOutputMappings create(InputStream inputStream) throws JAXBException {
 		if (inputStream != null) {
-			JAXBContext context = JAXBContext.newInstance(TypeValueMappings.class, TypeValueMapping.class);
+			JAXBContext context = JAXBContext.newInstance(TypeOutputMappings.class, TypeOutputMapping.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
-			TypeValueMappings mappings = (TypeValueMappings) unmarshaller.unmarshal(inputStream);
+			TypeOutputMappings mappings = (TypeOutputMappings) unmarshaller.unmarshal(inputStream);
 			return mappings;
 		}
 		return null;
 	}
 
 	@XmlElement(name = "Mapping")
-	protected TypeValueMapping[] getValues() {
-		return this.toArray(new TypeValueMapping[] {});
+	protected TypeOutputMapping[] getValues() {
+		return this.toArray(new TypeOutputMapping[] {});
 	}
 
-	protected void setValues(TypeValueMapping[] value) {
+	protected void setValues(TypeOutputMapping[] value) {
 		this.clear();
 		if (value != null) {
-			for (TypeValueMapping item : value) {
+			for (TypeOutputMapping item : value) {
 				this.add(item);
 			}
 		}

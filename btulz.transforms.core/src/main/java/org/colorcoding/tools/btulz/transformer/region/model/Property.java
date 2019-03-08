@@ -142,6 +142,9 @@ public class Property extends Entity implements IProperty {
 
 	@Override
 	public String getMapped() {
+		if (this.entity.getMapped() == null) {
+			return this.getName();
+		}
 		return this.entity.getMapped();
 	}
 

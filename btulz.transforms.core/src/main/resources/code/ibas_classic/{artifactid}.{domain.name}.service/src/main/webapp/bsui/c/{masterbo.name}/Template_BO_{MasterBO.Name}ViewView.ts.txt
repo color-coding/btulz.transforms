@@ -21,27 +21,33 @@ namespace ${Domain.getName().toLowerCase()} {
                     });
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
-                    this.table${BOItem.getName()} = new sap.ui.table.Table("", {
-                        enableSelectAll: false,
-                        selectionBehavior: sap.ui.table.SelectionBehavior.Row,
-                        visibleRowCount: ibas.config.get(openui5.utils.CONFIG_ITEM_LIST_TABLE_VISIBLE_ROW_COUNT, 8),
-                        rows: "{/rows}",
-                        columns: [
-                        ]
-                    });
                     let form${BOItem.getName()}: sap.ui.layout.form.SimpleForm = new sap.ui.layout.form.SimpleForm("", {
                         editable: true,
                         content: [
                             new sap.ui.core.Title("", { text: ibas.i18n.prop("bo_${BOItem.getName().toLowerCase()}") }),
-                            this.table${BOItem.getName()},
+                            this.table${BOItem.getName()} = new sap.extension.table.DataTable("", {
+                                visibleRowCount: sap.extension.table.visibleRowCount(8),
+                                dataInfo: {
+                                    code: bo.${BO.getName()}.BUSINESS_OBJECT_CODE,
+                                    name: bo.${BOItem.getName()}.name
+                                },
+                                rows: "{/rows}",
+                                columns: [
+                                ]
+                            }),
                         ]
                     });
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
-                    this.page = new sap.m.Page("", {
+                    let formBottom: sap.ui.layout.form.SimpleForm = new sap.ui.layout.form.SimpleForm("", {
+                        editable: true,
+                        content: [
+                        ]
+                    });
+                    return this.page = new sap.extension.m.DataPage("", {
                         showHeader: false,
-                        subHeader: new sap.m.Bar("", {
-                            contentLeft: [
+                        subHeader: new sap.m.Toolbar("", {
+                            content: [
                                 new sap.m.Button("", {
                                     text: ibas.i18n.prop("shell_data_edit"),
                                     type: sap.m.ButtonType.Transparent,
@@ -51,15 +57,14 @@ $END_BOITEM$
                                         that.fireViewEvents(that.editDataEvent);
                                     }
                                 })
-                            ],
-                            contentRight: [
+                                new sap.m.ToolbarSpacer(""),
                                 new sap.m.Button("", {
                                     type: sap.m.ButtonType.Transparent,
                                     icon: "sap-icon://action",
                                     press: function (event: any): void {
                                         ibas.servicesManager.showServices({
                                             proxy: new ibas.BOServiceProxy({
-                                                data: (<any>that.page.getModel()).getData(),
+                                                data: that.page.getModel().getData(),
                                                 converter: new bo.DataConverter(),
                                             }),
                                             displayServices(services: ibas.IServiceAgent[]): void {
@@ -81,7 +86,7 @@ $END_BOITEM$
                                                         }
                                                     }));
                                                 }
-                                                (<any>popover).addStyleClass("sapMOTAPopover sapTntToolHeaderPopover");
+                                                popover.addStyleClass("sapMOTAPopover sapTntToolHeaderPopover");
                                                 popover.openBy(event.getSource(), true);
                                             }
                                         });
@@ -90,38 +95,33 @@ $END_BOITEM$
                             ]
                         }),
                         content: [
-                            new sap.ui.layout.VerticalLayout("", {
-                                width: "100%",
-                                height: "100%",
-                                content: [
-                                    formTop,
+                            formTop,
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
-                                    form${BOItem.getName()},
+                            form${BOItem.getName()},
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
-                                ]
-                            })
+                            formBottom,
                         ]
                     });
-                    return this.page;
                 }
-                private page: sap.m.Page;
+
+                private page: sap.extension.m.Page;
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
-                private table${BOItem.getName()}: sap.ui.table.Table;
+                private table${BOItem.getName()}: sap.extension.table.Table;
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
+
                 /** 显示数据 */
                 show${BO.getName()}(data: bo.${BO.getName()}): void {
-                    this.page.setModel(new sap.ui.model.json.JSONModel(data));
-                    this.page.bindObject("/");
+                    this.page.setModel(new sap.extension.model.JSONModel(data));
                 }
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
                 /** 显示数据 */
                 show${BOItem.getName()}s(datas: bo.${BOItem.getName()}[]): void {
-                    this.table${BOItem.getName()}.setModel(new sap.ui.model.json.JSONModel({ rows: datas }));
+                    this.table${BOItem.getName()}.setModel(new sap.extension.model.JSONModel({ rows: datas }));
                 }
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$

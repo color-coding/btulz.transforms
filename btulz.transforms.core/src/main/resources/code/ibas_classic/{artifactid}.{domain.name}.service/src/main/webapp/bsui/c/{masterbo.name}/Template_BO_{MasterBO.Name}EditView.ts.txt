@@ -33,47 +33,50 @@ $END_BOITEM$
                     });
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
-                    this.table${BOItem.getName()} = new sap.ui.table.Table("", {
-                        toolbar: new sap.m.Toolbar("", {
-                            content: [
-                                new sap.m.Button("", {
-                                    text: ibas.i18n.prop("shell_data_add"),
-                                    type: sap.m.ButtonType.Transparent,
-                                    icon: "sap-icon://add",
-                                    press: function (): void {
-                                        that.fireViewEvents(that.add${BOItem.getName()}Event);
-                                    }
-                                }),
-                                new sap.m.Button("", {
-                                    text: ibas.i18n.prop("shell_data_remove"),
-                                    type: sap.m.ButtonType.Transparent,
-                                    icon: "sap-icon://less",
-                                    press: function (): void {
-                                        that.fireViewEvents(that.remove${BOItem.getName()}Event,
-                                            // 获取表格选中的对象
-                                            openui5.utils.getSelecteds<bo.${BOItem.getName()}>(that.table${BOItem.getName()})
-                                        );
-                                    }
-                                })
-                            ]
-                        }),
-                        enableSelectAll: false,
-                        selectionBehavior: sap.ui.table.SelectionBehavior.Row,
-                        visibleRowCount: ibas.config.get(openui5.utils.CONFIG_ITEM_LIST_TABLE_VISIBLE_ROW_COUNT, 8),
-                        rows: "{/rows}",
-                        columns: [
-                        ]
-                    });
                     let form${BOItem.getName()}: sap.ui.layout.form.SimpleForm = new sap.ui.layout.form.SimpleForm("", {
                         editable: true,
                         content: [
                             new sap.ui.core.Title("", { text: ibas.i18n.prop("bo_${BOItem.getName().toLowerCase()}") }),
-                            this.table${BOItem.getName()},
+                            this.table${BOItem.getName()} = new sap.extension.table.DataTable("", {
+                                visibleRowCount: sap.extension.table.visibleRowCount(8),
+                                dataInfo: {
+                                    code: bo.${BO.getName()}.BUSINESS_OBJECT_CODE,
+                                    name: bo.${BOItem.getName()}.name
+                                },
+                                toolbar: new sap.m.Toolbar("", {
+                                    content: [
+                                        new sap.m.Button("", {
+                                            text: ibas.i18n.prop("shell_data_add"),
+                                            type: sap.m.ButtonType.Transparent,
+                                            icon: "sap-icon://add",
+                                            press: function (): void {
+                                                that.fireViewEvents(that.add${BOItem.getName()}Event);
+                                            }
+                                        }),
+                                        new sap.m.Button("", {
+                                            text: ibas.i18n.prop("shell_data_remove"),
+                                            type: sap.m.ButtonType.Transparent,
+                                            icon: "sap-icon://less",
+                                            press: function (): void {
+                                                that.fireViewEvents(that.remove${BOItem.getName()}ItemEvent, that.table${BOItem.getName()}.getSelecteds());
+                                            }
+                                        })
+                                    ]
+                                }),
+                                rows: "{/rows}",
+                                columns: [
+                                ]
+                            }),
                         ]
                     });
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
-                    this.page = new sap.m.Page("", {
+                    let formBottom: sap.ui.layout.form.SimpleForm = new sap.ui.layout.form.SimpleForm("", {
+                        editable: true,
+                        content: [
+                        ]
+                    });
+                    return this.page = new sap.extension.m.DataPage("", {
                         showHeader: false,
                         subHeader: new sap.m.Toolbar("", {
                             content: [
@@ -123,67 +126,35 @@ $END_BOITEM$
                             ]
                         }),
                         content: [
-                            new sap.ui.layout.VerticalLayout("", {
-                                width: "100%",
-                                content: [
-                                    formTop,
+                            formTop,
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
-                                    form${BOItem.getName()},
+                            form${BOItem.getName()},
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
-                                ]
-                            })
+                            formBottom,
                         ]
                     });
-                    return this.page;
                 }
 
-                private page: sap.m.Page;
+                private page: sap.extension.m.Page;
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
-                private table${BOItem.getName()}: sap.ui.table.Table;
+                private table${BOItem.getName()}: sap.extension.table.Table;
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
-
-                /** 改变视图状态 */
-                private changeViewStatus(data: bo.${BO.getName()}): void {
-                    if (ibas.objects.isNull(data)) {
-                        return;
-                    }
-                    // 新建时：禁用删除，
-                    if (data.isNew) {
-                        if (this.page.getSubHeader() instanceof sap.m.Toolbar) {
-                            openui5.utils.changeToolbarSavable(<sap.m.Toolbar>this.page.getSubHeader(), true);
-                            openui5.utils.changeToolbarDeletable(<sap.m.Toolbar>this.page.getSubHeader(), false);
-                        }
-                    }
-                    // 不可编辑：已批准，
-                    if (data.approvalStatus === ibas.emApprovalStatus.APPROVED) {
-                        if (this.page.getSubHeader() instanceof sap.m.Toolbar) {
-                            openui5.utils.changeToolbarSavable(<sap.m.Toolbar>this.page.getSubHeader(), false);
-                            openui5.utils.changeToolbarDeletable(<sap.m.Toolbar>this.page.getSubHeader(), false);
-                        }
-                        openui5.utils.changeFormEditable(this.page, false);
-                    }
-                }
 
                 /** 显示数据 */
                 show${BO.getName()}(data: bo.${BO.getName()}): void {
-                    this.page.setModel(new sap.ui.model.json.JSONModel(data));
-                    this.page.bindObject("/");
-                    // 监听属性改变，并更新控件
-                    openui5.utils.refreshModelChanged(this.page, data);
-                    // 改变视图状态
-                    this.changeViewStatus(data);
+                    this.page.setModel(new sap.extension.model.JSONModel(data));
+                    // 改变页面状态
+                    sap.extension.pages.changeStatus(this.page);
                 }
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
                 /** 显示数据 */
                 show${BOItem.getName()}s(datas: bo.${BOItem.getName()}[]): void {
-                    this.table${BOItem.getName()}.setModel(new sap.ui.model.json.JSONModel({ rows: datas }));
-                    // 监听属性改变，并更新控件
-                    openui5.utils.refreshModelChanged(this.table${BOItem.getName()}, datas);
+                    this.table${BOItem.getName()}.setModel(new sap.extension.model.JSONModel({ rows: datas }));
                 }
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$

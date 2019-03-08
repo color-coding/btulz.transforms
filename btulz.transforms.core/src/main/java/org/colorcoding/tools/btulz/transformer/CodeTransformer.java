@@ -248,10 +248,8 @@ public class CodeTransformer extends Transformer {
 	/**
 	 * 替换字符中的变量
 	 * 
-	 * @param string
-	 *            字符串
-	 * @param parameters
-	 *            变量集合
+	 * @param string     字符串
+	 * @param parameters 变量集合
 	 * @return
 	 * @throws Exception
 	 */
@@ -310,8 +308,7 @@ public class CodeTransformer extends Transformer {
 	/**
 	 * 转换文件
 	 * 
-	 * @param folder
-	 *            模板文件夹
+	 * @param folder 模板文件夹
 	 * @throws Exception
 	 */
 	private final void transform(File tpltFolder, File rootFolder, Parameters parameters) throws Exception {
@@ -385,10 +382,8 @@ public class CodeTransformer extends Transformer {
 	/**
 	 * 复制文件
 	 * 
-	 * @param source
-	 *            源文件
-	 * @param output
-	 *            输出文件
+	 * @param source 源文件
+	 * @param output 输出文件
 	 * @throws Exception
 	 */
 	private void copyFile(File source, File outFolder) throws Exception {
@@ -534,7 +529,14 @@ public class CodeTransformer extends Transformer {
 				Environment.getLogger().error(e);
 			}
 		} else if (source.getName().equals("~parameter_property_default_value.xml")) {
-			// 属性的定义类型说明
+			// 属性的默认值说明
+			try {
+				return ParametersFactory.create().createParameter(TypeValueMappings.create(source));
+			} catch (JAXBException e) {
+				Environment.getLogger().error(e);
+			}
+		} else if (source.getName().equals("~parameter_property_type_output.xml")) {
+			// 属性类型的输出说明
 			try {
 				return ParametersFactory.create().createParameter(TypeValueMappings.create(source));
 			} catch (JAXBException e) {
