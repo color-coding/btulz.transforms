@@ -11,7 +11,6 @@ import org.colorcoding.tools.btulz.transformer.region.model.BusinessObjectItem;
 import org.colorcoding.tools.btulz.transformer.region.model.Domain;
 import org.colorcoding.tools.btulz.transformer.region.model.Model;
 import org.colorcoding.tools.btulz.transformer.region.model.Property;
-import org.colorcoding.tools.btulz.transformer.region.model.TypeValueMappings;
 
 public class ParametersFactory {
 
@@ -36,6 +35,10 @@ public class ParametersFactory {
 	 * 默认值映射
 	 */
 	public static final String PARAMETER_NAME_DEFAULT_VALUE = "DefaultValue";
+	/**
+	 * 类型映射
+	 */
+	public static final String PARAMETER_NAME_TYPE_OUTPUT = "TypeOutput";
 
 	private ParametersFactory() {
 
@@ -76,7 +79,4 @@ public class ParametersFactory {
 		return this.createParameter(RegionProperty.REGION_PARAMETER_NAME, new Property(entity));
 	}
 
-	public Parameter createParameter(TypeValueMappings value) {
-		return this.createParameter(PARAMETER_NAME_DEFAULT_VALUE, value);
-	}
 }

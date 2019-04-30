@@ -207,6 +207,9 @@ public class XmlTransformer extends FileTransformer {
 		if (property.getLinked() != null) {
 			element.setAttribute("Linked", property.getLinked());
 		}
+		if (property.getDefaultValue() != null) {
+			element.setAttribute("DefaultValue", property.getDefaultValue());
+		}
 	}
 
 	private void writeElement(IBusinessObject bo, Element element) {

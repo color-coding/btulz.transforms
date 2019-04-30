@@ -3,6 +3,7 @@ package org.colorcoding.tools.btulz.transformer.region.model;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
@@ -33,15 +34,15 @@ public class TypeOutputMapping {
 		this.setOutput(output);
 	}
 
-	private emDataType DataType;
+	private emDataType dataType;
 
 	@XmlAttribute(name = "DataType")
 	public emDataType getDataType() {
-		return DataType;
+		return dataType;
 	}
 
 	public void setDataType(emDataType DataType) {
-		this.DataType = DataType;
+		this.dataType = DataType;
 	}
 
 	private emDataSubType subType;
@@ -66,9 +67,20 @@ public class TypeOutputMapping {
 		this.declaredType = declaredType;
 	}
 
+	private String category;
+
+	@XmlAttribute(name = "Category")
+	public final String getCategory() {
+		return category;
+	}
+
+	public final void setCategory(String category) {
+		this.category = category;
+	}
+
 	private String output;
 
-	@XmlAttribute(name = "Output")
+	@XmlElement(name = "Output")
 	public String getOutput() {
 		return output;
 	}
@@ -77,24 +89,27 @@ public class TypeOutputMapping {
 		this.output = output;
 	}
 
-	public String getMapped(IProperty property) throws Exception {
+	public String getOutput(IProperty property) throws Exception {
 		// 处理映射中的变量
-		String mapValue = this.getOutput();
+		String outputValue = this.getOutput();
 		Variable[] variables = Variable.discerning(this.getOutput());
 		if (variables.length > 0) {
 			Parameter parameter = ParametersFactory.create().createParameter(property);
 			for (Variable variable : variables) {
 				Object value = parameter.getValue(variable.getValuePath());
 				if (value != null) {
-					mapValue = mapValue.replace(variable.getOriginal(), String.valueOf(value));
+					outputValue = outputValue.replace(variable.getOriginal(), String.valueOf(value));
 				}
 			}
 		}
-		return mapValue;
+		return outputValue;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("{type output: %s %s}", this.getOutput(), this.getDataType());
+		return String.format("{type output: %s %s}",
+				this.getDeclaredType() != null ? this.getDeclaredType() : this.getDataType(),
+				(this.getOutput().substring(0, this.getOutput().length() > 30 ? 30 : this.getOutput().length()))
+						.replaceAll("\\s*|\t|\r|\n", ""));
 	}
 }

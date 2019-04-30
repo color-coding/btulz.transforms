@@ -33,15 +33,15 @@ public class DataTypeMapping {
 		this.setMapped(mapped);
 	}
 
-	private emDataType DataType;
+	private emDataType dataType;
 
 	@XmlAttribute(name = "DataType")
 	public emDataType getDataType() {
-		return DataType;
+		return dataType;
 	}
 
 	public void setDataType(emDataType DataType) {
-		this.DataType = DataType;
+		this.dataType = DataType;
 	}
 
 	private emDataSubType subType;
@@ -95,6 +95,6 @@ public class DataTypeMapping {
 
 	@Override
 	public String toString() {
-		return String.format("{data mapping: %s %s}", this.getMapped(), this.getDataType());
+		return String.format("{data mapping: %s %s}", this.getDataType(), this.getMapped());
 	}
 }

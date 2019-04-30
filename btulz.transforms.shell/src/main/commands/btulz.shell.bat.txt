@@ -17,7 +17,7 @@ echo --工作目录:[%WORK_FOLDER%]
 echo --使用应用:[%BTULZ_SHELL%]
 
 if exist "%WORK_FOLDER%%BTULZ_SHELL%" (
-  start /b /min java -jar "%WORK_FOLDER%%BTULZ_SHELL%"
+  start /b /min javaw -jar "%WORK_FOLDER%%BTULZ_SHELL%"
   echo --启动成功
   GOTO :EOF
 )
@@ -27,7 +27,7 @@ echo --下载:[%TOOLS_URL%%BTULZ_SHELL%]
 curl -fsSL -o %BTULZ_SHELL% %TOOLS_URL%%BTULZ_SHELL%
 
 if exist "%WORK_FOLDER%%BTULZ_SHELL%" (
-  start /b /min java -jar "%WORK_FOLDER%%BTULZ_SHELL%"
+  start /b /min javaw -jar "%WORK_FOLDER%%BTULZ_SHELL%"
   echo --启动成功
   GOTO :EOF
 )

@@ -149,6 +149,29 @@ public class Property extends Entity implements IProperty {
 	}
 
 	@Override
+	public String getDefaultValue() {
+		return this.entity.getDefaultValue();
+	}
+
+	public String getDefaultValue(String type) {
+		if ("DB".equalsIgnoreCase(type)) {
+			if (this.entity.getDefaultValue() == null) {
+				return "null";
+			}
+			if (this.getDataType() == emDataType.Numeric || this.getDataType() == emDataType.Decimal) {
+				return this.entity.getDefaultValue();
+			}
+			return String.format("N'%s'", this.entity.getDefaultValue());
+		}
+		return this.getDefaultValue();
+	}
+
+	@Override
+	public void setDefaultValue(String value) {
+		this.entity.setDefaultValue(value);
+	}
+
+	@Override
 	public void setMapped(String mapped) {
 		this.entity.setMapped(mapped);
 	}
@@ -369,52 +392,75 @@ public class Property extends Entity implements IProperty {
 		return this.isLast() ? "" : value;
 	}
 
-	private String defaultValue;
+	private List<TypeOutputMapping> typeOutputMappings;
 
-	public String getDefaultValue() throws Exception {
-		for (TypeValueMapping typeValueMapping : this.getDefaultValueMappings()) {
-			if (typeValueMapping.getDataType() == null) {
-				continue;
-			}
-			if (typeValueMapping.getDataType().equals(this.getDeclaredType())) {
-				return typeValueMapping.getMapped(this);
-			}
+	public final List<TypeOutputMapping> getTypeOutputMappings() {
+		if (this.typeOutputMappings == null) {
+			this.typeOutputMappings = new ArrayList<>();
 		}
-		return defaultValue;
+		return typeOutputMappings;
 	}
 
-	public void setDefaultValue(String value) {
-		this.defaultValue = value;
-	}
-
-	private List<TypeValueMapping> defaultValueMappings;
-
-	public List<TypeValueMapping> getDefaultValueMappings() {
-		if (this.defaultValueMappings == null) {
-			this.defaultValueMappings = new ArrayList<>();
-		}
-		return defaultValueMappings;
-	}
-
-	public void addDefaultValueMappings(Iterable<?> value) {
-		this.getDefaultValueMappings().clear();
+	public void addTypeOutputMappings(Iterable<?> value) {
+		this.getTypeOutputMappings().clear();
 		if (value != null) {
 			for (Object item : value) {
-				if (item instanceof TypeValueMapping) {
-					this.getDefaultValueMappings().add((TypeValueMapping) item);
+				if (item instanceof TypeOutputMapping) {
+					this.getTypeOutputMappings().add((TypeOutputMapping) item);
 				}
 			}
 		}
 	}
 
-	public void addDefaultValueMappings(Parameter par) {
+	public void addTypeOutputMappings(Parameter par) {
 		if (par == null) {
 			return;
 		}
 		Object value = par.getValue();
 		if (Iterable.class.isInstance(value)) {
-			this.addDefaultValueMappings((Iterable<?>) value);
+			this.addTypeOutputMappings((Iterable<?>) value);
 		}
+	}
+
+	public String getTypeOutput() throws Exception {
+		return this.getTypeOutput(null);
+	}
+
+	public String getTypeOutput(String category) throws Exception {
+		for (TypeOutputMapping item : this.getTypeOutputMappings()) {
+			if (category != null) {
+				if (!category.equalsIgnoreCase(item.getCategory())) {
+					continue;
+				}
+			}
+			if (this.entity.getDeclaredType() != null) {
+				if (item.getDeclaredType() == null) {
+					continue;
+				} else if (this.entity.getDeclaredType().startsWith("em")) {
+					if (!(this.entity.getDeclaredType().equalsIgnoreCase(item.getDeclaredType())
+							|| "enum".equalsIgnoreCase(item.getDeclaredType()))) {
+						continue;
+					}
+				} else if (!this.entity.getDeclaredType().equalsIgnoreCase(item.getDeclaredType())) {
+					continue;
+				}
+			} else {
+				if (item.getSubType() != null && item.getDataType() != null) {
+					if (!(item.getDataType() == this.entity.getDataType()
+							&& item.getSubType() == this.entity.getDataSubType())) {
+						continue;
+					}
+				} else if (item.getDataType() != null) {
+					if (item.getDataType() != this.entity.getDataType()) {
+						continue;
+					}
+				} else {
+					continue;
+				}
+			}
+			return item.getOutput(this);
+		}
+		return "";
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package org.colorcoding.tools.btulz.transformer.region;
 
+import org.colorcoding.tools.btulz.template.JudgmentRegion;
 import org.colorcoding.tools.btulz.template.TemplateRegion;
 
 /**
@@ -29,7 +30,9 @@ public class RegionsFactory {
 			if (delimiter.startsWith(TemplateRegion.REGION_SIGN_BEGIN)) {
 				delimiter = delimiter.substring(TemplateRegion.REGION_SIGN_BEGIN.length(), delimiter.length() - 1);
 			}
-			if (RegionModel.REGION_DELIMITER.equals(delimiter)) {
+			if (delimiter.indexOf(JudgmentRegion.REGION_DELIMITER) > 0) {
+				return new RegionJudgment(delimiter);
+			} else if (RegionModel.REGION_DELIMITER.equals(delimiter)) {
 				return new RegionModel();
 			} else if (RegionProperty.REGION_DELIMITER.equals(delimiter)) {
 				return new RegionProperty();

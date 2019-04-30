@@ -170,6 +170,17 @@ public class Property implements IProperty, Cloneable {
 		this.linked = linked;
 	}
 
+	private String defaultValue;
+
+	@XmlAttribute(name = "DefaultValue")
+	public String getDefaultValue() {
+		return defaultValue;
+	}
+
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("property:%s type:%s", this.getName(), this.getDeclaredType());

@@ -96,6 +96,14 @@ namespace ${Domain.getName().toLowerCase()} {
         }
         /** 视图-${BO.getDescription()} */
         export interface I${BO.getName()}ViewView extends ibas.IBOViewView {
+            /** 显示数据 */
+            show${BO.getName()}(data: bo.${BO.getName()}): void;
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+            /** 显示数据-${BOItem.getDescription()} */
+            show${BOItem.getName()}s(datas: bo.${BOItem.getName()}[]): void;
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
 
         }
         /** ${BO.getDescription()}连接服务映射 */

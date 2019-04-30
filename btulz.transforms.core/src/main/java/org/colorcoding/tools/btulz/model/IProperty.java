@@ -165,6 +165,20 @@ public interface IProperty {
 	void setLinked(String linked);
 
 	/**
+	 * 获取-默认值
+	 * 
+	 * @return
+	 */
+	String getDefaultValue();
+
+	/**
+	 * 设置-默认值
+	 * 
+	 * @param defaultValue
+	 */
+	void setDefaultValue(String defaultValue);
+
+	/**
 	 * 深度克隆
 	 * 
 	 * @return

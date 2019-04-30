@@ -230,7 +230,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
             add${BOItem.getName()}Event: Function;
             /** 删除${BOItem.getDescription()}事件 */
             remove${BOItem.getName()}Event: Function;
-            /** 显示数据 */
+            /** 显示数据-${BOItem.getDescription()} */
             show${BOItem.getName()}s(datas: bo.${BOItem.getName()}[]): void;
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$

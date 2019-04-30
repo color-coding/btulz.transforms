@@ -98,6 +98,9 @@ public class XmlTransformerDom4j extends XmlTransformer {
 		if (property.getLinked() != null) {
 			element.addAttribute("Linked", property.getLinked());
 		}
+		if (property.getDefaultValue() != null) {
+			element.addAttribute("DefaultValue", property.getDefaultValue());
+		}
 	}
 
 	private void writeElement(IBusinessObject bo, Element element) {
