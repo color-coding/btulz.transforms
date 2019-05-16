@@ -156,12 +156,26 @@ public class Property extends Entity implements IProperty {
 	public String getDefaultValue(String type) {
 		if ("DB".equalsIgnoreCase(type)) {
 			if (this.entity.getDefaultValue() == null) {
-				return "null";
+				if (this.isPrimaryKey() || this.isUniqueKey()) {
+					if (this.getDataType() == emDataType.Alphanumeric) {
+						return String.format("N'%s' NOT NULL", "");
+					} else if (this.getDataType() == emDataType.Date) {
+						return String.format("'%s' NOT NULL", "1900-1-1");
+					} else if (this.getDataType() == emDataType.Numeric || this.getDataType() == emDataType.Decimal) {
+						return "0 NOT NULL";
+					}
+					return "NULL NOT NULL";
+				}
+			} else {
+				if (this.getDataType() == emDataType.Numeric || this.getDataType() == emDataType.Decimal) {
+					return this.entity.getDefaultValue();
+				} else if (this.getDataType() == emDataType.Date) {
+					return String.format("'%s'", this.entity.getDefaultValue());
+				} else if (this.getDataType() == emDataType.Alphanumeric) {
+					return String.format("N'%s'", this.entity.getDefaultValue());
+				}
 			}
-			if (this.getDataType() == emDataType.Numeric || this.getDataType() == emDataType.Decimal) {
-				return this.entity.getDefaultValue();
-			}
-			return String.format("N'%s'", this.entity.getDefaultValue());
+			return "NULL";
 		}
 		return this.getDefaultValue();
 	}
@@ -322,29 +336,22 @@ public class Property extends Entity implements IProperty {
 		switch (this.getDataType()) {
 		case Memo:
 			if (this.getDataSubType() == emDataSubType.Default)
-				return "ntext";
+				return "NTEXT";
 		case Numeric:
-			return "int";
+			return "INT";
 		case Date:
 			if (this.getDataSubType() == emDataSubType.Default || this.getDataSubType() == emDataSubType.Date)
-				return "datetime";
+				return "DATETIME";
 			else if (this.getDataSubType() == emDataSubType.Time)
-				return "smallint";
+				return "SMALLINT";
 		case Decimal:
-			return "numeric(19, 6)";
+			return "NUMERIC(19, 6)";
 		case Bytes:
-			return "bit";
+			return "BIT";
 		default:
 			break;
 		}
-		return String.format("nvarchar(%s)", this.getEditSize());
-	}
-
-	public String getNullType() {
-		if (this.isPrimaryKey() || this.isUniqueKey()) {
-			return "not null";
-		}
-		return "null";
+		return String.format("NVARCHAR(%s)", this.getEditSize());
 	}
 
 	private String annotatedType;
