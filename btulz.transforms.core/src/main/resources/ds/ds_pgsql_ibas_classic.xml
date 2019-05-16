@@ -104,7 +104,7 @@ $BEGIN_BO$
         </Step>
         <Step Name="register business object ${BO.getShortName()} code" RunOnValue="0">
             <Script>
-                INSERT INTO "${Company}_SYS_ONNM" ("ObjectCode", "AutoKey", "DocSubType") VALUES (N'${BO.getShortName()}', 1, '--')
+                INSERT INTO "${Company}_SYS_ONNM" ("ObjectCode", "AutoKey") VALUES (N'${BO.getShortName()}', 1)
             </Script>
         </Step>
     </Action>
