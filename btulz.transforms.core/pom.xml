@@ -99,12 +99,12 @@
     <dependency>
       <groupId>com.microsoft.sqlserver</groupId>
       <artifactId>mssql-jdbc</artifactId>
-      <version>7.0.0.jre8</version>
+      <version>7.2.2.jre8</version>
     </dependency>
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>8.0.12</version>
+      <version>8.0.16</version>
     </dependency>
     <dependency>
       <groupId>org.postgresql</groupId>
@@ -114,7 +114,7 @@
     <dependency>
       <groupId>com.sap.hana</groupId>
       <artifactId>ngdbc</artifactId>
-      <version>2.3</version>
+      <version>2.4</version>
     </dependency>
     <dependency>
       <groupId>com.sap.jconnect</groupId>
