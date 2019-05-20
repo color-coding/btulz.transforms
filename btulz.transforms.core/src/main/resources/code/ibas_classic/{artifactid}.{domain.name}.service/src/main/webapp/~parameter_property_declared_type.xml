@@ -18,4 +18,5 @@
     <Mapping DeclaredType="emDirection" Mapped="ibas.emDirection"/>
     <Mapping DeclaredType="emDocumentStatus" Mapped="ibas.emDocumentStatus"/>
     <Mapping DeclaredType="emYesNo" Mapped="ibas.emYesNo"/>
+    <Mapping DeclaredType="emAuthoriseType" Mapped="ibas.emAuthoriseType"/>
 </ns2:DataTypeMappings>
