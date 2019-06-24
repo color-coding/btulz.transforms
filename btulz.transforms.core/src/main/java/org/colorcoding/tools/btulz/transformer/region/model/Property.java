@@ -155,24 +155,26 @@ public class Property extends Entity implements IProperty {
 
 	public String getDefaultValue(String type) {
 		if ("DB".equalsIgnoreCase(type)) {
-			if (this.entity.getDefaultValue() == null) {
-				if (this.isPrimaryKey() || this.isUniqueKey()) {
-					if (this.getDataType() == emDataType.Alphanumeric) {
-						return String.format("N'%s' NOT NULL", "");
-					} else if (this.getDataType() == emDataType.Date) {
-						return String.format("'%s' NOT NULL", "1900-1-1");
-					} else if (this.getDataType() == emDataType.Numeric || this.getDataType() == emDataType.Decimal) {
-						return "0 NOT NULL";
-					}
-					return "NULL NOT NULL";
-				}
-			} else {
-				if (this.getDataType() == emDataType.Numeric || this.getDataType() == emDataType.Decimal) {
-					return this.entity.getDefaultValue();
+			// 主键或唯一键，必须有默认值
+			if (this.isPrimaryKey() || this.isUniqueKey()) {
+				if (this.getDataType() == emDataType.Alphanumeric) {
+					return String.format("NOT NULL DEFAULT N'%s'",
+							this.getDefaultValue() == null ? "" : this.getDefaultValue());
 				} else if (this.getDataType() == emDataType.Date) {
-					return String.format("'%s'", this.entity.getDefaultValue());
-				} else if (this.getDataType() == emDataType.Alphanumeric) {
-					return String.format("N'%s'", this.entity.getDefaultValue());
+					return String.format("NOT NULL DEFAULT '%s' ",
+							this.getDefaultValue() == null ? "1900-1-1" : this.getDefaultValue());
+				} else if (this.getDataType() == emDataType.Numeric || this.getDataType() == emDataType.Decimal) {
+					return String.format("NOT NULL DEFAULT %s",
+							this.getDefaultValue() == null ? "0" : this.getDefaultValue());
+				}
+			}
+			if (this.getDefaultValue() != null) {
+				if (this.getDataType() == emDataType.Alphanumeric) {
+					return String.format("NULL DEFAULT N'%s'", this.getDefaultValue());
+				} else if (this.getDataType() == emDataType.Date) {
+					return String.format("NULL DEFAULT '%s'", this.getDefaultValue());
+				} else if (this.getDataType() == emDataType.Numeric || this.getDataType() == emDataType.Decimal) {
+					return String.format("NULL DEFAULT %s", this.getDefaultValue());
 				}
 			}
 			return "NULL";

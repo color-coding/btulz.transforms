@@ -36,7 +36,7 @@ $$上步返回0时运行（RunOnValue="0"）。
             <Script>
                 CREATE TABLE "${DbName}"."${Model.getMapped()}"(
 $BEGIN_MODEL_PROPERTY$
-                   "${Property.getMapped()}" ${Property.getMappedType()} DEFAULT ${Property.getDefaultValue(DB)} ${Property.getSeparator(,)}
+                   "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getDefaultValue(DB)} ${Property.getSeparator(,)}
 $END_MODEL_PROPERTY$
                 )
             </Script>
@@ -49,7 +49,7 @@ $BEGIN_MODEL_PROPERTY$
         </Step>
         <Step Name="create field ${Model.getMapped()}.${Property.getMapped()}" RunOnValue="0">
             <Script>
-                ALTER TABLE "${DbName}"."${Model.getMapped()}" ADD ("${Property.getMapped()}" ${Property.getMappedType()} DEFAULT ${Property.getDefaultValue(DB)})
+                ALTER TABLE "${DbName}"."${Model.getMapped()}" ADD ("${Property.getMapped()}" ${Property.getMappedType()} ${Property.getDefaultValue(DB)})
             </Script>
         </Step>
 $END_MODEL_PROPERTY$

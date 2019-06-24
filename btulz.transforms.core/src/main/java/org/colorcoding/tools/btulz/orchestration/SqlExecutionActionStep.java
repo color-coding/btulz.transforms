@@ -48,7 +48,7 @@ public class SqlExecutionActionStep extends ExecutionActionStep implements ISqlE
 	public void setScript(String value) {
 		if (value != null) {
 			this.script = value.trim();
-			if (this.script.toLowerCase().startsWith("select")) {
+			if (this.script.toUpperCase().startsWith("SELECT")) {
 				this.setQuery(true);
 			}
 		} else {
