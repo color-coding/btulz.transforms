@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.colorcoding.tools.btulz.Environment;
+import org.colorcoding.tools.btulz.model.IModel;
 import org.colorcoding.tools.btulz.model.IProperty;
 import org.colorcoding.tools.btulz.model.data.emDataSubType;
 import org.colorcoding.tools.btulz.model.data.emDataType;
@@ -14,6 +15,13 @@ public class Property extends Entity implements IProperty {
 	public Property(IProperty property) {
 		this.entity = property;
 	}
+
+	public Property(IProperty property, IModel model) {
+		this(property);
+		this.model = model;
+	}
+
+	private IModel model;
 
 	private IProperty entity;
 
@@ -467,7 +475,7 @@ public class Property extends Entity implements IProperty {
 					continue;
 				}
 			}
-			return item.getOutput(this);
+			return item.getOutput(this, this.model);
 		}
 		return "";
 	}

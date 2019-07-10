@@ -50,7 +50,7 @@ public class RegionPrimaryProperty extends RegionBase {
 
 				@Override
 				public Parameter next() {
-					Property property = new Property(primaryProperty.get(curIndex));
+					Property property = new Property(primaryProperty.get(curIndex), model);
 					property.addMappedTypeMappings(parameters.get(ParametersFactory.PARAMETER_NAME_MAPPED_TYPE));
 					property.addDeclaredTypeMappings(parameters.get(ParametersFactory.PARAMETER_NAME_DECLARED_TYPE));
 					property.addTypeOutputMappings(parameters.get(ParametersFactory.PARAMETER_NAME_TYPE_OUTPUT));

@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
+import org.colorcoding.tools.btulz.model.IModel;
 import org.colorcoding.tools.btulz.model.IProperty;
 import org.colorcoding.tools.btulz.model.data.emDataSubType;
 import org.colorcoding.tools.btulz.model.data.emDataType;
@@ -89,16 +90,33 @@ public class TypeOutputMapping {
 		this.output = output;
 	}
 
-	public String getOutput(IProperty property) throws Exception {
+	public String getOutput(IProperty property, IModel model) throws Exception {
 		// 处理映射中的变量
 		String outputValue = this.getOutput();
 		Variable[] variables = Variable.discerning(this.getOutput());
 		if (variables.length > 0) {
-			Parameter parameter = ParametersFactory.create().createParameter(property);
-			for (Variable variable : variables) {
-				Object value = parameter.getValue(variable.getValuePath());
-				if (value != null) {
-					outputValue = outputValue.replace(variable.getOriginal(), String.valueOf(value));
+			if (model != null) {
+				Parameter parameter = ParametersFactory.create().createParameter(model);
+				for (Variable variable : variables) {
+					if (!variable.getName().equals(parameter.getName())) {
+						continue;
+					}
+					Object value = parameter.getValue(variable.getValuePath());
+					if (value != null) {
+						outputValue = outputValue.replace(variable.getOriginal(), String.valueOf(value));
+					}
+				}
+			}
+			if (property != null) {
+				Parameter parameter = ParametersFactory.create().createParameter(property);
+				for (Variable variable : variables) {
+					if (!variable.getName().equals(parameter.getName())) {
+						continue;
+					}
+					Object value = parameter.getValue(variable.getValuePath());
+					if (value != null) {
+						outputValue = outputValue.replace(variable.getOriginal(), String.valueOf(value));
+					}
 				}
 			}
 		}

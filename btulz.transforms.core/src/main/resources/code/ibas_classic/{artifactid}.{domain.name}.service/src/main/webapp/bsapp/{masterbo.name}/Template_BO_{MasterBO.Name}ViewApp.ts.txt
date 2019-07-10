@@ -39,6 +39,11 @@ namespace ${Domain.getName().toLowerCase()} {
                     this.proceeding(ibas.emMessageType.WARNING, ibas.i18n.prop("shell_data_created_new"));
                 }
                 this.view.show${BO.getName()}(this.viewData);
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+                this.view.show${BOItem.getName()}s(this.viewData.${BOItem.getName(LowerCamelCase)}s.filterDeleted());
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
             }
             /** 编辑数据，参数：目标数据 */
             protected editData(): void {
@@ -64,11 +69,19 @@ namespace ${Domain.getName().toLowerCase()} {
                 this.busy(true);
                 let that: this = this;
                 if (typeof criteria === "string") {
+                    let condition: ibas.ICondition;
                     let value: string = criteria;
                     criteria = new ibas.Criteria();
                     criteria.result = 1;
-                    // 添加查询条件
-
+$BEGIN_BO_MODEL$
+$BEGIN_MODEL_HAS_PRIMARY$
+$BEGIN_MODEL_PRIMARY_PROPERTY$
+                    condition = criteria.conditions.create();
+                    condition.alias = bo.${Model.getName()}.PROPERTY_${Property.getName().toUpperCase()}_NAME;
+                    condition.value = value;
+$END_MODEL_PRIMARY_PROPERTY$
+$END_MODEL_HAS_PRIMARY$
+$END_BO_MODEL$
                 }
                 let boRepository: bo.BORepository${Domain.getName()} = new bo.BORepository${Domain.getName()}();
                 boRepository.fetch${BO.getName()}({

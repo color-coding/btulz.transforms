@@ -14,105 +14,137 @@ namespace ${Domain.getName().toLowerCase()} {
                 /** 绘制视图 */
                 draw(): any {
                     let that: this = this;
-                    let formTop: sap.ui.layout.form.SimpleForm = new sap.ui.layout.form.SimpleForm("", {
-                        editable: true,
-                        content: [
-                        ]
-                    });
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
-                    let form${BOItem.getName()}: sap.ui.layout.form.SimpleForm = new sap.ui.layout.form.SimpleForm("", {
-                        editable: true,
-                        content: [
-                            new sap.ui.core.Title("", { text: ibas.i18n.prop("bo_${BOItem.getName().toLowerCase()}") }),
-                            this.table${BOItem.getName()} = new sap.extension.table.DataTable("", {
-                                visibleRowCount: sap.extension.table.visibleRowCount(8),
-                                dataInfo: {
-                                    code: bo.${BO.getName()}.BUSINESS_OBJECT_CODE,
-                                    name: bo.${BOItem.getName()}.name
-                                },
-                                rows: "{/rows}",
-                                columns: [
+                    this.table${BOItem.getName()} = new sap.extension.m.DataTable("", {
+                        dataInfo: {
+                            code: bo.${BO.getName()}.BUSINESS_OBJECT_CODE,
+                            name: bo.${BOItem.getName()}.name
+                        },
+                        columns: [
+$BEGIN_BOITEM_MODEL$
+$BEGIN_MODEL_PROPERTY$
+                            new sap.extension.m.Column("", {
+                                header: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+                            }),
+$END_MODEL_PROPERTY$
+$END_BOITEM_MODEL$
+                        ],
+                        items: {
+                            path: "/rows",
+                            template: new sap.m.ColumnListItem("", {
+                                cells: [
+$BEGIN_BOITEM_MODEL$
+$BEGIN_MODEL_PROPERTY$
+                                    ${Property.getTypeOutput(Object.2)},
+$END_MODEL_PROPERTY$
+$END_BOITEM_MODEL$
                                 ]
                             }),
-                        ]
+                        }
                     });
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
-                    let formBottom: sap.ui.layout.form.SimpleForm = new sap.ui.layout.form.SimpleForm("", {
-                        editable: true,
-                        content: [
-                        ]
-                    });
-                    return this.page = new sap.extension.m.DataPage("", {
-                        showHeader: false,
+                    return this.page = new sap.extension.uxap.DataObjectPageLayout("", {
                         dataInfo: {
                             code: bo.${BO.getName()}.BUSINESS_OBJECT_CODE,
                         },
-                        subHeader: new sap.m.Toolbar("", {
-                            content: [
-                                new sap.m.Button("", {
-                                    text: ibas.i18n.prop("shell_data_edit"),
-                                    type: sap.m.ButtonType.Transparent,
-                                    icon: "sap-icon://edit",
-                                    visible: this.mode === ibas.emViewMode.VIEW ? false : true,
-                                    press: function (): void {
-                                        that.fireViewEvents(that.editDataEvent);
-                                    }
-                                }),
-                                new sap.m.ToolbarSpacer(""),
-                                new sap.m.Button("", {
-                                    type: sap.m.ButtonType.Transparent,
-                                    icon: "sap-icon://action",
-                                    press: function (event: any): void {
-                                        ibas.servicesManager.showServices({
-                                            proxy: new ibas.BOServiceProxy({
-                                                data: that.page.getModel().getData(),
-                                                converter: new bo.DataConverter(),
-                                            }),
-                                            displayServices(services: ibas.IServiceAgent[]): void {
-                                                if (ibas.objects.isNull(services) || services.length === 0) {
-                                                    return;
+                        headerTitle: new sap.uxap.ObjectPageHeader("", {
+                            objectTitle: {
+                            },
+                            objectSubtitle: {
+                            },
+                            navigationBar: new sap.m.Bar("", {
+                                contentLeft: [
+                                    new sap.m.Button("", {
+                                        text: ibas.i18n.prop("shell_data_edit"),
+                                        type: sap.m.ButtonType.Transparent,
+                                        icon: "sap-icon://edit",
+                                        visible: this.mode === ibas.emViewMode.VIEW ? false : true,
+                                        press: function (): void {
+                                            that.fireViewEvents(that.editDataEvent);
+                                        }
+                                    })
+                                ],
+                                contentRight: [
+                                    new sap.m.Button("", {
+                                        type: sap.m.ButtonType.Transparent,
+                                        icon: "sap-icon://action",
+                                        press: function (event: any): void {
+                                            ibas.servicesManager.showServices({
+                                                proxy: new ibas.BOServiceProxy({
+                                                    data: that.page.getModel().getData(),
+                                                    converter: new bo.DataConverter(),
+                                                }),
+                                                displayServices(services: ibas.IServiceAgent[]): void {
+                                                    if (ibas.objects.isNull(services) || services.length === 0) {
+                                                        return;
+                                                    }
+                                                    let popover: sap.m.Popover = new sap.m.Popover("", {
+                                                        showHeader: false,
+                                                        placement: sap.m.PlacementType.Bottom,
+                                                    });
+                                                    for (let service of services) {
+                                                        popover.addContent(new sap.m.Button("", {
+                                                            text: ibas.i18n.prop(service.name),
+                                                            type: sap.m.ButtonType.Transparent,
+                                                            icon: service.icon,
+                                                            press: function (): void {
+                                                                service.run();
+                                                                popover.close();
+                                                            }
+                                                        }));
+                                                    }
+                                                    popover.addStyleClass("sapMOTAPopover sapTntToolHeaderPopover");
+                                                    popover.openBy(event.getSource(), true);
                                                 }
-                                                let popover: sap.m.Popover = new sap.m.Popover("", {
-                                                    showHeader: false,
-                                                    placement: sap.m.PlacementType.Bottom,
-                                                });
-                                                for (let service of services) {
-                                                    popover.addContent(new sap.m.Button("", {
-                                                        text: ibas.i18n.prop(service.name),
-                                                        type: sap.m.ButtonType.Transparent,
-                                                        icon: service.icon,
-                                                        press: function (): void {
-                                                            service.run();
-                                                            popover.close();
-                                                        }
-                                                    }));
-                                                }
-                                                popover.addStyleClass("sapMOTAPopover sapTntToolHeaderPopover");
-                                                popover.openBy(event.getSource(), true);
-                                            }
-                                        });
-                                    }
-                                })
+                                            });
+                                        }
+                                    })
+                                ]
+                            }),
+                            actions: [
                             ]
                         }),
-                        content: [
-                            formTop,
+                        headerContent: [
+                        ],
+                        sections: [
+                            new sap.uxap.ObjectPageSection("", {
+                                title: ibas.i18n.prop("bo_${BO.getName().toLowerCase()}"),
+                                subSections: [
+                                    new sap.uxap.ObjectPageSubSection("", {
+                                        blocks: [
+$BEGIN_BO_MODEL$
+$BEGIN_MODEL_PROPERTY$
+                                            ${Property.getTypeOutput(Object)},
+$END_MODEL_PROPERTY$
+$END_BO_MODEL$
+                                        ],
+                                    })
+                                ]
+                            }),
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
-                            form${BOItem.getName()},
+                            new sap.uxap.ObjectPageSection("", {
+                                title: ibas.i18n.prop("bo_${BO.getName().toLowerCase()}_${BOItem.getName().toLowerCase()}s"),
+                                subSections: [
+                                    new sap.uxap.ObjectPageSubSection("", {
+                                        blocks: [
+                                            this.table${BOItem.getName()}
+                                        ],
+                                    })
+                                ]
+                            }),
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
-                            formBottom,
                         ]
                     });
                 }
 
-                private page: sap.extension.m.Page;
+                private page: sap.extension.uxap.ObjectPageLayout;
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
-                private table${BOItem.getName()}: sap.extension.table.Table;
+                private table${BOItem.getName()}: sap.extension.m.Table;
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
 
