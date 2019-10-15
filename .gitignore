@@ -19,5 +19,8 @@ ts.eclipse.ide.core.prefs
 /release/
 /target/
 
+# mac os files
+.DS_Store
+
 /.vs/
 ~$*
