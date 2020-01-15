@@ -1,5 +1,6 @@
 package org.colorcoding.tools.btulz.bobas.transformer;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -161,19 +162,32 @@ public class DataTransformer extends Transformer {
 			ISerializer<?> serializer = SerializerFactory.create().createManager().create("xml");
 			String name = file.getName().toLowerCase();
 			if (name.startsWith("bo.") && name.endsWith(".xml")) {
-				InputStream inputStream = new FileInputStream(file);
-				String boName = this.getClassName(inputStream);
+				String boName = this.getClassName(new FileInputStream(file));
 				Class<?> boType = this.getClass(boName);
-				inputStream = new FileInputStream(file);
-				IBusinessObject bo = (IBusinessObject) serializer.deserialize(inputStream, BusinessObject.class,
-						boType);
+				IBusinessObject bo = (IBusinessObject) serializer
+						.deserialize(this.applyVariables(new FileInputStream(file)), BusinessObject.class, boType);
 				if (bo != null) {
 					bos.add(bo);
 				}
-				inputStream.close();
 			}
 		}
 		return bos;
+	}
+
+	protected InputStream applyVariables(InputStream stream) throws IOException {
+		try {
+			StringBuffer stringBuffer = new StringBuffer();
+			byte[] bytes = new byte[4096];
+			for (int i; (i = stream.read(bytes)) != -1;) {
+				String line = new String(bytes, 0, i, "utf-8");
+				stringBuffer.append(MyConfiguration.applyVariables(line));
+			}
+			return new ByteArrayInputStream(stringBuffer.toString().getBytes("utf-8"));
+		} finally {
+			if (stream != null) {
+				stream.close();
+			}
+		}
 	}
 
 	/**
@@ -186,33 +200,39 @@ public class DataTransformer extends Transformer {
 	 * @throws ParserConfigurationException
 	 */
 	protected String getClassName(InputStream stream) throws SAXException, IOException, ParserConfigurationException {
-		String dataType = null;
-		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
-		Element element = document.getDocumentElement();
-		if (element == null) {
-			throw new SAXException("invaild xml data.");
-		}
-		String dataName = element.getNodeName().toLowerCase();
-		String perfix = null;
-		int index = dataName.indexOf(":");
-		if (index > 0) {
-			perfix = dataName.substring(0, index);
-			dataName = dataName.substring(index + 1);
-		}
-		String xmlns = "xmlns";
-		if (perfix != null) {
-			xmlns = xmlns + ":" + perfix;
-			for (int i = 0; i < element.getAttributes().getLength(); i++) {
-				Node item = document.getDocumentElement().getAttributes().item(i);
-				if (item.getNodeName().equalsIgnoreCase(xmlns)) {
-					dataType = item.getNodeValue() + "/" + dataName;
-					break;
-				}
+		try {
+			String dataType = null;
+			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
+			Element element = document.getDocumentElement();
+			if (element == null) {
+				throw new SAXException("invaild xml data.");
 			}
-		} else {
-			dataType = dataName;
+			String dataName = element.getNodeName().toLowerCase();
+			String perfix = null;
+			int index = dataName.indexOf(":");
+			if (index > 0) {
+				perfix = dataName.substring(0, index);
+				dataName = dataName.substring(index + 1);
+			}
+			String xmlns = "xmlns";
+			if (perfix != null) {
+				xmlns = xmlns + ":" + perfix;
+				for (int i = 0; i < element.getAttributes().getLength(); i++) {
+					Node item = document.getDocumentElement().getAttributes().item(i);
+					if (item.getNodeName().equalsIgnoreCase(xmlns)) {
+						dataType = item.getNodeValue() + "/" + dataName;
+						break;
+					}
+				}
+			} else {
+				dataType = dataName;
+			}
+			return dataType;
+		} finally {
+			if (stream != null) {
+				stream.close();
+			}
 		}
-		return dataType;
 	}
 
 	/**

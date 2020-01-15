@@ -2,7 +2,6 @@ package org.colorcoding.tools.btulz.bobas.transformer;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -48,7 +47,7 @@ public class DataTransformer4Jar extends DataTransformer {
 						}
 						String name = jarEntry.getName().toLowerCase();
 						if (name.indexOf("/") > 0) {
-							name = name.substring(name.indexOf("/") + 1);
+							name = name.substring(name.lastIndexOf("/") + 1);
 						}
 						if (!name.startsWith("bo.")) {
 							continue;
@@ -69,16 +68,13 @@ public class DataTransformer4Jar extends DataTransformer {
 					});
 					// 读取内容
 					for (JarEntry jarEntry : JarEntryList) {
-						InputStream inputStream = jarFile.getInputStream(jarEntry);
-						String boName = this.getClassName(inputStream);
+						String boName = this.getClassName(jarFile.getInputStream(jarEntry));
 						Class<?> boType = this.getClass(boName);
-						inputStream = jarFile.getInputStream(jarEntry);
-						IBusinessObject bo = (IBusinessObject) serializer.deserialize(inputStream, BusinessObject.class,
-								boType);
+						IBusinessObject bo = (IBusinessObject) serializer.deserialize(
+								this.applyVariables(jarFile.getInputStream(jarEntry)), BusinessObject.class, boType);
 						if (bo != null) {
 							bos.add(bo);
 						}
-						inputStream.close();
 					}
 				}
 			} finally {

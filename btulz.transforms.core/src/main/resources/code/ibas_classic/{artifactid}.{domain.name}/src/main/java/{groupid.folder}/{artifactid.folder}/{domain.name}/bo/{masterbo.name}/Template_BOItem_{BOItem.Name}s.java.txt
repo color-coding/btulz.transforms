@@ -73,7 +73,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
     }
 
     @Override
-    public void onParentPropertyChanged(PropertyChangeEvent evt) {
+    protected void onParentPropertyChanged(PropertyChangeEvent evt) {
         super.onParentPropertyChanged(evt);
         // TODO 设置关联值
     }
