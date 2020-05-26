@@ -80,8 +80,7 @@ public abstract class TemplateRegion implements ITemplateData {
 	/**
 	 * 创建一个区域
 	 * 
-	 * @param delimiter
-	 *            区域标记
+	 * @param delimiter 区域标记
 	 * @return
 	 * @throws InvalidRegionException
 	 */
@@ -102,8 +101,7 @@ public abstract class TemplateRegion implements ITemplateData {
 	/**
 	 * 解析模板
 	 * 
-	 * @param template
-	 *            模板流
+	 * @param template 模板流
 	 * @throws Exception
 	 */
 	void parse(BufferedReader template) throws Exception {
@@ -128,7 +126,7 @@ public abstract class TemplateRegion implements ITemplateData {
 		}
 	}
 
-	public void export(BufferedWriter writer, Parameters parameters) throws Exception {
+	public void export(Parameters parameters, BufferedWriter writer) throws Exception {
 		for (ITemplateData tpltLine : this.getTemplateLines()) {
 			if (tpltLine instanceof TemplateRegion && !(tpltLine instanceof CommentRegion)) {
 				// 重复区域，需要循环输出
@@ -149,11 +147,11 @@ public abstract class TemplateRegion implements ITemplateData {
 								regionPar.getName(), regionPar.getValue()));
 						newParameters.add(regionPar);
 					}
-					tpltLine.export(writer, newParameters);
+					tpltLine.export(newParameters, writer);
 				}
 				Environment.getLogger().debug(String.format("template: end export region [%s].", tpltLine));
 			} else {
-				tpltLine.export(writer, parameters);
+				tpltLine.export(parameters, writer);
 			}
 		}
 		writer.flush();
@@ -162,8 +160,7 @@ public abstract class TemplateRegion implements ITemplateData {
 	/**
 	 * 获取区域参数
 	 * 
-	 * @param pars
-	 *            继承的参数
+	 * @param pars 继承的参数
 	 * @return 本区域参数迭代器
 	 * @throws InvalidParameterException
 	 */

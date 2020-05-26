@@ -25,7 +25,7 @@ public class CommentRegion extends TemplateRegion {
 	}
 
 	@Override
-	public void export(BufferedWriter writer, Parameters pars) throws Exception {
+	public void export(Parameters pars, BufferedWriter writer) throws Exception {
 	}
 
 	@Override

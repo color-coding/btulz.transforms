@@ -62,10 +62,8 @@ public class Template extends TemplateRegion {
 	/**
 	 * 根据模板输出
 	 * 
-	 * @param parameters
-	 *            参数
-	 * @param outputFile
-	 *            输出文件
+	 * @param parameters 参数
+	 * @param outputFile 输出文件
 	 * @throws Exception
 	 */
 	public void export(Parameters parameters, String outputFile) throws Exception {
@@ -75,10 +73,8 @@ public class Template extends TemplateRegion {
 	/**
 	 * 根据模板输出
 	 * 
-	 * @param parameters
-	 *            参数
-	 * @param outputFile
-	 *            输出文件
+	 * @param parameters 参数
+	 * @param outputFile 输出文件
 	 * @throws Exception
 	 */
 	public void export(Parameters parameters, File outputFile) throws Exception {
@@ -109,8 +105,7 @@ public class Template extends TemplateRegion {
 	/**
 	 * 解析模板
 	 * 
-	 * @param template
-	 *            模板流，注意编码方式
+	 * @param template 模板流，注意编码方式
 	 * @throws Exception
 	 */
 	public void parse(InputStream template) throws Exception {
@@ -120,8 +115,7 @@ public class Template extends TemplateRegion {
 	/**
 	 * 解析模板
 	 * 
-	 * @param template
-	 *            模板
+	 * @param template 模板
 	 * @throws Exception
 	 */
 	public void parse(InputStreamReader template) throws Exception {
@@ -141,10 +135,8 @@ public class Template extends TemplateRegion {
 	/**
 	 * 根据模板输出
 	 * 
-	 * @param parameters
-	 *            参数
-	 * @param writer
-	 *            输出文件
+	 * @param parameters 参数
+	 * @param writer     输出文件
 	 * @throws Exception
 	 */
 	public void export(Parameters parameters, BufferedWriter writer) throws Exception {
@@ -152,7 +144,7 @@ public class Template extends TemplateRegion {
 			if (!initialized) {
 				this.parse();
 			}
-			this.export(writer, parameters);// 输出数据
+			super.export(parameters, writer);// 输出数据
 			writer.close();
 		} finally {
 			if (writer != null) {

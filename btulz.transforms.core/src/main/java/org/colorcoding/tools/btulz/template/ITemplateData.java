@@ -12,11 +12,9 @@ public interface ITemplateData {
 	/**
 	 * 输出数据
 	 * 
-	 * @param writer
-	 *            输出
-	 * @param pars
-	 *            参数
+	 * @param pars   参数
+	 * @param writer 输出
 	 * @throws Exception
 	 */
-	void export(BufferedWriter writer, Parameters pars) throws Exception;
+	void export(Parameters pars, BufferedWriter writer) throws Exception;
 }

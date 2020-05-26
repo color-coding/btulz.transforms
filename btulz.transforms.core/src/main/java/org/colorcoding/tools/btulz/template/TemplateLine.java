@@ -36,7 +36,7 @@ public class TemplateLine implements ITemplateData {
 	}
 
 	@Override
-	public void export(BufferedWriter writer, Parameters parameters) throws Exception {
+	public void export(Parameters parameters, BufferedWriter writer) throws Exception {
 		String outLine = this.getLine();
 		boolean loop = false;
 		do {
