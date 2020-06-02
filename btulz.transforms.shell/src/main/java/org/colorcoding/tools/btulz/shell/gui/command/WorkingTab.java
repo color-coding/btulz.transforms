@@ -18,6 +18,8 @@ import javax.swing.JTextField;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
+import org.colorcoding.tools.btulz.shell.command.Command;
+
 public class WorkingTab extends JPanel {
 
 	private static final long serialVersionUID = 7047384462753675622L;
@@ -104,7 +106,6 @@ public class WorkingTab extends JPanel {
 		}
 	}
 
-	private WorkingTab that = this;
 	private JTextArea textMessages;
 	private JTextField textCommands;
 	private JButton button_stop = null;
@@ -145,9 +146,9 @@ public class WorkingTab extends JPanel {
 		this.button_stop.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				that.button_stop.setEnabled(false);
-				that.onButtonStopClick(that.button_stop);
-				that.button_stop.setEnabled(true);
+				WorkingTab.this.button_stop.setEnabled(false);
+				WorkingTab.this.onButtonStopClick(WorkingTab.this.button_stop);
+				WorkingTab.this.button_stop.setEnabled(true);
 			}
 		});
 		panel.add(this.button_stop, gridBagConstraints);
@@ -162,8 +163,8 @@ public class WorkingTab extends JPanel {
 		this.button_run.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				that.onButtonRunClick(that.button_run);
-				that.button_stop.setEnabled(true);
+				WorkingTab.this.onButtonRunClick(WorkingTab.this.button_run);
+				WorkingTab.this.button_stop.setEnabled(true);
 			}
 		});
 		panel.add(this.button_run, gridBagConstraints);
@@ -183,8 +184,8 @@ public class WorkingTab extends JPanel {
 		return this.textCommands.getText();
 	}
 
-	public void setRunningCommand(String command) {
-		this.textCommands.setText(command);
+	public void setRunningCommand(String[] commands) {
+		this.textCommands.setText(Command.toCommand(commands));
 	}
 
 	protected void onButtonStopClick(JButton button) {

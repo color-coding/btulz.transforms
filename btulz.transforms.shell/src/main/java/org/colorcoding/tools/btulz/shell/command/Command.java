@@ -3,7 +3,6 @@ package org.colorcoding.tools.btulz.shell.command;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.colorcoding.tools.btulz.shell.Environment;
@@ -15,6 +14,17 @@ import org.colorcoding.tools.btulz.shell.Environment;
  *
  */
 public class Command {
+
+	public static String toCommand(String[] commands) {
+		StringBuilder builder = new StringBuilder();
+		for (String command : commands) {
+			if (builder.length() > 0) {
+				builder.append(" ");
+			}
+			builder.append(command);
+		}
+		return builder.toString();
+	}
 
 	public Command() {
 	}
@@ -87,7 +97,7 @@ public class Command {
 		if (this.getCommandBuilder() == null) {
 			throw new NullPointerException("not set command builder.");
 		}
-		return this.run(this.getCommandBuilder().toCommand());
+		return this.run(this.getCommandBuilder().toCommands());
 	}
 
 	private Thread commonThread = null;
@@ -103,33 +113,28 @@ public class Command {
 	/**
 	 * 运行命令
 	 * 
-	 * @param command
-	 *            命令字符
+	 * @param command 命令字符
 	 * @return 命令运行返回值
 	 */
-	public int run(String command) {
+	public int run(String[] commands) {
 		try {
 			if (this.process != null) {
 				throw new RuntimeException("Has been in running command.");
 			}
 			this.fireMessages(MessageType.common, String.format("[%s] is ready to run.",
 					this.getCommandBuilder() != null ? this.getCommandBuilder().getName() : "unknown"));
-			this.fireMessages(MessageType.common, String.format("command: %s", command));
+			this.fireMessages(MessageType.common, String.format("command: %s", toCommand(commands)));
 			File workFolder = new File(this.getWorkFolder());
 			this.fireMessages(MessageType.common, String.format("workfolder: %s", workFolder.getPath()));
-			this.process = Runtime.getRuntime().exec(command, null, workFolder);
-			Command that = this;
+			this.process = Runtime.getRuntime().exec(commands, null, workFolder);
 			this.commonThread = new Thread(new Runnable() {
-				public void run() {
-					try {
-						InputStream inputStream = process.getInputStream();
-						BufferedReader read = new BufferedReader(
-								new InputStreamReader(inputStream, that.getCharsetName()));
+				public synchronized void run() {
+					try (BufferedReader read = new BufferedReader(
+							new InputStreamReader(process.getInputStream(), Command.this.getCharsetName()))) {
 						String line = null;
 						while ((line = read.readLine()) != null) {
-							that.fireMessages(MessageType.common, line);
+							Command.this.fireMessages(MessageType.common, line);
 						}
-						inputStream.close();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -137,16 +142,13 @@ public class Command {
 			});
 			// 开启线程2，错误输出
 			this.errorThread = new Thread(new Runnable() {
-				public void run() {
-					try {
-						InputStream inputStream = process.getErrorStream();
-						BufferedReader read = new BufferedReader(
-								new InputStreamReader(inputStream, that.getCharsetName()));
+				public synchronized void run() {
+					try (BufferedReader read = new BufferedReader(
+							new InputStreamReader(process.getErrorStream(), Command.this.getCharsetName()))) {
 						String line = null;
 						while ((line = read.readLine()) != null) {
-							that.fireMessages(MessageType.error, line);
+							Command.this.fireMessages(MessageType.error, line);
 						}
-						inputStream.close();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -188,10 +190,8 @@ public class Command {
 	/**
 	 * 触发消息
 	 * 
-	 * @param type
-	 *            消息类型
-	 * @param message
-	 *            消息
+	 * @param type    消息类型
+	 * @param message 消息
 	 */
 	protected void fireMessages(MessageType type, String message) {
 		if (this.support == null) {

@@ -103,7 +103,7 @@ public class TestCommandBuilder extends TestCase {
 		List<CommandBuilder> commandBuilders = manager.getCommands();
 		for (CommandBuilder commandBuilder : commandBuilders) {
 			System.out.println(commandBuilder.toString());
-			System.out.println(commandBuilder.toCommand());
+			System.out.println(Command.toCommand(commandBuilder.toCommands()));
 		}
 		System.out.println();
 		System.out.println();

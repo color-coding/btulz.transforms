@@ -53,8 +53,6 @@ public class CommandEditor extends JPanel {
 		return workFolder;
 	}
 
-	CommandEditor that = this;
-
 	private JTextArea textArea = null;
 	private JTextField textField = null;
 
@@ -107,20 +105,22 @@ public class CommandEditor extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				FileWriter fileWriter = null;
 				try {
-					if (that.textField.getText() == null || that.textField.getText().isEmpty()) {
+					if (CommandEditor.this.textField.getText() == null
+							|| CommandEditor.this.textField.getText().isEmpty()) {
 						throw new Exception("not input name.");
 					}
-					File workFolder = new File(that.getWorkFolder());
+					File workFolder = new File(CommandEditor.this.getWorkFolder());
 					if (!workFolder.exists()) {
 						workFolder.mkdirs();
 					}
-					fileWriter = new FileWriter(workFolder.getPath() + File.separator + that.textField.getText());
-					fileWriter.write(that.textArea.getText());
+					fileWriter = new FileWriter(
+							workFolder.getPath() + File.separator + CommandEditor.this.textField.getText());
+					fileWriter.write(CommandEditor.this.textArea.getText());
 					fileWriter.flush();
-					JOptionPane.showMessageDialog(that, "Successfully saved.", "Command Editor",
+					JOptionPane.showMessageDialog(CommandEditor.this, "Successfully saved.", "Command Editor",
 							JOptionPane.PLAIN_MESSAGE);
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(that, e2, "Command Editor", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(CommandEditor.this, e2, "Command Editor", JOptionPane.ERROR_MESSAGE);
 				} finally {
 					if (fileWriter != null) {
 						try {

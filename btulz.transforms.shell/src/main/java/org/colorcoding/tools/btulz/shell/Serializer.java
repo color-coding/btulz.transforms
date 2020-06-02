@@ -23,8 +23,7 @@ public class Serializer {
 	/**
 	 * 通过序列化与反序列化克隆对象
 	 * 
-	 * @param object
-	 *            被克隆对象
+	 * @param object 被克隆对象
 	 * 
 	 * @return 克隆的对象实例
 	 * @throws JAXBException
@@ -56,12 +55,9 @@ public class Serializer {
 	/**
 	 * 格式化字符串输出
 	 * 
-	 * @param type
-	 *            类型
-	 * @param object
-	 *            对象
-	 * @param formated
-	 *            是否缩进
+	 * @param type     类型
+	 * @param object   对象
+	 * @param formated 是否缩进
 	 * @return
 	 * @throws JAXBException
 	 */
@@ -76,10 +72,8 @@ public class Serializer {
 	/**
 	 * 输出字符串
 	 * 
-	 * @param object
-	 *            对象
-	 * @param formated
-	 *            是否格式化
+	 * @param object   对象
+	 * @param formated 是否格式化
 	 * @return 对象的字符串
 	 * @throws JAXBException
 	 */
@@ -108,15 +102,12 @@ public class Serializer {
 	/**
 	 * 从xml字符形成对象
 	 * 
-	 * @param value
-	 *            字符串
-	 * @param types
-	 *            相关对象
+	 * @param value 字符串
+	 * @param types 相关对象
 	 * @return 对象实例
 	 * @throws JAXBException
 	 */
 	public static Object fromXmlString(String value, Class<?>... types) throws JAXBException {
-
 		JAXBContext context = JAXBContext.newInstance(types);
 		Marshaller marshaller = context.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");// 编码格式
@@ -124,16 +115,13 @@ public class Serializer {
 		Unmarshaller unmarshaller = context.createUnmarshaller();
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(value.getBytes());
 		return unmarshaller.unmarshal(inputStream);
-
 	}
 
 	/**
 	 * 从xml字符流形成对象
 	 * 
-	 * @param inputStream
-	 *            字符流
-	 * @param types
-	 *            相关对象
+	 * @param inputStream 字符流
+	 * @param types       相关对象
 	 * @return 对象实例
 	 * @throws JAXBException
 	 */

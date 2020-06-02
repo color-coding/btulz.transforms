@@ -31,20 +31,8 @@ public class Environment {
 	 */
 	public static String getStartupFolder() {
 		try {
-			File file = null;
-			URL url = Thread.currentThread().getContextClassLoader().getResource("");
-			String path = null;
-			if (url != null) {
-				URI uri = url.toURI();
-				if (uri != null) {
-					path = uri.getPath();
-				}
-				if (path == null) {
-					path = url.getPath();
-					if (path != null)
-						path = java.net.URLDecoder.decode(path, "UTF-8");
-				}
-			}
+			String path = java.net.URLDecoder
+					.decode(Environment.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "UTF-8");
 			if (path != null) {
 				if (path.split(":").length > 2) {
 					path = path.substring(path.indexOf(":") + 1, path.length());
@@ -56,7 +44,7 @@ public class Environment {
 			if (path == null) {
 				path = System.getProperty("user.dir");
 			}
-			file = new File(path);
+			File file = new File(path);
 			if (file.isFile()) {
 				file = file.getParentFile();
 			}
@@ -65,7 +53,7 @@ public class Environment {
 				file = file.getParentFile();
 			}
 			return file.getPath();
-		} catch (URISyntaxException | UnsupportedEncodingException e) {
+		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -100,8 +88,7 @@ public class Environment {
 	/**
 	 * 获取资源地址
 	 * 
-	 * @param type
-	 *            资源名称
+	 * @param type 资源名称
 	 * @return 统一格式（此对象避免路径的中文问题）
 	 * @throws URISyntaxException
 	 */

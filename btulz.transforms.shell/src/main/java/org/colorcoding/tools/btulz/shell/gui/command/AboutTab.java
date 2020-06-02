@@ -31,8 +31,6 @@ public class AboutTab extends WorkingTab {
 		this.initPanel(PANEL_ABOUT);
 	}
 
-	private AboutTab that = this;
-
 	@Override
 	protected void init(JPanel panel) {
 		// 执行其他层
@@ -90,7 +88,7 @@ public class AboutTab extends WorkingTab {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				that.onButtonRunClick(null);
+				AboutTab.this.onButtonRunClick(null);
 			}
 		});
 		panel.add(label, gridBagConstraints);
@@ -98,6 +96,6 @@ public class AboutTab extends WorkingTab {
 
 	protected void onButtonRunClick(JButton button) {
 		super.onButtonRunClick(button);
-		this.setRunningCommand("-help");
+		this.setRunningCommand(new String[] { "-help" });
 	}
 }

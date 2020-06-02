@@ -98,5 +98,15 @@
       <artifactId>bobas.businessobjectscommon</artifactId>
       <version>${ibas.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.colorcoding.ibas</groupId>
+      <artifactId>bobas.businessobjectscommon.db.mssql</artifactId>
+      <version>${ibas.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.colorcoding.ibas</groupId>
+      <artifactId>bobas.businessobjectscommon.db.mysql</artifactId>
+      <version>${ibas.version}</version>
+    </dependency>
   </dependencies>
 </project>

@@ -25,11 +25,11 @@ hs_err_pid*
 .DS_Store
 
 # work folder
-/target/
-/release/
-/.vs/
-/.vscode/
-/.metadata/
-/.recommenders/
-/RemoteSystemsTempFiles/
-/Servers/
+*/target/
+*/release/
+*/.vs/
+*/.vscode/
+*/.metadata/
+*/.recommenders/
+*/RemoteSystemsTempFiles/
+*/Servers/

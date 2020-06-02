@@ -2,7 +2,6 @@ package org.colorcoding.tools.btulz.shell.test;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.colorcoding.tools.btulz.shell.Environment;
@@ -30,10 +29,9 @@ public class TestCommands extends TestCase {
 				String.format("-ArtifactId=%s", "ibas"), // 项目标记
 				String.format("-ProjectVersion=%s", "0.0.1"), // 项目版本
 				String.format("-ProjectUrl=%s", "http://colorcoding.org"), // 项目地址
-				String.format("-Domains=%s",
-						String.format(
-								"%1$s%2$sbtulz.transforms.core%2$ssrc%2$stest%2$sjava%2$sorg%2$scolorcoding%2$stools%2$sbtulz%2$stest%2$stransformers%2$s",
-								new File(userFolder).getParent(), File.separator)), // 模型文件
+				String.format("-Domains=%s", String.format(
+						"%1$s%2$sbtulz.transforms.core%2$ssrc%2$stest%2$sjava%2$sorg%2$scolorcoding%2$stools%2$sbtulz%2$stest%2$stransformers%2$s",
+						new File(userFolder).getParent(), File.separator)), // 模型文件
 				String.format("-Parameters=%s",
 						"[{\"name\":\"Company\",\"value\":\"CC\"},{\"name\":\"ibasVersion\",\"value\":\"0.1.1\"},{\"name\":\"jerseyVersion\",\"value\":\"2.22.1\"}]"), // 其他参数
 				"-Release" };// 命令数组
@@ -74,14 +72,12 @@ public class TestCommands extends TestCase {
 			// 开启线程1，正常输出
 			new Thread(new Runnable() {
 				public void run() {
-					try {
-						InputStream inputStream = process.getInputStream();
-						BufferedReader read = new BufferedReader(new InputStreamReader(inputStream, charsetName));
+					try (BufferedReader read = new BufferedReader(
+							new InputStreamReader(process.getInputStream(), charsetName))) {
 						String line = null;
 						while ((line = read.readLine()) != null) {
 							System.out.println(line);
 						}
-						inputStream.close();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -90,14 +86,12 @@ public class TestCommands extends TestCase {
 			// 开启线程2，错误输出
 			new Thread(new Runnable() {
 				public void run() {
-					try {
-						InputStream inputStream = process.getErrorStream();
-						BufferedReader read = new BufferedReader(new InputStreamReader(inputStream, charsetName));
+					try (BufferedReader read = new BufferedReader(
+							new InputStreamReader(process.getErrorStream(), charsetName))) {
 						String line = null;
 						while ((line = read.readLine()) != null) {
 							System.err.println(line);
 						}
-						inputStream.close();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

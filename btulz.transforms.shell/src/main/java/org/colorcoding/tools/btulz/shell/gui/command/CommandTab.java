@@ -95,7 +95,6 @@ public class CommandTab extends WorkingTab {
 	}
 
 	private JButton button_run = null;
-	private CommandTab that = this;
 	private Command command = null;
 
 	@Override
@@ -142,8 +141,8 @@ public class CommandTab extends WorkingTab {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					// 双击，重载ui
-					JFrame frame = (JFrame) that.getRootPane().getParent();
-					CommandEditor editor = new CommandEditor(that.getBuilder());
+					JFrame frame = (JFrame) CommandTab.this.getRootPane().getParent();
+					CommandEditor editor = new CommandEditor(CommandTab.this.getBuilder());
 					JDialog dialog = new JDialog(frame, "Command Editor", true);
 					dialog.add(editor);
 					dialog.setSize(600, 360);
@@ -162,8 +161,8 @@ public class CommandTab extends WorkingTab {
 		this.button_run.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				that.button_run.setEnabled(false);
-				that.onButtonRunClick(that.button_run);
+				CommandTab.this.button_run.setEnabled(false);
+				CommandTab.this.onButtonRunClick(CommandTab.this.button_run);
 			}
 		});
 		panel.add(this.button_run, gridBagConstraints);
@@ -204,20 +203,20 @@ public class CommandTab extends WorkingTab {
 					// 选择新的项
 					try {
 						ComboxItem comboxItem = (ComboxItem) comboBox.getSelectedItem();
-						File file = new File(that.getHistoryFolder() + File.separator + comboxItem.value);
+						File file = new File(CommandTab.this.getHistoryFolder() + File.separator + comboxItem.value);
 						if (file.isFile() && file.exists()) {
 							Object object = Serializer.fromXmlString(new FileInputStream(file), CommandBuilder.class);
 							if (object instanceof CommandBuilder) {
 								CommandBuilder commandBuilder = (CommandBuilder) object;
 								for (CommandItem item : commandBuilder.getItems().getItems()) {
-									CommandItem commandItem = that.getBuilder().getItems().firstOrDefault(
+									CommandItem commandItem = CommandTab.this.getBuilder().getItems().firstOrDefault(
 											c -> c.getContent() != null && c.getContent().equals(item.getContent()),
 											true);
 									if (commandItem != null) {
 										// 找到了对应项目
 										Component component = this.getComponent(
 												String.format("_value_%s", commandItem.hashCode()),
-												that.getPanel(PANEL_COMMAND));
+												CommandTab.this.getPanel(PANEL_COMMAND));
 										if (component instanceof JTextField) {
 											JTextField textField = (JTextField) component;
 											textField.setText(item.getValue());
@@ -306,8 +305,8 @@ public class CommandTab extends WorkingTab {
 				public CommandItem getCommandItem() {
 					if (commandItem == null) {
 						int hashCode = Integer.valueOf(comboBox.getName().replace(control_name_combox, ""));
-						this.commandItem = that.getBuilder().getItems().firstOrDefault(c -> hashCode == c.hashCode(),
-								true);
+						this.commandItem = CommandTab.this.getBuilder().getItems()
+								.firstOrDefault(c -> hashCode == c.hashCode(), true);
 					}
 					return this.commandItem;
 				}
@@ -349,8 +348,8 @@ public class CommandTab extends WorkingTab {
 				public CommandItem getCommandItem() {
 					if (commandItem == null) {
 						int hashCode = Integer.valueOf(textValue.getName().replace(control_name_text, ""));
-						this.commandItem = that.getBuilder().getItems().firstOrDefault(c -> hashCode == c.hashCode(),
-								true);
+						this.commandItem = CommandTab.this.getBuilder().getItems()
+								.firstOrDefault(c -> hashCode == c.hashCode(), true);
 					}
 					return this.commandItem;
 				}
@@ -398,7 +397,8 @@ public class CommandTab extends WorkingTab {
 			public CommandItem getCommandItem() {
 				if (commandItem == null) {
 					int hashCode = Integer.valueOf(checkBox.getName().replace(control_name_checkbox, ""));
-					this.commandItem = that.getBuilder().getItems().firstOrDefault(c -> hashCode == c.hashCode(), true);
+					this.commandItem = CommandTab.this.getBuilder().getItems()
+							.firstOrDefault(c -> hashCode == c.hashCode(), true);
 				}
 				return this.commandItem;
 			}
@@ -449,7 +449,7 @@ public class CommandTab extends WorkingTab {
 
 				public JTextField geTextField() {
 					if (textField == null) {
-						this.textField = this.getTextField(that.getPanel(PANEL_COMMAND));
+						this.textField = this.getTextField(CommandTab.this.getPanel(PANEL_COMMAND));
 					}
 					return this.textField;
 				}
@@ -483,7 +483,7 @@ public class CommandTab extends WorkingTab {
 												method.invoke(jfc, nValue);
 											} catch (IllegalAccessException | IllegalArgumentException
 													| InvocationTargetException e1) {
-												that.logMessages(e1.toString());
+												CommandTab.this.logMessages(e1.toString());
 											}
 										}
 									}
@@ -550,7 +550,7 @@ public class CommandTab extends WorkingTab {
 
 				public JTextField geTextField() {
 					if (textField == null) {
-						this.textField = this.getTextField(that.getPanel(PANEL_COMMAND));
+						this.textField = this.getTextField(CommandTab.this.getPanel(PANEL_COMMAND));
 					}
 					return this.textField;
 				}
@@ -619,20 +619,20 @@ public class CommandTab extends WorkingTab {
 
 	protected void onButtonStopClick(JButton button) {
 		super.onButtonStopClick(button);
-		if (that.command != null) {
-			that.command.destroy();
+		if (CommandTab.this.command != null) {
+			CommandTab.this.command.destroy();
 		}
 		this.button_run.setEnabled(true);
 	}
 
 	protected void onButtonRunClick(JButton button) {
 		super.onButtonRunClick(button);
-		this.setRunningCommand(that.getBuilder().toCommand());
-		this.command = new Command(that.getBuilder());
+		this.setRunningCommand(CommandTab.this.getBuilder().toCommands());
+		this.command = new Command(CommandTab.this.getBuilder());
 		this.command.addListener(new CommandListener() {
 			@Override
 			public void messaged(CommandMessageEvent messageEvent) {
-				that.logMessages(messageEvent.getMessage());
+				CommandTab.this.logMessages(messageEvent.getMessage());
 			}
 		});
 		// 另外一个线程运行命令，防止ui阻塞
@@ -641,15 +641,15 @@ public class CommandTab extends WorkingTab {
 			public void run() {
 				int ret = command.run();
 				// 命令执行完成，自动点击stop钮。
-				that.command = null;// 清除命令
-				that.onButtonStopClick(null);
+				CommandTab.this.command = null;// 清除命令
+				CommandTab.this.onButtonStopClick(null);
 				if (ret != 1) {
 					// 非用户中断
 					// 记录运行命令
 					StringBuilder stringBuilder = new StringBuilder();
-					stringBuilder.append(that.getHistoryFolder());
+					stringBuilder.append(CommandTab.this.getHistoryFolder());
 					stringBuilder.append(File.separator);
-					stringBuilder.append(that.getBuilder().getName());
+					stringBuilder.append(CommandTab.this.getBuilder().getName());
 					stringBuilder.append("_");
 					stringBuilder.append(
 							(new SimpleDateFormat("yyyyMMdd_HHmmssSSS")).format(new Date(System.currentTimeMillis())));
@@ -662,7 +662,7 @@ public class CommandTab extends WorkingTab {
 							file.createNewFile();
 						}
 						fileWriter = new FileWriter(file);
-						Serializer.toXmlString(that.getBuilder(), true, fileWriter);
+						Serializer.toXmlString(CommandTab.this.getBuilder(), true, fileWriter);
 					} catch (Exception e) {
 						e.printStackTrace();
 					} finally {

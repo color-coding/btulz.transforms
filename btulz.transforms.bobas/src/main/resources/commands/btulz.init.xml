@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE CommandBuilder>
 <ns2:CommandBuilder Description="解析文件数据导入业务仓库" xmlns:ns2="http://colorcoding.org/btulz/shell/commands">
     <Item Content="java" Editable="false" />
-    <Item Content="-jar btulz.transforms.bobas-0.1.0.jar" Description="使用jar包" Editable="false" />
+    <Item Content="-jar" Description="执行jar包" Editable="false" />
+    <Item Content="btulz.transforms.bobas-0.1.0.jar" Description="包名称" Editable="false" />
     <Item Content="init" Description="子命令" Editable="false" />
     <Item Content="-config=${VALUE}" Description="业务仓库配置文件">
       <ValidValues ClassName="javax.swing.JFileChooser" />

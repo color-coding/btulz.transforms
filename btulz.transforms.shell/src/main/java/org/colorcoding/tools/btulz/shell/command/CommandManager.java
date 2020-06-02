@@ -80,6 +80,7 @@ public class CommandManager {
 	}
 
 	public void initialize() {
+		this.getCommandMaps().clear();
 		this.loadResources();
 	}
 

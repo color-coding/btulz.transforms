@@ -94,8 +94,8 @@ public class CommandBuilder implements Comparable<CommandBuilder> {
 	 * 
 	 * @return 命令字符串
 	 */
-	public String toCommand() {
-		StringBuilder stringBuilder = new StringBuilder();
+	public String[] toCommands() {
+		ArrayList<String> commands = new ArrayList<>();
 		for (CommandItem commandItem : this.getItems()) {
 			if (commandItem == null) {
 				continue;
@@ -107,9 +107,6 @@ public class CommandBuilder implements Comparable<CommandBuilder> {
 				continue;
 			}
 			List<Variable> tmpVariables = new ArrayList<>(this.getVariables());// 新建一个数组，避免变量间影响
-			if (stringBuilder.length() > 0) {
-				stringBuilder.append(" ");
-			}
 			if (commandItem.getContent() != null && !commandItem.getContent().isEmpty()) {
 				// 添加命令内容
 				String itemValue = commandItem.getValue();
@@ -130,10 +127,10 @@ public class CommandBuilder implements Comparable<CommandBuilder> {
 				for (Variable variable : tmpVariables) {
 					content = content.replace(variable.getName(), variable.getValue());
 				}
-				stringBuilder.append(content);
+				commands.add(content);
 			}
 		}
-		return stringBuilder.toString();
+		return commands.toArray(new String[commands.size()]);
 	}
 
 	@Override

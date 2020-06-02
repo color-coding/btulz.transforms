@@ -25,8 +25,6 @@ public class BuilderTab extends JPanel {
 		this.init();
 	}
 
-	BuilderTab that = this;
-
 	protected void init() {
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -41,7 +39,7 @@ public class BuilderTab extends JPanel {
 			builderButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					that.onBuilderClick((BuilderButton) e.getSource());
+					BuilderTab.this.onBuilderClick((BuilderButton) e.getSource());
 				}
 			});
 			count++;

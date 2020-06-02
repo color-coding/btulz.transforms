@@ -82,8 +82,15 @@ public class RoutingTransformer extends Transformer {
 
 	@Override
 	public void transform() throws Exception {
-		if (!new File(this.getConfigFile()).isFile()) {
+		// 检查配置文件
+		if (this.getConfigFile() == null || this.getConfigFile().isEmpty()
+				|| !new File(this.getConfigFile()).isFile()) {
 			throw new IOException("not found config file.");
+		}
+		// 检查输出目录
+		File file = new File(this.getOutFile()).getParentFile();
+		if (!file.exists()) {
+			file.mkdirs();
 		}
 		// 读取配置文件
 		MyConfiguration.create(this.getConfigFile());
