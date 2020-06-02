@@ -2,6 +2,7 @@ package org.colorcoding.tools.btulz.bobas;
 
 import org.colorcoding.tools.btulz.bobas.command.Command4Ds;
 import org.colorcoding.tools.btulz.bobas.command.Command4Init;
+import org.colorcoding.tools.btulz.bobas.command.Command4Routing;
 import org.colorcoding.tools.btulz.command.CommandsManager;
 
 /**
@@ -21,6 +22,7 @@ public class Console {
 					// 注册发布的命令
 					commandsManager.register(Command4Init.class);
 					commandsManager.register(Command4Ds.class);
+					commandsManager.register(Command4Routing.class);
 				}
 			}
 		}

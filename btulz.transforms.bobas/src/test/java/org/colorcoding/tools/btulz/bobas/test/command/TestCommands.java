@@ -8,6 +8,7 @@ import org.colorcoding.ibas.bobas.MyConfiguration;
 import org.colorcoding.tools.btulz.bobas.Console;
 import org.colorcoding.tools.btulz.bobas.command.Command4Ds;
 import org.colorcoding.tools.btulz.bobas.command.Command4Init;
+import org.colorcoding.tools.btulz.bobas.command.Command4Routing;
 
 import junit.framework.TestCase;
 
@@ -49,6 +50,21 @@ public class TestCommands extends TestCase {
 		args.add(String.format(Command4Ds.COMMAND_PROMPT));
 		args.add(String.format("-data=%s", data));
 		args.add(String.format("-config=%s", config));
+		args.add("-ignore");
+		Console.main(args.toArray(new String[] {}));
+	}
+
+	public void testRouting() throws MalformedURLException {
+		ArrayList<String> args = new ArrayList<>();
+		File folder = new File(MyConfiguration.getStartupFolder());
+		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();
+		String ifFolder = folder.getPath() + File.separator + "ibas.initialfantasy";
+		String config = String.format("%s%2$sibas.initialfantasy%2$sapp.xml", ifFolder, File.separator);
+		args.add(String.format(Command4Routing.COMMAND_PROMPT));
+		args.add(String.format("-config=%s", config));
+		args.add(String.format("-query=%s", "SELECT * FROM ${Company}_SYS_MODULE"));
+		args.add(String.format("-dataUrl=%s", ".../${ModuleName}/services/rest/data"));
+		args.add(String.format("-viewUrl=%s", ".../${ModuleName}/"));
 		args.add("-ignore");
 		Console.main(args.toArray(new String[] {}));
 	}
