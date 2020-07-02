@@ -36,17 +36,6 @@
     </init-param>
     <load-on-startup>3</load-on-startup>
   </servlet>
-<!--
-  <servlet>
-    <servlet-name>soap</servlet-name>
-    <servlet-class>org.colorcoding.ibas.bobas.cxf.CXFServlet</servlet-class>
-    <init-param>
-      <param-name>ibas.config.server.provider.packages</param-name>
-      <param-value>${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.service.soap</param-value>
-    </init-param>
-    <load-on-startup>3</load-on-startup>
-  </servlet>
--->
   <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>/*</url-pattern>
@@ -59,12 +48,6 @@
     <servlet-name>monitor</servlet-name>
     <url-pattern>/services/monitor/*</url-pattern>
   </servlet-mapping>
-<!--
-  <servlet-mapping>
-    <servlet-name>soap</servlet-name>
-    <url-pattern>/services/soap/*</url-pattern>
-  </servlet-mapping>
--->
   <filter>
     <filter-name>CorsFilter</filter-name>
     <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>

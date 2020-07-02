@@ -42,10 +42,5 @@
             <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.colorcoding.ibas</groupId>
-            <artifactId>bobas.businessobjectscommon.cxf</artifactId>
-            <version>${ibas.version}</version>
-        </dependency>
     </dependencies>
 </project>
