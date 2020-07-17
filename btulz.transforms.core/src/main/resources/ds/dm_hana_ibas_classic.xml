@@ -3,5 +3,6 @@
 <ns2:DataTypeMappings xmlns:ns2="http://colorcoding.org/btulz/transformers">
     <Mapping DataType="Numeric" SubType="Default" Mapped="INTEGER"/>
     <Mapping DataType="Date" SubType="Default" Mapped="DATE"/>
+    <Mapping DataType="Date" SubType="Date" Mapped="DATE"/>
     <Mapping DataType="Bytes" SubType="Default" Mapped="VARBINARY"/>
 </ns2:DataTypeMappings>

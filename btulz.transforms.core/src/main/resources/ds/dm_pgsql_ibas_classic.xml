@@ -4,6 +4,7 @@
     <Mapping DataType="Memo" SubType="Default" Mapped="TEXT"/>
     <Mapping DataType="Numeric" SubType="Default" Mapped="INTEGER"/>
     <Mapping DataType="Date" SubType="Default" Mapped="DATE"/>
+    <Mapping DataType="Date" SubType="Date" Mapped="DATE"/>
     <!-- SubType未指定则忽略子项类型 -->
     <Mapping DataType="Alphanumeric" Mapped="VARCHAR"/>
     <Mapping DataType="Unknown" Mapped="VARCHAR"/>
