@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- ds_mysql_ibas.xml的数据类型额外映射说明 -->
+<ns2:DataTypeMappings xmlns:ns2="http://colorcoding.org/btulz/transformers">
+    <Mapping DataType="Memo" SubType="Default" Mapped="TEXT"/>
+    <!-- 数据库默认使用utf8mb4字符，则列使用VARCHAR类型 -->
+    <Mapping DataType="Alphanumeric" Mapped="VARCHAR(${Property.getEditSize()})"/>
+    <Mapping DataType="Unknown" Mapped="VARCHAR(${Property.getEditSize()})"/>
+    <Mapping DataType="Date" SubType="Default" Mapped="DATE"/>
+    <Mapping DataType="Date" SubType="Date" Mapped="DATE"/>
+</ns2:DataTypeMappings>

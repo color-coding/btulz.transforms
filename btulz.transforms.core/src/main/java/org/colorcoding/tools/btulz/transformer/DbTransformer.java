@@ -134,7 +134,11 @@ public abstract class DbTransformer extends Transformer {
 		// stringBuilder.append("_");
 		// stringBuilder.append(this.getDbServer());
 		stringBuilder.append("_");
-		stringBuilder.append(this.getDbName());
+		String dbName = this.getDbName();
+		if (dbName != null && dbName.contains(File.separator)) {
+			dbName = dbName.substring(dbName.lastIndexOf(File.separator) + 1);
+		}
+		stringBuilder.append(dbName);
 		stringBuilder.append("-");
 		stringBuilder.append(UUID.randomUUID().toString());
 		if (tpltName.indexOf(".") > 0) {

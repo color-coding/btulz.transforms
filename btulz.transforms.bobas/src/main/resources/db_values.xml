@@ -31,4 +31,10 @@
 		<DbValueItem Key="DbPort" Value="2638" />
 		<DbValueItem Key="DbSchema" Value="" />
 	</DbValue>
+	<DbValue Name="SQLITE">
+		<DbValueItem Key="DsTemplate" Value="ds_sqlite_ibas_classic.xml" />
+		<DbValueItem Key="SqlFilter" Value="sql_sqlite_" />
+		<DbValueItem Key="DbPort" Value="-1" />
+		<DbValueItem Key="DbSchema" Value="" />
+	</DbValue>
 </ns:DbValues>

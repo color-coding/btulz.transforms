@@ -17,7 +17,7 @@ public final class Environment extends org.colorcoding.tools.btulz.Environment {
 	}
 
 	public static String getXmlModelsFileOld() {
-		return "//org//colorcoding//tools//btulz//test//transformers//domain_models_old.xml".replace("//",
+		return "//org//colorcoding//tools//btulz//test//transformer//domain_models_old.xml".replace("//",
 				File.separator);
 	}
 
