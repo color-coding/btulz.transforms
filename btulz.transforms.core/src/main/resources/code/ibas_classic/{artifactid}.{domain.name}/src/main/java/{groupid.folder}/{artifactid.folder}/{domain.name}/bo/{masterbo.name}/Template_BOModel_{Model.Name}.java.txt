@@ -63,8 +63,8 @@ $BEGIN_MODEL_PROPERTY$
     /**
     * ${Property.getDescription()} 属性
     */
-    @DbField(name = "${Property.getMapped()}", type = DbFieldType.${Property.getAnnotatedType()}, table = DB_TABLE_NAME, primaryKey = ${Property.isPrimaryKey()})
-    public static final IPropertyInfo<${Property.getDeclaredType()}> PROPERTY_${Property.getName().toUpperCase()} = registerProperty(PROPERTY_${Property.getName().toUpperCase()}_NAME, ${Property.getDeclaredType()}.class, MY_CLASS);
+    @DbField(name = "${Property.getMapped()}", type = ${Property.output(an.type)}, table = DB_TABLE_NAME${Property.output(an.key)})
+    public static final IPropertyInfo<${Property.output(bo.type)}> PROPERTY_${Property.getName().toUpperCase()} = registerProperty(PROPERTY_${Property.getName().toUpperCase()}_NAME, ${Property.output(bo.type)}.class, MY_CLASS);
 
     /**
     * 获取-${Property.getDescription()}
@@ -72,7 +72,7 @@ $BEGIN_MODEL_PROPERTY$
     * @return 值
     */
     @XmlElement(name = PROPERTY_${Property.getName().toUpperCase()}_NAME)
-    public final ${Property.getDeclaredType()} get${Property.getName()}() {
+    public final ${Property.output(bo.type)} get${Property.getName()}() {
         return this.getProperty(PROPERTY_${Property.getName().toUpperCase()});
     }
 
@@ -81,7 +81,7 @@ $BEGIN_MODEL_PROPERTY$
     * 
     * @param value 值
     */
-    public final void set${Property.getName()}(${Property.getDeclaredType()} value) {
+    public final void set${Property.getName()}(${Property.output(bo.type)} value) {
         this.setProperty(PROPERTY_${Property.getName().toUpperCase()}, value);
     }
 

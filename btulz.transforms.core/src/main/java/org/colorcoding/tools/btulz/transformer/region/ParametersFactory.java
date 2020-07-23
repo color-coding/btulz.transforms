@@ -24,21 +24,9 @@ public class ParametersFactory {
 	}
 
 	/**
-	 * 数据库字段映射类型
-	 */
-	public static final String PARAMETER_NAME_MAPPED_TYPE = "MappedType";
-	/**
-	 * 开发语言属性映射类型
-	 */
-	public static final String PARAMETER_NAME_DECLARED_TYPE = "DeclaredType";
-	/**
-	 * 默认值映射
-	 */
-	public static final String PARAMETER_NAME_DEFAULT_VALUE = "DefaultValue";
-	/**
 	 * 类型映射
 	 */
-	public static final String PARAMETER_NAME_TYPE_OUTPUT = "TypeOutput";
+	public static final String PARAMETER_NAME_OUTPUT_MAPPING = "OutputMapping";
 
 	private ParametersFactory() {
 

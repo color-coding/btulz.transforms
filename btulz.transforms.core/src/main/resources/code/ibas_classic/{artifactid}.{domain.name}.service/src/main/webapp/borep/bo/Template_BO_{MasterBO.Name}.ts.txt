@@ -20,11 +20,11 @@ $BEGIN_MODEL_PROPERTY$
             /** 映射的属性名称-${Property.getDescription()} */
             static PROPERTY_${Property.getName().toUpperCase()}_NAME: string = "${Property.getName()}";
             /** 获取-${Property.getDescription()} */
-            get ${Property.getName(LowerCamelCase)}(): ${Property.getDeclaredType()} {
-                return this.getProperty<${Property.getDeclaredType()}>(${BO.getName()}.PROPERTY_${Property.getName().toUpperCase()}_NAME);
+            get ${Property.getName(LowerCamelCase)}(): ${Property.output(ts.type)} {
+                return this.getProperty<${Property.output(ts.type)}>(${BO.getName()}.PROPERTY_${Property.getName().toUpperCase()}_NAME);
             }
             /** 设置-${Property.getDescription()} */
-            set ${Property.getName(LowerCamelCase)}(value: ${Property.getDeclaredType()}) {
+            set ${Property.getName(LowerCamelCase)}(value: ${Property.output(ts.type)}) {
                 this.setProperty(${BO.getName()}.PROPERTY_${Property.getName().toUpperCase()}_NAME, value);
             }
 
@@ -98,11 +98,11 @@ $BEGIN_MODEL_PROPERTY$
             /** 映射的属性名称-${Property.getDescription()} */
             static PROPERTY_${Property.getName().toUpperCase()}_NAME: string = "${Property.getName()}";
             /** 获取-${Property.getDescription()} */
-            get ${Property.getName(LowerCamelCase)}(): ${Property.getDeclaredType()} {
-                return this.getProperty<${Property.getDeclaredType()}>(${BO.getName()}.PROPERTY_${Property.getName().toUpperCase()}_NAME);
+            get ${Property.getName(LowerCamelCase)}(): ${Property.output(ts.type)} {
+                return this.getProperty<${Property.output(ts.type)}>(${BO.getName()}.PROPERTY_${Property.getName().toUpperCase()}_NAME);
             }
             /** 设置-${Property.getDescription()} */
-            set ${Property.getName(LowerCamelCase)}(value: ${Property.getDeclaredType()}) {
+            set ${Property.getName(LowerCamelCase)}(value: ${Property.output(ts.type)}) {
                 this.setProperty(${BO.getName()}.PROPERTY_${Property.getName().toUpperCase()}_NAME, value);
             }
 

@@ -1,6 +1,7 @@
 package org.colorcoding.tools.btulz.template;
 
 import java.io.BufferedWriter;
+import java.lang.reflect.InvocationTargetException;
 
 import org.colorcoding.tools.btulz.Environment;
 
@@ -56,6 +57,9 @@ public class TemplateLine implements ITemplateData {
 								variable.setValue(value);
 								outLine = outLine.replace(variable.getOriginal(), variable.getValue());
 							}
+						} catch (InvocationTargetException e) {
+							Environment.getLogger().error(String.format("template: replace [%s]'value, error %s",
+									variable.getOriginal(), e.getTargetException()));
 						} catch (Exception e) {
 							Environment.getLogger().error(
 									String.format("template: replace [%s]'value, error %s", variable.getOriginal(), e));

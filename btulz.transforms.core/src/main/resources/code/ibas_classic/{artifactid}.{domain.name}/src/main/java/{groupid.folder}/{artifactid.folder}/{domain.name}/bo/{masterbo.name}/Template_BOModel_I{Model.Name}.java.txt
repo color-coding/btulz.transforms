@@ -17,14 +17,14 @@ $BEGIN_MODEL_PROPERTY$
     * 
     * @return 值
     */
-    ${Property.getDeclaredType()} get${Property.getName()}();
+    ${Property.output(bo.type)} get${Property.getName()}();
 
     /**
     * 设置-${Property.getDescription()}
     * 
     * @param value 值
     */
-    void set${Property.getName()}(${Property.getDeclaredType()} value);
+    void set${Property.getName()}(${Property.output(bo.type)} value);
 
 $BEGIN_PROPERTY_DECLAREDTYPE_IS_BIGDECIMAL$
 

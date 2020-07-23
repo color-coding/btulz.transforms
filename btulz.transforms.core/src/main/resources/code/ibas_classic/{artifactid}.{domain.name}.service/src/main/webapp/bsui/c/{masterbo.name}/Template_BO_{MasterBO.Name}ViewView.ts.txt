@@ -36,7 +36,7 @@ $END_BOITEM_MODEL$
                                 cells: [
 $BEGIN_BOITEM_MODEL$
 $BEGIN_MODEL_PROPERTY$
-                                    ${Property.getTypeOutput(Object.2)},
+                                    ${Property.output(ui.object.2)},
 $END_MODEL_PROPERTY$
 $END_BOITEM_MODEL$
                                 ]
@@ -116,7 +116,7 @@ $END_BOITEM$
                                         blocks: [
 $BEGIN_BO_MODEL$
 $BEGIN_MODEL_PROPERTY$
-                                            ${Property.getTypeOutput(Object)},
+                                            ${Property.output(ui.object)},
 $END_MODEL_PROPERTY$
 $END_BO_MODEL$
                                         ],

@@ -1,10 +1,13 @@
 package org.colorcoding.tools.btulz.test.model;
 
+import java.io.File;
 import java.io.StringWriter;
+import java.net.URISyntaxException;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 import org.colorcoding.tools.btulz.model.Domain;
 import org.colorcoding.tools.btulz.model.IBusinessObject;
@@ -15,6 +18,11 @@ import org.colorcoding.tools.btulz.model.IProperty;
 import org.colorcoding.tools.btulz.model.data.emBORelation;
 import org.colorcoding.tools.btulz.model.data.emDataType;
 import org.colorcoding.tools.btulz.model.data.emModelType;
+import org.colorcoding.tools.btulz.test.Environment;
+import org.colorcoding.tools.btulz.transformer.region.model.OutputItem;
+import org.colorcoding.tools.btulz.transformer.region.model.OutputMapping;
+import org.colorcoding.tools.btulz.transformer.region.model.OutputMappingList;
+import org.colorcoding.tools.btulz.util.Condition;
 
 import junit.framework.TestCase;
 
@@ -106,6 +114,38 @@ public class TestModels extends TestCase {
 		System.out.println("序列化输出：");
 		System.out.println(oldXML);
 
+	}
+
+	public void testOutput() throws JAXBException, URISyntaxException {
+		OutputMappingList opMappings = new OutputMappingList();
+		OutputMapping opMapping = new OutputMapping();
+		opMapping.setName(",");
+		opMapping.setBinding("Property");
+		OutputItem opItem = new OutputItem();
+		opItem.setContent(",");
+		Condition condition = new Condition();
+		condition.setProperty("First");
+		condition.setValue("true");
+		opItem.getConditions().add(condition);
+		opMapping.getItems().add(opItem);
+		opMappings.add(opMapping);
+		JAXBContext context = JAXBContext.newInstance(opMappings.getClass());
+		Marshaller marshaller = context.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+		StringWriter writer = new StringWriter();
+		marshaller.marshal(opMappings, writer);
+		System.out.println("序列化输出：");
+		System.out.println(writer.toString());
+
+		Unmarshaller unmarshaller = context.createUnmarshaller();
+		Object data = unmarshaller
+				.unmarshal(new File(Environment.getResource("ds/dm_mssql_ibas_classic.xml").getPath()));
+		writer = new StringWriter();
+		marshaller.marshal(data, writer);
+		System.out.println("序列化输出：");
+		System.out.println(writer.toString());
 	}
 
 }

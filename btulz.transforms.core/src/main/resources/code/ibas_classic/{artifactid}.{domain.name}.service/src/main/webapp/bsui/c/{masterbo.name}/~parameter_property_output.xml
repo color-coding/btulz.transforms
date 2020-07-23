@@ -1,0 +1,818 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE ArrayList>
+<!-- 界面属性 -->
+<ns3:ArrayList xmlns:ns2="http://colorcoding.org/btulz/util"
+    xmlns:ns3="http://colorcoding.org/btulz/transformers">
+    <!-- 输入控件模板 -->
+    <OutputMapping Name="ui.input" Binding="Property" Unmatched="SKIP">
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.EnumSelect("", {
+                enumType: ibas.emYesNo
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.YesNo(),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emYesNo" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.EnumSelect("", {
+                enumType: ibas.emDocumentStatus
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.DocumentStatus(),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emDocumentStatus" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.EnumSelect("", {
+                enumType: ibas.emBOStatus
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.BOStatus(),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emBOStatus" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.EnumSelect("", {
+                enumType: ibas.emApprovalStatus
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.ApprovalStatus(),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emApprovalStatus" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.EnumSelect("", {
+                enumType: ibas.emApprovalResult
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.ApprovalResult(),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emApprovalResult" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.EnumSelect("", {
+                enumType: ibas.emApprovalStepStatus
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.ApprovalStepStatus(),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emApprovalStepStatus" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.EnumSelect("", {
+                enumType: ibas.emAuthoriseType
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.AuthoriseType(),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emAuthoriseType" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.EnumSelect("", {
+                enumType: ibas.emConditionOperation
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.ConditionOperation(),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emConditionOperation" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.EnumSelect("", {
+                enumType: ibas.emConditionRelationship
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.ConditionRelationship(),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emConditionRelationship" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.EnumSelect("", {
+                enumType: ibas.emSortType
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.SortType(),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emSortType" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.EnumSelect("", {
+                enumType: ibas.emDirection
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Direction(),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emDirection" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.EnumSelect("", {
+                enumType: bo.${Property.getDeclaredType()}
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Enum({
+                    enumType: bo.${Property.getDeclaredType()}
+                }),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="em" Operation="BEGIN_WITH" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Input("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Alphanumeric({
+                    maxLength: ${Property.getEditSize()}
+                }),
+            })]]></Content>
+            <Condition Property="DataType" Value="Alphanumeric" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.TextArea("", {
+                rows: 3,
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Alphanumeric(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Memo" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Input("", {
+                type: sap.m.InputType.Number
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Numeric(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Numeric" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.TimePicker("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Time(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Date" />
+            <Condition Property="DataSubType" Value="Time" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.DatePicker("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Date(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Date" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Input("", {
+                type: sap.m.InputType.Number
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Price(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Price" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Input("", {
+                type: sap.m.InputType.Number
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Quantity(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Quantity" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Input("", {
+                type: sap.m.InputType.Number
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Rate(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Rate" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Input("", {
+                type: sap.m.InputType.Number
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Sum(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Sum" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Input("", {
+                type: sap.m.InputType.Number
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Measurement(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Measurement" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Input("", {
+                type: sap.m.InputType.Text
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Percentage(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Percentage" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Input("", {
+                type: sap.m.InputType.Number
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Decimal(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Input("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+            })]]></Content>
+        </OutputItem>
+    </OutputMapping>
+    <!-- 文本控件模板 -->
+    <OutputMapping Name="ui.text" Binding="Property" Unmatched="SKIP">
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.YesNo(true),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emYesNo" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.DocumentStatus(true),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emDocumentStatus" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.BOStatus(true),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emBOStatus" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.ApprovalStatus(true),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emApprovalStatus" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.ApprovalResult(true),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emApprovalResult" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.ApprovalStepStatus(true),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emApprovalStepStatus" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.AuthoriseType(true),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emAuthoriseType" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.ConditionOperation(true),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emConditionOperation" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.ConditionRelationship(true),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emConditionRelationship" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.SortType(true),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emSortType" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Direction(true),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emDirection" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Enum({
+                    enumType: bo.${Property.getDeclaredType()},
+                    describe: true,
+                }),
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="em" Operation="BEGIN_WITH" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Alphanumeric(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Alphanumeric" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Alphanumeric(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Memo" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Numeric(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Numeric" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Time(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Date" />
+            <Condition Property="DataSubType" Value="Time" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Date(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Date" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Price(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Price" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Quantity(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Quantity" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Rate(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Rate" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Sum(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Sum" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Measurement(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Measurement" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Percentage(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Percentage" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Decimal(),
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.Text("", {
+            }).bindProperty("bindingValue", {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Alphanumeric(),
+            })]]></Content>
+        </OutputItem>
+    </OutputMapping>
+    <!-- 对象属性控件模板 -->
+    <OutputMapping Name="ui.object" Binding="Property" Unmatched="SKIP">
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectYesNoStatus("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.YesNo(true),
+            }
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emYesNo" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectDocumentStatus("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.DocumentStatus(true),
+            }
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emDocumentStatus" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectApprovalStatus("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.ApprovalStatus(true),
+            }
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emApprovalStatus" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectBOStatus("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.BOStatus(true),
+            }
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emBOStatus" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectEnumStatus("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Enum({
+                    enumType: bo.${Property.getDeclaredType()},
+                    describe: true,
+                }),
+            }
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="em" Operation="BEGIN_WITH" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Alphanumeric(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Alphanumeric" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Alphanumeric(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Memo" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Numeric(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Numeric" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Time(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Date" />
+            <Condition Property="DataSubType" Value="Time" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Date(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Date" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Price(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Price" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Quantity(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Quantity" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Rate(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Rate" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Sum(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Sum" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Measurement(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Measurement" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Percentage(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Percentage" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Decimal(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Alphanumeric(),
+            }
+            })]]></Content>
+        </OutputItem>
+    </OutputMapping>
+    <!-- 对象属性控件模板 -->
+    <OutputMapping Name="ui.object.2" Binding="Property" Unmatched="SKIP">
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectYesNoStatus("", {
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.YesNo(true),
+            }
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emYesNo" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectDocumentStatus("", {
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.DocumentStatus(true),
+            }
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emDocumentStatus" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectApprovalStatus("", {
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.ApprovalStatus(true),
+            }
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emApprovalStatus" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectBOStatus("", {
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.BOStatus(true),
+            }
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="emBOStatus" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectEnumStatus("", {
+            title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Enum({
+                    enumType: bo.${Property.getDeclaredType()},
+                    describe: true,
+                }),
+            }
+            })]]></Content>
+            <Condition Property="DeclaredType" Value="em" Operation="BEGIN_WITH" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Alphanumeric(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Alphanumeric" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Alphanumeric(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Memo" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Numeric(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Numeric" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Date(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Date" />
+            <Condition Property="DataSubType" Value="Time" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Date(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Date" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Price(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Price" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Quantity(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Quantity" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Rate(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Rate" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Sum(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Sum" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Measurement(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Measurement" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Percentage(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DataSubType" Value="Percentage" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Decimal(),
+            }
+            })]]></Content>
+            <Condition Property="DataType" Value="Decimal" />
+        </OutputItem>
+        <OutputItem>
+            <Content><![CDATA[new sap.extension.m.ObjectAttribute("", {
+            text: {
+                path: "${Property.getName(LowerCamelCase)}",
+                type: new sap.extension.data.Alphanumeric(),
+            }
+            })]]></Content>
+        </OutputItem>
+    </OutputMapping>
+</ns3:ArrayList>

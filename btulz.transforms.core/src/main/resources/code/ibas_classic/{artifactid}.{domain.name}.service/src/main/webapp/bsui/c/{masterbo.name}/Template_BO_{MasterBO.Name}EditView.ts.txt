@@ -32,7 +32,7 @@ $END_BOITEM$
 $BEGIN_BO_MODEL$
 $BEGIN_MODEL_PROPERTY$
                             new sap.m.Label("", { text: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}") }),
-                            ${Property.getTypeOutput(Input)},
+                            ${Property.output(ui.input)},
 $END_MODEL_PROPERTY$
 $END_BO_MODEL$
                         ]
@@ -76,7 +76,7 @@ $BEGIN_BOITEM_MODEL$
 $BEGIN_MODEL_PROPERTY$
                                     new sap.extension.table.DataColumn("", {
                                         label: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
-                                        template: ${Property.getTypeOutput(Input)},
+                                        template: ${Property.output(ui.input)},
                                     }),
 $END_MODEL_PROPERTY$
 $END_BOITEM_MODEL$

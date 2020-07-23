@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 $$适用于java平台下的ibas框架
-<ns2:DataStructureOrchestration
-    xmlns:ns2="http://colorcoding.org/btulz/transformers">
+<ns2:DataStructureOrchestration xmlns:ns2="http://colorcoding.org/btulz/transformers">
     <Name>ds_mssql_ibas</Name>
     <Description>基于MSSQL的结构映射说明</Description>
     <Integrated>true</Integrated>
@@ -36,7 +35,7 @@ $$上步返回0时运行（RunOnValue="0"）。
             <Script><![CDATA[
                 CREATE TABLE "${DbName}"."${DbSchema}"."${Model.getMapped()}"(
 $BEGIN_MODEL_PROPERTY$
-                   "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getDefaultValue(DB)} ${Property.getSeparator(,)}
+                   "${Property.getMapped()}" ${Property.output(db.type)} ${Property.output(db.value)} ${Property.output(,)}
 $END_MODEL_PROPERTY$
                 )
             ]]></Script>
@@ -49,7 +48,7 @@ $BEGIN_MODEL_PROPERTY$
         </Step>
         <Step Name="create field ${Model.getMapped()}.${Property.getMapped()}" RunOnValue="0">
             <Script><![CDATA[
-                ALTER TABLE "${DbName}"."${DbSchema}"."${Model.getMapped()}" ADD "${Property.getMapped()}" ${Property.getMappedType()} ${Property.getDefaultValue(DB)}
+                ALTER TABLE "${DbName}"."${DbSchema}"."${Model.getMapped()}" ADD "${Property.getMapped()}" ${Property.output(db.type)} ${Property.output(db.value)}
             ]]></Script>
         </Step>
 $END_MODEL_PROPERTY$
@@ -63,7 +62,7 @@ $BEGIN_MODEL_HAS_PRIMARY$
             <Script><![CDATA[
                 ALTER TABLE "${DbName}"."${DbSchema}"."${Model.getMapped()}" ADD CONSTRAINT "K${Model.getMapped().toUpperCase()}" PRIMARY KEY (
 $BEGIN_MODEL_PRIMARY_PROPERTY$
-                    "${Property.getMapped()}" ${Property.getSeparator(,)}
+                    "${Property.getMapped()}" ${Property.output(,)}
 $END_MODEL_PRIMARY_PROPERTY$
                 )
             ]]></Script>
@@ -88,7 +87,7 @@ $BEGIN_MODEL_HAS_UNIQUE$
             <Script><![CDATA[
                 CREATE UNIQUE INDEX "${Model.getMapped().toUpperCase()}_UNIQUE_INDEX" ON "${DbName}"."${DbSchema}"."${Model.getMapped()}" (
 $BEGIN_MODEL_UNIQUE_PROPERTY$
-                    "${Property.getMapped()}" ${Property.getSeparator(,)}
+                    "${Property.getMapped()}" ${Property.output(,)}
 $END_MODEL_UNIQUE_PROPERTY$
                 )
             ]]></Script>
@@ -144,7 +143,7 @@ $BEGIN_MODEL_PROPERTY$
         </Step>
         <Step Name="register business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script><![CDATA[
-                INSERT INTO "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES (N'${BO.getShortName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'${Property.isSystemed()}')
+                INSERT INTO "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES (N'${BO.getShortName()}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.output(db.search)}', N'${Property.output(db.system)}')
             ]]></Script>
         </Step>
 $END_MODEL_PROPERTY$
@@ -207,7 +206,7 @@ $BEGIN_MODEL_PROPERTY$
         </Step>
         <Step Name="register business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
             <Script><![CDATA[
-                INSERT INTO "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES (N'${BO.getShortName(index)}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.isSearched(DB)}', N'${Property.isSystemed()}')
+                INSERT INTO "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES (N'${BO.getShortName(index)}', N'${Property.getName()}', N'${Property.getMapped()}', N'${Property.getDescription()}', N'${Property.getDataType()}', N'${Property.getDataSubType()}', ${Property.getEditSize()}, N'${Property.output(db.search)}', N'${Property.output(db.system)}')
             ]]></Script>
         </Step>
 $END_MODEL_PROPERTY$

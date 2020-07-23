@@ -41,8 +41,10 @@ public class TestCodeTransformer extends TestCase {
 		codeTransformer.setProjectUrl("http://colorcoding.org");
 		codeTransformer.addParameters(new Parameter("Company", "CC"));
 		codeTransformer.addParameters(new Parameter("ibasVersion", "0.1.2"));
+		codeTransformer.addParameters(new Parameter("ibasIfVersion", "0.1.0"));
 		codeTransformer.addParameters(new Parameter("ProjectId", UUID.randomUUID().toString()));
-		codeTransformer.addDomains(Environment.getWorkingFolder() + File.separator + Environment.getXmlModelsFileOld());
+		// codeTransformer.addDomains(Environment.getWorkingFolder() + File.separator +
+		// Environment.getXmlModelsFileOld());
 		codeTransformer.addDomains(Environment.getCodeFolder() + String.format(
 				"%1$sibas-typescript%1$stest%1$sapps%1$strainingtesting%1$sresources%1$sds_trainingtesting.xml",
 				File.separator));
