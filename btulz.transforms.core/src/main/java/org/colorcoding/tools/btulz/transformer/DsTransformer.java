@@ -10,7 +10,7 @@ import org.colorcoding.tools.btulz.model.IDomain;
 import org.colorcoding.tools.btulz.template.Parameters;
 import org.colorcoding.tools.btulz.transformer.region.ParametersFactory;
 import org.colorcoding.tools.btulz.transformer.region.RegionDomain;
-import org.colorcoding.tools.btulz.transformer.region.model.DataTypeMappings;
+import org.colorcoding.tools.btulz.transformer.region.model.OutputMappingList;
 
 /**
  * 数据结构与模型的转换器
@@ -91,15 +91,15 @@ public class DsTransformer extends DbTransformer {
 		return this.getOutputFile(file.isFile() ? file.getName() : this.getTemplateFile());
 	}
 
-	private DataTypeMappings dataTypeMappings;
+	private OutputMappingList outputMappings;
 
-	public DataTypeMappings getDataTypeMappings() {
-		if (dataTypeMappings == null) {
+	public OutputMappingList getOutputMappings() {
+		if (this.outputMappings == null) {
 			if (this.getTemplateFile() != null && !this.getTemplateFile().isEmpty()) {
 				try {
 					if (this.getTemplateFile().indexOf(File.separator) > 0) {
 						// 有路径符，表示使用的是物理文件
-						dataTypeMappings = DataTypeMappings.create(
+						this.outputMappings = OutputMappingList.create(
 								this.getTemplateFile().replace(File.separatorChar + "ds_", File.separatorChar + "dm_"));
 					} else {
 						// 无路径符，尝试使用资源流
@@ -108,7 +108,7 @@ public class DsTransformer extends DbTransformer {
 						InputStream inputStream = Thread.currentThread().getContextClassLoader()
 								.getResourceAsStream(resName);
 						if (inputStream != null) {
-							dataTypeMappings = DataTypeMappings.create(inputStream);
+							this.outputMappings = OutputMappingList.create(inputStream);
 						}
 					}
 				} catch (Exception e) {
@@ -116,7 +116,7 @@ public class DsTransformer extends DbTransformer {
 				}
 			}
 		}
-		return dataTypeMappings;
+		return this.outputMappings;
 	}
 
 	@Override
@@ -125,8 +125,8 @@ public class DsTransformer extends DbTransformer {
 		if (this.currentDomain != null) {
 			parameters.add(ParametersFactory.create().createParameter(this.currentDomain));
 		}
-		parameters.add(ParametersFactory.create().createParameter(ParametersFactory.PARAMETER_NAME_MAPPED_TYPE,
-				this.getDataTypeMappings()));
+		parameters.add(ParametersFactory.create().createParameter(ParametersFactory.PARAMETER_NAME_OUTPUT_MAPPING,
+				this.getOutputMappings()));
 		return parameters;
 	}
 

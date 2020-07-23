@@ -1,5 +1,181 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<!-- ds_sybase_ibas.xml的数据类型额外映射说明 -->
-<ns2:DataTypeMappings xmlns:ns2="http://colorcoding.org/btulz/transformers">
-    <Mapping DataType="Bytes" SubType="Default" Mapped="VARBINARY"/>
-</ns2:DataTypeMappings>
+<!DOCTYPE ArrayList>
+<!-- MSSQL -->
+<ns3:ArrayList xmlns:ns2="http://colorcoding.org/btulz/util"
+    xmlns:ns3="http://colorcoding.org/btulz/transformers">
+    <!-- 数据类型说明 -->
+    <OutputMapping Name="db.type" Binding="Property" Unmatched="EXCEPTION">
+        <OutputItem>
+            <Content>NVARCHAR(${Property.getEditSize()})</Content>
+            <Condition Property="DataType" Value="Alphanumeric" />
+        </OutputItem>
+        <OutputItem>
+            <Content>NTEXT</Content>
+            <Condition Property="DataType" Value="Memo" />
+        </OutputItem>
+        <OutputItem>
+            <Content>INT</Content>
+            <Condition Property="DataType" Value="Numeric" />
+        </OutputItem>
+        <OutputItem>
+            <Content>SMALLINT</Content>
+            <Condition Property="DataType" Value="Date" />
+            <Condition Property="DataSubType" Value="Time" />
+        </OutputItem>
+        <OutputItem>
+            <Content>DATETIME</Content>
+            <Condition Property="DataType" Value="Date" />
+        </OutputItem>
+        <OutputItem>
+            <Content>NUMERIC(19, 6)</Content>
+            <Condition Property="DataType" Value="Decimal" />
+        </OutputItem>
+        <OutputItem>
+            <Content>VARBINARY</Content>
+            <Condition Property="DataType" Value="Bytes" />
+        </OutputItem>
+    </OutputMapping>
+    <!-- 字段默认值 -->
+    <OutputMapping Name="db.value" Binding="Property" Unmatched="SKIP">
+        <!-- 主键/唯一，无默认值时 -->
+        <OutputItem>
+            <Content>NOT NULL DEFAULT N''</Content>
+            <Condition Property="PrimaryKey" Value="true" BracketOpen="1" />
+            <Condition Property="UniqueKey" Value="true" Relation="OR" BracketClose="1" />
+            <Condition Property="DataType" Value="Alphanumeric" />
+            <Condition Property="DefaultValue" Operation="EQUAL" />
+        </OutputItem>
+        <OutputItem>
+            <Content>NOT NULL DEFAULT 0</Content>
+            <Condition Property="PrimaryKey" Value="true" BracketOpen="1" />
+            <Condition Property="UniqueKey" Value="true" Relation="OR" BracketClose="1" />
+            <Condition Property="DataType" Value="Date" />
+            <Condition Property="DataSubType" Value="Time" />
+            <Condition Property="DefaultValue" Operation="EQUAL" />
+        </OutputItem>
+        <OutputItem>
+            <Content>NOT NULL DEFAULT '1900-01-01'</Content>
+            <Condition Property="PrimaryKey" Value="true" BracketOpen="1" />
+            <Condition Property="UniqueKey" Value="true" Relation="OR" BracketClose="1" />
+            <Condition Property="DataType" Value="Date" />
+            <Condition Property="DefaultValue" Operation="EQUAL" />
+        </OutputItem>
+        <OutputItem>
+            <Content>NOT NULL DEFAULT 0</Content>
+            <Condition Property="PrimaryKey" Value="true" BracketOpen="1" />
+            <Condition Property="UniqueKey" Value="true" Relation="OR" BracketClose="1" />
+            <Condition Property="DataType" Value="Numeric" />
+            <Condition Property="DefaultValue" Operation="EQUAL" />
+        </OutputItem>
+        <OutputItem>
+            <Content>NOT NULL DEFAULT 0</Content>
+            <Condition Property="PrimaryKey" Value="true" BracketOpen="1" />
+            <Condition Property="UniqueKey" Value="true" Relation="OR" BracketClose="1" />
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DefaultValue" Operation="EQUAL" />
+        </OutputItem>
+        <!-- 主键/唯一，有默认值时 -->
+        <OutputItem>
+            <Content>NOT NULL DEFAULT N'${Property.getDefaultValue()}'</Content>
+            <Condition Property="PrimaryKey" Value="true" BracketOpen="1" />
+            <Condition Property="UniqueKey" Value="true" Relation="OR" BracketClose="1" />
+            <Condition Property="DataType" Value="Alphanumeric" />
+            <Condition Property="DefaultValue" Operation="NOT_EQUAL" />
+        </OutputItem>
+        <OutputItem>
+            <Content>NOT NULL DEFAULT ${Property.getDefaultValue()}</Content>
+            <Condition Property="PrimaryKey" Value="true" BracketOpen="1" />
+            <Condition Property="UniqueKey" Value="true" Relation="OR" BracketClose="1" />
+            <Condition Property="DataType" Value="Date" />
+            <Condition Property="DataSubType" Value="Time" />
+            <Condition Property="DefaultValue" Operation="NOT_EQUAL" />
+        </OutputItem>
+        <OutputItem>
+            <Content>NOT NULL DEFAULT '${Property.getDefaultValue()}'</Content>
+            <Condition Property="PrimaryKey" Value="true" BracketOpen="1" />
+            <Condition Property="UniqueKey" Value="true" Relation="OR" BracketClose="1" />
+            <Condition Property="DataType" Value="Date" />
+            <Condition Property="DefaultValue" Operation="NOT_EQUAL" />
+        </OutputItem>
+        <OutputItem>
+            <Content>NOT NULL DEFAULT ${Property.getDefaultValue()}</Content>
+            <Condition Property="PrimaryKey" Value="true" BracketOpen="1" />
+            <Condition Property="UniqueKey" Value="true" Relation="OR" BracketClose="1" />
+            <Condition Property="DataType" Value="Numeric" />
+            <Condition Property="DefaultValue" Operation="NOT_EQUAL" />
+        </OutputItem>
+        <OutputItem>
+            <Content>NOT NULL DEFAULT ${Property.getDefaultValue()}</Content>
+            <Condition Property="PrimaryKey" Value="true" BracketOpen="1" />
+            <Condition Property="UniqueKey" Value="true" Relation="OR" BracketClose="1" />
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DefaultValue" Operation="NOT_EQUAL" />
+        </OutputItem>
+        <!-- 一般键值，有默认值时 -->
+        <OutputItem>
+            <Content>DEFAULT N'${Property.getDefaultValue()}</Content>
+            <Condition Property="DataType" Value="Alphanumeric" />
+            <Condition Property="DefaultValue" Operation="NOT_EQUAL" />
+        </OutputItem>
+        <OutputItem>
+            <Content>DEFAULT ${Property.getDefaultValue()}</Content>
+            <Condition Property="DataType" Value="Date" />
+            <Condition Property="DataSubType" Value="Time" />
+            <Condition Property="DefaultValue" Operation="NOT_EQUAL" />
+        </OutputItem>
+        <OutputItem>
+            <Content>DEFAULT '${Property.getDefaultValue()}'</Content>
+            <Condition Property="DataType" Value="Date" />
+            <Condition Property="DefaultValue" Operation="NOT_EQUAL" />
+        </OutputItem>
+        <OutputItem>
+            <Content>DEFAULT ${Property.getDefaultValue()}</Content>
+            <Condition Property="DataType" Value="Numeric" />
+            <Condition Property="DefaultValue" Operation="NOT_EQUAL" />
+        </OutputItem>
+        <OutputItem>
+            <Content>DEFAULT ${Property.getDefaultValue()}</Content>
+            <Condition Property="DataType" Value="Decimal" />
+            <Condition Property="DefaultValue" Operation="NOT_EQUAL" />
+        </OutputItem>
+    </OutputMapping>
+    <!-- 查询字段标记 -->
+    <OutputMapping Name="db.search" Binding="Property" Unmatched="EXCEPTION">
+        <OutputItem>
+            <Content>Y</Content>
+            <Condition Property="PrimaryKey" Value="true" />
+        </OutputItem>
+        <OutputItem>
+            <Content>Y</Content>
+            <Condition Property="UniqueKey" Value="true" />
+        </OutputItem>
+        <OutputItem>
+            <Content>Y</Content>
+            <Condition Property="Name" Value="Code" />
+        </OutputItem>
+        <OutputItem>
+            <Content>Y</Content>
+            <Condition Property="Name" Value="Name" />
+        </OutputItem>
+        <OutputItem>
+            <Content>N</Content>
+        </OutputItem>
+    </OutputMapping>
+    <!-- 系统字段标记 -->
+    <OutputMapping Name="db.system" Binding="Property" Unmatched="EXCEPTION">
+        <OutputItem>
+            <Content>N</Content>
+            <Condition Property="Name" Operation="BEGIN" Value="U_" />
+        </OutputItem>
+        <OutputItem>
+            <Content>Y</Content>
+        </OutputItem>
+    </OutputMapping>
+    <!-- 分割符 -->
+    <OutputMapping Name="," Binding="Property" Unmatched="SKIP">
+        <OutputItem>
+            <Content>,</Content>
+            <Condition Property="Last" Operation="NOT_EQUAL" Value="true" />
+        </OutputItem>
+    </OutputMapping>
+</ns3:ArrayList>

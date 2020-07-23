@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!DOCTYPE ArrayList>
-<!-- HANA -->
+<!-- MSSQL -->
 <ns3:ArrayList xmlns:ns2="http://colorcoding.org/btulz/util"
 	xmlns:ns3="http://colorcoding.org/btulz/transformers">
 	<!-- 数据类型说明 -->
@@ -14,7 +14,7 @@
 			<Condition Property="DataType" Value="Memo" />
 		</OutputItem>
 		<OutputItem>
-			<Content>INTEGER</Content>
+			<Content>INT</Content>
 			<Condition Property="DataType" Value="Numeric" />
 		</OutputItem>
 		<OutputItem>
@@ -23,7 +23,7 @@
 			<Condition Property="DataSubType" Value="Time" />
 		</OutputItem>
 		<OutputItem>
-			<Content>DATE</Content>
+			<Content>DATETIME</Content>
 			<Condition Property="DataType" Value="Date" />
 		</OutputItem>
 		<OutputItem>
@@ -31,7 +31,7 @@
 			<Condition Property="DataType" Value="Decimal" />
 		</OutputItem>
 		<OutputItem>
-			<Content>VARBINARY</Content>
+			<Content>BIT</Content>
 			<Condition Property="DataType" Value="Bytes" />
 		</OutputItem>
 	</OutputMapping>
@@ -113,7 +113,7 @@
 		</OutputItem>
 		<!-- 一般键值，有默认值时 -->
 		<OutputItem>
-			<Content>DEFAULT N'${Property.getDefaultValue()}'</Content>
+			<Content>DEFAULT N'${Property.getDefaultValue()}</Content>
 			<Condition Property="DataType" Value="Alphanumeric" />
 			<Condition Property="DefaultValue" Operation="NOT_EQUAL" />
 		</OutputItem>

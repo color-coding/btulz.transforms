@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE ArrayList>
+<!-- 业务对象 -->
+<ns3:ArrayList xmlns:ns2="http://colorcoding.org/btulz/util" xmlns:ns3="http://colorcoding.org/btulz/transformers">
+	<!-- 数据类型说明 -->
+	<OutputMapping Name="bo.type" Binding="Property" Unmatched="EXCEPTION">
+		<OutputItem>
+			<Content>${Property.getDeclaredType()}</Content>
+			<Condition Property="DeclaredType" Operation="NOT_EQUAL" />
+		</OutputItem>
+		<OutputItem>
+			<Content>String</Content>
+			<Condition Property="DataType" Value="Alphanumeric" />
+		</OutputItem>
+		<OutputItem>
+			<Content>String</Content>
+			<Condition Property="DataType" Value="Memo" />
+		</OutputItem>
+		<OutputItem>
+			<Content>Integer</Content>
+			<Condition Property="DataType" Value="Numeric" />
+		</OutputItem>
+		<OutputItem>
+			<Content>Short</Content>
+			<Condition Property="DataType" Value="Date" />
+			<Condition Property="DataSubType" Value="Time" />
+		</OutputItem>
+		<OutputItem>
+			<Content>DateTime</Content>
+			<Condition Property="DataType" Value="Date" />
+		</OutputItem>
+		<OutputItem>
+			<Content>BigDecimal</Content>
+			<Condition Property="DataType" Value="Decimal" />
+		</OutputItem>
+		<OutputItem>
+			<Content>Byte[]</Content>
+			<Condition Property="DataType" Value="Bytes" />
+		</OutputItem>
+	</OutputMapping>
+	<!-- 标记类型说明 -->
+	<OutputMapping Name="an.type" Binding="Property" Unmatched="EXCEPTION">
+		<OutputItem>
+			<Content>DbFieldType.ALPHANUMERIC</Content>
+			<Condition Property="DataType" Value="Alphanumeric" />
+		</OutputItem>
+		<OutputItem>
+			<Content>DbFieldType.MEMO</Content>
+			<Condition Property="DataType" Value="Memo" />
+		</OutputItem>
+		<OutputItem>
+			<Content>DbFieldType.NUMERIC</Content>
+			<Condition Property="DataType" Value="Numeric" />
+		</OutputItem>
+		<OutputItem>
+			<Content>DbFieldType.NUMERIC</Content>
+			<Condition Property="DataType" Value="Date" />
+			<Condition Property="DataSubType" Value="Time" />
+		</OutputItem>
+		<OutputItem>
+			<Content>DbFieldType.DATE</Content>
+			<Condition Property="DataType" Value="Date" />
+		</OutputItem>
+		<OutputItem>
+			<Content>DbFieldType.DECIMAL</Content>
+			<Condition Property="DataType" Value="Decimal" />
+		</OutputItem>
+		<OutputItem>
+			<Content>DbFieldType.BYTES</Content>
+			<Condition Property="DataType" Value="Bytes" />
+		</OutputItem>
+	</OutputMapping>
+	<!-- 标记键类型说明 -->
+	<OutputMapping Name="an.key" Binding="Property" Unmatched="SKIP">
+		<OutputItem>
+			<Content>, primaryKey = true, uniqueKey = true</Content>
+			<Condition Property="PrimaryKey" Value="true" />
+			<Condition Property="UniqueKey" Value="true" />
+		</OutputItem>
+		<OutputItem>
+			<Content>, primaryKey = true</Content>
+			<Condition Property="PrimaryKey" Value="true" />
+		</OutputItem>
+		<OutputItem>
+			<Content>, uniqueKey = true</Content>
+			<Condition Property="UniqueKey" Value="true" />
+		</OutputItem>
+	</OutputMapping>
+</ns3:ArrayList>

@@ -3,7 +3,6 @@ package org.colorcoding.tools.btulz.util;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
@@ -13,14 +12,12 @@ import org.colorcoding.tools.btulz.Environment;
  * 
  * @author Niuren.Zhu
  *
- * @param <E>
- *            集合类型
+ * @param <E> 集合类型
  */
 @XmlType(name = "ArrayList", namespace = Environment.NAMESPACE_BTULZ_UTIL)
-@XmlRootElement(name = "ArrayList", namespace = Environment.NAMESPACE_BTULZ_UTIL)
 public class ArrayList<E> extends java.util.ArrayList<E> implements List<E> {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -3667786953103150180L;
 
 	public E firstOrDefault() {
 		if (this.size() > 0)
@@ -75,4 +72,5 @@ public class ArrayList<E> extends java.util.ArrayList<E> implements List<E> {
 		}
 		return true;
 	}
+
 }

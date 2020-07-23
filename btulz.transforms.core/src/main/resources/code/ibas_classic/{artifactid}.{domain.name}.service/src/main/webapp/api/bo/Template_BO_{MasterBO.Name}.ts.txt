@@ -12,7 +12,7 @@ $BEGIN_BO_MODEL$
         export interface I${Model.getName()} extends ibas.IBO${Model.getModelType()} {
 $BEGIN_MODEL_PROPERTY$
             /** ${Property.getDescription()} */
-            ${Property.getName(LowerCamelCase)}: ${Property.getDeclaredType()};
+            ${Property.getName(LowerCamelCase)}: ${Property.output(ts.type)};
 $END_MODEL_PROPERTY$
 
 $BEGIN_BOITEM$
@@ -45,7 +45,7 @@ $BEGIN_BO_MODEL$
         export interface I${Model.getName()} extends ibas.IBO${Model.getModelType()} {
 $BEGIN_MODEL_PROPERTY$
             /** ${Property.getDescription()} */
-            ${Property.getName(LowerCamelCase)}: ${Property.getDeclaredType()};
+            ${Property.getName(LowerCamelCase)}: ${Property.output(ts.type)};
 $END_MODEL_PROPERTY$
 
 $BEGIN_BOITEM$

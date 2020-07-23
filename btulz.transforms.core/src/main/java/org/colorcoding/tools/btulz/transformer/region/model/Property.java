@@ -1,27 +1,14 @@
 package org.colorcoding.tools.btulz.transformer.region.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.colorcoding.tools.btulz.Environment;
-import org.colorcoding.tools.btulz.model.IModel;
 import org.colorcoding.tools.btulz.model.IProperty;
 import org.colorcoding.tools.btulz.model.data.emDataSubType;
 import org.colorcoding.tools.btulz.model.data.emDataType;
-import org.colorcoding.tools.btulz.template.Parameter;
 
 public class Property extends Entity implements IProperty {
 
 	public Property(IProperty property) {
 		this.entity = property;
 	}
-
-	public Property(IProperty property, IModel model) {
-		this(property);
-		this.model = model;
-	}
-
-	private IModel model;
 
 	private IProperty entity;
 
@@ -46,20 +33,8 @@ public class Property extends Entity implements IProperty {
 	}
 
 	@Override
-	public void setDeclaredType(String declaredType) {
-		this.entity.setDeclaredType(declaredType);
-	}
-
-	@Override
 	public boolean isPrimaryKey() {
 		return this.entity.isPrimaryKey();
-	}
-
-	public String isPrimaryKey(String type) {
-		if (this.isPrimaryKey())
-			return "Y";
-		else
-			return "N";
 	}
 
 	@Override
@@ -70,13 +45,6 @@ public class Property extends Entity implements IProperty {
 	@Override
 	public boolean isUniqueKey() {
 		return this.entity.isUniqueKey();
-	}
-
-	public String isUniqueKey(String type) {
-		if (this.isUniqueKey())
-			return "Y";
-		else
-			return "N";
 	}
 
 	@Override
@@ -92,30 +60,6 @@ public class Property extends Entity implements IProperty {
 	@Override
 	public void setSearchKey(boolean value) {
 		this.entity.setSearchKey(value);
-	}
-
-	public String isSearched(String type) {
-		if (this.isPrimaryKey() || this.isUniqueKey()) {
-			return "Y";
-		}
-		if (this.isSearchKey()) {
-			return "Y";
-		}
-		if (this.getName() != null) {
-			if (this.getName().equalsIgnoreCase("Code")) {
-				return "Y";
-			} else if (this.getName().equalsIgnoreCase("Name")) {
-				return "Y";
-			}
-		}
-		return "N";
-	}
-
-	public String isSystemed() {
-		if (this.getName() != null && this.getName().startsWith("U_")) {
-			return "N";
-		}
-		return "Y";
 	}
 
 	@Override
@@ -161,35 +105,6 @@ public class Property extends Entity implements IProperty {
 		return this.entity.getDefaultValue();
 	}
 
-	public String getDefaultValue(String type) {
-		if ("DB".equalsIgnoreCase(type)) {
-			// 主键或唯一键，必须有默认值
-			if (this.isPrimaryKey() || this.isUniqueKey()) {
-				if (this.getDataType() == emDataType.Alphanumeric) {
-					return String.format("NOT NULL DEFAULT N'%s'",
-							this.getDefaultValue() == null ? "" : this.getDefaultValue());
-				} else if (this.getDataType() == emDataType.Date) {
-					return String.format("NOT NULL DEFAULT '%s' ",
-							this.getDefaultValue() == null ? "1900-1-1" : this.getDefaultValue());
-				} else if (this.getDataType() == emDataType.Numeric || this.getDataType() == emDataType.Decimal) {
-					return String.format("NOT NULL DEFAULT %s",
-							this.getDefaultValue() == null ? "0" : this.getDefaultValue());
-				}
-			}
-			if (this.getDefaultValue() != null) {
-				if (this.getDataType() == emDataType.Alphanumeric) {
-					return String.format("NULL DEFAULT N'%s'", this.getDefaultValue());
-				} else if (this.getDataType() == emDataType.Date) {
-					return String.format("NULL DEFAULT '%s'", this.getDefaultValue());
-				} else if (this.getDataType() == emDataType.Numeric || this.getDataType() == emDataType.Decimal) {
-					return String.format("NULL DEFAULT %s", this.getDefaultValue());
-				}
-			}
-			return "NULL";
-		}
-		return this.getDefaultValue();
-	}
-
 	@Override
 	public void setDefaultValue(String value) {
 		this.entity.setDefaultValue(value);
@@ -215,6 +130,16 @@ public class Property extends Entity implements IProperty {
 		return (IProperty) super.clone();
 	}
 
+	@Override
+	public String getDeclaredType() {
+		return this.entity.getDeclaredType();
+	}
+
+	@Override
+	public void setDeclaredType(String declaredType) {
+		this.entity.setDeclaredType(declaredType);
+	}
+
 	private boolean last;
 
 	public boolean isLast() {
@@ -223,261 +148,6 @@ public class Property extends Entity implements IProperty {
 
 	public void setLast(boolean last) {
 		this.last = last;
-	}
-
-	private List<DataTypeMapping> declaredTypeMappings;
-
-	public List<DataTypeMapping> getDeclaredTypeMappings() {
-		if (this.declaredTypeMappings == null) {
-			this.declaredTypeMappings = new ArrayList<>();
-		}
-		return declaredTypeMappings;
-	}
-
-	public void addDeclaredTypeMappings(Iterable<?> value) {
-		this.getDeclaredTypeMappings().clear();
-		if (value != null) {
-			for (Object item : value) {
-				if (item instanceof DataTypeMapping) {
-					this.getDeclaredTypeMappings().add((DataTypeMapping) item);
-				}
-			}
-		}
-	}
-
-	public void addDeclaredTypeMappings(Parameter par) {
-		if (par == null) {
-			return;
-		}
-		Object value = par.getValue();
-		if (Iterable.class.isInstance(value)) {
-			this.addDeclaredTypeMappings((Iterable<?>) value);
-		}
-	}
-
-	@Override
-	public String getDeclaredType() {
-		// 优先定义
-		if (this.entity.getDeclaredType() != null) {
-			// 已定义类型的转换
-			for (DataTypeMapping mapping : this.getDeclaredTypeMappings()) {
-				if (mapping == null) {
-					continue;
-				}
-				if (!this.entity.getDeclaredType().equals(mapping.getDeclaredType())) {
-					continue;
-				}
-				// 存在映射
-				try {
-					return mapping.getMapped(this);
-				} catch (Exception e) {
-					Environment.getLogger().error(e);
-				}
-			}
-			return this.entity.getDeclaredType();
-		}
-		// 未发现定义使用映射
-		for (DataTypeMapping mapping : this.getDeclaredTypeMappings()) {
-			if (mapping == null) {
-				continue;
-			}
-			if (mapping.getDataType() != this.getDataType()) {
-				continue;
-			}
-			if (mapping.getSubType() != null && mapping.getSubType() != this.getDataSubType()) {
-				continue;
-			}
-			// 存在映射
-			try {
-				return mapping.getMapped(this);
-			} catch (Exception e) {
-				Environment.getLogger().error(e);
-			}
-		}
-		return this.entity.getDeclaredType();
-	}
-
-	private List<DataTypeMapping> mappedTypeMappings;
-
-	public List<DataTypeMapping> getMappedTypeMappings() {
-		if (this.mappedTypeMappings == null) {
-			this.mappedTypeMappings = new ArrayList<>();
-		}
-		return mappedTypeMappings;
-	}
-
-	public void addMappedTypeMappings(Iterable<?> value) {
-		this.getMappedTypeMappings().clear();
-		if (value != null) {
-			for (Object item : value) {
-				if (item instanceof DataTypeMapping) {
-					this.getMappedTypeMappings().add((DataTypeMapping) item);
-				}
-			}
-		}
-	}
-
-	public void addMappedTypeMappings(Parameter par) {
-		if (par == null) {
-			return;
-		}
-		Object value = par.getValue();
-		if (Iterable.class.isInstance(value)) {
-			this.addMappedTypeMappings((Iterable<?>) value);
-		}
-	}
-
-	public String getMappedType() throws Exception {
-		// 优先使用映射
-		for (DataTypeMapping mapping : this.getMappedTypeMappings()) {
-			if (mapping == null) {
-				continue;
-			}
-			if (mapping.getDataType() != this.getDataType()) {
-				continue;
-			}
-			if (mapping.getSubType() != null && mapping.getSubType() != this.getDataSubType()) {
-				continue;
-			}
-			// 存在映射
-			return mapping.getMapped(this);
-		}
-		// 默认类型
-		switch (this.getDataType()) {
-		case Memo:
-			if (this.getDataSubType() == emDataSubType.Default)
-				return "NTEXT";
-		case Numeric:
-			return "INT";
-		case Date:
-			if (this.getDataSubType() == emDataSubType.Default || this.getDataSubType() == emDataSubType.Date)
-				return "DATETIME";
-			else if (this.getDataSubType() == emDataSubType.Time)
-				return "SMALLINT";
-		case Decimal:
-			return "NUMERIC(19, 6)";
-		case Bytes:
-			return "BIT";
-		default:
-			break;
-		}
-		return String.format("NVARCHAR(%s)", this.getEditSize());
-	}
-
-	private String annotatedType;
-
-	public String getAnnotatedType() {
-		if (this.annotatedType == null) {
-			switch (this.getDataType()) {
-			case Alphanumeric:
-				this.annotatedType = "ALPHANUMERIC";
-				break;
-			case Memo:
-				this.annotatedType = "MEMO";
-				break;
-			case Numeric:
-				this.annotatedType = "NUMERIC";
-				break;
-			case Date:
-				if (this.getDataSubType() == emDataSubType.Default || this.getDataSubType() == emDataSubType.Date)
-					this.annotatedType = "DATE";
-				else if (this.getDataSubType() == emDataSubType.Time)
-					this.annotatedType = "NUMERIC";
-				break;
-			case Decimal:
-				this.annotatedType = "DECIMAL";
-				break;
-			case Bytes:
-				this.annotatedType = "BYTES";
-				break;
-			case Boolean:
-				this.annotatedType = "BOOLEAN";
-				break;
-			default:
-				this.annotatedType = "UNKNOWN";
-				break;
-			}
-		}
-		return annotatedType;
-	}
-
-	public void setAnnotatedType(String annotatedType) {
-		this.annotatedType = annotatedType;
-	}
-
-	public String getSeparator(String value) {
-		return this.isLast() ? "" : value;
-	}
-
-	private List<TypeOutputMapping> typeOutputMappings;
-
-	public final List<TypeOutputMapping> getTypeOutputMappings() {
-		if (this.typeOutputMappings == null) {
-			this.typeOutputMappings = new ArrayList<>();
-		}
-		return typeOutputMappings;
-	}
-
-	public void addTypeOutputMappings(Iterable<?> value) {
-		this.getTypeOutputMappings().clear();
-		if (value != null) {
-			for (Object item : value) {
-				if (item instanceof TypeOutputMapping) {
-					this.getTypeOutputMappings().add((TypeOutputMapping) item);
-				}
-			}
-		}
-	}
-
-	public void addTypeOutputMappings(Parameter par) {
-		if (par == null) {
-			return;
-		}
-		Object value = par.getValue();
-		if (Iterable.class.isInstance(value)) {
-			this.addTypeOutputMappings((Iterable<?>) value);
-		}
-	}
-
-	public String getTypeOutput() throws Exception {
-		return this.getTypeOutput(null);
-	}
-
-	public String getTypeOutput(String category) throws Exception {
-		for (TypeOutputMapping item : this.getTypeOutputMappings()) {
-			if (category != null) {
-				if (!category.equalsIgnoreCase(item.getCategory())) {
-					continue;
-				}
-			}
-			if (this.entity.getDeclaredType() != null) {
-				if (item.getDeclaredType() == null) {
-					continue;
-				} else if (this.entity.getDeclaredType().startsWith("em")) {
-					if (!(this.entity.getDeclaredType().equalsIgnoreCase(item.getDeclaredType())
-							|| "enum".equalsIgnoreCase(item.getDeclaredType()))) {
-						continue;
-					}
-				} else if (!this.entity.getDeclaredType().equalsIgnoreCase(item.getDeclaredType())) {
-					continue;
-				}
-			} else {
-				if (item.getSubType() != null && item.getDataType() != null) {
-					if (!(item.getDataType() == this.entity.getDataType()
-							&& item.getSubType() == this.entity.getDataSubType())) {
-						continue;
-					}
-				} else if (item.getDataType() != null) {
-					if (item.getDataType() != this.entity.getDataType()) {
-						continue;
-					}
-				} else {
-					continue;
-				}
-			}
-			return item.getOutput(this, this.model);
-		}
-		return "";
 	}
 
 	@Override

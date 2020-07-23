@@ -30,8 +30,7 @@ import org.colorcoding.tools.btulz.template.Variable;
 import org.colorcoding.tools.btulz.transformer.region.ParametersFactory;
 import org.colorcoding.tools.btulz.transformer.region.RegionBusinessObject;
 import org.colorcoding.tools.btulz.transformer.region.RegionDomain;
-import org.colorcoding.tools.btulz.transformer.region.model.DataTypeMappings;
-import org.colorcoding.tools.btulz.transformer.region.model.TypeOutputMappings;
+import org.colorcoding.tools.btulz.transformer.region.model.OutputMappingList;
 
 /**
  * 代码的转换器
@@ -520,19 +519,11 @@ public class CodeTransformer extends Transformer {
 	 * @return
 	 */
 	protected Parameter loadParameters(File source) {
-		if (source.getName().equals("~parameter_property_declared_type.xml")) {
-			// 属性的定义类型说明
-			try {
-				return ParametersFactory.create().createParameter(ParametersFactory.PARAMETER_NAME_DECLARED_TYPE,
-						DataTypeMappings.create(source));
-			} catch (JAXBException e) {
-				Environment.getLogger().error(e);
-			}
-		} else if (source.getName().equals("~parameter_property_type_output.xml")) {
+		if (source.getName().equals("~parameter_property_output.xml")) {
 			// 属性类型的输出说明
 			try {
-				return ParametersFactory.create().createParameter(ParametersFactory.PARAMETER_NAME_TYPE_OUTPUT,
-						TypeOutputMappings.create(source));
+				return ParametersFactory.create().createParameter(ParametersFactory.PARAMETER_NAME_OUTPUT_MAPPING,
+						OutputMappingList.create(source));
 			} catch (JAXBException e) {
 				Environment.getLogger().error(e);
 			}

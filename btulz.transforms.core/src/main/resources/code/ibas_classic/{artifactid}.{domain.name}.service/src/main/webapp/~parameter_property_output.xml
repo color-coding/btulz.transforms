@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE ArrayList>
+<!-- 前端业务对象 -->
+<ns3:ArrayList xmlns:ns2="http://colorcoding.org/btulz/util"
+	xmlns:ns3="http://colorcoding.org/btulz/transformers">
+	<!-- 数据类型说明 -->
+	<OutputMapping Name="ts.type" Binding="Property" Unmatched="EXCEPTION">
+		<OutputItem>
+			<Content>ibas.emApprovalStatus</Content>
+			<Condition Property="DeclaredType" Value="emApprovalStatus" />
+		</OutputItem>
+		<OutputItem>
+			<Content>ibas.emBOStatus</Content>
+			<Condition Property="DeclaredType" Value="emBOStatus" />
+		</OutputItem>
+		<OutputItem>
+			<Content>ibas.emConditionOperation</Content>
+			<Condition Property="DeclaredType" Value="emConditionOperation" />
+		</OutputItem>
+		<OutputItem>
+			<Content>ibas.emConditionRelationship</Content>
+			<Condition Property="DeclaredType" Value="emConditionRelationship" />
+		</OutputItem>
+		<OutputItem>
+			<Content>ibas.emDirection</Content>
+			<Condition Property="DeclaredType" Value="emDirection" />
+		</OutputItem>
+		<OutputItem>
+			<Content>ibas.emDocumentStatus</Content>
+			<Condition Property="DeclaredType" Value="emDocumentStatus" />
+		</OutputItem>
+		<OutputItem>
+			<Content>ibas.emYesNo</Content>
+			<Condition Property="DeclaredType" Value="emYesNo" />
+		</OutputItem>
+		<OutputItem>
+			<Content>ibas.emAuthoriseType</Content>
+			<Condition Property="DeclaredType" Value="emAuthoriseType" />
+		</OutputItem>
+		<OutputItem>
+			<Content>${Property.getDeclaredType()}</Content>
+			<Condition Property="DeclaredType" Operation="NOT_EQUAL" />
+		</OutputItem>
+		<OutputItem>
+			<Content>string</Content>
+			<Condition Property="DataType" Value="Alphanumeric" />
+		</OutputItem>
+		<OutputItem>
+			<Content>string</Content>
+			<Condition Property="DataType" Value="Memo" />
+		</OutputItem>
+		<OutputItem>
+			<Content>number</Content>
+			<Condition Property="DataType" Value="Numeric" />
+		</OutputItem>
+		<OutputItem>
+			<Content>number</Content>
+			<Condition Property="DataType" Value="Date" />
+			<Condition Property="DataSubType" Value="Time" />
+		</OutputItem>
+		<OutputItem>
+			<Content>Date</Content>
+			<Condition Property="DataType" Value="Date" />
+		</OutputItem>
+		<OutputItem>
+			<Content>number</Content>
+			<Condition Property="DataType" Value="Decimal" />
+		</OutputItem>
+		<OutputItem>
+			<Content>[]</Content>
+			<Condition Property="DataType" Value="Bytes" />
+		</OutputItem>
+	</OutputMapping>
+</ns3:ArrayList>
