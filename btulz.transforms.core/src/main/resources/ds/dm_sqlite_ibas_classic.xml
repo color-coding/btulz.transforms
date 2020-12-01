@@ -165,7 +165,7 @@
     <OutputMapping Name="db.system" Binding="Property" Unmatched="EXCEPTION">
         <OutputItem>
             <Content>N</Content>
-            <Condition Property="Name" Operation="BEGIN" Value="U_" />
+            <Condition Property="Name" Operation="BEGIN_WITH" Value="U_" />
         </OutputItem>
         <OutputItem>
             <Content>Y</Content>
