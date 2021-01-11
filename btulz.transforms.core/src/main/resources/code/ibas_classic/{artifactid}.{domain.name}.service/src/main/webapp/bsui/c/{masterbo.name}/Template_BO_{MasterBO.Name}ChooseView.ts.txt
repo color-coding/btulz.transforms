@@ -53,6 +53,7 @@ $END_BO_MODEL$
                         title: this.title,
                         type: sap.m.DialogType.Standard,
                         state: sap.ui.core.ValueState.None,
+                        stretch: ibas.config.get(ibas.CONFIG_ITEM_PLANTFORM) === ibas.emPlantform.PHONE ? true : false,
                         horizontalScrolling: true,
                         verticalScrolling: true,
                         content: [
@@ -63,21 +64,21 @@ $END_BO_MODEL$
                                 text: ibas.i18n.prop("shell_data_new"),
                                 type: sap.m.ButtonType.Transparent,
                                 visible: this.mode === ibas.emViewMode.VIEW ? false : true,
-                                press: function (): void {
+                                press(): void {
                                     that.fireViewEvents(that.newDataEvent);
                                 }
                             }),
                             new sap.m.Button("", {
                                 text: ibas.i18n.prop("shell_data_choose"),
                                 type: sap.m.ButtonType.Transparent,
-                                press: function (): void {
+                                press(): void {
                                     that.fireViewEvents(that.chooseDataEvent, that.table.getSelecteds());
                                 }
                             }),
                             new sap.m.Button("", {
                                 text: ibas.i18n.prop("shell_exit"),
                                 type: sap.m.ButtonType.Transparent,
-                                press: function (): void {
+                                press(): void {
                                     that.fireViewEvents(that.closeEvent);
                                 }
                             }),

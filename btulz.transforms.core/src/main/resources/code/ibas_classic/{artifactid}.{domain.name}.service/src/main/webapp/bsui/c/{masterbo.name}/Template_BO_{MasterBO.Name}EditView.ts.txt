@@ -56,7 +56,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
                                             text: ibas.i18n.prop("shell_data_add"),
                                             type: sap.m.ButtonType.Transparent,
                                             icon: "sap-icon://add",
-                                            press: function (): void {
+                                            press(): void {
                                                 that.fireViewEvents(that.add${BOItem.getName()}Event);
                                             }
                                         }),
@@ -64,7 +64,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
                                             text: ibas.i18n.prop("shell_data_remove"),
                                             type: sap.m.ButtonType.Transparent,
                                             icon: "sap-icon://less",
-                                            press: function (): void {
+                                            press(): void {
                                                 that.fireViewEvents(that.remove${BOItem.getName()}Event, that.table${BOItem.getName()}.getSelecteds());
                                             }
                                         })
@@ -102,7 +102,7 @@ $END_BOITEM$
                                     text: ibas.i18n.prop("shell_data_save"),
                                     type: sap.m.ButtonType.Transparent,
                                     icon: "sap-icon://save",
-                                    press: function (): void {
+                                    press(): void {
                                         that.fireViewEvents(that.saveDataEvent);
                                     }
                                 }),
@@ -110,7 +110,7 @@ $END_BOITEM$
                                     text: ibas.i18n.prop("shell_data_delete"),
                                     type: sap.m.ButtonType.Transparent,
                                     icon: "sap-icon://delete",
-                                    press: function (): void {
+                                    press(): void {
                                         that.fireViewEvents(that.deleteDataEvent);
                                     }
                                 }),
@@ -125,7 +125,7 @@ $END_BOITEM$
                                             new sap.m.MenuItem("", {
                                                 text: ibas.i18n.prop("shell_data_new"),
                                                 icon: "sap-icon://create",
-                                                press: function (): void {
+                                                press(): void {
                                                     // 创建新的对象
                                                     that.fireViewEvents(that.createDataEvent, false);
                                                 }
@@ -133,7 +133,7 @@ $END_BOITEM$
                                             new sap.m.MenuItem("", {
                                                 text: ibas.i18n.prop("shell_data_clone"),
                                                 icon: "sap-icon://copy",
-                                                press: function (): void {
+                                                press(): void {
                                                     // 复制当前对象
                                                     that.fireViewEvents(that.createDataEvent, true);
                                                 }

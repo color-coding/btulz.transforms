@@ -62,7 +62,7 @@ $END_BO_MODEL$
                                     text: ibas.i18n.prop("shell_data_new"),
                                     type: sap.m.ButtonType.Transparent,
                                     icon: "sap-icon://create",
-                                    press: function (): void {
+                                    press(): void {
                                         that.fireViewEvents(that.newDataEvent);
                                     }
                                 }),
@@ -70,7 +70,7 @@ $END_BO_MODEL$
                                     text: ibas.i18n.prop("shell_data_view"),
                                     type: sap.m.ButtonType.Transparent,
                                     icon: "sap-icon://display",
-                                    press: function (): void {
+                                    press(): void {
                                         that.fireViewEvents(that.viewDataEvent, that.table.getSelecteds().firstOrDefault());
                                     }
                                 }),
@@ -78,7 +78,7 @@ $END_BO_MODEL$
                                     text: ibas.i18n.prop("shell_data_edit"),
                                     type: sap.m.ButtonType.Transparent,
                                     icon: "sap-icon://edit",
-                                    press: function (): void {
+                                    press(): void {
                                         that.fireViewEvents(that.editDataEvent, that.table.getSelecteds().firstOrDefault());
                                     }
                                 }),
@@ -87,7 +87,7 @@ $END_BO_MODEL$
                                     text: ibas.i18n.prop("shell_data_delete"),
                                     type: sap.m.ButtonType.Transparent,
                                     icon: "sap-icon://delete",
-                                    press: function (): void {
+                                    press(): void {
                                         that.fireViewEvents(that.deleteDataEvent, that.table.getSelecteds());
                                     }
                                 }),
@@ -95,7 +95,7 @@ $END_BO_MODEL$
                                 new sap.m.Button("", {
                                     type: sap.m.ButtonType.Transparent,
                                     icon: "sap-icon://action",
-                                    press: function (event: any): void {
+                                    press(event: sap.ui.base.Event): void {
                                         ibas.servicesManager.showServices({
                                             proxy: new ibas.BOServiceProxy({
                                                 data: that.table.getSelecteds(),
@@ -114,7 +114,7 @@ $END_BO_MODEL$
                                                         text: ibas.i18n.prop(service.name),
                                                         type: sap.m.ButtonType.Transparent,
                                                         icon: service.icon,
-                                                        press: function (): void {
+                                                        press(): void {
                                                             service.run();
                                                             popover.close();
                                                         }

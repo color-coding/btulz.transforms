@@ -61,7 +61,7 @@ $END_BOITEM$
                                         type: sap.m.ButtonType.Transparent,
                                         icon: "sap-icon://edit",
                                         visible: this.mode === ibas.emViewMode.VIEW ? false : true,
-                                        press: function (): void {
+                                        press(): void {
                                             that.fireViewEvents(that.editDataEvent);
                                         }
                                     })
@@ -70,7 +70,7 @@ $END_BOITEM$
                                     new sap.m.Button("", {
                                         type: sap.m.ButtonType.Transparent,
                                         icon: "sap-icon://action",
-                                        press: function (event: any): void {
+                                        press(event: sap.ui.base.Event): void {
                                             ibas.servicesManager.showServices({
                                                 proxy: new ibas.BOServiceProxy({
                                                     data: that.page.getModel().getData(),
@@ -89,7 +89,7 @@ $END_BOITEM$
                                                             text: ibas.i18n.prop(service.name),
                                                             type: sap.m.ButtonType.Transparent,
                                                             icon: service.icon,
-                                                            press: function (): void {
+                                                            press(): void {
                                                                 service.run();
                                                                 popover.close();
                                                             }
