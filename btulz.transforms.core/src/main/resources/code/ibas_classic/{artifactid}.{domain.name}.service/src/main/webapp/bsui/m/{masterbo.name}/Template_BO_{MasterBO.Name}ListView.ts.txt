@@ -81,7 +81,7 @@ namespace ${Domain.getName().toLowerCase()} {
                                             press(oEvent: any): void {
                                                 that.fireViewEvents(that.editDataEvent, that.list.getSelecteds().firstOrDefault());
                                             }
-                                        })                                        
+                                        })
                                     ]
                                 }),
                             ]
@@ -89,7 +89,6 @@ namespace ${Domain.getName().toLowerCase()} {
                         items: {
                             path: "/rows",
                             template: new sap.m.ObjectListItem("", {
-                                type: sap.m.ListType.Active,
                                 title: {
                                     path: "" 
                                 },

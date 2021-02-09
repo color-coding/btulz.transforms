@@ -106,8 +106,9 @@ $END_BOITEM$
                                 subSections: [
                                     new sap.uxap.ObjectPageSubSection("", {
                                         blocks: [
-                                            new sap.extension.layout.SimpleForm("", {
+                                            new sap.ui.layout.form.SimpleForm("", {
                                                 editable: true,
+                                                width: "auto",
                                                 content: [
 $BEGIN_BO_MODEL$
 $BEGIN_MODEL_PROPERTY$
@@ -116,7 +117,7 @@ $BEGIN_MODEL_PROPERTY$
 $END_MODEL_PROPERTY$
 $END_BO_MODEL$
                                                 ]
-                                            }).addStyleClass("sapUiNoContentPadding")
+                                            }).addStyleClass("sapUxAPObjectPageSubSectionAlignContent")
                                         ]
                                     }),
                                 ]
@@ -128,54 +129,50 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
                                 subSections: [
                                     new sap.uxap.ObjectPageSubSection("", {
                                         blocks: [
-                                            new sap.extension.layout.SimpleForm("", {
-                                                editable: false,
-                                                content: [
-                                                    this.list${BOItem.getName()} = <any>new sap.extension.m.List("", {
-                                                        inset: false,
-                                                        growing: false,
-                                                        mode: sap.m.ListMode.None,
-                                                        swipeDirection: sap.m.SwipeDirection.RightToLeft,
-                                                        backgroundDesign: sap.m.BackgroundDesign.Transparent,
-                                                        showNoData: true,
-                                                        swipeContent: new sap.m.FlexBox("", {
-                                                            height: "100%",
-                                                            alignItems: sap.m.FlexAlignItems.Start,
-                                                            justifyContent: sap.m.FlexJustifyContent.End,
+                                            this.list${BOItem.getName()} = new sap.extension.m.List("", {
+                                                inset: false,
+                                                width: "auto",
+                                                growing: false,
+                                                mode: sap.m.ListMode.None,
+                                                swipeDirection: sap.m.SwipeDirection.RightToLeft,
+                                                backgroundDesign: sap.m.BackgroundDesign.Transparent,
+                                                showNoData: true,
+                                                swipeContent: new sap.m.FlexBox("", {
+                                                    height: "100%",
+                                                    alignItems: sap.m.FlexAlignItems.Start,
+                                                    justifyContent: sap.m.FlexJustifyContent.End,
+                                                    items: [
+                                                        new sap.m.SegmentedButton("", {
                                                             items: [
-                                                                new sap.m.SegmentedButton("", {
-                                                                    items: [
-                                                                        new sap.m.SegmentedButtonItem("", {
-                                                                            width: "3rem",
-                                                                            icon: "sap-icon://delete",
-                                                                            press(oEvent: any): void {
-                                                                                that.fireViewEvents(that.remove${BOItem.getName()}Event, that.list${BOItem.getName()}.getSelecteds());
-                                                                            }
-                                                                        }),
-                                                                    ]
+                                                                new sap.m.SegmentedButtonItem("", {
+                                                                    width: "3rem",
+                                                                    icon: "sap-icon://delete",
+                                                                    press(oEvent: any): void {
+                                                                        that.fireViewEvents(that.remove${BOItem.getName()}Event, that.list${BOItem.getName()}.getSelecteds());
+                                                                    }
                                                                 }),
                                                             ]
-                                                        }).addStyleClass("sapUiSmallMarginTop"),
-                                                        items: {
-                                                            path: "/rows",
-                                                            template: new sap.m.ObjectListItem("", {
-                                                                title: "# {lineId}",
-                                                                attributes: [
+                                                        }),
+                                                    ]
+                                                }).addStyleClass("sapUiSmallMarginTop"),
+                                                items: {
+                                                    path: "/rows",
+                                                    template: new sap.m.ObjectListItem("", {
+                                                        title: "# {lineId}",
+                                                        attributes: [
 $BEGIN_BOITEM_MODEL$
 $BEGIN_MODEL_PROPERTY$
-                                                                    ${Property.output(ui.object)},
+                                                            ${Property.output(ui.object)},
 $END_MODEL_PROPERTY$
 $END_BOITEM_MODEL$
-                                                                ],
-                                                                type: sap.m.ListType.Active,
-                                                                press: function (oEvent: sap.ui.base.Event): void {
-                                                                    that.edit${BOItem.getName()}(this.getBindingContext().getObject());
-                                                                },
-                                                            })
+                                                        ],
+                                                        type: sap.m.ListType.Active,
+                                                        press: function (oEvent: sap.ui.base.Event): void {
+                                                            that.edit${BOItem.getName()}(this.getBindingContext().getObject());
                                                         },
-                                                    }).addStyleClass("sapUiNoContentPadding"),
-                                                ]
-                                            }).addStyleClass("sapUiNoContentPadding")
+                                                    })
+                                                },
+                                            }).addStyleClass("sapUxAPObjectPageSubSectionAlignContent"),
                                         ]
                                     }),
                                 ]
@@ -208,7 +205,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
                 /** 编辑数据行（${BOItem.getDescription()}） */
                 edit${BOItem.getName()}(data: bo.${BOItem.getName()}): void {
                     let that: this = this;
-                    let editForm: sap.m.Dialog = new sap.extension.m.Dialog("", {
+                    let editForm: sap.m.Dialog = new sap.m.Dialog("", {
                         title: {
                             path: "/lineId",
                             type: new sap.extension.data.Numeric(),
@@ -222,7 +219,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
                         horizontalScrolling: true,
                         verticalScrolling: true,
                         content: [
-                            new sap.extension.layout.SimpleForm("", {
+                            new sap.ui.layout.form.SimpleForm("", {
                                 editable: true,
                                 content: [
 $BEGIN_BOITEM_MODEL$
@@ -291,8 +288,8 @@ $END_BOITEM_MODEL$
                                 }
                             }),
                         ]
-                    });
-                    editForm.setModel(new sap.extension.model.JSONModel(data));
+                    }).addStyleClass("sapUiNoContentPadding");
+                    editForm.bindObject("/").setModel(new sap.extension.model.JSONModel(data));
                     editForm.open();
                 }
 $END_BOITEM_RELATION_IS_ONETOMANY$
