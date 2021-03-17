@@ -22,8 +22,6 @@ namespace ${Domain.getName().toLowerCase()} {
                 draw(): any {
                     let that: this = this;
                     this.list = new sap.extension.m.List("", {
-                        inset: false,
-                        growing: false,
                         mode: sap.m.ListMode.None,
                         swipeDirection: sap.m.SwipeDirection.RightToLeft,
                         swipeContent: new sap.m.FlexBox("", {

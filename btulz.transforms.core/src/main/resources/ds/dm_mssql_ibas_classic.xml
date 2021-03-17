@@ -113,7 +113,7 @@
 		</OutputItem>
 		<!-- 一般键值，有默认值时 -->
 		<OutputItem>
-			<Content>DEFAULT N'${Property.getDefaultValue()}</Content>
+			<Content>DEFAULT N'${Property.getDefaultValue()}'</Content>
 			<Condition Property="DataType" Value="Alphanumeric" />
 			<Condition Property="DefaultValue" Operation="NOT_EQUAL" />
 		</OutputItem>

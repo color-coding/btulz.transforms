@@ -29,6 +29,7 @@ $END_BOITEM$
                         dataInfo: {
                             code: bo.${BO.getName()}.BUSINESS_OBJECT_CODE,
                         },
+                        userFieldsMode: "input",
                         showFooter: false,
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
@@ -219,8 +220,14 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
                         horizontalScrolling: true,
                         verticalScrolling: true,
                         content: [
-                            new sap.ui.layout.form.SimpleForm("", {
+                            new sap.extension.layout.DataSimpleForm("", {
                                 editable: true,
+                                userFieldsTitle: "",
+                                userFieldsMode: "input",
+                                dataInfo: {
+                                    code: bo.${BO.getName()}.BUSINESS_OBJECT_CODE,
+                                    name: bo.${BOItem.getName()}.name,
+                                },
                                 content: [
 $BEGIN_BOITEM_MODEL$
 $BEGIN_MODEL_PROPERTY$

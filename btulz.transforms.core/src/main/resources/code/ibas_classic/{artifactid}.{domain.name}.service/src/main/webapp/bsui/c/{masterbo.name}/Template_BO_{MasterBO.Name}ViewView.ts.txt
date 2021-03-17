@@ -17,6 +17,7 @@ namespace ${Domain.getName().toLowerCase()} {
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
                     this.table${BOItem.getName()} = new sap.extension.m.DataTable("", {
+                        autoPopinMode: true,
                         dataInfo: {
                             code: bo.${BO.getName()}.BUSINESS_OBJECT_CODE,
                             name: bo.${BOItem.getName()}.name

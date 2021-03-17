@@ -17,6 +17,7 @@ namespace ${Domain.getName().toLowerCase()} {
                         dataInfo: {
                             code: bo.${BO.getName()}.BUSINESS_OBJECT_CODE,
                         },
+                        userFieldsMode: "text",
                         showFooter: false,
                         headerTitle: new sap.uxap.ObjectPageHeader("", {
                             actions: [
@@ -173,8 +174,14 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
                         horizontalScrolling: true,
                         verticalScrolling: true,
                         content: [
-                            new sap.ui.layout.form.SimpleForm("", {
+                            new sap.extension.layout.DataSimpleForm("", {
                                 editable: false,
+                                userFieldsTitle: "",
+                                userFieldsMode: "text",
+                                dataInfo: {
+                                    code: bo.${BO.getName()}.BUSINESS_OBJECT_CODE,
+                                    name: bo.${BOItem.getName()}.name,
+                                },
                                 content: [
 $BEGIN_BOITEM_MODEL$
 $BEGIN_MODEL_PROPERTY$
