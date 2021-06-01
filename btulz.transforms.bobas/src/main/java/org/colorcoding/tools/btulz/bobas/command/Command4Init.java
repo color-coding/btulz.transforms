@@ -42,7 +42,7 @@ public class Command4Init extends Command<Command4Init> {
 		// 添加自身参数
 		arguments.add(new Argument("-data", "数据文件，待解析jar文件"));
 		arguments.add(new Argument("-config", "配置文件"));
-		arguments.add(new Argument("-classes", "加载的类库，多个时用“;”分隔"));
+		arguments.add(new Argument("-classes", "加载的类库，多个时用“;”分隔。支持目录"));
 		arguments.add(new Argument("-force", "替换已存在的数据"));
 		arguments.add(new Argument("-ignore", "忽略错误"));
 		arguments.add(new Argument("-test", "测试"));
@@ -110,7 +110,19 @@ public class Command4Init extends Command<Command4Init> {
 							this.print("类库[%s]不存在", item);
 							continue;
 						}
-						argClasses.add(file.toURI().toURL());
+						if (file.isDirectory()) {
+							for (File lsItem : file.listFiles()) {
+								if (!lsItem.isFile()) {
+									continue;
+								}
+								if (!lsItem.getName().toLowerCase().endsWith(".jar")) {
+									continue;
+								}
+								argClasses.add(lsItem.toURI().toURL());
+							}
+						} else if (file.isFile()) {
+							argClasses.add(file.toURI().toURL());
+						}
 					}
 				}
 			}
