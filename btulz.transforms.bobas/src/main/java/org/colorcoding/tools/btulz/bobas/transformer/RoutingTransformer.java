@@ -115,6 +115,7 @@ public class RoutingTransformer extends Transformer {
 		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 		// 领域模型
 		Element root = document.createElementNS("http://colorcoding.org/ibas/initialfantasy/service", "ServiceRouting");
+		root.setPrefix("ns");
 		for (Entry<String, String> entry : modules.entrySet()) {
 			Element module = document.createElement("ServiceInformation");
 			// id
