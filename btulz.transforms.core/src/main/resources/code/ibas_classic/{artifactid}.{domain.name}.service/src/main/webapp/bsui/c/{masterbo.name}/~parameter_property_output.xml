@@ -453,9 +453,9 @@
         <OutputItem>
             <Content><![CDATA[new sap.extension.m.ObjectYesNoStatus("", {
             title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
-            text: {
+            enumValue: {
                 path: "${Property.getName(LowerCamelCase)}",
-                type: new sap.extension.data.YesNo(true),
+                type: new sap.extension.data.YesNo(),
             }
             })]]></Content>
             <Condition Property="DeclaredType" Value="emYesNo" />
@@ -463,9 +463,9 @@
         <OutputItem>
             <Content><![CDATA[new sap.extension.m.ObjectDocumentStatus("", {
             title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
-            text: {
+            enumValue: {
                 path: "${Property.getName(LowerCamelCase)}",
-                type: new sap.extension.data.DocumentStatus(true),
+                type: new sap.extension.data.DocumentStatus(),
             }
             })]]></Content>
             <Condition Property="DeclaredType" Value="emDocumentStatus" />
@@ -473,9 +473,9 @@
         <OutputItem>
             <Content><![CDATA[new sap.extension.m.ObjectApprovalStatus("", {
             title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
-            text: {
+            enumValue: {
                 path: "${Property.getName(LowerCamelCase)}",
-                type: new sap.extension.data.ApprovalStatus(true),
+                type: new sap.extension.data.ApprovalStatus(),
             }
             })]]></Content>
             <Condition Property="DeclaredType" Value="emApprovalStatus" />
@@ -483,9 +483,9 @@
         <OutputItem>
             <Content><![CDATA[new sap.extension.m.ObjectBOStatus("", {
             title: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}"),
-            text: {
+            enumValue: {
                 path: "${Property.getName(LowerCamelCase)}",
-                type: new sap.extension.data.BOStatus(true),
+                type: new sap.extension.data.BOStatus(),
             }
             })]]></Content>
             <Condition Property="DeclaredType" Value="emBOStatus" />

@@ -51,11 +51,29 @@ public class DsTransformer extends DbTransformer {
 	}
 
 	public void addDomains(File file) throws Exception {
-		XmlTransformer xmlTransformer = new XmlTransformer();
-		xmlTransformer.setInterruptOnError(true);
-		xmlTransformer.load(file, false);
-		for (IDomain domain : xmlTransformer.getWorkingDomains()) {
-			this.getDomains().add(domain);
+		if (file.isDirectory()) {
+			File[] files = file.listFiles();
+			if (files != null) {
+				for (File item : files) {
+					String name = item.getName().toLowerCase();
+					if (!name.startsWith("ds_") || !name.endsWith(".xml")) {
+						continue;
+					}
+					XmlTransformer xmlTransformer = new XmlTransformer();
+					xmlTransformer.setInterruptOnError(true);
+					xmlTransformer.load(item, false);
+					for (IDomain domain : xmlTransformer.getWorkingDomains()) {
+						this.getDomains().add(domain);
+					}
+				}
+			}
+		} else if (file.isFile()) {
+			XmlTransformer xmlTransformer = new XmlTransformer();
+			xmlTransformer.setInterruptOnError(true);
+			xmlTransformer.load(file, false);
+			for (IDomain domain : xmlTransformer.getWorkingDomains()) {
+				this.getDomains().add(domain);
+			}
 		}
 	}
 

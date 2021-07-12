@@ -23,7 +23,10 @@ namespace ${Domain.getName().toLowerCase()} {
                         mode: sap.m.ListMode.None,
                         items: {
                             path: "/rows",
-                            template: new sap.m.ObjectListItem("", {
+                            template: new sap.extension.m.DataObjectListItem("", {
+                                dataInfo: {
+                                    code: bo.${BO.getName()}.BUSINESS_OBJECT_CODE,
+                                },
                                 title: {
                                     path: "" 
                                 },

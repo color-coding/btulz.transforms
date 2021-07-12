@@ -209,4 +209,17 @@ $END_MODEL_MODELTYPE_IS_MASTERDATA$
 
     }
 
+$BEGIN_MODEL_MODELTYPE_IS_DOCUMENT$
+    @Override
+	public void reset() {
+		super.reset();
+        this.setDocumentStatus(emDocumentStatus.RELEASED);
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+        this.get${BOItem.getName()}s().forEach(c -> c.setLineStatus(emDocumentStatus.RELEASED));
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+    }
+$END_MODEL_MODELTYPE_IS_DOCUMENT$
+
 }
