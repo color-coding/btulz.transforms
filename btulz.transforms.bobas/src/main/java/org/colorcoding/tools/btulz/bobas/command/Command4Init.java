@@ -105,6 +105,12 @@ public class Command4Init extends Command<Command4Init> {
 						if (item == null || item.isEmpty()) {
 							continue;
 						}
+						if (item.startsWith("\"")) {
+							item = item.substring(1);
+						}
+						if (item.endsWith("\"")) {
+							item = item.substring(0, item.lastIndexOf("\""));
+						}
 						File file = new File(item);
 						if (!file.exists()) {
 							this.print("类库[%s]不存在", item);
