@@ -1,7 +1,6 @@
 package org.colorcoding.tools.btulz.transformer;
 
 import java.io.File;
-import java.io.FileWriter;
 
 import org.colorcoding.tools.btulz.model.IBusinessObject;
 import org.colorcoding.tools.btulz.model.IBusinessObjectItem;
@@ -51,13 +50,17 @@ public class XmlTransformerDom4j extends XmlTransformer {
 				this.writeElement(boItem, biElement);
 			}
 		}
-		OutputFormat xmlFormat = OutputFormat.createCompactFormat();
+		OutputFormat xmlFormat = OutputFormat.createPrettyPrint();
 		xmlFormat.setEncoding(XML_FILE_ENCODING);
 		xmlFormat.setNewlines(true);
 		xmlFormat.setIndent(true);
 		xmlFormat.setIndent("  ");
-		XMLWriter writer = new XMLWriter(new FileWriter(fileName), xmlFormat);
+		java.io.OutputStream out = new java.io.FileOutputStream(fileName);
+		java.io.Writer wr = new java.io.OutputStreamWriter(out, XML_FILE_ENCODING);
+		XMLWriter writer = new XMLWriter(wr, xmlFormat);
 		writer.write(document);
+		wr.close();
+		out.close();
 		writer.close();
 	}
 

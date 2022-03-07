@@ -1,7 +1,6 @@
 package org.colorcoding.tools.btulz.transformer;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -163,7 +162,7 @@ public class XmlTransformer extends FileTransformer {
 		transformer.setOutputProperty(OutputKeys.ENCODING, XML_FILE_ENCODING);
 		transformer.setOutputProperty(OutputKeys.INDENT, XML_FILE_INDENT);
 		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		PrintWriter pw = new PrintWriter(new FileOutputStream(fileName));
+		PrintWriter pw = new PrintWriter(new File(fileName), XML_FILE_ENCODING);
 		StreamResult result = new StreamResult(pw);
 		transformer.transform(source, result);
 

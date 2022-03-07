@@ -661,8 +661,9 @@ public class CommandTab extends WorkingTab {
 							file.getParentFile().mkdirs();
 							file.createNewFile();
 						}
-						fileWriter = new FileWriter(file);
-						Serializer.toXmlString(CommandTab.this.getBuilder(), true, fileWriter);
+						java.io.OutputStream out = new java.io.FileOutputStream(file);
+						java.io.Writer witer = new java.io.OutputStreamWriter(out, "UTF-8");
+						Serializer.toXmlString(CommandTab.this.getBuilder(), true, witer);
 					} catch (Exception e) {
 						e.printStackTrace();
 					} finally {
