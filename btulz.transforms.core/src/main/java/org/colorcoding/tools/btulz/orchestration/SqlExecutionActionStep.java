@@ -16,6 +16,8 @@ import org.colorcoding.tools.btulz.Environment;
 @XmlType(name = "SqlExecutionActionStep", namespace = Environment.NAMESPACE_BTULZ_ORCHESTRATION)
 public class SqlExecutionActionStep extends ExecutionActionStep implements ISqlExecutionActionStep {
 
+	public final static String SCRIPT_THROW_BREAK_EXCEPTION = "THROW BREAK EXCEPTION;";
+
 	private Statement statement;
 
 	protected Statement getStatement() {
@@ -76,7 +78,10 @@ public class SqlExecutionActionStep extends ExecutionActionStep implements ISqlE
 		Object value = null;
 		Environment.getLogger().info(String.format("runnig step [%s].", this.getName()));
 		Environment.getLogger().debug(String.format("execute sql [%s].", this.getScript()));
-		if (this.isQuery()) {
+		if (this.getScript().indexOf(SCRIPT_THROW_BREAK_EXCEPTION) >= 0) {
+			// 抛错语句
+			throw new BreakException(this.getName());
+		} else if (this.isQuery()) {
 			// 有结果的语句
 			ResultSet resultSet = statement.executeQuery(this.getScript());
 			if (resultSet.next()) {

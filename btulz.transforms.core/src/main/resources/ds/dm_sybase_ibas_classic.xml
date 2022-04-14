@@ -138,6 +138,10 @@
             <Condition Property="DataType" Value="Decimal" />
             <Condition Property="DefaultValue" Operation="NOT_EQUAL" />
         </OutputItem>
+        <!-- 默认可为空 -->
+        <OutputItem>
+            <Content>NULL</Content>
+        </OutputItem>
     </OutputMapping>
     <!-- 查询字段标记 -->
     <OutputMapping Name="db.search" Binding="Property" Unmatched="EXCEPTION">

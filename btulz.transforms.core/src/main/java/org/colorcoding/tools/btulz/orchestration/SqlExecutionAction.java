@@ -108,10 +108,11 @@ public class SqlExecutionAction extends ExecutionAction implements ISqlExecution
 					Environment.getLogger().debug(String.format("[%s] clear status value.", step.getName()));
 				}
 			}
+		} catch (BreakException e) {
+			Environment.getLogger().warn(String.format("user break the action, %s.", e.getMessage()));
 		} catch (Exception e) {
 			// 检查后续步骤，是否有对此错误的处理
 			// TODO:错误处理
-
 			// 没有处理此错误，则抛出
 			throw e;
 		}
