@@ -136,7 +136,6 @@
         </OutputItem>
         <OutputItem>
             <Content><![CDATA[new sap.extension.m.Input("", {
-                type: sap.m.InputType.Number
             }).bindProperty("bindingValue", {
                 path: "${Property.getName(LowerCamelCase)}",
                 type: new sap.extension.data.Numeric(),
@@ -162,7 +161,6 @@
         </OutputItem>
         <OutputItem>
             <Content><![CDATA[new sap.extension.m.Input("", {
-                type: sap.m.InputType.Number
             }).bindProperty("bindingValue", {
                 path: "${Property.getName(LowerCamelCase)}",
                 type: new sap.extension.data.Price(),
@@ -172,7 +170,6 @@
         </OutputItem>
         <OutputItem>
             <Content><![CDATA[new sap.extension.m.Input("", {
-                type: sap.m.InputType.Number
             }).bindProperty("bindingValue", {
                 path: "${Property.getName(LowerCamelCase)}",
                 type: new sap.extension.data.Quantity(),
@@ -182,7 +179,6 @@
         </OutputItem>
         <OutputItem>
             <Content><![CDATA[new sap.extension.m.Input("", {
-                type: sap.m.InputType.Number
             }).bindProperty("bindingValue", {
                 path: "${Property.getName(LowerCamelCase)}",
                 type: new sap.extension.data.Rate(),
@@ -192,7 +188,6 @@
         </OutputItem>
         <OutputItem>
             <Content><![CDATA[new sap.extension.m.Input("", {
-                type: sap.m.InputType.Number
             }).bindProperty("bindingValue", {
                 path: "${Property.getName(LowerCamelCase)}",
                 type: new sap.extension.data.Sum(),
@@ -202,7 +197,6 @@
         </OutputItem>
         <OutputItem>
             <Content><![CDATA[new sap.extension.m.Input("", {
-                type: sap.m.InputType.Number
             }).bindProperty("bindingValue", {
                 path: "${Property.getName(LowerCamelCase)}",
                 type: new sap.extension.data.Measurement(),
@@ -222,7 +216,6 @@
         </OutputItem>
         <OutputItem>
             <Content><![CDATA[new sap.extension.m.Input("", {
-                type: sap.m.InputType.Number
             }).bindProperty("bindingValue", {
                 path: "${Property.getName(LowerCamelCase)}",
                 type: new sap.extension.data.Decimal(),
