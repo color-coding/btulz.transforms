@@ -123,7 +123,7 @@ namespace ${Domain.getName().toLowerCase()} {
                         if (action !== ibas.emMessageAction.YES) {
                             return;
                         }
-                        let boRepository: bo.BORepository${Domain.getName()} = new bo.BORepository${Domain.getName()};
+                        let boRepository: bo.BORepository${Domain.getName()} = new bo.BORepository${Domain.getName()}();
                         ibas.queues.execute(beDeleteds, (data, next) => {
                             // 处理数据
                             boRepository.save${BO.getName()}({
