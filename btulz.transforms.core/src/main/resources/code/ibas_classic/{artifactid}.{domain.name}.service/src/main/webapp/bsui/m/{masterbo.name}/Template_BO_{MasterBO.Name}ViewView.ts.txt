@@ -175,114 +175,128 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
                 /** 编辑数据行（${BOItem.getDescription()}） */
                 view${BOItem.getName()}(data: bo.${BOItem.getName()}): void {
                     let that: this = this;
-                    let editForm: sap.m.Dialog = new sap.m.Dialog("", {
-                        title: ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_${BOItem.getName().toLowerCase()}"), data.lineId),
-                        type: sap.m.DialogType.Standard,
-                        state: sap.ui.core.ValueState.None,
-                        stretch: ibas.config.get(ibas.CONFIG_ITEM_PLANTFORM) === ibas.emPlantform.PHONE ? true : false,
-                        horizontalScrolling: true,
-                        verticalScrolling: true,
-                        content: [
-                            new sap.extension.layout.DataSimpleForm("", {
-                                editable: false,
-                                userFieldsTitle: "",
-                                userFieldsMode: "text",
-                                dataInfo: {
-                                    code: bo.${BO.getName()}.BUSINESS_OBJECT_CODE,
-                                    name: bo.${BOItem.getName()}.name,
-                                },
-                                content: [
+                    let editForm: sap.m.Dialog = <any>sap.ui.getCore().byId(this.id + "_editform");
+                    if (!(editForm instanceof sap.m.Dialog)) {
+                        editForm = new sap.m.Dialog(this.id + "_editform", {
+							title: ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_${BOItem.getName().toLowerCase()}"), data.lineId),
+							type: sap.m.DialogType.Standard,
+							state: sap.ui.core.ValueState.None,
+							stretch: ibas.config.get(ibas.CONFIG_ITEM_PLANTFORM) === ibas.emPlantform.PHONE ? true : false,
+							horizontalScrolling: true,
+							verticalScrolling: true,
+							content: [
+								new sap.extension.layout.DataSimpleForm("", {
+									editable: false,
+									userFieldsTitle: "",
+									userFieldsMode: "text",
+									dataInfo: {
+										code: bo.${BO.getName()}.BUSINESS_OBJECT_CODE,
+										name: bo.${BOItem.getName()}.name,
+									},
+									content: [
 $BEGIN_BOITEM_MODEL$
 $BEGIN_MODEL_PROPERTY$
-                                    new sap.m.Label("", { text: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}") }),
-                                    ${Property.output(ui.Text)},
+										new sap.m.Label("", { text: ibas.i18n.prop("bo_${Model.getName().toLowerCase()}_${Property.getName().toLowerCase()}") }),
+										${Property.output(ui.Text)},
 $END_MODEL_PROPERTY$
 $END_BOITEM_MODEL$
-                                ],
-                            }),
-                        ],
-                        buttons: [
-                            new sap.m.Button("", {
-                                width: "20%",
-                                icon: "sap-icon://arrow-left",
-                                type: sap.m.ButtonType.Transparent,
-                                press(): void {
-                                    let form: any = editForm.getContent()[0];
-                                    if (form instanceof sap.extension.layout.SimpleForm) {
-                                        let datas: any = that.list${BOItem.getName()}.getModel().getData("rows");
-                                        if (datas instanceof Array && datas.length > 0) {
-                                            let index: number = datas.indexOf(form.getModel().getData());
-                                            index = index <= 0 ? datas.length - 1 : index - 1;
-                                            form.setModel(new sap.extension.model.JSONModel(datas[index]));
-                                            editForm.setTitle(ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_${BOItem.getName().toLowerCase()}"), datas[index].lineId));
-                                        } else {
-                                            that.application.viewShower.messages({
-                                                title: that.title,
-                                                type: ibas.emMessageType.WARNING,
-                                                message: ibas.i18n.prop(["shell_please", "shell_data_add_line"]),
-                                            });
-                                        }
-                                    }
-                                }
-                            }),
-                            new sap.m.Button("", {
-                                width: "20%",
-                                icon: "sap-icon://arrow-right",
-                                type: sap.m.ButtonType.Transparent,
-                                press(): void {
-                                    let form: any = editForm.getContent()[0];
-                                    if (form instanceof sap.extension.layout.SimpleForm) {
-                                        let datas: any = that.list${BOItem.getName()}.getModel().getData("rows");
-                                        if (datas instanceof Array && datas.length > 0) {
-                                            let index: number = datas.indexOf(form.getModel().getData());
-                                            index = index >= datas.length - 1 ? 0 : index + 1;
-                                            form.setModel(new sap.extension.model.JSONModel(datas[index]));
-                                            editForm.setTitle(ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_${BOItem.getName().toLowerCase()}"), datas[index].lineId));
-                                        } else {
-                                            that.application.viewShower.messages({
-                                                title: that.title,
-                                                type: ibas.emMessageType.WARNING,
-                                                message: ibas.i18n.prop(["shell_please", "shell_data_add_line"]),
-                                            });
-                                        }
-                                    }
-                                }
-                            }),
-                            new sap.m.Button("", {
-                                width: "20%",
-                                text: ibas.i18n.prop("shell_data_remove"),
-                                type: sap.m.ButtonType.Transparent,
-                                press: function (): void {
-                                    let form: any = editForm.getContent()[0];
-                                    if (form instanceof sap.extension.layout.SimpleForm) {
-                                        let datas: any = that.list${BOItem.getName()}.getModel().getData("rows");
-                                        if (datas instanceof Array && datas.length > 0) {
-                                            that.fireViewEvents(that.remove${BOItem.getName()}Event, form.getModel().getData());
-                                            if (datas.length === 1) {
-                                                // 无数据，退出
-                                                (<any>editForm.getButtons()[3]).firePress({});
-                                            } else {
-                                                // 下一个
-                                                (<any>editForm.getButtons()[1]).firePress({});
-                                            }
-                                        }
-                                    }
-                                }
-                            }),
-                            new sap.m.Button("", {
-                                text: ibas.i18n.prop("shell_exit"),
-                                type: sap.m.ButtonType.Transparent,
-                                press(): void {
-                                    editForm.close();
-                                }
-                            }),
-                        ]
-                    }).addStyleClass("sapUiNoContentPadding");
+									],
+								}),
+							],
+							buttons: [
+								new sap.m.Button("", {
+									width: "20%",
+									icon: "sap-icon://arrow-left",
+									type: sap.m.ButtonType.Transparent,
+									press(): void {
+										let form: any = editForm.getContent()[0];
+										if (form instanceof sap.extension.layout.SimpleForm) {
+											let datas: any = that.list${BOItem.getName()}.getModel().getData("rows");
+											if (datas instanceof Array && datas.length > 0) {
+												let index: number = datas.indexOf(form.getModel().getData());
+												index = index <= 0 ? datas.length - 1 : index - 1;
+												form.setModel(new sap.extension.model.JSONModel(datas[index]));
+												editForm.setTitle(ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_${BOItem.getName().toLowerCase()}"), datas[index].lineId));
+											} else {
+												that.application.viewShower.messages({
+													title: that.title,
+													type: ibas.emMessageType.WARNING,
+													message: ibas.i18n.prop(["shell_please", "shell_data_add_line"]),
+												});
+											}
+										}
+									}
+								}),
+								new sap.m.Button("", {
+									width: "20%",
+									icon: "sap-icon://arrow-right",
+									type: sap.m.ButtonType.Transparent,
+									press(): void {
+										let form: any = editForm.getContent()[0];
+										if (form instanceof sap.extension.layout.SimpleForm) {
+											let datas: any = that.list${BOItem.getName()}.getModel().getData("rows");
+											if (datas instanceof Array && datas.length > 0) {
+												let index: number = datas.indexOf(form.getModel().getData());
+												index = index >= datas.length - 1 ? 0 : index + 1;
+												form.setModel(new sap.extension.model.JSONModel(datas[index]));
+												editForm.setTitle(ibas.strings.format("{0} - {1}", ibas.i18n.prop("bo_${BOItem.getName().toLowerCase()}"), datas[index].lineId));
+											} else {
+												that.application.viewShower.messages({
+													title: that.title,
+													type: ibas.emMessageType.WARNING,
+													message: ibas.i18n.prop(["shell_please", "shell_data_add_line"]),
+												});
+											}
+										}
+									}
+								}),
+								new sap.m.Button("", {
+									width: "20%",
+									text: ibas.i18n.prop("shell_data_remove"),
+									type: sap.m.ButtonType.Transparent,
+									press: function (): void {
+										let form: any = editForm.getContent()[0];
+										if (form instanceof sap.extension.layout.SimpleForm) {
+											let datas: any = that.list${BOItem.getName()}.getModel().getData("rows");
+											if (datas instanceof Array && datas.length > 0) {
+												that.fireViewEvents(that.remove${BOItem.getName()}Event, form.getModel().getData());
+												if (datas.length === 1) {
+													// 无数据，退出
+													(<any>editForm.getButtons()[3]).firePress({});
+												} else {
+													// 下一个
+													(<any>editForm.getButtons()[1]).firePress({});
+												}
+											}
+										}
+									}
+								}),
+								new sap.m.Button("", {
+									text: ibas.i18n.prop("shell_exit"),
+									type: sap.m.ButtonType.Transparent,
+									press(): void {
+										editForm.close();
+									}
+								}),
+							]
+						}).addStyleClass("sapUiNoContentPadding");
+                    }
                     editForm.getContent()[0].setModel(new sap.extension.model.JSONModel(data));
                     editForm.open();
                 }
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $END_BOITEM$
+                protected onClosed(): void {
+                    super.onClosed();
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+                    let form: any = sap.ui.getCore().byId(this.id + "_editform");
+                    if (form instanceof sap.m.Dialog) {
+                        form.destroy();
+                    }
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$END_BOITEM$
+                }
             }
         }
     }
