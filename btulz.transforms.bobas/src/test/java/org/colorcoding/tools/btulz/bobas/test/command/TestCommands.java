@@ -52,6 +52,15 @@ public class TestCommands extends TestCase {
 		args.add(String.format("-config=%s", config));
 		args.add("-ignore");
 		Console.main(args.toArray(new String[] {}));
+		args = new ArrayList<>();
+		data = String.format(
+				"%s%2$sibas.initialfantasy%2$ssrc%2$smain%2$sresources%2$sdatastructures%2$sds_sys_user.xml", ifFolder,
+				File.separator);
+		args.add(String.format(Command4Ds.COMMAND_PROMPT));
+		args.add(String.format("-data=%s", data));
+		args.add(String.format("-config=%s", config));
+		args.add("-ignore");
+		Console.main(args.toArray(new String[] {}));
 	}
 
 	public void testRouting() throws MalformedURLException {

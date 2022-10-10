@@ -9,6 +9,7 @@ import org.colorcoding.ibas.bobas.configuration.ConfigurationManagerFile;
 import org.colorcoding.tools.btulz.command.Argument;
 import org.colorcoding.tools.btulz.command.Command;
 import org.colorcoding.tools.btulz.command.Prompt;
+import org.colorcoding.tools.btulz.transformer.DsTransformer;
 import org.colorcoding.tools.btulz.transformer.JarTransformer;
 
 /**
@@ -36,7 +37,7 @@ public class Command4Ds extends Command<Command4Ds> {
 	protected Argument[] createArguments() {
 		ArrayList<Argument> arguments = new ArrayList<>();
 		// 添加自身参数
-		arguments.add(new Argument("-data", "模型数据，待解析jar文件"));
+		arguments.add(new Argument("-data", "模型数据，待解析文件（jar、xml）"));
 		arguments.add(new Argument("-config", "配置文件"));
 		arguments.add(new Argument("-dbSign", "数据库标记（可忽略）"));
 		arguments.add(new Argument("-template", "数据结构解析模板（可忽略）"));
@@ -56,7 +57,7 @@ public class Command4Ds extends Command<Command4Ds> {
 		stringBuilder.append("  ");
 		stringBuilder.append(COMMAND_PROMPT);
 		stringBuilder.append(" ");
-		stringBuilder.append("-data=D:\\tomcat\\data\\ibas.app.jar");
+		stringBuilder.append("-data=D:\\tomcat\\data\\ibas.modules.jar");
 		stringBuilder.append(" ");
 		stringBuilder.append("-config=D:\\tomcat\\config\\app.xml");
 		stringBuilder.append(" ");
@@ -179,19 +180,38 @@ public class Command4Ds extends Command<Command4Ds> {
 			if (argDbPassword == null || argDbPassword.isEmpty()) {
 				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "DbPassword"));
 			}
-			JarTransformer jarTransformer = new JarTransformer();
-			jarTransformer.setDsTemplate(argTemplate);
-			jarTransformer.setSqlFilter(argSql);
-			jarTransformer.setJarFile(argData);
-			jarTransformer.setCompany(argCompany);
-			jarTransformer.setDbServer(argDbServer);
-			jarTransformer.setDbPort(argDbPort);
-			jarTransformer.setDbSchema(argDbSchema);
-			jarTransformer.setDbName(argDbName);
-			jarTransformer.setDbUser(argDbUser);
-			jarTransformer.setDbPassword(argDbPassword);
-			jarTransformer.setInterruptOnError(!ignore);
-			jarTransformer.transform();
+			file = new File(argData);
+			if (!file.isFile() || !file.exists()) {
+				throw new IOException("invaild data file.");
+			}
+			if (file.getName().toLowerCase().endsWith(".jar")) {
+				JarTransformer transformer = new JarTransformer();
+				transformer.setDsTemplate(argTemplate);
+				transformer.setSqlFilter(argSql);
+				transformer.setJarFile(argData);
+				transformer.setCompany(argCompany);
+				transformer.setDbServer(argDbServer);
+				transformer.setDbPort(argDbPort);
+				transformer.setDbSchema(argDbSchema);
+				transformer.setDbName(argDbName);
+				transformer.setDbUser(argDbUser);
+				transformer.setDbPassword(argDbPassword);
+				transformer.setInterruptOnError(!ignore);
+				transformer.transform();
+			} else {
+				DsTransformer transformer = new DsTransformer();
+				transformer.addDomains(file);
+				transformer.setTemplateFile(argTemplate);
+				transformer.setCompany(argCompany);
+				transformer.setDbServer(argDbServer);
+				transformer.setDbPort(argDbPort);
+				transformer.setDbSchema(argDbSchema);
+				transformer.setDbName(argDbName);
+				transformer.setDbUser(argDbUser);
+				transformer.setDbPassword(argDbPassword);
+				transformer.setInterruptOnError(!ignore);
+				transformer.transform();
+			}
 			return RETURN_VALUE_SUCCESS;
 		} catch (Exception e) {
 			this.print(e);
