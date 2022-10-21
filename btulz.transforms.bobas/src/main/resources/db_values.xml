@@ -37,4 +37,10 @@
 		<DbValueItem Key="DbPort" Value="-1" />
 		<DbValueItem Key="DbSchema" Value="" />
 	</DbValue>
+	<DbValue Name="DM8">
+		<DbValueItem Key="DsTemplate" Value="ds_dm8_ibas_classic.xml" />
+		<DbValueItem Key="SqlFilter" Value="sql_dm8_" />
+		<DbValueItem Key="DbPort" Value="5236" />
+		<DbValueItem Key="DbSchema" Value="" />
+	</DbValue>
 </ns:DbValues>

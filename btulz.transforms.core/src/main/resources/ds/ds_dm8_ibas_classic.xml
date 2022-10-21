@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+$$适用于java平台下的ibas框架
+<ns2:DataStructureOrchestration xmlns:ns2="http://colorcoding.org/btulz/transformers">
+    <Name>ds_dm8_ibas</Name>
+    <Description>基于达梦8的结构映射说明</Description>
+    <Integrated>true</Integrated>
+    <DriverName>dm.jdbc.driver.DmDriver</DriverName>
+$$因存在创建数据的可能，所以数据库连接默认库。
+    <DbUrl>jdbc:dm://${DbServer}:${DbPort}</DbUrl>
+    <DbUser>${DbUser}</DbUser>
+    <DbPassword>${DbPassword}</DbPassword>
+$$"!"表示延迟解析变量，例如${!Property.getEditSize()}
+$$设置为隔离动作（Isolated = true），此动作独立数据库事务，若已存在事务，则提交。
+    <Action Name="create db" Isolated="true">
+        <Step Name="check db ${DbName} exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "SYS"."DBA_OBJECTS" WHERE "OBJECT_NAME" = '${DbName}' AND "OBJECT_TYPE" = 'SCH'
+            ]]></Script>
+        </Step>
+        <Step Name="create db ${DbName}" RunOnValue="0">
+            <Script><![CDATA[
+                CREATE SCHEMA "${DbName}" AUTHORIZATION ${DbUser}
+            ]]></Script>
+        </Step>
+    </Action>
+$BEGIN_MODEL$
+    <Action Name="create table">
+        <Step Name="check table ${Model.getMapped()} exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "SYS"."DBA_TABLES" WHERE "OWNER" = '${DbName}' AND "TABLE_NAME" = '${Model.getMapped()}'
+            ]]></Script>
+        </Step>
+$$上步返回0时运行（RunOnValue="0"）。
+        <Step Name="create table ${Model.getMapped()}" RunOnValue="0">
+            <Script><![CDATA[
+                CREATE TABLE "${DbName}"."${Model.getMapped()}"(
+$BEGIN_MODEL_PROPERTY$
+                   "${Property.getMapped()}" ${Property.output(db.type)} ${Property.output(db.value)} ${Property.output(,)}
+$END_MODEL_PROPERTY$
+                )
+            ]]></Script>
+        </Step>
+$BEGIN_MODEL_PROPERTY$
+        <Step Name="check field ${Model.getMapped()}.${Property.getMapped()} exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "SYS"."DBA_TAB_COLUMNS" WHERE "OWNER" = '${DbName}' AND "TABLE_NAME" = '${Model.getMapped()}' AND "COLUMN_NAME" = '${Property.getMapped()}'
+            ]]></Script>
+        </Step>
+        <Step Name="create field ${Model.getMapped()}.${Property.getMapped()}" RunOnValue="0">
+            <Script><![CDATA[
+                ALTER TABLE "${DbName}"."${Model.getMapped()}" ADD "${Property.getMapped()}" ${Property.output(db.type)} ${Property.output(db.value)}
+            ]]></Script>
+        </Step>
+$END_MODEL_PROPERTY$
+$BEGIN_MODEL_HAS_PRIMARY$
+        <Step Name="check ${Model.getMapped()}'s key fields exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "SYS"."DBA_CONSTRAINTS" WHERE "OWNER" = '${DbName}' AND "TABLE_NAME" = '${Model.getMapped()}' AND "CONSTRAINT_NAME" = 'K${Model.getMapped().toUpperCase()}'
+            ]]></Script>
+        </Step>
+        <Step Name="create ${Model.getMapped()}'s key fields" RunOnValue="0">
+            <Script><![CDATA[
+                ALTER TABLE "${DbName}"."${Model.getMapped()}" ADD CONSTRAINT "K${Model.getMapped().toUpperCase()}" PRIMARY KEY (
+$BEGIN_MODEL_PRIMARY_PROPERTY$
+                    "${Property.getMapped()}" ${Property.output(,)}
+$END_MODEL_PRIMARY_PROPERTY$
+                )
+            ]]></Script>
+        </Step>
+$END_MODEL_HAS_PRIMARY$
+    </Action>
+$BEGIN_MODEL_HAS_UNIQUE$
+    <Action Name="drop table unique index">
+        <Step Name="check table ${Model.getMapped()}'s unique index exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "SYS"."DBA_INDEXES" WHERE "OWNER" = '${DbName}' AND "TABLE_NAME" = '${Model.getMapped()}' AND "INDEX_NAME" = '${Model.getMapped().toUpperCase()}_UNIQUE_INDEX'
+            ]]></Script>
+        </Step>
+        <Step Name="delete table ${Model.getMapped()}'s unique index" RunOnValue="1">
+            <Script><![CDATA[
+                DROP INDEX "${DbName}"."${Model.getMapped().toUpperCase()}_UNIQUE_INDEX"
+            ]]></Script>
+        </Step>
+    </Action>
+    <Action Name="create table unique index">
+        <Step Name="create table ${Model.getMapped()}'s unique index">
+            <Script><![CDATA[
+                CREATE UNIQUE INDEX "${Model.getMapped().toUpperCase()}_UNIQUE_INDEX" ON "${DbName}"."${Model.getMapped()}" (
+$BEGIN_MODEL_UNIQUE_PROPERTY$
+                    "${Property.getMapped()}" ${Property.output(,)}
+$END_MODEL_UNIQUE_PROPERTY$
+                )
+            ]]></Script>
+        </Step>
+    </Action>
+$END_MODEL_HAS_UNIQUE$
+$END_MODEL$
+$BEGIN_BO$
+    <Action Name="register business object">
+        <Step Name="check number table exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "SYS"."DBA_TABLES" WHERE "OWNER" = '${DbName}' AND "TABLE_NAME" = '${Company}_SYS_ONNM'
+            ]]></Script>
+        </Step>
+        <Step Name="break action, table not exists" RunOnValue="0">
+            <Script><![CDATA[
+                THROW BREAK EXCEPTION;
+            ]]></Script>
+        </Step>
+        <Step Name="check business object code ${BO.getShortName()} exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "${DbName}"."${Company}_SYS_ONNM" WHERE "ObjectCode" = '${BO.getShortName()}'
+            ]]></Script>
+        </Step>
+        <Step Name="register business object code ${BO.getShortName()}" RunOnValue="0">
+            <Script><![CDATA[
+                INSERT INTO "${DbName}"."${Company}_SYS_ONNM" ("ObjectCode", "AutoKey") VALUES (N'${BO.getShortName()}', 1)
+            ]]></Script>
+        </Step>
+    </Action>
+$BEGIN_BO_MODEL$
+    <Action Name="register business object informations">
+        <Step Name="check business object informations table exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "SYS"."DBA_TABLES" WHERE "OWNER" = '${DbName}' AND "TABLE_NAME" = '${Company}_SYS_OBOI'
+            ]]></Script>
+        </Step>
+        <Step Name="break action, table not exists" RunOnValue="0">
+            <Script><![CDATA[
+                THROW BREAK EXCEPTION;
+            ]]></Script>
+        </Step>
+        <Step Name="check business object ${Model.getName()}'s informations exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "${DbName}"."${Company}_SYS_OBOI" WHERE "Code" = '${BO.getShortName()}'
+            ]]></Script>
+        </Step>
+        <Step Name="update business object ${Model.getName()}'s informations" RunOnValue="1">
+            <Script><![CDATA[
+                UPDATE "${DbName}"."${Company}_SYS_OBOI" SET "Name" = '${Model.getName()}', "Descrp" = '${Model.getDescription()}', "Mapped" = '${Model.getMapped().toUpperCase()}', "ObjectType" = '${Model.getModelType()}' WHERE "Code" = '${BO.getShortName()}'
+            ]]></Script>
+        </Step>
+        <Step Name="register business object ${Model.getName()}'s informations" RunOnValue="0">
+            <Script><![CDATA[
+                INSERT INTO "${DbName}"."${Company}_SYS_OBOI"("Code", "Name", "Descrp", "Mapped", "ObjectType") VALUES (N'${BO.getShortName()}', '${Model.getName()}', '${Model.getDescription()}', '${Model.getMapped().toUpperCase()}', '${Model.getModelType()}')
+            ]]></Script>
+        </Step>
+        <Step Name="check business object informations table exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "SYS"."DBA_TABLES" WHERE "OWNER" = '${DbName}' AND "TABLE_NAME" = '${Company}_SYS_BOI1'
+            ]]></Script>
+        </Step>
+        <Step Name="break action, table not exists" RunOnValue="0">
+            <Script><![CDATA[
+                THROW BREAK EXCEPTION;
+            ]]></Script>
+        </Step>
+$BEGIN_MODEL_PROPERTY$
+        <Step Name="check business object ${Model.getName()}.${Property.getName()}'s informations exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "${DbName}"."${Company}_SYS_BOI1" WHERE "Code" = '${BO.getShortName()}' AND "Property" = '${Property.getName()}'
+            ]]></Script>
+        </Step>
+        <Step Name="update business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
+            <Script><![CDATA[
+                UPDATE "${DbName}"."${Company}_SYS_BOI1" SET "Mapped" = '${Property.getMapped()}', "Descrp" = '${Property.getDescription()}', "DataType" = '${Property.getDataType()}', "EditType" = '${Property.getDataSubType()}', "EditSize" = ${Property.getEditSize()}, "Systemed" = '${Property.output(db.system)}' WHERE "Code" = '${BO.getShortName()}' AND "Property" = '${Property.getName()}'
+            ]]></Script>
+        </Step>
+        <Step Name="register business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="0">
+            <Script><![CDATA[
+                INSERT INTO "${DbName}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES (N'${BO.getShortName()}', '${Property.getName()}', '${Property.getMapped()}', '${Property.getDescription()}', '${Property.getDataType()}', '${Property.getDataSubType()}', ${Property.getEditSize()}, '${Property.output(db.search)}', '${Property.output(db.system)}')
+            ]]></Script>
+        </Step>
+$END_MODEL_PROPERTY$
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+        <Step Name="check business object ${BOItem.getName()}s.${BOItem.getName()}'s informations exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "${DbName}"."${Company}_SYS_BOI1" WHERE "Code" = '${BOItem.getParent().getShortName()}' AND "Property" = '${BOItem.getName()}s'
+            ]]></Script>
+        </Step>
+        <Step Name="update business object ${BOItem.getName()}s.${BOItem.getName()}'s informations" RunOnValue="1">
+            <Script><![CDATA[
+                UPDATE "${DbName}"."${Company}_SYS_BOI1" SET "Mapped" = '${BOItem.getShortName(index)}', "Descrp" = '${BOItem.getDescription()}', "DataType" = '${BOItem.getName()}', "EditType" = NULL, "EditSize" = -1, "Systemed" = 'Y' WHERE "Code" = '${BOItem.getParent().getShortName()}' AND "Property" = '${BOItem.getName()}s'
+            ]]></Script>
+        </Step>
+        <Step Name="register business object property ${BOItem.getName()}s.${BOItem.getName()}'s informations" RunOnValue="0">
+            <Script><![CDATA[
+                INSERT INTO "${DbName}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES (N'${BOItem.getParent().getShortName()}', '${BOItem.getName()}s', '${BOItem.getShortName(index)}', '${BOItem.getDescription()}', '${BOItem.getName()}', NULL, -1, 'N', 'Y')
+            ]]></Script>
+        </Step>
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$BEGIN_BOITEM_RELATION_IS_ONETOONE$
+        <Step Name="check business object ${BOItem.getName()}s.${BOItem.getName()}'s informations exists"">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "${DbName}"."${Company}_SYS_BOI1" WHERE "Code" = '${BOItem.getParent().getShortName()}' AND "Property" = '${BOItem.getName()}'
+            ]]></Script>
+        </Step>
+        <Step Name="update business object ${BOItem.getName()}s.${BOItem.getName()}'s informations" RunOnValue="1">
+            <Script><![CDATA[
+                UPDATE "${DbName}"."${Company}_SYS_BOI1" SET "Mapped" = '${BOItem.getShortName(index)}', "Descrp" = '${BOItem.getDescription()}', "DataType" = '${BOItem.getName()}', "EditType" = NULL, "EditSize" = -1, "Systemed" = 'Y' WHERE "Code" = '${BOItem.getParent().getShortName()}' AND "Property" = '${BOItem.getName()}'
+            ]]></Script>
+        </Step>
+        <Step Name="register business object property ${BOItem.getName()}.${BOItem.getName()}'s informations" RunOnValue="1">
+            <Script><![CDATA[
+                INSERT INTO "${DbName}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES (N'${BOItem.getParent().getShortName()}', '${BOItem.getName()}', '${BOItem.getShortName(index)}', '${BOItem.getDescription()}', '${BOItem.getName()}', NULL, -1, 'N', 'Y')
+            ]]></Script>
+        </Step>
+$END_BOITEM_RELATION_IS_ONETOONE$
+$END_BOITEM$
+    </Action>
+$END_BO_MODEL$
+$BEGIN_BOITEMS$
+    <Action Name="register business object informations">
+$BEGIN_BO_MODEL$
+        <Step Name="check business object informations table exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "SYS"."DBA_TABLES" WHERE "OWNER" = '${DbName}' AND "TABLE_NAME" = '${Company}_SYS_OBOI'
+            ]]></Script>
+        </Step>
+        <Step Name="break action, table not exists" RunOnValue="0">
+            <Script><![CDATA[
+                THROW BREAK EXCEPTION;
+            ]]></Script>
+        </Step>
+        <Step Name="check business object ${Model.getName()}'s informations exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "${DbName}"."${Company}_SYS_OBOI" WHERE "Code" = '${BO.getShortName(index)}'
+            ]]></Script>
+        </Step>
+        <Step Name="update business object ${Model.getName()}'s informations" RunOnValue="1">
+            <Script><![CDATA[
+                UPDATE "${DbName}"."${Company}_SYS_OBOI" SET "Name" = '${Model.getName()}', "Descrp" = '${Model.getDescription()}', "Mapped" = '${Model.getMapped().toUpperCase()}', "ObjectType" = '${Model.getModelType()}' WHERE "Code" = '${BO.getShortName(index)}'
+            ]]></Script>
+        </Step>
+        <Step Name="register business object ${Model.getName()}'s informations" RunOnValue="0">
+            <Script><![CDATA[
+                INSERT INTO "${DbName}"."${Company}_SYS_OBOI"("Code", "Name", "Descrp", "Mapped", "ObjectType") VALUES (N'${BO.getShortName(index)}', '${Model.getName()}', '${Model.getDescription()}', '${Model.getMapped().toUpperCase()}', '${Model.getModelType()}')
+            ]]></Script>
+        </Step>
+        <Step Name="check business object informations table exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "SYS"."DBA_TABLES" WHERE "OWNER" = '${DbName}' AND "TABLE_NAME" = '${Company}_SYS_BOI1'
+            ]]></Script>
+        </Step>
+        <Step Name="break action, table not exists" RunOnValue="0">
+            <Script><![CDATA[
+                THROW BREAK EXCEPTION;
+            ]]></Script>
+        </Step>
+$BEGIN_MODEL_PROPERTY$
+        <Step Name="check business object ${Model.getName()}.${Property.getName()}'s informations exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "${DbName}"."${Company}_SYS_BOI1" WHERE "Code" = '${BO.getShortName(index)}' AND "Property" = '${Property.getName()}'
+            ]]></Script>
+        </Step>
+        <Step Name="update business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="1">
+            <Script><![CDATA[
+                UPDATE "${DbName}"."${Company}_SYS_BOI1" SET "Mapped" = '${Property.getMapped()}', "Descrp" = '${Property.getDescription()}', "DataType" = '${Property.getDataType()}', "EditType" = '${Property.getDataSubType()}', "EditSize" = ${Property.getEditSize()}, "Systemed" = '${Property.output(db.system)}' WHERE "Code" = '${BO.getShortName(index)}' AND "Property" = '${Property.getName()}'
+            ]]></Script>
+        </Step>
+        <Step Name="register business object ${Model.getName()}.${Property.getName()}'s informations" RunOnValue="0">
+            <Script><![CDATA[
+                INSERT INTO "${DbName}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES (N'${BO.getShortName(index)}', '${Property.getName()}', '${Property.getMapped()}', '${Property.getDescription()}', '${Property.getDataType()}', '${Property.getDataSubType()}', ${Property.getEditSize()}, '${Property.output(db.search)}', '${Property.output(db.system)}')
+            ]]></Script>
+        </Step>
+$END_MODEL_PROPERTY$
+$END_BO_MODEL$
+$BEGIN_BOITEM$
+$BEGIN_BOITEM_RELATION_IS_ONETOMANY$
+        <Step Name="check business object property ${BOItem.getName()}s.${BOItem.getName()}'s informations">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "${DbName}"."${Company}_SYS_BOI1" WHERE "Code" = '${BOItem.getParent().getShortName(index)}' AND "Property" = '${BOItem.getName()}s'
+            ]]></Script>
+        </Step>
+        <Step Name="update business object property ${BOItem.getName()}s.${BOItem.getName()}'s informations" RunOnValue="1">
+            <Script><![CDATA[
+                UPDATE "${DbName}"."${Company}_SYS_BOI1" SET "Mapped" = '${BOItem.getShortName(index)}', "Descrp" = '${BOItem.getDescription()}', "DataType" = '${BOItem.getName()}', "EditType" = NULL, "EditSize" = -1, "Systemed" = 'Y' WHERE "Code" = '${BOItem.getParent().getShortName(index)}' AND "Property" = '${BOItem.getName()}s'
+            ]]></Script>
+        </Step>
+        <Step Name="register business object property ${BOItem.getName()}s.${BOItem.getName()}'s informations" RunOnValue="0">
+            <Script><![CDATA[
+                INSERT INTO "${DbName}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES (N'${BOItem.getParent().getShortName(index)}', '${BOItem.getName()}s', '${BOItem.getShortName(index)}', '${BOItem.getDescription()}', '${BOItem.getName()}', NULL, -1, 'N', 'Y')
+            ]]></Script>
+        </Step>
+$END_BOITEM_RELATION_IS_ONETOMANY$
+$BEGIN_BOITEM_RELATION_IS_ONETOONE$
+        <Step Name="check business object property ${BOItem.getName()}s.${BOItem.getName()}'s informations">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "${DbName}"."${Company}_SYS_BOI1" WHERE "Code" = '${BOItem.getParent().getShortName(index)}' AND "Property" = '${BOItem.getName()}'
+            ]]></Script>
+        </Step>
+        <Step Name="update business object property ${BOItem.getName()}s.${BOItem.getName()}'s informations" RunOnValue="1">
+            <Script><![CDATA[
+                UPDATE "${DbName}"."${Company}_SYS_BOI1" SET "Mapped" = '${BOItem.getShortName(index)}', "Descrp" = '${BOItem.getDescription()}', "DataType" = '${BOItem.getName()}', "EditType" = NULL, "EditSize" = -1, "Systemed" = 'Y' WHERE "Code" = '${BOItem.getParent().getShortName(index)}' AND "Property" = '${BOItem.getName()}'
+            ]]></Script>
+        </Step>
+        <Step Name="register business object property ${BOItem.getName()}.${BOItem.getName()}'s informations" RunOnValue="0">
+            <Script><![CDATA[
+                INSERT INTO "${DbName}"."${Company}_SYS_BOI1" ("Code", "Property", "Mapped", "Descrp", "DataType", "EditType", "EditSize", "Searched", "Systemed") VALUES (N'${BOItem.getParent().getShortName(index)}', '${BOItem.getName()}', '${BOItem.getShortName(index)}', '${BOItem.getDescription()}', '${BOItem.getName()}', NULL, -1, 'N', 'Y')
+            ]]></Script>
+        </Step>
+$END_BOITEM_RELATION_IS_ONETOONE$
+$END_BOITEM$
+    </Action>
+$END_BOITEMS$
+$END_BO$
+</ns2:DataStructureOrchestration>
