@@ -92,6 +92,9 @@ public class Command4Routing extends Command<Command4Routing> {
 					transformer.setInterruptOnError(!true);
 				}
 			}
+			if (transformer.getQuery() == null || transformer.getQuery().isEmpty()) {
+				transformer.setQuery("SELECT * FROM ${Company}_SYS_MODULE");
+			}
 			transformer.transform();
 			return RETURN_VALUE_SUCCESS;
 		} catch (Exception | Error e) {
