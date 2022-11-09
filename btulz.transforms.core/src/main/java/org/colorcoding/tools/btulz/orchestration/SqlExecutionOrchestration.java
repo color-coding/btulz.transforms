@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
+import org.colorcoding.tools.btulz.util.URIEncoder;
 
 /**
  * SQL执行规划实现
@@ -33,6 +34,17 @@ public class SqlExecutionOrchestration extends ExecutionOrchestration implements
 
 	public void setDriverName(String driverName) {
 		this.driverName = driverName;
+	}
+
+	private boolean encodeDbUrl = false;
+
+	@XmlElement(name = "EncodeDbUrl")
+	public boolean isEncodeDbUrl() {
+		return encodeDbUrl;
+	}
+
+	public void setEncodeDbUrl(boolean encodeDbUrl) {
+		this.encodeDbUrl = encodeDbUrl;
 	}
 
 	private String dbUrl;
@@ -83,8 +95,7 @@ public class SqlExecutionOrchestration extends ExecutionOrchestration implements
 	/**
 	 * 创建数据库连接
 	 * 
-	 * @param dbUrl
-	 *            数据地址，为null时取默认
+	 * @param dbUrl 数据地址，为null时取默认
 	 * @return
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
@@ -93,6 +104,9 @@ public class SqlExecutionOrchestration extends ExecutionOrchestration implements
 		Class.forName(this.getDriverName());
 		if (dbUrl == null || dbUrl.isEmpty()) {
 			dbUrl = this.getDbUrl();
+		}
+		if (this.isEncodeDbUrl()) {
+			dbUrl = URIEncoder.encodeURIParameters(dbUrl);
 		}
 		Environment.getLogger().info(String.format("connect to [%s], by user [%s].", dbUrl, this.getDbUser()));
 		Connection connection = DriverManager.getConnection(dbUrl, this.getDbUser(), this.getDbPassword());

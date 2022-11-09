@@ -69,20 +69,18 @@ public abstract class Command<C> {
 	/**
 	 * 打印消息
 	 * 
-	 * @param message
-	 *            消息模板
-	 * @param args
-	 *            参数
+	 * @param message 消息模板
+	 * @param args    参数
 	 */
 	protected void print(String message, Object... args) {
-		System.out.println(String.format("[btulz|%s]: ", this.getName()) + String.format(message, args));
+		System.out.println(String.format("[btulz|%s]: %s", this.getName(),
+				args != null && args.length > 0 ? String.format(message, args) : message));
 	}
 
 	/**
 	 * 打印异常
 	 * 
-	 * @param error
-	 *            异常
+	 * @param error 异常
 	 */
 	protected void print(Throwable error) {
 		try {
@@ -106,8 +104,7 @@ public abstract class Command<C> {
 	/**
 	 * 运行
 	 * 
-	 * @param args
-	 *            参数
+	 * @param args 参数
 	 * @return
 	 */
 	public final int run(String[] args) {
@@ -203,8 +200,7 @@ public abstract class Command<C> {
 	/**
 	 * 运行
 	 * 
-	 * @param arguments
-	 *            参数
+	 * @param arguments 参数
 	 * @return
 	 */
 	protected abstract int run(Argument[] arguments);
@@ -212,8 +208,7 @@ public abstract class Command<C> {
 	/**
 	 * 创建参数
 	 * 
-	 * @param values
-	 *            参数字符串
+	 * @param values 参数字符串
 	 * @return
 	 */
 	protected Collection<Parameter> createParameters(String values) {

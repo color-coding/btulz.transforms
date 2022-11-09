@@ -9,6 +9,7 @@ $$因存在创建数据的可能，所以数据库连接默认库。
     <DbUrl>jdbc:mysql://${DbServer}:${DbPort}/mysql?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=${Timezone}</DbUrl>
     <DbUser>${DbUser}</DbUser>
     <DbPassword>${DbPassword}</DbPassword>
+    <EncodeDbUrl>true</EncodeDbUrl>
 $$"!"表示延迟解析变量，例如${!Property.getEditSize()}
 $$设置为隔离动作（Isolated = true），此动作独立数据库事务，若已存在事务，则提交。
     <Action Name="create db" Isolated="true">
