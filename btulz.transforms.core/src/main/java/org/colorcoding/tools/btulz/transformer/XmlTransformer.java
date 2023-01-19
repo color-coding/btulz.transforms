@@ -190,7 +190,7 @@ public class XmlTransformer extends FileTransformer {
 		element.setAttribute("DataType", String.valueOf(property.getDataType()));
 		element.setAttribute("DataSubType", String.valueOf(property.getDataSubType()));
 		element.setAttribute("EditSize", String.valueOf(property.getEditSize()));
-		if (property.getDeclaredType() != null) {
+		if (property.getDeclaredType() != null && !property.getDeclaredType().isEmpty()) {
 			element.setAttribute("DeclaredType", String.valueOf(property.getDeclaredType()));
 		}
 		element.setAttribute("Mapped", property.getMapped());
@@ -203,10 +203,10 @@ public class XmlTransformer extends FileTransformer {
 		if (property.isSearchKey()) {
 			element.setAttribute("SearchKey", String.valueOf(emYesNo.valueOf(property.isSearchKey())));
 		}
-		if (property.getLinked() != null) {
+		if (property.getLinked() != null && !property.getLinked().isEmpty()) {
 			element.setAttribute("Linked", property.getLinked());
 		}
-		if (property.getDefaultValue() != null) {
+		if (property.getDefaultValue() != null && !property.getDefaultValue().isEmpty()) {
 			element.setAttribute("DefaultValue", property.getDefaultValue());
 		}
 	}

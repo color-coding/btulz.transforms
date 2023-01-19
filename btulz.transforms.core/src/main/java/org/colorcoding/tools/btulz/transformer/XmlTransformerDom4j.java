@@ -85,7 +85,7 @@ public class XmlTransformerDom4j extends XmlTransformer {
 		element.addAttribute("DataType", String.valueOf(property.getDataType()));
 		element.addAttribute("DataSubType", String.valueOf(property.getDataSubType()));
 		element.addAttribute("EditSize", String.valueOf(property.getEditSize()));
-		if (property.getDeclaredType() != null) {
+		if (property.getDeclaredType() != null && !property.getDeclaredType().isEmpty()) {
 			element.addAttribute("DeclaredType", String.valueOf(property.getDeclaredType()));
 		}
 		element.addAttribute("Mapped", property.getMapped());
@@ -98,10 +98,10 @@ public class XmlTransformerDom4j extends XmlTransformer {
 		if (property.isSearchKey()) {
 			element.addAttribute("SearchKey", String.valueOf(emYesNo.valueOf(property.isSearchKey())));
 		}
-		if (property.getLinked() != null) {
+		if (property.getLinked() != null && !property.getLinked().isEmpty()) {
 			element.addAttribute("Linked", property.getLinked());
 		}
-		if (property.getDefaultValue() != null) {
+		if (property.getDefaultValue() != null && !property.getDefaultValue().isEmpty()) {
 			element.addAttribute("DefaultValue", property.getDefaultValue());
 		}
 	}

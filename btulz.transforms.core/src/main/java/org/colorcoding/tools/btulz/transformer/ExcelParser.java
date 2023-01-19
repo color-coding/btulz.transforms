@@ -36,21 +36,23 @@ public class ExcelParser implements IExcelParser {
 	 */
 	public static Object getCellValue(Cell cell) {
 		Object cellValue = null;
-		CellType cellType = cell.getCellTypeEnum();// CellType.forInt(cell.getCellType());
-		if (cellType == CellType.STRING) {
-			cellValue = cell.getStringCellValue();
-		} else if (cellType == CellType.NUMERIC) {
-			if (DateUtil.isCellDateFormatted(cell)) {
-				cellValue = cell.getDateCellValue();
-			} else {
-				cellValue = cell.getNumericCellValue();
+		if (cell != null) {
+			CellType cellType = cell.getCellTypeEnum();// CellType.forInt(cell.getCellType());
+			if (cellType == CellType.STRING) {
+				cellValue = cell.getStringCellValue();
+			} else if (cellType == CellType.NUMERIC) {
+				if (DateUtil.isCellDateFormatted(cell)) {
+					cellValue = cell.getDateCellValue();
+				} else {
+					cellValue = cell.getNumericCellValue();
+				}
+			} else if (cellType == CellType.BOOLEAN) {
+				cellValue = cell.getBooleanCellValue();
+			} else if (cellType == CellType.FORMULA) {
+				cellValue = cell.getCellFormula();
+			} else if (cellType == CellType.BLANK) {
+				cellValue = "";
 			}
-		} else if (cellType == CellType.BOOLEAN) {
-			cellValue = cell.getBooleanCellValue();
-		} else if (cellType == CellType.FORMULA) {
-			cellValue = cell.getCellFormula();
-		} else if (cellType == CellType.BLANK) {
-			cellValue = "";
 		}
 		return cellValue;
 	}
@@ -101,10 +103,8 @@ public class ExcelParser implements IExcelParser {
 	/**
 	 * 转换数据
 	 * 
-	 * @param value
-	 *            原始类型
-	 * @param targetType
-	 *            目标类型
+	 * @param value      原始类型
+	 * @param targetType 目标类型
 	 * @return 转换的数据
 	 */
 	@SuppressWarnings("unchecked")
@@ -236,10 +236,8 @@ public class ExcelParser implements IExcelParser {
 		/**
 		 * 转换单元格数据
 		 * 
-		 * @param cell
-		 *            单元格
-		 * @param targetType
-		 *            目标类型
+		 * @param cell       单元格
+		 * @param targetType 目标类型
 		 * @return 转换的数据
 		 */
 		protected final <T> T convertData(Cell cell, Class<T> targetType) {
@@ -249,8 +247,7 @@ public class ExcelParser implements IExcelParser {
 		/**
 		 * 判断是否匹配
 		 * 
-		 * @param row
-		 *            行
+		 * @param row 行
 		 * @return
 		 */
 		public abstract boolean match(Row row);
@@ -268,10 +265,8 @@ public class ExcelParser implements IExcelParser {
 		/**
 		 * 解释数据
 		 * 
-		 * @param row
-		 *            行数据
-		 * @param target
-		 *            目标对象
+		 * @param row    行数据
+		 * @param target 目标对象
 		 * @return 额外使用行数，默认0
 		 */
 		public abstract int parse(Row row, Object... targets);
@@ -483,7 +478,7 @@ public class ExcelParser implements IExcelParser {
 			property.setDataSubType(this.convertData(row.getCell(COLUMN_INDEX_DATA_SUB_TYPE), emDataSubType.class));
 			property.setEditSize(this.convertData(row.getCell(COLUMN_INDEX_EDIT_SIZE), Integer.class));
 			String value = this.convertData(row.getCell(COLUMN_INDEX_DECLARED_TYPE), String.class);
-			if (value != null && !value.isEmpty()) {
+			if (value != null && !value.isEmpty() && !value.equalsIgnoreCase("null")) {
 				property.setDeclaredType(value);
 			}
 			// 标记主键
