@@ -60,20 +60,13 @@ $END_MODEL_PRIMARY_PROPERTY$
 $END_MODEL_HAS_PRIMARY$
     </Action>
 $BEGIN_MODEL_HAS_UNIQUE$
-    <Action Name="drop table unique index">
+    <Action Name="create table unique index">
         <Step Name="check table ${Model.getMapped()}'s unique index exists">
             <Script><![CDATA[
                 SELECT COUNT(DISTINCT 'INDEX_NAME') FROM `information_schema`.`statistics` WHERE `TABLE_SCHEMA` = '${DbName}' AND `TABLE_NAME` = '${Model.getMapped()}' AND `INDEX_NAME` = '${Model.getMapped().toUpperCase()}_UNIQUE_INDEX'
             ]]></Script>
         </Step>
-        <Step Name="delete table ${Model.getMapped()}'s unique index" RunOnValue="1">
-            <Script><![CDATA[
-                DROP INDEX `${Model.getMapped().toUpperCase()}_UNIQUE_INDEX` ON `${DbName}`.`${Model.getMapped()}`
-            ]]></Script>
-        </Step>
-    </Action>
-    <Action Name="create table unique index">
-        <Step Name="create table ${Model.getMapped()}'s unique index">
+        <Step Name="create table ${Model.getMapped()}'s unique index" RunOnValue="0">
             <Script><![CDATA[
                 ALTER TABLE `${DbName}`.`${Model.getMapped()}` ADD UNIQUE `${Model.getMapped().toUpperCase()}_UNIQUE_INDEX` (
 $BEGIN_MODEL_UNIQUE_PROPERTY$

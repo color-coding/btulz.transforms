@@ -61,20 +61,13 @@ $END_MODEL_PRIMARY_PROPERTY$
     </Action>
 $END_MODEL_HAS_PRIMARY$
 $BEGIN_MODEL_HAS_UNIQUE$
-    <Action Name="drop table unique index">
+    <Action Name="create table unique index">
         <Step Name="check table ${Model.getMapped()}'s unique index exists">
             <Script><![CDATA[
                 SELECT COUNT(0) FROM "sqlite_master" WHERE "type" = 'index' AND "name" = '${Model.getMapped().toUpperCase()}_UNIQUE_INDEX'
             ]]></Script>
         </Step>
-        <Step Name="delete table ${Model.getMapped()}'s unique index" RunOnValue="1">
-            <Script><![CDATA[
-                DROP INDEX "${Model.getMapped().toUpperCase()}_UNIQUE_INDEX" 
-            ]]></Script>
-        </Step>
-    </Action>
-    <Action Name="create table unique index">
-        <Step Name="create table ${Model.getMapped()}'s unique index">
+        <Step Name="create table ${Model.getMapped()}'s unique index" RunOnValue="0">
             <Script><![CDATA[
                 CREATE UNIQUE INDEX "${Model.getMapped().toUpperCase()}_UNIQUE_INDEX" ON "${Model.getMapped()}" (
 $BEGIN_MODEL_UNIQUE_PROPERTY$
