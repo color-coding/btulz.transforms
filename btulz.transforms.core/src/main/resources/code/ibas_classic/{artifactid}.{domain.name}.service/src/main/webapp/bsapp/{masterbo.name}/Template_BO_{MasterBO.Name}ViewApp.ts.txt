@@ -54,11 +54,46 @@ $END_BOITEM$
             }
             run(): void;
             run(data: bo.${BO.getName()}): void;
-            /** 运行 */
             run(): void {
-                if (ibas.objects.instanceOf(arguments[0], bo.${BO.getName()})) {
-                    this.viewData = arguments[0];
-                    this.show();
+                if (arguments[0] instanceof bo.${BO.getName()}) {
+                    let data: bo.${BO.getName()} = arguments[0];
+                    if (data.isNew) {
+                        this.viewData = data;
+                        this.show();
+                    } else {
+                        let criteria: ibas.ICriteria = data.criteria();
+                        if (criteria?.conditions.length > 0) {
+                            // 有效的查询对象查询
+                            let that: this = this;
+                            let boRepository: bo.BORepository${Domain.getName()} = new bo.BORepository${Domain.getName()}();
+                            boRepository.fetch${BO.getName()}({
+                                criteria: criteria,
+                                onCompleted(opRslt: ibas.IOperationResult<bo.${BO.getName()}>): void {
+                                    try {
+                                        if (opRslt.resultCode !== 0) {
+                                            throw new Error(opRslt.message);
+                                        }
+                                        if (opRslt.resultObjects.length > 0) {
+                                            that.viewData = opRslt.resultObjects.firstOrDefault();
+                                            that.show();
+                                        } else {
+                                            that.messages({
+                                                type: ibas.emMessageType.WARNING,
+                                                message: ibas.i18n.prop("shell_data_deleted_and_created"),
+                                                onCompleted(): void {
+                                                    that.show();
+                                                }
+                                            });
+                                        }
+                                    } catch (error) {
+                                        that.messages(error);
+                                    }
+                                }
+                            });
+                        } else {
+                            super.run.apply(this, arguments);
+                        }
+                    }
                 } else {
                     super.run.apply(this, arguments);
                 }

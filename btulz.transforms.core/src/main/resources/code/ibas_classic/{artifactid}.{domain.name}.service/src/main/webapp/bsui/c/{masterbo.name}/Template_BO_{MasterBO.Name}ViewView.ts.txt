@@ -141,7 +141,7 @@ $END_BO_MODEL$
 $BEGIN_BOITEM$
 $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
                             new sap.uxap.ObjectPageSection("", {
-                                title: ibas.i18n.prop("bo_${BO.getName().toLowerCase()}_${BOItem.getName().toLowerCase()}s"),
+                                title: ibas.i18n.prop("bo_${BOItem.getName().toLowerCase()}"),
                                 subSections: [
                                     new sap.uxap.ObjectPageSubSection("", {
                                         blocks: [

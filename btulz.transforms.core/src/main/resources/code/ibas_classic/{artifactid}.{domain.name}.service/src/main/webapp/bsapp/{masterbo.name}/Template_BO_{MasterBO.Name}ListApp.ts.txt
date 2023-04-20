@@ -38,6 +38,10 @@ namespace ${Domain.getName().toLowerCase()} {
             /** 查询数据 */
             protected fetchData(criteria: ibas.ICriteria): void {
                 this.busy(true);
+                if (!ibas.objects.isNull(criteria)) {
+                    // 不查询子项
+                    criteria.noChilds = true;
+                }
                 let that: this = this;
                 let boRepository: bo.BORepository${Domain.getName()} = new bo.BORepository${Domain.getName()}();
                 boRepository.fetch${BO.getName()}({
@@ -109,10 +113,6 @@ namespace ${Domain.getName().toLowerCase()} {
                     ));
                     return;
                 }
-                // 标记删除对象
-                beDeleteds.forEach((value) => {
-                    value.delete();
-                });
                 let that: this = this;
                 this.messages({
                     type: ibas.emMessageType.QUESTION,
@@ -123,6 +123,10 @@ namespace ${Domain.getName().toLowerCase()} {
                         if (action !== ibas.emMessageAction.YES) {
                             return;
                         }
+                        // 标记删除对象
+                        beDeleteds.forEach((value) => {
+                            value.delete();
+                        });
                         let boRepository: bo.BORepository${Domain.getName()} = new bo.BORepository${Domain.getName()}();
                         ibas.queues.execute(beDeleteds, (data, next) => {
                             // 处理数据
