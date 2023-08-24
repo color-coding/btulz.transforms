@@ -25,9 +25,19 @@ $$设置为隔离动作（Isolated = true），此动作独立数据库事务，
     </Action>
 $BEGIN_MODEL$
     <Action Name="create table">
+        <Step Name="check table ${Model.getMapped()} status">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "information_schema"."tables" WHERE "table_catalog" = '${DbName}' AND "table_name" = '${Model.getMapped()}' AND "table_type" = 'VIEW'
+            ]]></Script>
+        </Step>
+        <Step Name="break action, table is view" RunOnValue="1">
+            <Script><![CDATA[
+                THROW BREAK EXCEPTION;
+            ]]></Script>
+        </Step>
         <Step Name="check table ${Model.getMapped()} exists">
             <Script><![CDATA[
-                SELECT COUNT(0) FROM "information_schema"."tables" WHERE "table_catalog" = '${DbName}' AND "table_name" = '${Model.getMapped()}'
+                SELECT COUNT(0) FROM "information_schema"."tables" WHERE "table_catalog" = '${DbName}' AND "table_name" = '${Model.getMapped()}' AND "table_type" = 'BASE TABLE'
             ]]></Script>
         </Step>
         <Step Name="create table ${Model.getMapped()}" RunOnValue="0">
@@ -70,9 +80,19 @@ $END_MODEL_HAS_PRIMARY$
     </Action>
 $BEGIN_MODEL_HAS_UNIQUE$
     <Action Name="create table unique index">
+        <Step Name="check table ${Model.getMapped()} exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM "information_schema"."tables" WHERE "table_catalog" = '${DbName}' AND "table_name" = '${Model.getMapped()}' AND "table_type" = 'BASE TABLE'
+            ]]></Script>
+        </Step>
+        <Step Name="break action, table is not exists" RunOnValue="0">
+            <Script><![CDATA[
+                THROW BREAK EXCEPTION;
+            ]]></Script>
+        </Step>
         <Step Name="check table ${Model.getMapped()}'s unique index exists">
             <Script><![CDATA[
-                SELECT COUNT(0) FROM "pg_indexes" WHERE "tablename" = '${Model.getMapped()}' AND "indexname" = '${Model.getMapped().toUpperCase()}_UNIQUE_INDEX'
+                SELECT COUNT(0) FROM "information_schema"."table_constraints" WHERE "table_catalog" = '${DbName}' AND "table_name" = '${Model.getMapped()}' AND "constraint_name" = '${Model.getMapped().toUpperCase()}_UNIQUE_INDEX'
             ]]></Script>
         </Step>
         <Step Name="create table ${Model.getMapped()}'s unique index" RunOnValue="0">

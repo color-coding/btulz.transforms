@@ -21,6 +21,16 @@ $$设置为隔离动作（Isolated = true），此动作独立数据库事务，
     </Action>
 $BEGIN_MODEL$
     <Action Name="create table">
+        <Step Name="check table ${Model.getMapped()} status">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = '${DbName}' AND `TABLE_NAME` = '${Model.getMapped()}' AND `TABLE_TYPE` = 'VIEW'
+            ]]></Script>
+        </Step>
+        <Step Name="break action, table is view" RunOnValue="1">
+            <Script><![CDATA[
+                THROW BREAK EXCEPTION;
+            ]]></Script>
+        </Step>
         <Step Name="check and create table ${Model.getMapped()}">
             <Script><![CDATA[
                 CREATE TABLE IF NOT EXISTS `${DbName}`.`${Model.getMapped()}`(
@@ -61,6 +71,16 @@ $END_MODEL_HAS_PRIMARY$
     </Action>
 $BEGIN_MODEL_HAS_UNIQUE$
     <Action Name="create table unique index">
+        <Step Name="check table ${Model.getMapped()} exists">
+            <Script><![CDATA[
+                SELECT COUNT(0) FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = '${DbName}' AND `TABLE_NAME` = '${Model.getMapped()}' AND `TABLE_TYPE` = 'BASE TABLE'
+            ]]></Script>
+        </Step>
+        <Step Name="break action, table is not exists" RunOnValue="0">
+            <Script><![CDATA[
+                THROW BREAK EXCEPTION;
+            ]]></Script>
+        </Step>
         <Step Name="check table ${Model.getMapped()}'s unique index exists">
             <Script><![CDATA[
                 SELECT COUNT(DISTINCT 'INDEX_NAME') FROM `information_schema`.`statistics` WHERE `TABLE_SCHEMA` = '${DbName}' AND `TABLE_NAME` = '${Model.getMapped()}' AND `INDEX_NAME` = '${Model.getMapped().toUpperCase()}_UNIQUE_INDEX'
