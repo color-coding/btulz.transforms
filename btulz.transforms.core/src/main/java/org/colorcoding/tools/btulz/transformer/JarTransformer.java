@@ -57,6 +57,7 @@ public class JarTransformer extends DbTransformer {
 		dsTransformer.setDbName(this.getDbName());
 		dsTransformer.setDbUser(this.getDbUser());
 		dsTransformer.setDbPassword(this.getDbPassword());
+		dsTransformer.setInterruptOnError(this.isInterruptOnError());
 		dsTransformer.transform();
 		// 执行初始化语句
 		SqlTransformer4Jar sqlTransformer = new SqlTransformer4Jar();
@@ -69,6 +70,7 @@ public class JarTransformer extends DbTransformer {
 		sqlTransformer.setDbName(this.getDbName());
 		sqlTransformer.setDbUser(this.getDbUser());
 		sqlTransformer.setDbPassword(this.getDbPassword());
+		sqlTransformer.setInterruptOnError(this.isInterruptOnError());
 		sqlTransformer.transform();
 	}
 }

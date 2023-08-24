@@ -1,5 +1,6 @@
 package org.colorcoding.tools.btulz.transformer;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -155,6 +156,7 @@ public class DsTransformer extends DbTransformer {
 		if (this.getTemplateFile() == null || this.getTemplateFile().isEmpty()) {
 			throw new Exception("no template file specified.");
 		}
+		this.clearResults();
 		long startTime = System.currentTimeMillis();
 		Environment.getLogger().info(String.format("begin transform data structures."));
 		for (IDomain domain : this.getDomains()) {
@@ -177,14 +179,39 @@ public class DsTransformer extends DbTransformer {
 				template.setEncoding("utf-8");
 				template.parse(inputStream);
 			}
-
-			template.export(this.getRuntimeParameters(), dsFile);
-			// 调用基类的结构编排调用
-			super.execute(dsFile);
+			try {
+				// 输出编排内容
+				template.export(this.getRuntimeParameters(), dsFile);
+				// 编排调用
+				super.execute(dsFile);
+			} catch (Exception e) {
+				if (this.isInterruptOnError()) {
+					// 中断错误
+					throw e;
+				} else {
+					// 不中断错误，记录结果
+					this.logError(e);
+					try (ByteArrayOutputStream stream = new java.io.ByteArrayOutputStream()) {
+						e.printStackTrace(new java.io.PrintWriter(stream, true));
+						Environment.getLogger().error(stream.toString());
+					}
+				}
+			}
 		}
 		long endTime = System.currentTimeMillis();
 		float excTime = (float) (endTime - startTime) / 1000;
-		Environment.getLogger().info(String.format("end transform data structures, used %s second.", excTime));
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(String.format("end transform data structures, used %s second.", excTime));
+		if (!this.isInterruptOnError() && this.getErrors().length > 0) {
+			// 非错误中断，则输出所有错误信息
+			stringBuilder.append(String.format(" occurred %s errors: ", this.getErrors().length));
+			for (Exception exception : this.getErrors()) {
+				stringBuilder.append(Environment.NEW_LINE);
+				stringBuilder.append("  ");
+				stringBuilder.append(exception.getMessage());
+			}
+		}
+		Environment.getLogger().info(stringBuilder.toString());
 	}
 
 }

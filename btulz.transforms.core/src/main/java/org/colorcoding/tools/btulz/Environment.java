@@ -21,6 +21,10 @@ import org.apache.log4j.PropertyConfigurator;
 public class Environment {
 
 	/**
+	 * 新行标记
+	 */
+	public static final String NEW_LINE = System.getProperty("line.separator", "\r\n");
+	/**
 	 * 命名空间-工具
 	 */
 	public static final String NAMESPACE_BTULZ_UTIL = "http://colorcoding.org/btulz/util";
@@ -130,8 +134,7 @@ public class Environment {
 	/**
 	 * 获取资源地址
 	 * 
-	 * @param type
-	 *            资源名称
+	 * @param type 资源名称
 	 * @return 统一格式（此对象避免路径的中文问题）
 	 * @throws URISyntaxException
 	 */
@@ -146,8 +149,7 @@ public class Environment {
 	/**
 	 * 判断文件的编码格式
 	 * 
-	 * @param fileName
-	 *            文件路径
+	 * @param fileName 文件路径
 	 * @return 文件编码格式
 	 * @throws Exception
 	 */

@@ -17,7 +17,7 @@ public class CommandsManager {
 	/**
 	 * 新行字符
 	 */
-	public static final String NEW_LINE = System.getProperty("line.separator", "\r\n");
+	public static final String NEW_LINE = Environment.NEW_LINE;
 
 	private HashMap<String, Class<? extends Command<?>>> commands;
 
@@ -65,10 +65,8 @@ public class CommandsManager {
 	/**
 	 * 打印消息
 	 * 
-	 * @param message
-	 *            消息模板
-	 * @param args
-	 *            参数
+	 * @param message 消息模板
+	 * @param args    参数
 	 */
 	protected void print(String message, Object... args) {
 		System.out.println("[btulz]: " + String.format(message, args));

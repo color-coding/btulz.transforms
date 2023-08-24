@@ -59,8 +59,6 @@ public class Command4Routing extends Command<Command4Routing> {
 		stringBuilder.append("-viewUrl=.../${ModuleName}/");
 		stringBuilder.append(" ");
 		stringBuilder.append("-out=service_routing.xml");
-		stringBuilder.append(" ");
-		stringBuilder.append("-ignore");
 		super.moreHelps(stringBuilder);
 	}
 
@@ -88,8 +86,6 @@ public class Command4Routing extends Command<Command4Routing> {
 					transformer.setViewUrl(argument.getValue());
 				} else if (argument.getName().equalsIgnoreCase("-out")) {
 					transformer.setOutFile(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-ignore")) {
-					transformer.setInterruptOnError(!true);
 				}
 			}
 			if (transformer.getQuery() == null || transformer.getQuery().isEmpty()) {

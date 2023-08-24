@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.template.Parameter;
 
 /**
@@ -41,7 +42,7 @@ public abstract class Command<C> {
 	/**
 	 * 新行字符
 	 */
-	public static final String NEW_LINE = System.getProperty("line.separator", "\r\n");
+	public static final String NEW_LINE = Environment.NEW_LINE;
 
 	private String name;
 
