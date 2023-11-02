@@ -475,7 +475,8 @@ public class CodeTransformer extends Transformer {
 				if (!businessObjectItem.getMappedModel().equals(model.getName())) {
 					continue;
 				}
-				parameters.add(ParametersFactory.create().createParameter(model));
+				parameters.add(ParametersFactory.create().createParameter(model,
+						parameters.get(ParametersFactory.PARAMETER_NAME_OUTPUT_MAPPING)));
 				RegionDomain template = new RegionDomain();
 				template.setTemplateFile(source.getPath());
 				template.export(parameters,
@@ -497,7 +498,8 @@ public class CodeTransformer extends Transformer {
 		for (IModel model : domain.getModels()) {
 			if (businessObject.getMappedModel().equals(model.getName())) {
 				Parameters usingParameters = new Parameters(parameters);
-				usingParameters.add(ParametersFactory.create().createParameter(model));
+				usingParameters.add(ParametersFactory.create().createParameter(model,
+						parameters.get(ParametersFactory.PARAMETER_NAME_OUTPUT_MAPPING)));
 				RegionDomain template = new RegionDomain();
 				template.setTemplateFile(source.getPath());
 				template.export(usingParameters, this.getFilePath(output,
@@ -519,7 +521,7 @@ public class CodeTransformer extends Transformer {
 	 * @return
 	 */
 	protected Parameter loadParameters(File source) {
-		if (source.getName().equals("~parameter_property_output.xml")) {
+		if (source.getName().equals("~parameter_entity_output.xml")) {
 			// 属性类型的输出说明
 			try {
 				return ParametersFactory.create().createParameter(ParametersFactory.PARAMETER_NAME_OUTPUT_MAPPING,

@@ -36,35 +36,52 @@ public class ParametersFactory {
 		return new Parameter(name, value);
 	}
 
-	public Parameter createParameter(IDomain entity) {
-		return this.createParameter(RegionDomain.REGION_PARAMETER_NAME, new Domain(entity));
+	public Parameter createParameter(IDomain entity, Parameter... parameters) {
+		Domain domain = new Domain(entity);
+		if (parameters != null) {
+			for (Parameter item : parameters) {
+				domain.addOutputMappings(item);
+			}
+		}
+		return this.createParameter(RegionDomain.REGION_PARAMETER_NAME, domain);
 	}
 
-	public Parameter createParameter(IBusinessObject entity) {
-		return this.createParameter(RegionBusinessObject.REGION_PARAMETER_NAME, new BusinessObject(entity));
+	public Parameter createParameter(IBusinessObject entity, Parameter... parameters) {
+		BusinessObject businessObject = new BusinessObject(entity);
+		if (parameters != null) {
+			for (Parameter item : parameters) {
+				businessObject.addOutputMappings(item);
+			}
+		}
+		return this.createParameter(RegionBusinessObject.REGION_PARAMETER_NAME, businessObject);
 	}
 
-	public Parameter createParameter(IBusinessObjectItem entity) {
-		return this.createParameter(RegionBusinessObjectItem.REGION_PARAMETER_NAME, entity);
-	}
-
-	public Parameter createParameter(String name, IBusinessObjectItem entity) {
-		return this.createParameter(name, (Object) new BusinessObjectItem(entity));
-	}
-
-	public Parameter createParameter(IBusinessObjectItem entity, IBusinessObject parent, int index) {
+	public Parameter createParameter(IBusinessObjectItem entity, IBusinessObject parent, int index,
+			Parameter... parameters) {
 		BusinessObjectItem boItem = new BusinessObjectItem(entity);
 		boItem.setParent(parent);
 		boItem.setIndex(index);
 		return this.createParameter(RegionBusinessObjectItem.REGION_PARAMETER_NAME, (Object) boItem);
 	}
 
-	public Parameter createParameter(IModel entity) {
-		return this.createParameter(RegionModel.REGION_PARAMETER_NAME, new Model(entity));
+	public Parameter createParameter(IModel entity, Parameter... parameters) {
+		Model model = new Model(entity);
+		if (parameters != null) {
+			for (Parameter item : parameters) {
+				model.addOutputMappings(item);
+			}
+		}
+		return this.createParameter(RegionModel.REGION_PARAMETER_NAME, model);
 	}
 
-	public Parameter createParameter(IProperty entity) {
-		return this.createParameter(RegionProperty.REGION_PARAMETER_NAME, new Property(entity));
+	public Parameter createParameter(IProperty entity, Parameter... parameters) {
+		Property property = new Property(entity);
+		if (parameters != null) {
+			for (Parameter item : parameters) {
+				property.addOutputMappings(item);
+			}
+		}
+		return this.createParameter(RegionProperty.REGION_PARAMETER_NAME, property);
 	}
 
 }

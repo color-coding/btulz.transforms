@@ -2,6 +2,37 @@
 <!DOCTYPE ArrayList>
 <!-- 业务对象 -->
 <ns3:ArrayList xmlns:ns2="http://colorcoding.org/btulz/util" xmlns:ns3="http://colorcoding.org/btulz/transformers">
+	<!-- 基类类型说明 -->
+	<OutputMapping Name="bo.class" Binding="Model" Unmatched="EXCEPTION">
+		<OutputItem>
+			<Content>BOMasterData</Content>
+			<Condition Property="ModelType" Value="MasterData" />
+		</OutputItem>
+		<OutputItem>
+			<Content>BOMasterDataLine</Content>
+			<Condition Property="ModelType" Value="MasterDataLine" />
+		</OutputItem>
+		<OutputItem>
+			<Content>BODocument</Content>
+			<Condition Property="ModelType" Value="Document" />
+		</OutputItem>
+		<OutputItem>
+			<Content>BODocumentLine</Content>
+			<Condition Property="ModelType" Value="DocumentLine" />
+		</OutputItem>
+		<OutputItem>
+			<Content>BOSimple</Content>
+			<Condition Property="ModelType" Value="Simple" />
+		</OutputItem>
+		<OutputItem>
+			<Content>BOSimpleLine</Content>
+			<Condition Property="ModelType" Value="SimpleLine" />
+		</OutputItem>
+		<OutputItem>
+			<Content>BusinessObject</Content>
+			<Condition Property="ModelType" Value="Unspecified" />
+		</OutputItem>
+	</OutputMapping>
 	<!-- 数据类型说明 -->
 	<OutputMapping Name="bo.type" Binding="Property" Unmatched="EXCEPTION">
 		<OutputItem>
@@ -15,6 +46,16 @@
 		<OutputItem>
 			<Content>String</Content>
 			<Condition Property="DataType" Value="Memo" />
+		</OutputItem>
+		<OutputItem>
+			<Content>Long</Content>
+			<Condition Property="DataType" Value="Numeric" />
+			<Condition Property="DataSubType" Value="Long" />
+		</OutputItem>
+		<OutputItem>
+			<Content>Short</Content>
+			<Condition Property="DataType" Value="Numeric" />
+			<Condition Property="DataSubType" Value="Short" />
 		</OutputItem>
 		<OutputItem>
 			<Content>Integer</Content>

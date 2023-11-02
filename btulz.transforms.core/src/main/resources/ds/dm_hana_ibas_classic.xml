@@ -14,6 +14,16 @@
 			<Condition Property="DataType" Value="Memo" />
 		</OutputItem>
 		<OutputItem>
+			<Content>BIGINT</Content>
+			<Condition Property="DataType" Value="Numeric" />
+			<Condition Property="DataSubType" Value="Long" />
+		</OutputItem>
+		<OutputItem>
+			<Content>SMALLINT</Content>
+			<Condition Property="DataType" Value="Numeric" />
+			<Condition Property="DataSubType" Value="Short" />
+		</OutputItem>
+		<OutputItem>
 			<Content>INTEGER</Content>
 			<Condition Property="DataType" Value="Numeric" />
 		</OutputItem>

@@ -9,7 +9,7 @@ namespace ${Domain.getName().toLowerCase()} {
     export namespace bo {
 $BEGIN_BO_MODEL$
         /** ${Model.getDescription()} */
-        export interface I${Model.getName()} extends ibas.IBO${Model.getModelType()} {
+        export interface I${Model.getName()} extends ibas.I${Model.output(ts.class)} {
 $BEGIN_MODEL_PROPERTY$
             /** ${Property.getDescription()} */
             ${Property.getName(LowerCamelCase)}: ${Property.output(ts.type)};

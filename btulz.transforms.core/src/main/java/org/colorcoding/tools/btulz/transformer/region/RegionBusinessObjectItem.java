@@ -44,7 +44,7 @@ public class RegionBusinessObjectItem extends RegionBase {
 				public Parameter next() {
 					curIndex++;
 					return ParametersFactory.create().createParameter(businessObject.getRelatedBOs().get(curIndex - 1),
-							businessObject, curIndex);
+							businessObject, curIndex, parameters.get(ParametersFactory.PARAMETER_NAME_OUTPUT_MAPPING));
 				}
 			};
 		}

@@ -68,5 +68,13 @@ public enum emDataSubType {
 	 * 邮箱
 	 */
 	Email,
+	/**
+	 * 短整数
+	 */
+	Short,
 
+	/**
+	 * 长整数
+	 */
+	Long,
 }

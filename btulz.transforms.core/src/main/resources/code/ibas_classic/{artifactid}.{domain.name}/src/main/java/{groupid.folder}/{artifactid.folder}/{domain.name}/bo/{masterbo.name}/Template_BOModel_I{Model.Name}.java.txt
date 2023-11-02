@@ -9,7 +9,7 @@ import org.colorcoding.ibas.bobas.data.*;
 * ${Model.getDescription()} 接口
 * 
 */
-public interface I${Model.getName()} extends IBO${Model.getModelType()} {
+public interface I${Model.getName()} extends I${Model.output(bo.class)} {
 
 $BEGIN_MODEL_PROPERTY$
     /**

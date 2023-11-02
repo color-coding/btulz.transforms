@@ -9,7 +9,7 @@ namespace ${Domain.getName().toLowerCase()} {
     export namespace bo {
 $BEGIN_BO_MODEL$
         /** ${Model.getDescription()} */
-        export class ${Model.getName()} extends ibas.BO${Model.getModelType()}<${Model.getName()}> implements I${Model.getName()} {
+        export class ${Model.getName()} extends ibas.${Model.output(ts.class)}<${Model.getName()}> implements I${Model.getName()} {
             /** 业务对象编码 */
             static BUSINESS_OBJECT_CODE: string = BO_CODE_${BO.getName().toUpperCase()};
             /** 构造函数 */

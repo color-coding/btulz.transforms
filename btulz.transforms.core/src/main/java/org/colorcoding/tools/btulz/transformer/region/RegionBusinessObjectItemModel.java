@@ -59,7 +59,8 @@ public class RegionBusinessObjectItemModel extends RegionBase {
 					@Override
 					public Parameter next() {
 						curIndex++;
-						return ParametersFactory.create().createParameter(boModels.get(curIndex - 1));
+						return ParametersFactory.create().createParameter(boModels.get(curIndex - 1),
+								parameters.get(ParametersFactory.PARAMETER_NAME_OUTPUT_MAPPING));
 					}
 				};
 			}
