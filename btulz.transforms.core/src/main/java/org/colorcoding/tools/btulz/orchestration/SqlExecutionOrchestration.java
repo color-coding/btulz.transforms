@@ -113,7 +113,6 @@ public class SqlExecutionOrchestration extends ExecutionOrchestration implements
 		return connection;
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	public void execute() throws Exception {
 		long startTime = System.currentTimeMillis();

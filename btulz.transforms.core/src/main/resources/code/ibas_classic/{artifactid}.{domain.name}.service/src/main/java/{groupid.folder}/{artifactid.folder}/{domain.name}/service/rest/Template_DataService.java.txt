@@ -8,6 +8,7 @@ import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.repository.*;
 $BEGIN_BO$
 import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${BO.getName().toLowerCase()}.*;
 $END_BO$
+import org.colorcoding.ibas.${Domain.getName().toLowerCase()}.MyConfiguration;
 
 /**
 * ${Domain.getName()} 数据服务JSON
@@ -27,8 +28,9 @@ $BEGIN_BO$
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("fetch${BO.getName()}")
-    public OperationResult<${BO.getName()}> fetch${BO.getName()}(Criteria criteria, @QueryParam("token") String token) {
-        return super.fetch${BO.getName()}(criteria, token);
+    public OperationResult<${BO.getName()}> fetch${BO.getName()}(Criteria criteria,
+			@HeaderParam("authorization") String authorization, @QueryParam("token") String token) {
+        return super.fetch${BO.getName()}(criteria, MyConfiguration.optToken(authorization, token));
     }
 
     /**
@@ -41,8 +43,9 @@ $BEGIN_BO$
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("save${BO.getName()}")
-    public OperationResult<${BO.getName()}> save${BO.getName()}(${BO.getName()} bo, @QueryParam("token") String token) {
-        return super.save${BO.getName()}(bo, token);
+    public OperationResult<${BO.getName()}> save${BO.getName()}(${BO.getName()} bo,
+			@HeaderParam("authorization") String authorization, @QueryParam("token") String token) {
+        return super.save${BO.getName()}(bo, MyConfiguration.optToken(authorization, token));
     }
 
     //--------------------------------------------------------------------------------------------//

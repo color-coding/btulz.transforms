@@ -92,7 +92,7 @@ $BEGIN_MODEL_HAS_UNIQUE$
         </Step>
         <Step Name="check table ${Model.getMapped()}'s unique index exists">
             <Script><![CDATA[
-                SELECT COUNT(0) FROM "information_schema"."table_constraints" WHERE "table_catalog" = '${DbName}' AND "table_name" = '${Model.getMapped()}' AND "constraint_name" = '${Model.getMapped().toUpperCase()}_UNIQUE_INDEX'
+                SELECT COUNT(0) FROM "pg_indexes" WHERE "tablename" = '${Model.getMapped()}' AND "indexname" = '${Model.getMapped().toUpperCase()}_UNIQUE_INDEX'
             ]]></Script>
         </Step>
         <Step Name="create table ${Model.getMapped()}'s unique index" RunOnValue="0">
