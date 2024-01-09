@@ -54,22 +54,12 @@ public class TemplateGetter implements ValidValuesGetter {
 						values.add(new ValidValue(item, item + "@folder"));
 					}
 				} else if (file.isFile() && file.getName().toLowerCase().endsWith(".jar")) {
-					JarFile jarFile = null;
-					try {
-						jarFile = new JarFile(file);
+					try (JarFile jarFile = new JarFile(file)) {
 						for (String item : this.getMatchingValues(jarFile, template)) {
 							values.add(new ValidValue(item, item + "@jar"));
 						}
 					} catch (IOException e) {
 						e.printStackTrace();
-					} finally {
-						try {
-							if (jarFile != null) {
-								jarFile.close();
-							}
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
 					}
 				}
 			}
@@ -108,13 +98,16 @@ public class TemplateGetter implements ValidValuesGetter {
 	/**
 	 * 获取有效值
 	 * 
-	 * @param file
-	 *            文件实体
+	 * @param file 文件实体
 	 * @return null表示不存在
 	 */
 	private List<String> getMatchingValues(File file, String template) {
 		List<String> values = new ArrayList<>();
 		for (File item : file.listFiles()) {
+			if (item.getName().startsWith(".")) {
+				// 跳过隐藏目录
+				continue;
+			}
 			if (!item.isDirectory()) {
 				continue;
 			}
@@ -122,7 +115,11 @@ public class TemplateGetter implements ValidValuesGetter {
 				continue;
 			}
 			for (File subItem : item.listFiles()) {
-				if (!item.isDirectory()) {
+				if (subItem.getName().startsWith(".")) {
+					// 跳过隐藏目录
+					continue;
+				}
+				if (!subItem.isDirectory()) {
 					continue;
 				}
 				values.add(subItem.getName());

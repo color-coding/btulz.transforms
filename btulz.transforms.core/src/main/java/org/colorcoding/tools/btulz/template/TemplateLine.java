@@ -39,9 +39,17 @@ public class TemplateLine implements ITemplateData {
 	@Override
 	public void export(Parameters parameters, BufferedWriter writer) throws Exception {
 		String outLine = this.getLine();
-		boolean loop = false;
+		if (outLine == null) {
+			return;
+		}
+		boolean loop, hasErr;
 		do {
+			loop = false;
+			hasErr = false;
 			Variable[] variables = Variable.discerning(outLine);
+			if (variables.length <= 0) {
+				hasErr = true;
+			}
 			for (Variable variable : variables) {
 				if (variable == null || variable.getName() == null) {
 					continue;
@@ -56,33 +64,34 @@ public class TemplateLine implements ITemplateData {
 							if (value != null) {
 								variable.setValue(value);
 								outLine = outLine.replace(variable.getOriginal(), variable.getValue());
+							} else {
+								hasErr = true;
+								Environment.getLogger().warn(String
+										.format("template: not found parameter [%s]'s value.", variable.getName()));
 							}
 						} catch (InvocationTargetException e) {
+							hasErr = true;
 							Environment.getLogger().error(String.format("template: replace [%s]'value, error %s",
 									variable.getOriginal(), e.getTargetException()));
 						} catch (Exception e) {
+							hasErr = true;
 							Environment.getLogger().error(
 									String.format("template: replace [%s]'value, error %s", variable.getOriginal(), e));
 						}
 					} else {
+						hasErr = true;
 						Environment.getLogger().warn(
 								String.format("template: not found variable [%s]'s parameter.", variable.getName()));
 					}
 				}
 			}
-			if (!loop) {
-				if (outLine != null && outLine.indexOf("${") > 0) {
-					// 输出字符存在变量时，重复一次运算
-					loop = true;
-				}
-			} else {
-				loop = false;
+			// 输出字符存在变量时，重复运算
+			if (!hasErr && outLine.indexOf("${") > 0) {
+				loop = true;
 			}
 		} while (loop);
-		if (outLine != null) {
-			writer.write(outLine);
-			writer.newLine();
-		}
+		writer.write(outLine);
+		writer.newLine();
 	}
 
 }
