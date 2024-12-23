@@ -114,6 +114,11 @@ public class DataTransformer extends Transformer {
 			Thread.currentThread().setContextClassLoader(this.getClassLoader());
 			// 读取配置文件
 			MyConfiguration.create(this.getConfigFile());
+			// 跳过审批（可能表未创建）
+			MyConfiguration.addConfigValue(MyConfiguration.CONFIG_ITEM_APPROVAL_WAY, "");
+			MyConfiguration.addConfigValue(MyConfiguration.CONFIG_ITEM_OWNERSHIP_WAY, "");
+			MyConfiguration.addConfigValue(MyConfiguration.CONFIG_ITEM_ORGANIZATION_WAY, "");
+			MyConfiguration.addConfigValue(MyConfiguration.CONFIG_ITEM_CONFIGURATION_WAY, "");
 			// 获取业务对象
 			File file = new File(this.getDataFile());
 			if (!file.exists()) {

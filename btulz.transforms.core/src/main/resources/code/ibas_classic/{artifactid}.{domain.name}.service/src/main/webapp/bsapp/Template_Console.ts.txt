@@ -43,7 +43,7 @@ $END_BO$
             /** 运行 */
             run(): void {
                 // 加载语言-框架默认
-                ibas.i18n.load([
+                this.loadResources([
                     this.rootUrl + "resources/languages/${Domain.getName().toLowerCase()}.json",
                     this.rootUrl + "resources/languages/bos.json"
                 ], () => {

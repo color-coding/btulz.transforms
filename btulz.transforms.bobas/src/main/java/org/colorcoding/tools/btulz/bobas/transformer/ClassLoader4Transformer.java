@@ -89,22 +89,22 @@ public class ClassLoader4Transformer extends URLClassLoader {
 									URL url = this.urlIterator.next();
 									File file = new File(java.net.URLDecoder.decode(url.getPath(), "UTF-8"));
 									if (file.getName().endsWith(".jar")) {
-										JarFile jarFile = new JarFile(file);
-										Enumeration<JarEntry> jarEntries = jarFile.entries();
-										if (jarEntries != null) {
-											while (jarEntries.hasMoreElements()) {
-												JarEntry jarEntry = (JarEntry) jarEntries.nextElement();
-												if (jarEntry.isDirectory()) {
-													continue;
-												}
-												if (jarEntry.getName().toLowerCase().endsWith(".class")) {
-													String name = jarEntry.getName().replace("/", ".");
-													name = name.replace(".class", "");
-													classNames.add(name);
+										try (JarFile jarFile = new JarFile(file)) {
+											Enumeration<JarEntry> jarEntries = jarFile.entries();
+											if (jarEntries != null) {
+												while (jarEntries.hasMoreElements()) {
+													JarEntry jarEntry = (JarEntry) jarEntries.nextElement();
+													if (jarEntry.isDirectory()) {
+														continue;
+													}
+													if (jarEntry.getName().toLowerCase().endsWith(".class")) {
+														String name = jarEntry.getName().replace("/", ".");
+														name = name.replace(".class", "");
+														classNames.add(name);
+													}
 												}
 											}
 										}
-										jarFile.close();
 									}
 									this.classNameIterator = classNames.iterator();
 									return this.next();
@@ -123,15 +123,14 @@ public class ClassLoader4Transformer extends URLClassLoader {
 
 	protected Class<?> defineClass(String name, InputStream inputStream)
 			throws IOException, ClassFormatError, NoClassDefFoundError, ClassNotFoundException {
-		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-		int data = inputStream.read();
-		while (data != -1) {
-			buffer.write(data);
-			data = inputStream.read();
+		try (ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+			int data = inputStream.read();
+			while (data != -1) {
+				buffer.write(data);
+				data = inputStream.read();
+			}
+			return this.defineClass(name, buffer.toByteArray(), 0, buffer.size());
 		}
-		byte[] bytes = buffer.toByteArray();
-		inputStream.close();
-		return this.defineClass(name, bytes, 0, bytes.length);
 	}
 
 	@Override
