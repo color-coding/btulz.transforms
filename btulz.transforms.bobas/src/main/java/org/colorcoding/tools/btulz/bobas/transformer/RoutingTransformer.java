@@ -178,9 +178,12 @@ public class RoutingTransformer extends Transformer {
 		transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		PrintWriter pw = new PrintWriter(new FileOutputStream(this.getOutFile()));
-		StreamResult result = new StreamResult(pw);
-		transformer.transform(source, result);
+
+		try (PrintWriter writer = new PrintWriter(new FileOutputStream(this.getOutFile()))) {
+			StreamResult result = new StreamResult(writer);
+			transformer.transform(source, result);
+			writer.flush();
+		}
 
 		Environment.getLogger().info(String.format("out file [%s].", this.getOutFile()));
 	}

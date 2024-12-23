@@ -30,6 +30,6 @@ public class Console {
 	}
 
 	public static void main(String[] args) {
-		getCommandsManager().run(args);
+		System.exit(getCommandsManager().run(args));
 	}
 }

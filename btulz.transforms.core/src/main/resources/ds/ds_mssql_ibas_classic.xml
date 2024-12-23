@@ -204,7 +204,7 @@ $BEGIN_BOITEM_RELATION_IS_ONETOMANY$
         </Step>
 $END_BOITEM_RELATION_IS_ONETOMANY$
 $BEGIN_BOITEM_RELATION_IS_ONETOONE$
-        <Step Name="check business object ${BOItem.getName()}s.${BOItem.getName()}'s informations exists"">
+        <Step Name="check business object ${BOItem.getName()}s.${BOItem.getName()}'s informations exists">
             <Script><![CDATA[
                 SELECT COUNT(0) FROM "${DbName}"."${DbSchema}"."${Company}_SYS_BOI1" WHERE "Code" = N'${BOItem.getParent().getShortName()}' AND "Property" = N'${BOItem.getName()}'
             ]]></Script>
