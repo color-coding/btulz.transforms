@@ -2,10 +2,13 @@ package org.colorcoding.tools.btulz.bobas.transformer;
 
 import org.colorcoding.ibas.bobas.bo.IBusinessObject;
 import org.colorcoding.ibas.bobas.common.ICriteria;
+import org.colorcoding.ibas.bobas.common.IOperationResult;
 import org.colorcoding.ibas.bobas.common.OperationResult;
-import org.colorcoding.ibas.bobas.core.RepositoryException;
-import org.colorcoding.ibas.bobas.organization.OrganizationFactory;
-import org.colorcoding.ibas.bobas.repository.BORepositoryLogicService;
+import org.colorcoding.ibas.bobas.data.IDataTable;
+import org.colorcoding.ibas.bobas.db.DbTransaction;
+import org.colorcoding.ibas.bobas.db.SqlStatement;
+import org.colorcoding.ibas.bobas.repository.BORepositoryService;
+import org.colorcoding.ibas.bobas.repository.RepositoryException;
 
 /**
  * 变形金刚专用业务仓库
@@ -15,48 +18,30 @@ import org.colorcoding.ibas.bobas.repository.BORepositoryLogicService;
  * @author Niuren.Zhu
  *
  */
-public class BORepository4Transformer extends BORepositoryLogicService implements IBORepository4Transformer {
+public class BORepository4Transformer extends BORepositoryService {
 
 	public BORepository4Transformer() {
-		this.setCheckApprovalProcess(false);// 不使用审批流程
-		// 使用系统用户
-		this.setCurrentUser(OrganizationFactory.SYSTEM_USER);
 	}
 
-	@Override
-	public boolean openRepository() throws RepositoryException {
-		return super.openRepository();
+	public <P extends IBusinessObject> IOperationResult<P> saveData(P bo) {
+		return super.save(bo);
 	}
 
-	@Override
-	public void closeRepository() throws RepositoryException {
-		super.closeRepository();
+	public <P extends IBusinessObject> IOperationResult<P> fetchData(ICriteria criteria, Class<P> boType) {
+		return super.fetch(boType, criteria);
 	}
 
-	@Override
-	public boolean beginTransaction() throws RepositoryException {
-		return super.beginTransaction();
-	}
-
-	@Override
-	public void rollbackTransaction() throws RepositoryException {
-		super.rollbackTransaction();
-	}
-
-	@Override
-	public void commitTransaction() throws RepositoryException {
-		super.commitTransaction();
-	}
-
-	@Override
-	public <P extends IBusinessObject> OperationResult<P> saveData(P bo) {
-		String token = this.getCurrentUser().getToken();
-		return super.save(bo, token);
-	}
-
-	@Override
-	public <P extends IBusinessObject> OperationResult<P> fetchData(ICriteria criteria, Class<P> boType) {
-		String token = this.getCurrentUser().getToken();
-		return super.fetch(criteria, token, boType);
+	public IOperationResult<IDataTable> queryData(String query) {
+		try {
+			if (this.getTransaction() instanceof DbTransaction) {
+				DbTransaction transaction = (DbTransaction) this.getTransaction();
+				SqlStatement sqlStatement = new SqlStatement(query);
+				return new OperationResult<IDataTable>().addResultObjects(transaction.fetch(sqlStatement));
+			} else {
+				throw new RepositoryException("the transaction not support.");
+			}
+		} catch (Exception e) {
+			return new OperationResult<>(e);
+		}
 	}
 }

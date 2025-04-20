@@ -25,12 +25,16 @@ set REPOSITORY_URL=%ROOT_URL%%REPOSITORY%
 set REPOSITORY_ID=ibas-maven
 
 echo --检查maven运行环境
-call mvn -v >nul || goto :CHECK_MAVEN_FAILD
+set MVN_BIN=mvn
+if "%MAVEN_HOME%" neq "" (
+  set MVN_BIN="%MAVEN_HOME%"\bin\mvn
+)
+call %MVN_BIN% -v >nul || goto :CHECK_MAVEN_FAILD
 
 echo --发布地址：%REPOSITORY_URL%
-REM 发布父项
+rem 发布父项
 if exist %WORK_FOLDER%\pom.xml (
-  call mvn deploy:deploy-file ^
+  call %MVN_BIN% deploy:deploy-file ^
     -Dfile=%WORK_FOLDER%\pom.xml ^
     -DpomFile=%WORK_FOLDER%\pom.xml ^
     -Durl=%REPOSITORY_URL% ^
@@ -41,12 +45,23 @@ REM 发布子项
 for /f %%m in (%WORKFOLDER%compile_order.txt) do (
   if exist %WORK_FOLDER%%%m\pom.xml (
     for /f %%l in ('dir /s /a /b %WORK_FOLDER%release\%%m-*.jar' ) do (
-      call mvn deploy:deploy-file ^
-        -Dfile=%%l ^
-        -DpomFile=%WORK_FOLDER%%%m\pom.xml ^
-        -Durl=%REPOSITORY_URL% ^
-        -DrepositoryId=%REPOSITORY_ID% ^
-        -Dpackaging=jar
+        set NAME=%%l
+        if "!NAME:~-12!" equ "-sources.jar" (
+          call %MVN_BIN% deploy:deploy-file ^
+            -Dclassifier=sources ^
+            -Dfile=%%l ^
+            -DpomFile=%WORK_FOLDER%%%m\pom.xml ^
+            -Durl=%REPOSITORY_URL% ^
+            -DrepositoryId=%REPOSITORY_ID% ^
+            -Dpackaging=jar
+        ) else (
+          call %MVN_BIN% deploy:deploy-file ^
+            -Dfile=%%l ^
+            -DpomFile=%WORK_FOLDER%%%m\pom.xml ^
+            -Durl=%REPOSITORY_URL% ^
+            -DrepositoryId=%REPOSITORY_ID% ^
+            -Dpackaging=jar
+        )
     )
   )
 )
@@ -59,18 +74,7 @@ if exist %WORK_FOLDER%\release\btulz.transforms.tar (
     -DrepositoryId=%REPOSITORY_ID% ^
     -Dfile=%WORK_FOLDER%\release\btulz.transforms.tar ^
     -Dpackaging=tar ^
-    -Dversion=latest
-)
-REM 发布closure-compiler.jar
-if exist %WORK_FOLDER%\release\closure-compiler-latest.jar (
-  call mvn deploy:deploy-file ^
-    -DgroupId=org.colorcoding.tools ^
-    -DartifactId=closure-compiler ^
-    -Durl=%REPOSITORY_URL% ^
-    -DrepositoryId=%REPOSITORY_ID% ^
-    -Dfile=%WORK_FOLDER%\release\closure-compiler-latest.jar ^
-    -Dpackaging=jar ^
-    -Dversion=latest
+    -Dversion=latest-v2
 )
 echo --操作完成
 

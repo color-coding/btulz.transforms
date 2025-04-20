@@ -4,49 +4,53 @@ echo ***************************************************************************
 echo            compile_packages.bat
 echo                     by niuren.zhu
 echo                           2016.06.19
-echo  ËµÃ÷£º
-echo     1. °²×°apache-maven£¬ÏÂÔØµØÖ·http://maven.apache.org/download.cgi¡£
-echo     2. ½âÑ¹apache-maven£¬²¢ÉèÖÃÏµÍ³±äÁ¿MAVEN_HOMEÎª½âÑ¹µÄ³ÌÐòÄ¿Â¼¡£
-echo     3. Ìí¼ÓPATH±äÁ¿µ½%%MAVEN_HOME%%\bin£¬²¢¼ì²éJAVA_HOMEÅäÖÃÊÇ·ñÕýÈ·¡£
-echo     4. ÔËÐÐÌáÊ¾·ûÔËÐÐmvn -v ¼ì²é°²×°ÊÇ·ñ³É¹¦¡£
-echo     5. ´Ë½Å±¾»á±éÀúµ±Ç°Ä¿Â¼µÄ×ÓÄ¿Â¼£¬²éÕÒpom.xml²¢±àÒëjar°üµ½releaseÄ¿Â¼¡£
-echo     6. ¿ÉÔÚcompile_order.txtÎÄ¼þÖÐµ÷Õû±àÒëË³Ðò¡£
+echo  Ëµï¿½ï¿½ï¿½ï¿½
+echo     1. ï¿½ï¿½ï¿½ï¿½apache-mavenï¿½ï¿½ï¿½ï¿½Ö·http://maven.apache.org/download.cgiï¿½ï¿½
+echo     2. ï¿½ï¿½Ñ¹apache-mavenï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½MAVEN_HOMEÎªï¿½ï¿½Ñ¹ï¿½Ä³ï¿½ï¿½ï¿½Ä¿Â¼ï¿½ï¿½
+echo     3. ï¿½ï¿½ï¿½ï¿½PATHï¿½ï¿½ï¿½ï¿½ï¿½ï¿½%%MAVEN_HOME%%\binï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½JAVA_HOMEï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½È·ï¿½ï¿½
+echo     4. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mvn -v ï¿½ï¿½é°²×°ï¿½Ç·ï¿½É¹ï¿½ï¿½ï¿½
+echo     5. ï¿½Ë½Å±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°Ä¿Â¼ï¿½ï¿½ï¿½ï¿½Ä¿Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pom.xmlï¿½ï¿½ï¿½ï¿½ï¿½ï¿½jarï¿½ï¿½ï¿½ï¿½releaseÄ¿Â¼ï¿½ï¿½
+echo     6. ï¿½ï¿½ï¿½ï¿½compile_order.txtï¿½Ä¼ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½ï¿½
 echo ****************************************************************************
-REM ÉèÖÃ²ÎÊý±äÁ¿
-SET WORK_FOLDER=%~dp0
+rem ï¿½ï¿½ï¿½Ã²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+set WORK_FOLDER=%~dp0
 
-echo --µ±Ç°¹¤×÷µÄÄ¿Â¼ÊÇ[%WORK_FOLDER%]
-echo --¼ì²é±àÒëË³ÐòÎÄ¼þ[compile_order.txt]
+echo --ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿Â¼ï¿½ï¿½[%WORK_FOLDER%]
+echo --ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½Ä¼ï¿½[compile_order.txt]
 if not exist %WORK_FOLDER%compile_order.txt dir /a:d /b %WORK_FOLDER% >%WORK_FOLDER%compile_order.txt
+set MVN_BIN=mvn
+if "%MAVEN_HOME%" neq "" (
+  set MVN_BIN="%MAVEN_HOME%"\bin\mvn
+)
 
-echo --Çå³ýÏîÄ¿»º´æ
+echo --ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½
 if exist %WORK_FOLDER%release\ rd /s /q %WORK_FOLDER%release\ >nul
 if not exist %WORK_FOLDER%release md %WORK_FOLDER%release >nul
 if exist %WORK_FOLDER%pom.xml (
-  call "%MAVEN_HOME%\bin\mvn" -q clean install -f %WORK_FOLDER%pom.xml
+  call %MVN_BIN% -q clean install -f %WORK_FOLDER%pom.xml
 )
 
-echo --¿ªÊ¼±àÒë[compile_order.txt]ÄÚÈÝ
+echo --ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½[compile_order.txt]ï¿½ï¿½ï¿½ï¿½
 for /f %%m in (%WORK_FOLDER%compile_order.txt) do (
   if exist %WORK_FOLDER%%%m\pom.xml (
-    SET MY_PACKAGES_FOLDER=%%m
+    set MY_PACKAGES_FOLDER=%%m
     if !MY_PACKAGES_FOLDER:~-8!==.service (
-      REM ÍøÕ¾£¬±àÒëwar°ü
-      echo --¿ªÊ¼±àÒë[%%m]
-      call "%MAVEN_HOME%\bin\mvn" -q clean package -Dmaven.test.skip=true -f %WORK_FOLDER%%%m\pom.xml
+      rem ï¿½ï¿½Õ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½warï¿½ï¿½
+      echo --ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½[%%m]
+      call %MVN_BIN% -q clean package %MAVEN_PACKAGE_ARGUMENTS% -Dmaven.test.skip=true -f %WORK_FOLDER%%%m\pom.xml
       if exist %WORK_FOLDER%%%m\target\%%m*.war copy /y %WORK_FOLDER%%%m\target\%%m*.war %WORK_FOLDER%release >nul
     ) else (
-      REM ·ÇÍøÕ¾£¬±àÒëjar°ü²¢°²×°µ½±¾µØ
-      echo --¿ªÊ¼±àÒë[%%m]+°²×°
-      call "%MAVEN_HOME%\bin\mvn" -q clean package install -Dmaven.test.skip=true -f %WORK_FOLDER%%%m\pom.xml
+      rem ï¿½ï¿½ï¿½ï¿½Õ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½jarï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      echo --ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½[%%m]+ï¿½ï¿½×°
+      call %MVN_BIN% -q clean package install %MAVEN_PACKAGE_ARGUMENTS% -Dmaven.test.skip=true -f %WORK_FOLDER%%%m\pom.xml
       if exist %WORK_FOLDER%%%m\target\%%m*.jar copy /y %WORK_FOLDER%%%m\target\%%m*.jar %WORK_FOLDER%release >nul
     )
-    REM ¼ì²é²¢¸´ÖÆ±àÒë½á¹û
+    rem ï¿½ï¿½é²¢ï¿½ï¿½ï¿½Æ±ï¿½ï¿½ï¿½ï¿½ï¿½
     if exist %WORK_FOLDER%release\%%m*.* (
-      echo --±àÒë[%%m]³É¹¦
+      echo --ï¿½ï¿½ï¿½ï¿½[%%m]ï¿½É¹ï¿½
     ) else (
-      echo --±àÒë[%%m]Ê§°Ü
+      echo --ï¿½ï¿½ï¿½ï¿½[%%m]Ê§ï¿½ï¿½
     )
   )
 )
-echo --±àÒëÍê³É
+echo --ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½

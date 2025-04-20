@@ -4,7 +4,7 @@ import java.math.*;
 import javax.xml.bind.annotation.*;
 
 import org.colorcoding.ibas.bobas.core.*;
-import org.colorcoding.ibas.bobas.mapping.*;
+import org.colorcoding.ibas.bobas.db.*;
 import org.colorcoding.ibas.bobas.bo.*;
 import org.colorcoding.ibas.bobas.data.*;
 import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.MyConfiguration;
@@ -198,9 +198,9 @@ $END_BOITEM_RELATION_IS_ONETOONE$
 $END_BOITEM$
         this.setObjectCode(BUSINESS_OBJECT_CODE);
 $BEGIN_MODEL_MODELTYPE_IS_DOCUMENT$
-        this.setPostingDate(DateTime.getToday());
-        this.setDocumentDate(DateTime.getToday());
-        this.setDeliveryDate(DateTime.getToday());
+        this.setPostingDate(DateTimes.today());
+        this.setDocumentDate(DateTimes.today());
+        this.setDeliveryDate(DateTimes.today());
         this.setDocumentStatus(emDocumentStatus.RELEASED);
 $END_MODEL_MODELTYPE_IS_DOCUMENT$
 $BEGIN_MODEL_MODELTYPE_IS_MASTERDATA$

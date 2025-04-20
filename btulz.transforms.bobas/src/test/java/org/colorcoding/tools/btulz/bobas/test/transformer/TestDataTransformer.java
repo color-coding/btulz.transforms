@@ -7,7 +7,7 @@ import java.net.URL;
 import org.colorcoding.ibas.bobas.MyConfiguration;
 import org.colorcoding.ibas.bobas.common.Criteria;
 import org.colorcoding.ibas.bobas.common.ICriteria;
-import org.colorcoding.ibas.bobas.organization.IOrganizationManager;
+import org.colorcoding.ibas.bobas.organization.OrganizationManager;
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.bobas.transformer.ClassLoader4Transformer;
 import org.colorcoding.tools.btulz.bobas.transformer.DataTransformer;
@@ -24,9 +24,9 @@ public class TestDataTransformer extends TestCase {
 		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();
 		File classFolder = new File(String.format("%1$s%2$s%3$s%2$s%3$s%2$starget%2$sclasses", folder.getPath(),
 				File.separator, "ibas.initialfantasy"));
-		classFolder = new File(String.format("%1$s%2$s%3$s%2$srelease%2$sibas.initialfantasy-0.1.0.jar",
+		classFolder = new File(String.format("%1$s%2$s%3$s%2$srelease%2$sibas.initialfantasy-0.2.0.jar",
 				folder.getPath(), File.separator, "ibas.initialfantasy"));
-		File jarFile = new File(String.format("%1$s%2$s%3$s%2$srelease%2$sbobas.businessobjectscommon-0.1.2.jar",
+		File jarFile = new File(String.format("%1$s%2$s%3$s%2$srelease%2$sbobas.businessobjectscommon-0.2.0.jar",
 				folder.getPath(), File.separator, "ibas-framework"));
 		ClassLoader parentLoader = this.getClass().getClassLoader();
 		ClassLoader4Transformer loader = new ClassLoader4Transformer(
@@ -35,7 +35,8 @@ public class TestDataTransformer extends TestCase {
 		for (String className : loader.getClassNames()) {
 			// System.out.println(className);
 			Class<?> type = loader.findClass(className);
-			if (!type.getClassLoader().equals(loader)) {
+
+			if (type != null && !type.getClassLoader().equals(loader)) {
 				// 仅其他加载器加载类型
 				System.err.println(type.getName());
 			}
@@ -50,9 +51,9 @@ public class TestDataTransformer extends TestCase {
 		type = loader.findClass(Criteria.class.getName());
 		ICriteria criteria = (ICriteria) type.newInstance();
 		// 父加载器接口引用子加载器的类
-		type = loader.findClass(IOrganizationManager.class.getName());
-		type = loader.findClass("org.colorcoding.ibas.bobas.organization.fantasy.OrganizationManager");
-		IOrganizationManager manager = (IOrganizationManager) type.newInstance();
+		type = loader.findClass(OrganizationManager.class.getName());
+		type = loader.findClass("org.colorcoding.ibas.bobas.organization.initial.OrganizationManager");
+		OrganizationManager manager = (OrganizationManager) type.newInstance();
 		type = loader.findClass("org.colorcoding.ibas.initialfantasy.bo.organizations.OrganizationalStructure");
 		Object org = type.newInstance();
 		loader.close();
@@ -65,8 +66,8 @@ public class TestDataTransformer extends TestCase {
 		String ifFolder = folder.getPath() + File.separator + "ibas.initialfantasy";
 		String ibas = String.format("%1$s%2$s%3$s%2$srelease%2$s", folder.getPath(), File.separator, "ibas-framework");
 		String config = String.format("%s%2$sibas.initialfantasy%2$sapp.xml", ifFolder, File.separator);
-		String data = String.format("%s%2$srelease%2$sibas.initialfantasy-0.1.0.jar", ifFolder, File.separator);
-		String classes = String.format("%s%2$srelease%2$sibas.initialfantasy-0.1.0.jar", ifFolder, File.separator);
+		String data = String.format("%s%2$srelease%2$sibas.initialfantasy-0.2.0.jar", ifFolder, File.separator);
+		String classes = String.format("%s%2$srelease%2$sibas.initialfantasy-0.2.0.jar", ifFolder, File.separator);
 		DataTransformer transformer = new DataTransformer4Jar();
 		transformer.setConfigFile(config);
 		transformer.setDataFile(data);
