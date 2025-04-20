@@ -59,7 +59,7 @@ if exist %WORK_FOLDER%\release\btulz.transforms.tar (
     -DrepositoryId=%REPOSITORY_ID% ^
     -Dfile=%WORK_FOLDER%\release\btulz.transforms.tar ^
     -Dpackaging=tar ^
-    -Dversion=latest
+    -Dversion=latest-v2
 )
 REM ·¢²¼closure-compiler.jar
 if exist %WORK_FOLDER%\release\closure-compiler-latest.jar (
