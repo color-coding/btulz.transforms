@@ -6,7 +6,7 @@ $$适用于java平台下的ibas框架
     <Integrated>true</Integrated>
     <DriverName>com.microsoft.sqlserver.jdbc.SQLServerDriver</DriverName>
 $$因存在创建数据的可能，所以数据库连接默认库。
-    <DbUrl>jdbc:sqlserver://${DbServer}:${DbPort};DatabaseName=master;ApplicationName=${AppName}</DbUrl>
+    <DbUrl>jdbc:sqlserver://${DbServer}:${DbPort};DatabaseName=master;encrypt=false;ApplicationName=${AppName}</DbUrl>
     <DbUser>${DbUser}</DbUser>
     <DbPassword>${DbPassword}</DbPassword>
 $$"!"表示延迟解析变量，例如${!Property.getEditSize()}

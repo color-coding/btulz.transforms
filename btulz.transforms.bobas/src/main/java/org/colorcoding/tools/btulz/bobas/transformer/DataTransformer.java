@@ -14,15 +14,17 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.colorcoding.ibas.bobas.MyConfiguration;
+import org.colorcoding.ibas.bobas.bo.BOFactory;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBOStorageTag;
 import org.colorcoding.ibas.bobas.bo.IBusinessObject;
 import org.colorcoding.ibas.bobas.common.ICriteria;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
-import org.colorcoding.ibas.bobas.core.Daemon;
-import org.colorcoding.ibas.bobas.core.RepositoryException;
+import org.colorcoding.ibas.bobas.organization.OrganizationFactory;
+import org.colorcoding.ibas.bobas.repository.RepositoryException;
 import org.colorcoding.ibas.bobas.serialization.ISerializer;
-import org.colorcoding.ibas.bobas.serialization.SerializerFactory;
+import org.colorcoding.ibas.bobas.serialization.SerializationFactory;
+import org.colorcoding.ibas.bobas.task.Daemon;
 import org.colorcoding.tools.btulz.bobas.Environment;
 import org.colorcoding.tools.btulz.transformer.TransformException;
 import org.colorcoding.tools.btulz.transformer.Transformer;
@@ -97,8 +99,8 @@ public class DataTransformer extends Transformer {
 
 	public final ClassLoader4Transformer getClassLoader() {
 		if (this.classLoader == null) {
-			ClassLoader parentLoader = this.getClass().getClassLoader();
-			this.classLoader = new ClassLoader4Transformer(this.getLibrary().toArray(new URL[] {}), parentLoader);
+			this.classLoader = new ClassLoader4Transformer(this.getLibrary().toArray(new URL[] {}),
+					ClassLoader.getSystemClassLoader());
 		}
 		return classLoader;
 	}
@@ -109,11 +111,12 @@ public class DataTransformer extends Transformer {
 
 	@Override
 	public final void transform() throws Exception {
-		ClassLoader oldLoader = Thread.currentThread().getContextClassLoader();
 		try {
-			Thread.currentThread().setContextClassLoader(this.getClassLoader());
+			BOFactory.setClassLoader(this.getClassLoader());
 			// 读取配置文件
 			MyConfiguration.create(this.getConfigFile());
+			// 跳过审批（可能表未创建）
+			MyConfiguration.addConfigValue(MyConfiguration.CONFIG_ITEM_APPROVAL_WAY, "");
 			// 获取业务对象
 			File file = new File(this.getDataFile());
 			if (!file.exists()) {
@@ -129,9 +132,7 @@ public class DataTransformer extends Transformer {
 			// 保存数据
 			this.saveDatas(bos);
 		} finally {
-			if (oldLoader != null) {
-				Thread.currentThread().setContextClassLoader(oldLoader);
-			}
+			BOFactory.setClassLoader(null);
 			// 结束ibas线程
 			Daemon.destory();
 		}
@@ -159,7 +160,7 @@ public class DataTransformer extends Transformer {
 				}
 			}
 		} else if (file.isFile()) {
-			ISerializer<?> serializer = SerializerFactory.create().createManager().create("xml");
+			ISerializer serializer = SerializationFactory.createManager().create("xml");
 			String name = file.getName().toLowerCase();
 			if (name.startsWith("bo.") && name.endsWith(".xml")) {
 				String boName = this.getClassName(new FileInputStream(file));
@@ -285,63 +286,66 @@ public class DataTransformer extends Transformer {
 	 * @throws TransformException
 	 */
 	protected void saveDatas(List<IBusinessObject> datas) throws RepositoryException, TransformException {
-		IBORepository4Transformer boRepository = new BORepository4Transformer();
 		IOperationResult<?> opRslt = null;
-		try {
-			boRepository.beginTransaction();// 开启事务
-			for (IBusinessObject data : datas) {
-				// 标记数据
-				if (data instanceof IBOStorageTag) {
-					IBOStorageTag tag = (IBOStorageTag) data;
-					tag.setDataSource(Environment.SIGN_DATA_SOURCE);
-				}
-				// 处理已存在数据
-				ICriteria criteria = data.getCriteria();
-				if (criteria != null && !criteria.getConditions().isEmpty()) {
-					opRslt = boRepository.fetchData(criteria, data.getClass());
-					if (!opRslt.getResultObjects().isEmpty()) {
-						// 已存在数据
-						if (this.isForceSave()) {
-							// 强制保存，删除旧数据
-							for (Object item : opRslt.getResultObjects()) {
-								if (item instanceof IBusinessObject) {
-									IBusinessObject boItem = (IBusinessObject) item;
-									boItem.delete();
-									Environment.getLogger()
-											.info(String.format("delete exists data [%s].", boItem.toString()));
-									opRslt = boRepository.saveData(boItem);
-									if (opRslt.getResultCode() != 0) {
-										// 保存失败
+		try (BORepository4Transformer boRepository = new BORepository4Transformer()) {
+			boRepository.setUserToken(OrganizationFactory.SYSTEM_USER.getToken());
+			try {
+				boRepository.beginTransaction();// 开启事务
+				for (IBusinessObject data : datas) {
+					// 标记数据
+					if (data instanceof IBOStorageTag) {
+						IBOStorageTag tag = (IBOStorageTag) data;
+						tag.setDataSource(Environment.SIGN_DATA_SOURCE);
+					}
+					// 处理已存在数据
+					ICriteria criteria = data.getCriteria();
+					if (criteria != null && !criteria.getConditions().isEmpty()) {
+						opRslt = boRepository.fetchData(criteria, data.getClass());
+						if (!opRslt.getResultObjects().isEmpty()) {
+							// 已存在数据
+							if (this.isForceSave()) {
+								// 强制保存，删除旧数据
+								for (Object item : opRslt.getResultObjects()) {
+									if (item instanceof IBusinessObject) {
+										IBusinessObject boItem = (IBusinessObject) item;
+										boItem.delete();
 										Environment.getLogger()
-												.error(String.format("delete faild [%s].", opRslt.getMessage()));
-										if (this.isInterruptOnError()) {
-											throw new Exception(opRslt.getMessage());
+												.info(String.format("delete exists data [%s].", boItem.toString()));
+										opRslt = boRepository.saveData(boItem);
+										if (opRslt.getResultCode() != 0) {
+											// 保存失败
+											Environment.getLogger()
+													.error(String.format("delete faild [%s].", opRslt.getMessage()));
+											if (this.isInterruptOnError()) {
+												throw new Exception(opRslt.getMessage());
+											}
 										}
 									}
 								}
+							} else {
+								// 非强制保存，跳过
+								continue;
 							}
-						} else {
-							// 非强制保存，跳过
-							continue;
 						}
 					}
-				}
-				// 开始保存正数据
-				opRslt = boRepository.saveData(data);
-				if (opRslt.getResultCode() != 0) {
-					// 保存失败
-					Environment.getLogger().error(String.format("save faild [%s].", opRslt.getMessage()));
-					if (this.isInterruptOnError()) {
-						throw new Exception(opRslt.getMessage());
+					// 开始保存正数据
+					opRslt = boRepository.saveData(data);
+					if (opRslt.getResultCode() != 0) {
+						// 保存失败
+						Environment.getLogger().error(String.format("save faild [%s].", opRslt.getMessage()));
+						if (this.isInterruptOnError()) {
+							throw new Exception(opRslt.getMessage());
+						}
+					} else {
+						// 保存成功
+						Environment.getLogger().info(String.format("save successfully [%s].", data.toString()));
 					}
-				} else {
-					// 保存成功
-					Environment.getLogger().info(String.format("save successfully [%s].", data.toString()));
 				}
+				boRepository.commitTransaction();// 提交事务
+			} catch (Exception e) {
+				boRepository.rollbackTransaction();// 回滚事务
 			}
-			boRepository.commitTransaction();// 提交事务
 		} catch (Exception e) {
-			boRepository.rollbackTransaction();// 回滚事务
 			throw new TransformException(e);
 		}
 	}

@@ -16,10 +16,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.colorcoding.ibas.bobas.MyConfiguration;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
-import org.colorcoding.ibas.bobas.common.SqlQuery;
 import org.colorcoding.ibas.bobas.data.IDataTable;
 import org.colorcoding.ibas.bobas.data.IDataTableRow;
-import org.colorcoding.ibas.bobas.repository.BORepository4DbReadonly;
 import org.colorcoding.tools.btulz.bobas.Environment;
 import org.colorcoding.tools.btulz.transformer.Transformer;
 import org.w3c.dom.Document;
@@ -97,13 +95,15 @@ public class RoutingTransformer extends Transformer {
 		if (this.getQuery() == null || this.getQuery().isEmpty()) {
 			throw new Exception("invaild query.");
 		}
-		BORepository4DbReadonly boRepository = new BORepository4DbReadonly("Master");
-		IOperationResult<IDataTable> opRslt = boRepository
-				.query(new SqlQuery(MyConfiguration.applyVariables(this.getQuery())));
-		if (opRslt.getError() != null) {
-			throw opRslt.getError();
+		IDataTable table;
+		try (BORepository4Transformer boRepository = new BORepository4Transformer()) {
+			IOperationResult<IDataTable> opRslt = boRepository
+					.queryData(MyConfiguration.applyVariables(this.getQuery()));
+			if (opRslt.getError() != null) {
+				throw opRslt.getError();
+			}
+			table = opRslt.getResultObjects().firstOrDefault();
 		}
-		IDataTable table = opRslt.getResultObjects().firstOrDefault();
 		if (table == null) {
 			throw new Exception("not query data table.");
 		}
