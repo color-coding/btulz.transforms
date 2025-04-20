@@ -1,7 +1,6 @@
 package org.colorcoding.tools.btulz.bobas.command;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -77,12 +76,11 @@ public class Command4Init extends Command<Command4Init> {
 
 	@Override
 	protected int run(Argument[] arguments) {
-		ClassLoader4Transformer classLoader = null;
 		try {
 			String argData = "";
 			String argConfig = "";
 			boolean ignore = false;
-			List<URL> argClasses = new ArrayList<>();
+			List<File> classFiles = new ArrayList<>();
 			boolean test = false, force = false;
 			for (Argument argument : arguments) {
 				if (!argument.isInputed()) {
@@ -124,40 +122,70 @@ public class Command4Init extends Command<Command4Init> {
 								if (!lsItem.getName().toLowerCase().endsWith(".jar")) {
 									continue;
 								}
-								argClasses.add(lsItem.toURI().toURL());
+								classFiles.add(lsItem);
 							}
 						} else if (file.isFile()) {
-							argClasses.add(file.toURI().toURL());
+							classFiles.add(file);
 						}
 					}
 				}
 			}
-			ClassLoader parentLoader = this.getClass().getClassLoader();
-			classLoader = new ClassLoader4Transformer(this.filter(argClasses), parentLoader);
-			if (test) {
-				// 测试类加载器
-				this.testClassLoder(classLoader);
-				return RETURN_VALUE_NO_COMMAND_EXECUTION;
+			// 查看是否有基础库
+			for (File lsItem : new File(
+					DataTransformer4Jar.class.getProtectionDomain().getCodeSource().getLocation().getFile())
+					.getParentFile().listFiles()) {
+				if (!lsItem.isFile()) {
+					continue;
+				}
+				if (!lsItem.getName().toLowerCase().endsWith(".jar")) {
+					continue;
+				}
+				classFiles.add(lsItem);
 			}
-			Class<?> dtType = classLoader.findClass(DataTransformer4Jar.class.getName());
-			Environment.getLogger().debug(
-					String.format("DataTransformer loaded by %s.", dtType.getClassLoader().getClass().getSimpleName()));
-			Object transformer = dtType.newInstance();
-			Method method = dtType.getMethod("setInterruptOnError", boolean.class);
-			method.invoke(transformer, !ignore);
-			method = dtType.getMethod("setForceSave", boolean.class);
-			method.invoke(transformer, force);
-			method = dtType.getMethod("setConfigFile", String.class);
-			method.invoke(transformer, argConfig);
-			method = dtType.getMethod("setDataFile", String.class);
-			method.invoke(transformer, argData);
-			// method = dtType.getMethod("addLibrary", List.class);
-			// method.invoke(transformer, argClasses);
-			method = dtType.getMethod("setClassLoader", ClassLoader4Transformer.class);
-			method.invoke(transformer, classLoader);
-			method = dtType.getMethod("transform");
-			method.invoke(transformer);
-			return RETURN_VALUE_SUCCESS;
+			List<URL> argClasses = new ArrayList<>(classFiles.size());
+			for (File file : classFiles) {
+				// 避免重复加载
+				if (file.getName().toLowerCase().startsWith("bobas.businessobjectscommon-")) {
+					continue;
+				}
+				if (file.getName().toLowerCase().startsWith("btulz.transforms.")) {
+					continue;
+				}
+				argClasses.add(file.toURI().toURL());
+			}
+			try (ClassLoader4Transformer classLoader = new ClassLoader4Transformer(argClasses.toArray(new URL[] {}),
+					ClassLoader.getSystemClassLoader())) {
+				if (test) {
+					// 测试类加载器
+					this.testClassLoder(classLoader);
+					return RETURN_VALUE_NO_COMMAND_EXECUTION;
+				}
+				Class<?> dtType = classLoader.loadClass(DataTransformer4Jar.class.getName());
+				Environment.getLogger().debug(String.format("DataTransformer loaded by %s.",
+						dtType.getClassLoader().getClass().getSimpleName()));
+				Object transformer = dtType.newInstance();
+				Method method = dtType.getMethod("setInterruptOnError", boolean.class);
+				method.invoke(transformer, !ignore);
+				method = dtType.getMethod("setForceSave", boolean.class);
+				method.invoke(transformer, force);
+				method = dtType.getMethod("setConfigFile", String.class);
+				method.invoke(transformer, argConfig);
+				method = dtType.getMethod("setDataFile", String.class);
+				method.invoke(transformer, argData);
+				// method = dtType.getMethod("addLibrary", List.class);
+				// method.invoke(transformer, argClasses);
+				for (Method item : dtType.getMethods()) {
+					if (item.getName().equals("setClassLoader")) {
+						item.invoke(transformer, classLoader);
+						break;
+					}
+				}
+				// method = dtType.getMethod("setClassLoader", ClassLoader4Transformer.class);
+				// method.invoke(transformer, classLoader);
+				method = dtType.getMethod("transform");
+				method.invoke(transformer);
+				return RETURN_VALUE_SUCCESS;
+			}
 		} catch (Exception | Error e) {
 			if (e instanceof InvocationTargetException) {
 				this.print(e.getCause());
@@ -165,37 +193,7 @@ public class Command4Init extends Command<Command4Init> {
 				this.print(e);
 			}
 			return RETURN_VALUE_COMMAND_EXECUTION_FAILD;
-		} finally {
-			try {
-				if (classLoader != null) {
-					classLoader.close();
-				}
-			} catch (IOException e) {
-				this.print(e);
-			}
 		}
-	}
-
-	/**
-	 * 过滤输入类库
-	 * 
-	 * @param args
-	 * @return
-	 */
-	private URL[] filter(List<URL> args) {
-		ArrayList<URL> urls = new ArrayList<>();
-		for (URL url : args) {
-			if (url.toString().endsWith(".jar")) {
-				if (url.toString().indexOf("bobas.businessobjectscommon-") > 0) {
-					continue;
-				}
-				if (url.toString().indexOf("btulz.transforms.") > 0) {
-					continue;
-				}
-			}
-			urls.add(url);
-		}
-		return urls.toArray(new URL[] {});
 	}
 
 	private void testClassLoder(ClassLoader4Transformer classLoader) {

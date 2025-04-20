@@ -10,7 +10,7 @@
 			<Condition Property="DataType" Value="Alphanumeric" />
 		</OutputItem>
 		<OutputItem>
-			<Content>NTEXT</Content>
+			<Content>NCLOB</Content>
 			<Condition Property="DataType" Value="Memo" />
 		</OutputItem>
 		<OutputItem>

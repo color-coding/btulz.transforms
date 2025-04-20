@@ -16,10 +16,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.colorcoding.ibas.bobas.MyConfiguration;
 import org.colorcoding.ibas.bobas.common.IOperationResult;
-import org.colorcoding.ibas.bobas.common.SqlQuery;
 import org.colorcoding.ibas.bobas.data.IDataTable;
 import org.colorcoding.ibas.bobas.data.IDataTableRow;
-import org.colorcoding.ibas.bobas.repository.BORepository4DbReadonly;
 import org.colorcoding.tools.btulz.bobas.Environment;
 import org.colorcoding.tools.btulz.transformer.Transformer;
 import org.w3c.dom.Document;
@@ -97,13 +95,15 @@ public class RoutingTransformer extends Transformer {
 		if (this.getQuery() == null || this.getQuery().isEmpty()) {
 			throw new Exception("invaild query.");
 		}
-		BORepository4DbReadonly boRepository = new BORepository4DbReadonly("Master");
-		IOperationResult<IDataTable> opRslt = boRepository
-				.query(new SqlQuery(MyConfiguration.applyVariables(this.getQuery())));
-		if (opRslt.getError() != null) {
-			throw opRslt.getError();
+		IDataTable table;
+		try (BORepository4Transformer boRepository = new BORepository4Transformer()) {
+			IOperationResult<IDataTable> opRslt = boRepository
+					.queryData(MyConfiguration.applyVariables(this.getQuery()));
+			if (opRslt.getError() != null) {
+				throw opRslt.getError();
+			}
+			table = opRslt.getResultObjects().firstOrDefault();
 		}
-		IDataTable table = opRslt.getResultObjects().firstOrDefault();
 		if (table == null) {
 			throw new Exception("not query data table.");
 		}
@@ -178,9 +178,12 @@ public class RoutingTransformer extends Transformer {
 		transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		PrintWriter pw = new PrintWriter(new FileOutputStream(this.getOutFile()));
-		StreamResult result = new StreamResult(pw);
-		transformer.transform(source, result);
+
+		try (PrintWriter writer = new PrintWriter(new FileOutputStream(this.getOutFile()))) {
+			StreamResult result = new StreamResult(writer);
+			transformer.transform(source, result);
+			writer.flush();
+		}
 
 		Environment.getLogger().info(String.format("out file [%s].", this.getOutFile()));
 	}

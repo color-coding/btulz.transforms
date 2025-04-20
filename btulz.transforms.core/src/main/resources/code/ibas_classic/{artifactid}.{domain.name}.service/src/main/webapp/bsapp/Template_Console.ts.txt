@@ -1,9 +1,6 @@
 /**
  * @license
- * Copyright Color-Coding Studio. All Rights Reserved.
- *
- * Use of this source code is governed by an Apache License, Version 2.0
- * that can be found in the LICENSE file at http://www.apache.org/licenses/LICENSE-2.0
+ * Copyright ${Copyright}. All Rights Reserved.
  */
 /// <reference path="../borep/index.ts" />
 $BEGIN_BO$
@@ -11,8 +8,6 @@ $BEGIN_BO$
 $END_BO$
 namespace ${Domain.getName().toLowerCase()} {
     export namespace app {
-        /** 属性-导航 */
-        const PROPERTY_NAVIGATION: symbol = Symbol("navigation");
         /** 模块控制台 */
         export class Console extends ibas.ModuleConsole {
             /** 构造函数 */
@@ -21,10 +16,6 @@ namespace ${Domain.getName().toLowerCase()} {
                 this.id = CONSOLE_ID;
                 this.name = CONSOLE_NAME;
                 this.version = CONSOLE_VERSION;
-            }
-            /** 创建视图导航 */
-            navigation(): ibas.IViewNavigation {
-                return this[PROPERTY_NAVIGATION];
             }
             /** 初始化 */
             protected registers(): void {
@@ -43,7 +34,7 @@ $END_BO$
             /** 运行 */
             run(): void {
                 // 加载语言-框架默认
-                ibas.i18n.load([
+                this.loadResources([
                     this.rootUrl + "resources/languages/${Domain.getName().toLowerCase()}.json",
                     this.rootUrl + "resources/languages/bos.json"
                 ], () => {
@@ -66,7 +57,7 @@ $END_BO$
                     // 加载视图库
                     this.loadUI(uiModules, (ui) => {
                         // 设置导航
-                        this[PROPERTY_NAVIGATION] = new ui.Navigation();
+                        this.setNavigation(new ui.Navigation());
                         // 调用初始化
                         this.initialize();
                     });

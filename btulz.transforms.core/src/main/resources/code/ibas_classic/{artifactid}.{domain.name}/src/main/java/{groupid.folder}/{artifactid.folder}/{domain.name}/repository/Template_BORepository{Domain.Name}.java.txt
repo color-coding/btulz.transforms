@@ -20,7 +20,7 @@ $BEGIN_BO$
      * @return 操作结果
      */
     public OperationResult<${BO.getName()}> fetch${BO.getName()}(ICriteria criteria, String token) {
-        return super.fetch(criteria, token, ${BO.getName()}.class);
+        return super.fetch(${BO.getName()}.class, criteria, token);
     }
 
     /**

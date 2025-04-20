@@ -1,8 +1,8 @@
 package org.colorcoding.tools.btulz;
 
 import org.colorcoding.tools.btulz.command.Command4Code;
-import org.colorcoding.tools.btulz.command.Command4DsJar;
 import org.colorcoding.tools.btulz.command.Command4Ds;
+import org.colorcoding.tools.btulz.command.Command4DsJar;
 import org.colorcoding.tools.btulz.command.Command4Excel;
 import org.colorcoding.tools.btulz.command.Command4Sql;
 import org.colorcoding.tools.btulz.command.CommandsManager;
@@ -34,6 +34,6 @@ public class Console {
 	}
 
 	public static void main(String[] args) {
-		getCommandsManager().run(args);
+		System.exit(getCommandsManager().run(args));
 	}
 }

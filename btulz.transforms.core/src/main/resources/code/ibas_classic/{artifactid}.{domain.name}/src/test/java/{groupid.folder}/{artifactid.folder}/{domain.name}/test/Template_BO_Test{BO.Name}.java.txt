@@ -49,23 +49,22 @@ $END_BOITEM$
         // 测试对象的保存和查询
         IOperationResult<?> operationResult = null;
         ICriteria criteria = null;
-        IBORepository${Domain.getName()}App boRepository = new BORepository${Domain.getName()}();
-        //设置用户口令
-        boRepository.setUserToken(this.getToken());
+        try (IBORepository${Domain.getName()}App boRepository = new BORepository${Domain.getName()}()) {
+            //设置用户口令
+            boRepository.setUserToken(this.getToken());
 
-        // 测试保存
-        operationResult = boRepository.save${BO.getName()}(${BO.getName(LowerCamelCase)});
-        assertEquals(operationResult.getMessage(), operationResult.getResultCode(), 0);
-        ${BO.getName()} boSaved = (${BO.getName()})operationResult.getResultObjects().firstOrDefault();
+            // 测试保存
+            operationResult = boRepository.save${BO.getName()}(${BO.getName(LowerCamelCase)});
+            assertEquals(operationResult.getMessage(), operationResult.getResultCode(), 0);
+            ${BO.getName()} boSaved = (${BO.getName()})operationResult.getResultObjects().firstOrDefault();
 
 
-        // 测试查询
-        criteria = boSaved.getCriteria();
-        criteria.setResultCount(10);
-        operationResult = boRepository.fetch${BO.getName()}(criteria);
-        assertEquals(operationResult.getMessage(), operationResult.getResultCode(), 0);
-
+            // 测试查询
+            criteria = boSaved.getCriteria();
+            criteria.setResultCount(10);
+            operationResult = boRepository.fetch${BO.getName()}(criteria);
+            assertEquals(operationResult.getMessage(), operationResult.getResultCode(), 0);
+        }
 
     }
-
 }

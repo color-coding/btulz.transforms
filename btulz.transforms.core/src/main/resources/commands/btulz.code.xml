@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!DOCTYPE CommandBuilder>
-<ns2:CommandBuilder Description="生成代码" xmlns:ns2="http://colorcoding.org/btulz/shell/commands">
+<ns2:CommandBuilder Description="生成代码"
+    xmlns:ns2="http://colorcoding.org/btulz/shell/commands">
     <Item Content="java" Editable="false" />
     <Item Content="-Dfile.encoding=utf-8" Description="使用utf-8编码方式" Editable="false" />
     <Item Content="-jar" Description="执行jar包" Editable="false" />
     <Item Content="btulz.transforms.core-0.1.1.jar" Description="包名称" Editable="false" />
     <Item Content="code" Description="子命令" Editable="false" />
-    <Item Content="-TemplateFolder=${VALUE}" Description="使用的模板" >
+    <Item Content="-TemplateFolder=${VALUE}" Description="使用的模板">
         <ValidValues ClassName="org.colorcoding.tools.btulz.shell.command.TemplateGetter" Definitions="Template=code;WorkFile=btulz.transforms.core-0.1.1.jar;WorkFile=" />
     </Item>
-    <Item Content="-OutputFolder=${VALUE}" Description="输出目录" Value="${WORK_FOLDER}temp" >
+    <Item Content="-OutputFolder=${VALUE}" Description="输出目录" Value="${WORK_FOLDER}temp">
         <ValidValues ClassName="javax.swing.JFileChooser"/>
     </Item>
     <Item Content="-GroupId=${VALUE}" Description="组标记" Value="org.colorcoding" />
     <Item Content="-ArtifactId=${VALUE}" Description="项目标记" Value="ibas" />
     <Item Content="-ProjectVersion=${VALUE}" Description="项目标记" Value="0.1.0" />
     <Item Content="-ProjectUrl=${VALUE}" Description="项目地址" Value="http://colorcoding.org" />
-    <Item Content="-Domains=${VALUE}" Description="模型文件" Value="${WORK_FOLDER}domains" >
+    <Item Content="-Domains=${VALUE}" Description="模型文件" Value="${WORK_FOLDER}domains">
         <ValidValues ClassName="javax.swing.JFileChooser"/>
     </Item>
     <Item Content="-Parameters=[${VALUE}]" Description="其他参数">
         <Items>
             <Item Content="{&quot;name&quot;:&quot;Company&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="公司标识" Value="CC" />
-            <Item Content=",{&quot;name&quot;:&quot;ibasVersion&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="ibas版本" Value="0.1.2" />
-            <Item Content=",{&quot;name&quot;:&quot;ibasIfVersion&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="最初模块版本" Value="0.1.0" />
-            <Item Content=",{&quot;name&quot;:&quot;ProjectId&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="项目标识" >
+            <Item Content=",{&quot;name&quot;:&quot;Copyright&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="版权声明" Value="Color-Coding Studio" />
+            <Item Content=",{&quot;name&quot;:&quot;ibasVersion&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="ibas版本" Value="0.2.0" />
+            <Item Content=",{&quot;name&quot;:&quot;ibasIfVersion&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="最初模块版本" Value="0.2.0" />
+            <Item Content=",{&quot;name&quot;:&quot;ProjectId&quot;,&quot;value&quot;:&quot;${VALUE}&quot;}" Description="项目标识">
                 <ValidValues ClassName="java.util.UUID"/>
             </Item>
         </Items>

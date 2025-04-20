@@ -126,6 +126,12 @@ public class Command {
 			this.fireMessages(MessageType.common, String.format("command: %s", toCommand(commands)));
 			File workFolder = new File(this.getWorkFolder());
 			this.fireMessages(MessageType.common, String.format("workfolder: %s", workFolder.getPath()));
+			// windows环境处理特殊字符
+			if (System.getProperty("os.name", "").toLowerCase().contains("windows")) {
+				for (int i = 1; i < commands.length; i++) {
+					commands[i] = commands[i].replace("\"", "\\\"");
+				}
+			}
 			this.process = Runtime.getRuntime().exec(commands, null, workFolder);
 			this.commonThread = new Thread(new Runnable() {
 				public synchronized void run() {
