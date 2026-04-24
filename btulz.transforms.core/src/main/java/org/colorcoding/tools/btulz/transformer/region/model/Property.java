@@ -117,12 +117,12 @@ public class Property extends Entity implements IProperty {
 
 	@Override
 	public String getLinked() {
-		return this.entity.getMapped();
+		return this.entity.getLinked();
 	}
 
 	@Override
 	public void setLinked(String linked) {
-		this.entity.setMapped(linked);
+		this.entity.setLinked(linked);
 	}
 
 	@Override

@@ -27,7 +27,7 @@ public class Command4Ds extends Command4Release<Command4Code> {
 
 	public Command4Ds() {
 		this.setName(COMMAND_PROMPT);
-		this.setDescription("根据模型创建数据结构");
+		this.setDescription("Create data structures from models");
 	}
 
 	@Override
@@ -53,24 +53,24 @@ public class Command4Ds extends Command4Release<Command4Code> {
 			arguments.add(argument);
 		}
 		// 添加自身参数
-		arguments.add(new Argument("-TemplateFile", "使用的模板"));
-		arguments.add(new Argument("-Company", "公司标记，用于数据库对象前缀"));
-		arguments.add(new Argument("-DbServer", "数据库地址"));
-		arguments.add(new Argument("-DbPort", "数据库端口"));
-		arguments.add(new Argument("-DbSchema", "应用架构"));
-		arguments.add(new Argument("-DbName", "数据库名称"));
-		arguments.add(new Argument("-DbUser", "数据库用户"));
-		arguments.add(new Argument("-DbPassword", "数据库用户密码"));
-		arguments.add(new Argument("-Domains", "使用的模型目录或文件"));
+		arguments.add(new Argument("-TemplateFile", "Template to use"));
+		arguments.add(new Argument("-Company", "Company tag for database object prefix"));
+		arguments.add(new Argument("-DbServer", "Database server address"));
+		arguments.add(new Argument("-DbPort", "Database port"));
+		arguments.add(new Argument("-DbSchema", "Database schema"));
+		arguments.add(new Argument("-DbName", "Database name"));
+		arguments.add(new Argument("-DbUser", "Database user"));
+		arguments.add(new Argument("-DbPassword", "Database user password"));
+		arguments.add(new Argument("-Domains", "Model directory or file to use"));
 		return arguments.toArray(new Argument[] {});
 	}
 
 	/**
-	 * 为帮助添加调用代码的示例
+	 * 为帮助添加调用数据结构的示例
 	 */
 	@Override
 	protected void moreHelps(StringBuilder stringBuilder) {
-		stringBuilder.append("示例：");
+		stringBuilder.append("Example:");
 		stringBuilder.append(NEW_LINE);
 		stringBuilder.append("  ");
 		stringBuilder.append(COMMAND_PROMPT);
@@ -101,7 +101,7 @@ public class Command4Ds extends Command4Release<Command4Code> {
 			DsTransformer dsTransformer = new DsTransformer();
 			for (Argument argument : arguments) {
 				if (!argument.isInputed()) {
-					// 没有输出的参数不做处理
+					// 没有输入的参数不做处理
 					continue;
 				}
 				if (argument.getName().equalsIgnoreCase("-TemplateFile")) {

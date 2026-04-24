@@ -5,7 +5,7 @@ import javax.swing.JButton;
 import org.colorcoding.tools.btulz.shell.command.CommandBuilder;
 
 /**
- * 命令构造器选项卡
+ * 命令构造器按钮
  * 
  * @author Niuren.Zhu
  *

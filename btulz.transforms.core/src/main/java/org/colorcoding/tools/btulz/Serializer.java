@@ -31,14 +31,13 @@ public class Serializer {
 	 *            被克隆对象
 	 * 
 	 * @return 克隆的对象实例
-	 * @throws JAXBException
 	 */
 	public static Object clone(Object object, Class<?>... types) {
 		try {
 			Class<?>[] knownTypes = new Class[types.length + 1];
 			knownTypes[0] = object.getClass();
 			for (int i = 0; i < types.length; i++) {
-				knownTypes[i + 1] = types[0];
+				knownTypes[i + 1] = types[i];
 			}
 			JAXBContext context = JAXBContext.newInstance(knownTypes);
 			Marshaller marshaller = context.createMarshaller();
@@ -94,7 +93,7 @@ public class Serializer {
 		Class<?>[] knownTypes = new Class[types.length + 1];
 		knownTypes[0] = object.getClass();
 		for (int i = 0; i < types.length; i++) {
-			knownTypes[i + 1] = types[0];
+			knownTypes[i + 1] = types[i];
 		}
 		JAXBContext context = JAXBContext.newInstance(knownTypes);
 		Marshaller marshaller = context.createMarshaller();
@@ -177,7 +176,7 @@ public class Serializer {
 		Class<?>[] knownTypes = new Class[types.length + 1];
 		knownTypes[0] = object.getClass();
 		for (int i = 0; i < types.length; i++) {
-			knownTypes[i + 1] = types[0];
+			knownTypes[i + 1] = types[i];
 		}
 		JAXBContext context = createJAXBContextJson(knownTypes);
 

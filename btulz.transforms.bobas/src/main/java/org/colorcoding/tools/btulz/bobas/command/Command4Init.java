@@ -32,28 +32,28 @@ public class Command4Init extends Command<Command4Init> {
 
 	public Command4Init() {
 		this.setName(COMMAND_PROMPT);
-		this.setDescription("导入初始化数据");
+		this.setDescription("Import initialization data");
 	}
 
 	@Override
 	protected Argument[] createArguments() {
 		ArrayList<Argument> arguments = new ArrayList<>();
 		// 添加自身参数
-		arguments.add(new Argument("-data", "数据文件，待解析jar文件"));
-		arguments.add(new Argument("-config", "配置文件"));
-		arguments.add(new Argument("-classes", "加载的类库，多个时用“;”分隔。支持目录"));
-		arguments.add(new Argument("-force", "替换已存在的数据"));
-		arguments.add(new Argument("-ignore", "忽略错误"));
-		arguments.add(new Argument("-test", "测试"));
+		arguments.add(new Argument("-data", "Data file (jar file to parse)"));
+		arguments.add(new Argument("-config", "Configuration file"));
+		arguments.add(new Argument("-classes", "Class libraries, separated by \";\". Supports directories"));
+		arguments.add(new Argument("-force", "Replace existing data"));
+		arguments.add(new Argument("-ignore", "Ignore errors"));
+		arguments.add(new Argument("-test", "Test"));
 		return arguments.toArray(new Argument[] {});
 	}
 
 	/**
-	 * 为帮助添加调用代码的示例
+	 * 为帮助添加调用初始化的示例
 	 */
 	@Override
 	protected void moreHelps(StringBuilder stringBuilder) {
-		stringBuilder.append("示例：");
+		stringBuilder.append("Example:");
 		stringBuilder.append(NEW_LINE);
 		stringBuilder.append("  ");
 		stringBuilder.append(COMMAND_PROMPT);
@@ -65,7 +65,10 @@ public class Command4Init extends Command<Command4Init> {
 		stringBuilder.append("-classes=D:\\tomcat\\lib\\a.jar;D:\\tomcat\\lib\\b.jar;D:\\tomcat\\lib\\classes");
 		stringBuilder.append(" ");
 		stringBuilder.append("-ignore");
+		stringBuilder.append(" ");
 		stringBuilder.append("-force");
+		stringBuilder.append(" ");
+		stringBuilder.append("-test");
 		super.moreHelps(stringBuilder);
 	}
 
@@ -84,7 +87,7 @@ public class Command4Init extends Command<Command4Init> {
 			boolean test = false, force = false;
 			for (Argument argument : arguments) {
 				if (!argument.isInputed()) {
-					// 没有输出的参数不做处理
+					// 没有输入的参数不做处理
 					continue;
 				}
 				if (argument.getName().equalsIgnoreCase("-data")) {
@@ -111,18 +114,21 @@ public class Command4Init extends Command<Command4Init> {
 						}
 						File file = new File(item);
 						if (!file.exists()) {
-							this.print("类库[%s]不存在", item);
+							this.print("Class library [%s] not found", item);
 							continue;
 						}
 						if (file.isDirectory()) {
-							for (File lsItem : file.listFiles()) {
-								if (!lsItem.isFile()) {
-									continue;
+							File[] lsItems = file.listFiles();
+							if (lsItems != null) {
+								for (File lsItem : lsItems) {
+									if (!lsItem.isFile()) {
+										continue;
+									}
+									if (!lsItem.getName().toLowerCase().endsWith(".jar")) {
+										continue;
+									}
+									classFiles.add(lsItem);
 								}
-								if (!lsItem.getName().toLowerCase().endsWith(".jar")) {
-									continue;
-								}
-								classFiles.add(lsItem);
 							}
 						} else if (file.isFile()) {
 							classFiles.add(file);
@@ -131,16 +137,19 @@ public class Command4Init extends Command<Command4Init> {
 				}
 			}
 			// 查看是否有基础库
-			for (File lsItem : new File(
-					DataTransformer4Jar.class.getProtectionDomain().getCodeSource().getLocation().getFile())
-					.getParentFile().listFiles()) {
-				if (!lsItem.isFile()) {
-					continue;
+			File baseJarFile = new File(DataTransformer4Jar.class.getProtectionDomain().getCodeSource().getLocation().getFile());
+			File baseLibFolder = baseJarFile != null ? baseJarFile.getParentFile() : null;
+			File[] baseLibFiles = baseLibFolder != null ? baseLibFolder.listFiles() : null;
+			if (baseLibFiles != null) {
+				for (File lsItem : baseLibFiles) {
+					if (!lsItem.isFile()) {
+						continue;
+					}
+					if (!lsItem.getName().toLowerCase().endsWith(".jar")) {
+						continue;
+					}
+					classFiles.add(lsItem);
 				}
-				if (!lsItem.getName().toLowerCase().endsWith(".jar")) {
-					continue;
-				}
-				classFiles.add(lsItem);
 			}
 			List<URL> argClasses = new ArrayList<>(classFiles.size());
 			for (File file : classFiles) {
@@ -186,7 +195,7 @@ public class Command4Init extends Command<Command4Init> {
 				method.invoke(transformer);
 				return RETURN_VALUE_SUCCESS;
 			}
-		} catch (Exception | Error e) {
+		} catch (Exception e) {
 			if (e instanceof InvocationTargetException) {
 				this.print(e.getCause());
 			} else {
@@ -205,11 +214,9 @@ public class Command4Init extends Command<Command4Init> {
 			this.print("test class loader %s", className);
 			try {
 				type = classLoader.loadClass(className);
-				if (type.getClassLoader().equals(classLoader)) {
-					this.print("passed.");
-				} else {
-					this.print("faild, %s.", type.getClassLoader());
-				}
+				if (type != null) {
+						this.print("loaded by %s.", type.getClassLoader().getClass().getSimpleName());
+					}
 			} catch (ClassNotFoundException e) {
 				this.print(e);
 			}
@@ -222,7 +229,7 @@ public class Command4Init extends Command<Command4Init> {
 				this.print("test new instance %s", type.getName());
 				for (Constructor<?> item : type.getConstructors()) {
 					if (item.getParameterCount() == 0
-							// public方法
+							// public构造方法
 							&& Modifier.isPublic(item.getModifiers())) {
 						try {
 							type.newInstance();

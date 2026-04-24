@@ -138,8 +138,8 @@ public abstract class Command<C> {
 			arguments = new Argument[] {};
 		}
 		if (this.isRequiredArguments()) {
-			// 要求输出参数，有则运行，没有则显示帮助
-			boolean done = false;// 是否输出了参数
+			// 要求输入参数，有则运行，没有则显示帮助
+			boolean done = false;// 是否输入了参数
 			for (Argument argument : arguments) {
 				if (argument.isInputed()) {
 					done = true;
@@ -157,8 +157,6 @@ public abstract class Command<C> {
 
 	/**
 	 * 打印帮助信息
-	 * 
-	 * @param arguments
 	 */
 	protected void printHelps() {
 		Argument[] arguments = this.createArguments();

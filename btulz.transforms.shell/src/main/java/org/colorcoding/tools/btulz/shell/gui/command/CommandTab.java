@@ -14,8 +14,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -36,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.Scrollable;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -205,7 +204,10 @@ public class CommandTab extends WorkingTab {
 						ComboxItem comboxItem = (ComboxItem) comboBox.getSelectedItem();
 						File file = new File(CommandTab.this.getHistoryFolder() + File.separator + comboxItem.value);
 						if (file.isFile() && file.exists()) {
-							Object object = Serializer.fromXmlString(new FileInputStream(file), CommandBuilder.class);
+							Object object;
+							try (FileInputStream fis = new FileInputStream(file)) {
+								object = Serializer.fromXmlString(fis, CommandBuilder.class);
+							}
 							if (object instanceof CommandBuilder) {
 								CommandBuilder commandBuilder = (CommandBuilder) object;
 								for (CommandItem item : commandBuilder.getItems().getItems()) {
@@ -251,13 +253,25 @@ public class CommandTab extends WorkingTab {
 		gridBagConstraintsItem.fill = GridBagConstraints.BOTH;
 		gridBagConstraintsItem.anchor = GridBagConstraints.WEST;
 		gridBagConstraintsItem.insets = new Insets(2, 2, 2, 2);
-		JPanel panelItem = new JPanel();
+		JPanel panelItem = new TrackWidthPanel();
 		panelItem.setLayout(new GridBagLayout());
 		for (CommandItem commandItem : this.getBuilder().getItems()) {
 			this.addCommandItemLine(commandItem, panelItem, gridBagConstraintsItem);
 		}
 		JScrollPane scrollPane = new JScrollPane(panelItem, ScrollPaneLayout.VERTICAL_SCROLLBAR_AS_NEEDED,
-				ScrollPaneLayout.HORIZONTAL_SCROLLBAR_NEVER);
+				ScrollPaneLayout.HORIZONTAL_SCROLLBAR_NEVER) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public java.awt.Dimension getPreferredSize() {
+				java.awt.Dimension dim = super.getPreferredSize();
+				java.awt.Container parent = getParent();
+				if (parent != null) {
+					dim.width = parent.getWidth();
+				}
+				return dim;
+			}
+		};
 
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		gridBagConstraints.anchor = GridBagConstraints.NORTH;
@@ -278,6 +292,7 @@ public class CommandTab extends WorkingTab {
 		JTextField textField = new JTextField();
 		textField.setText(commandItem.getContent());
 		textField.setEditable(false);
+		textField.setColumns(15);
 		textField.setToolTipText(commandItem.getDescription());
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridwidth = 1;
@@ -337,6 +352,7 @@ public class CommandTab extends WorkingTab {
 		} else {
 			JTextField textValue = new JTextField(commandItem.getValue());
 			textValue.setName(control_name_text + commandItem.hashCode());
+			textValue.setColumns(20);
 			textValue.setEditable(commandItem.isEditable());
 			if (commandItem.getItems().size() > 0) {
 				// 存在子命令
@@ -644,7 +660,7 @@ public class CommandTab extends WorkingTab {
 				CommandTab.this.command = null;// 清除命令
 				CommandTab.this.onButtonStopClick(null);
 				if (ret != 1) {
-					// 非用户中断
+					// 非执行失败
 					// 记录运行命令
 					StringBuilder stringBuilder = new StringBuilder();
 					stringBuilder.append(CommandTab.this.getHistoryFolder());
@@ -654,26 +670,18 @@ public class CommandTab extends WorkingTab {
 					stringBuilder.append(
 							(new SimpleDateFormat("yyyyMMdd_HHmmssSSS")).format(new Date(System.currentTimeMillis())));
 					stringBuilder.append(".xml");
-					FileWriter fileWriter = null;
 					try {
 						File file = new File(stringBuilder.toString());
 						if (!file.exists()) {
 							file.getParentFile().mkdirs();
 							file.createNewFile();
 						}
-						java.io.OutputStream out = new java.io.FileOutputStream(file);
-						java.io.Writer witer = new java.io.OutputStreamWriter(out, "UTF-8");
-						Serializer.toXmlString(CommandTab.this.getBuilder(), true, witer);
+						try (java.io.OutputStream out = new java.io.FileOutputStream(file);
+								java.io.Writer writer = new java.io.OutputStreamWriter(out, "UTF-8")) {
+							Serializer.toXmlString(CommandTab.this.getBuilder(), true, writer);
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
-					} finally {
-						if (fileWriter != null) {
-							try {
-								fileWriter.close();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-						}
 					}
 
 				}
@@ -699,6 +707,38 @@ public class CommandTab extends WorkingTab {
 		@Override
 		public String toString() {
 			return this.description;
+		}
+	}
+
+	/**
+	 * 跟随滚动窗口宽度的面板，防止内容横向溢出
+	 */
+	private static class TrackWidthPanel extends JPanel implements Scrollable {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public boolean getScrollableTracksViewportWidth() {
+			return true;
+		}
+
+		@Override
+		public boolean getScrollableTracksViewportHeight() {
+			return false;
+		}
+
+		@Override
+		public java.awt.Dimension getPreferredScrollableViewportSize() {
+			return getPreferredSize();
+		}
+
+		@Override
+		public int getScrollableUnitIncrement(java.awt.Rectangle visibleRect, int orientation, int direction) {
+			return 16;
+		}
+
+		@Override
+		public int getScrollableBlockIncrement(java.awt.Rectangle visibleRect, int orientation, int direction) {
+			return (orientation == javax.swing.SwingConstants.VERTICAL) ? visibleRect.height : visibleRect.width;
 		}
 	}
 }

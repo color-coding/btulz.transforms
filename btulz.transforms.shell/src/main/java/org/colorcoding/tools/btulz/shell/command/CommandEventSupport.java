@@ -19,7 +19,7 @@ public class CommandEventSupport {
 	private Object source = null;
 	private CommandListener[] listeners;
 
-	public void addListener(CommandListener listener) {
+	public synchronized void addListener(CommandListener listener) {
 		if (listener == null) {
 			return;
 		}
@@ -57,7 +57,7 @@ public class CommandEventSupport {
 		}
 	}
 
-	public void removeListener(CommandListener listener) {
+	public synchronized void removeListener(CommandListener listener) {
 		if (listener == null) {
 			return;
 		}
@@ -71,7 +71,7 @@ public class CommandEventSupport {
 		}
 	}
 
-	public void fireMessages(MessageType type, String message) {
+	public synchronized void fireMessages(MessageType type, String message) {
 		if (this.listeners == null) {
 			return;
 		}

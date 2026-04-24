@@ -1,33 +1,34 @@
 package org.colorcoding.tools.btulz.test.model;
 
-import java.io.File;
-import java.io.StringWriter;
-import java.net.URISyntaxException;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
+import org.colorcoding.tools.btulz.model.BusinessObject;
 import org.colorcoding.tools.btulz.model.Domain;
 import org.colorcoding.tools.btulz.model.IBusinessObject;
 import org.colorcoding.tools.btulz.model.IBusinessObjectItem;
 import org.colorcoding.tools.btulz.model.IDomain;
 import org.colorcoding.tools.btulz.model.IModel;
 import org.colorcoding.tools.btulz.model.IProperty;
+import org.colorcoding.tools.btulz.model.Model;
+import org.colorcoding.tools.btulz.model.Property;
 import org.colorcoding.tools.btulz.model.data.emBORelation;
+import org.colorcoding.tools.btulz.model.data.emDataSubType;
 import org.colorcoding.tools.btulz.model.data.emDataType;
 import org.colorcoding.tools.btulz.model.data.emModelType;
-import org.colorcoding.tools.btulz.test.Environment;
-import org.colorcoding.tools.btulz.transformer.region.model.OutputItem;
-import org.colorcoding.tools.btulz.transformer.region.model.OutputMapping;
-import org.colorcoding.tools.btulz.transformer.region.model.OutputMappingList;
-import org.colorcoding.tools.btulz.util.Condition;
 
 import junit.framework.TestCase;
 
+/**
+ * 领域模型测试
+ *
+ * 覆盖： - Domain/Model/Property/BusinessObject的创建、属性、clone、buildMapping
+ *
+ * 注意：Domain等模型被XmlTransformer、CodeTransformer、RegionDomain等高级功能广泛使用，
+ * 此处仅保留核心代表性测试
+ */
 public class TestModels extends TestCase {
 
+	/**
+	 * 创建标准测试用域对象 包含：Document模型、MasterData模型、行模型，以及1:1和1:n关联
+	 */
 	public IDomain createDomain() throws ClassNotFoundException {
 		IDomain domain = new Domain();
 		domain.setName("TrainingTesting");
@@ -99,53 +100,95 @@ public class TestModels extends TestCase {
 		return domain;
 	}
 
-	public void testDomainModels()
-			throws InstantiationException, IllegalAccessException, ClassNotFoundException, JAXBException {
+	/** Domain完整构建与克隆、buildMapping */
+	public void testDomainBuildAndClone() throws ClassNotFoundException {
 		IDomain domain = this.createDomain();
+		assertEquals("TrainingTesting", domain.getName());
+		assertEquals(3, domain.getModels().size());
+		assertEquals(1, domain.getBusinessObjects().size());
 
-		JAXBContext context = JAXBContext.newInstance(domain.getClass());
-		Marshaller marshaller = context.createMarshaller();
-		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
-		StringWriter writer = new StringWriter();
-		marshaller.marshal(domain, writer);
-		String oldXML = writer.toString();
-		System.out.println("序列化输出：");
-		System.out.println(oldXML);
+		// Domain克隆：深拷贝
+		IDomain cloned = domain.clone();
+		assertEquals(domain.getName(), cloned.getName());
+		cloned.setName("ClonedDomain");
+		assertFalse(domain.getName().equals(cloned.getName()));
 
+		// Domain克隆(无子对象)
+		IDomain clonedNoChilds = domain.clone(true);
+		assertEquals(domain.getName(), clonedNoChilds.getName());
+		assertEquals(0, clonedNoChilds.getModels().size());
+
+		// buildMapping
+		domain.buildMapping();
+		for (IBusinessObject bo : domain.getBusinessObjects()) {
+			assertNotNull(bo.getMappedModel());
+		}
+
+		// Domain自动推导ShortName
+		Domain d = new Domain();
+		d.setName("TestDomain");
+		IBusinessObject bo2 = d.getBusinessObjects().create();
+		bo2.setShortName("CC_TT_ORDER");
+		assertEquals("TT", d.getShortName());
 	}
 
-	public void testOutput() throws JAXBException, URISyntaxException {
-		OutputMappingList opMappings = new OutputMappingList();
-		OutputMapping opMapping = new OutputMapping();
-		opMapping.setName(",");
-		opMapping.setBinding("Property");
-		OutputItem opItem = new OutputItem();
-		opItem.setContent(",");
-		Condition condition = new Condition();
-		condition.setProperty("First");
-		condition.setValue("true");
-		opItem.getConditions().add(condition);
-		opMapping.getItems().add(opItem);
-		opMappings.add(opMapping);
-		JAXBContext context = JAXBContext.newInstance(opMappings.getClass());
-		Marshaller marshaller = context.createMarshaller();
-		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
-		StringWriter writer = new StringWriter();
-		marshaller.marshal(opMappings, writer);
-		System.out.println("序列化输出：");
-		System.out.println(writer.toString());
+	/** Model/Property/BusinessObject创建、属性、clone */
+	public void testModelPropertyBusinessObject() {
+		// Model
+		Model model = new Model();
+		model.setName("TestModel");
+		model.setModelType(emModelType.Document);
+		model.setMapped("CC_TEST_TABLE");
+		model.setEntity(true);
+		assertEquals("TestModel", model.getName());
+		assertEquals(emModelType.Document, model.getModelType());
+		assertEquals("CC_TEST_TABLE", model.getMapped());
+		IModel clonedModel = model.clone();
+		assertEquals(model.getName(), clonedModel.getName());
 
-		Unmarshaller unmarshaller = context.createUnmarshaller();
-		Object data = unmarshaller
-				.unmarshal(new File(Environment.getResource("ds/dm_mssql_ibas_classic.xml").getPath()));
-		writer = new StringWriter();
-		marshaller.marshal(data, writer);
-		System.out.println("序列化输出：");
-		System.out.println(writer.toString());
+		// Property
+		Property prop = new Property();
+		prop.setName("DocEntry");
+		prop.setDataType(emDataType.Numeric);
+		prop.setPrimaryKey(true);
+		prop.setUniqueKey(true);
+		prop.setSearchKey(true);
+		prop.setDeclaredType("Integer");
+		prop.setMapped("DocEntry");
+		assertTrue(prop.isPrimaryKey());
+		assertTrue(prop.isUniqueKey());
+		assertTrue(prop.isSearchKey());
+		assertEquals(emDataType.Numeric, prop.getDataType());
+		IProperty clonedProp = prop.clone();
+		assertEquals(prop.getName(), clonedProp.getName());
+		assertTrue(clonedProp.isPrimaryKey());
+
+		// Property默认值
+		Property defaultProp = new Property();
+		assertEquals(emDataType.Alphanumeric, defaultProp.getDataType());
+		assertEquals(emDataSubType.Default, defaultProp.getDataSubType());
+		assertFalse(defaultProp.isPrimaryKey());
+
+		// BusinessObject
+		BusinessObject bo = new BusinessObject();
+		bo.setName("SalesOrder");
+		bo.setShortName("CC_ORDER");
+		bo.setMappedModel("SalesOrder");
+		assertEquals("SalesOrder", bo.getName());
+		assertEquals("CC_ORDER", bo.getShortName());
+		// getName()在name为null时返回mappedModel
+		BusinessObject bo2 = new BusinessObject();
+		bo2.setMappedModel("Order");
+		assertEquals("Order", bo2.getName());
+		// 通过Model设置映射
+		BusinessObject bo3 = new BusinessObject();
+		Model m = new Model();
+		m.setName("Order");
+		m.setDescription("订单");
+		bo3.setMappedModel(m);
+		assertEquals("Order", bo3.getMappedModel());
+		assertEquals("订单", bo3.getDescription());
+		IBusinessObject clonedBo = bo.clone();
+		assertEquals(bo.getName(), clonedBo.getName());
 	}
-
 }

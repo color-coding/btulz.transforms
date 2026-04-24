@@ -65,20 +65,15 @@ public abstract class Command4Release<C> extends Command<C> {
 							}
 							if (writeFile.createNewFile()) {
 								this.print("release resources [%s].", jarEntry.getName());
-								InputStream inputStream = jarFile.getInputStream(jarEntry);
-								FileOutputStream fos = new FileOutputStream(writeFile);
-								int len = -1;
-								byte[] b = new byte[1024];
-								while ((len = inputStream.read(b)) != -1) {
-									if (fos == null) {
-										file.getParentFile().mkdirs();
-										file.createNewFile();
+								try (InputStream inputStream = jarFile.getInputStream(jarEntry);
+										FileOutputStream fos = new FileOutputStream(writeFile)) {
+									int len = -1;
+									byte[] b = new byte[1024];
+									while ((len = inputStream.read(b)) != -1) {
+										fos.write(b, 0, len);
 									}
-									fos.write(b, 0, len);
+									fos.flush();
 								}
-								fos.flush();
-								fos.close();
-								inputStream.close();
 							}
 						}
 					}
@@ -113,7 +108,7 @@ public abstract class Command4Release<C> extends Command<C> {
 	}
 
 	/**
-	 * 为帮助添加调用代码的示例
+	 * 为帮助添加释放资源的示例
 	 */
 	@Override
 	protected void moreHelps(StringBuilder stringBuilder) {
@@ -126,7 +121,7 @@ public abstract class Command4Release<C> extends Command<C> {
 	 * 创建自身参数
 	 */
 	protected Argument[] createArguments() {
-		return new Argument[] { new Argument("-Release", "释放资源模板") };
+		return new Argument[] { new Argument("-Release", "Release resource templates") };
 	}
 
 	/**

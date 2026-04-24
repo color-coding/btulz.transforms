@@ -46,7 +46,7 @@ public class DataTransformer extends Transformer {
 	private boolean forceSave;
 
 	/**
-	 * 强制保存，不做任何检查
+	 * 强制保存，替换已存在的数据
 	 * 
 	 * @return
 	 */
@@ -117,6 +117,9 @@ public class DataTransformer extends Transformer {
 			MyConfiguration.create(this.getConfigFile());
 			// 跳过审批（可能表未创建）
 			MyConfiguration.addConfigValue(MyConfiguration.CONFIG_ITEM_APPROVAL_WAY, "");
+			MyConfiguration.addConfigValue(MyConfiguration.CONFIG_ITEM_OWNERSHIP_WAY, "");
+			MyConfiguration.addConfigValue(MyConfiguration.CONFIG_ITEM_ORGANIZATION_WAY, "");
+			MyConfiguration.addConfigValue(MyConfiguration.CONFIG_ITEM_CONFIGURATION_WAY, "");
 			// 获取业务对象
 			File file = new File(this.getDataFile());
 			if (!file.exists()) {
@@ -134,7 +137,7 @@ public class DataTransformer extends Transformer {
 		} finally {
 			BOFactory.setClassLoader(null);
 			// 结束ibas线程
-			Daemon.destory();
+			Daemon.destroy();
 		}
 	}
 
@@ -344,10 +347,11 @@ public class DataTransformer extends Transformer {
 				boRepository.commitTransaction();// 提交事务
 			} catch (Exception e) {
 				boRepository.rollbackTransaction();// 回滚事务
+				throw new TransformException(e);
 			}
 		} catch (Exception e) {
 			throw new TransformException(e);
 		}
-	}
 
+	}
 }

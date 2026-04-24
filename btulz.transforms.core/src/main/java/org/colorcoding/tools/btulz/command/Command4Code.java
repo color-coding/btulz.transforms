@@ -27,7 +27,7 @@ public class Command4Code extends Command4Release<Command4Code> {
 
 	public Command4Code() {
 		this.setName(COMMAND_PROMPT);
-		this.setDescription("根据模型创建代码");
+		this.setDescription("Generate code from models");
 	}
 
 	@Override
@@ -53,14 +53,14 @@ public class Command4Code extends Command4Release<Command4Code> {
 			arguments.add(argument);
 		}
 		// 添加自身参数
-		arguments.add(new Argument("-TemplateFolder", "使用的模板"));
-		arguments.add(new Argument("-OutputFolder", "代码输出的目录"));
-		arguments.add(new Argument("-GroupId", "组命名空间"));
-		arguments.add(new Argument("-ArtifactId", "项目命名空间"));
-		arguments.add(new Argument("-ProjectVersion", "版本"));
-		arguments.add(new Argument("-ProjectUrl", "项目的地址"));
-		arguments.add(new Argument("-Domains", "使用的模型目录或文件"));
-		arguments.add(new Argument("-Parameters", "其他参数数据，json格式字符串"));
+		arguments.add(new Argument("-TemplateFolder", "Template to use"));
+		arguments.add(new Argument("-OutputFolder", "Output directory for code"));
+		arguments.add(new Argument("-GroupId", "Group namespace"));
+		arguments.add(new Argument("-ArtifactId", "Project namespace"));
+		arguments.add(new Argument("-ProjectVersion", "Version"));
+		arguments.add(new Argument("-ProjectUrl", "Project URL"));
+		arguments.add(new Argument("-Domains", "Model directory or file to use"));
+		arguments.add(new Argument("-Parameters", "Additional parameters in JSON format"));
 		return arguments.toArray(new Argument[] {});
 	}
 
@@ -69,7 +69,7 @@ public class Command4Code extends Command4Release<Command4Code> {
 	 */
 	@Override
 	protected void moreHelps(StringBuilder stringBuilder) {
-		stringBuilder.append("示例：");
+		stringBuilder.append("Example:");
 		stringBuilder.append(NEW_LINE);
 		stringBuilder.append("  ");
 		stringBuilder.append(COMMAND_PROMPT); // 命令

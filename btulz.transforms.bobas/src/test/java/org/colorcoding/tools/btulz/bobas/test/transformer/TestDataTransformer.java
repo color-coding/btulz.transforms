@@ -15,59 +15,52 @@ import org.colorcoding.tools.btulz.bobas.transformer.DataTransformer4Jar;
 
 import junit.framework.TestCase;
 
+/**
+ * 数据转换器测试（bobas模块）
+ *
+ * 覆盖：
+ * - ClassLoader4Transformer：自定义类加载器，加载JAR中的类，父加载器接口引用子加载器的类
+ * - DataTransformer4Jar：从JAR包加载数据结构并转换
+ *
+ * 注意：依赖ibas.initialfantasy项目和ibas-framework
+ */
 public class TestDataTransformer extends TestCase {
 
+	/** 类加载器测试：父优先委派，框架类由父加载器加载，业务类由子加载器加载 */
 	@SuppressWarnings("unused")
 	public void testClassLoader()
 			throws ClassNotFoundException, IOException, InstantiationException, IllegalAccessException {
 		File folder = new File(MyConfiguration.getStartupFolder());
 		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();
-		File classFolder = new File(String.format("%1$s%2$s%3$s%2$s%3$s%2$starget%2$sclasses", folder.getPath(),
-				File.separator, "ibas.initialfantasy"));
-		classFolder = new File(String.format("%1$s%2$s%3$s%2$srelease%2$sibas.initialfantasy-0.2.0.jar",
-				folder.getPath(), File.separator, "ibas.initialfantasy"));
-		File jarFile = new File(String.format("%1$s%2$s%3$s%2$srelease%2$sbobas.businessobjectscommon-0.2.0.jar",
-				folder.getPath(), File.separator, "ibas-framework"));
+		String ifPath = folder.getPath() + File.separator + "ibas.initialfantasy";
+		File classFolder = new File(ifPath + File.separator + "release" + File.separator + "ibas.initialfantasy-0.2.0.jar");
+		String fwPath = folder.getPath() + File.separator + "ibas-framework";
+		File jarFile = new File(
+				fwPath + File.separator + "release" + File.separator + "bobas.businessobjectscommon-0.2.0.jar");
 		ClassLoader parentLoader = this.getClass().getClassLoader();
 		ClassLoader4Transformer loader = new ClassLoader4Transformer(
 				new URL[] { classFolder.toURI().toURL(), jarFile.toURI().toURL() }, parentLoader);
-		int count = 0;
-		for (String className : loader.getClassNames()) {
-			// System.out.println(className);
-			Class<?> type = loader.findClass(className);
-
-			if (type != null && !type.getClassLoader().equals(loader)) {
-				// 仅其他加载器加载类型
-				System.err.println(type.getName());
-			}
-			count++;
-		}
-		System.err.println("class count:" + count);
-		Class<?> type = null;
-		// 测试基本类型的，能否引用
-		// type = loader.findClass(Object.class.getName());
-		// Object object = (Object) type.newInstance();
-		// 测试是否能用接口接受类型实例，结论不行
-		type = loader.findClass(Criteria.class.getName());
+		// 框架类：父加载器能找到，由父加载器加载
+		Class<?> type = loader.loadClass(Criteria.class.getName());
+		assertTrue("框架类应由父加载器加载", !type.getClassLoader().equals(loader));
 		ICriteria criteria = (ICriteria) type.newInstance();
-		// 父加载器接口引用子加载器的类
-		type = loader.findClass(OrganizationManager.class.getName());
-		type = loader.findClass("org.colorcoding.ibas.bobas.organization.initial.OrganizationManager");
+		// 业务类：父加载器找不到，由子加载器加载
+		type = loader.loadClass("org.colorcoding.ibas.bobas.organization.initial.OrganizationManager");
+		assertTrue("业务类应由子加载器加载", type.getClassLoader().equals(loader));
 		OrganizationManager manager = (OrganizationManager) type.newInstance();
-		type = loader.findClass("org.colorcoding.ibas.initialfantasy.bo.organizations.OrganizationalStructure");
-		Object org = type.newInstance();
 		loader.close();
 	}
 
+	/** DataTransformer4Jar从JAR包加载数据结构并转换 */
 	public void testTransformer() throws Exception {
 		Environment.getLogger().debug("begin test.");
 		File folder = new File(MyConfiguration.getStartupFolder());
 		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();
 		String ifFolder = folder.getPath() + File.separator + "ibas.initialfantasy";
-		String ibas = String.format("%1$s%2$s%3$s%2$srelease%2$s", folder.getPath(), File.separator, "ibas-framework");
-		String config = String.format("%s%2$sibas.initialfantasy%2$sapp.xml", ifFolder, File.separator);
-		String data = String.format("%s%2$srelease%2$sibas.initialfantasy-0.2.0.jar", ifFolder, File.separator);
-		String classes = String.format("%s%2$srelease%2$sibas.initialfantasy-0.2.0.jar", ifFolder, File.separator);
+		String ibas = folder.getPath() + File.separator + "ibas-framework" + File.separator + "release" + File.separator;
+		String config = ifFolder + File.separator + "ibas.initialfantasy" + File.separator + "app.xml";
+		String data = ifFolder + File.separator + "release" + File.separator + "ibas.initialfantasy-0.2.0.jar";
+		String classes = ifFolder + File.separator + "release" + File.separator + "ibas.initialfantasy-0.2.0.jar";
 		DataTransformer transformer = new DataTransformer4Jar();
 		transformer.setConfigFile(config);
 		transformer.setDataFile(data);
@@ -81,22 +74,5 @@ public class TestDataTransformer extends TestCase {
 			}
 		}
 		transformer.transform();
-
-		data = String.format("%s%2$sibas.initialfantasy%2$starget%2$sclasses%2$sinitialization", ifFolder,
-				File.separator);
-		classes = String.format("%s%2$sibas.initialfantasy%2$starget%2$sclasses", ifFolder, File.separator);
-		transformer = new DataTransformer4Jar();
-		transformer.setConfigFile(config);
-		transformer.setDataFile(data);
-		transformer.addLibrary(new File(classes).toURI().toURL());
-		files = new File(ibas).listFiles();
-		if (files != null) {
-			for (File item : files) {
-				if (item.getName().endsWith(".jar")) {
-					transformer.addLibrary(item.toURI().toURL());
-				}
-			}
-		}
-		// transformer.transform();
 	}
 }

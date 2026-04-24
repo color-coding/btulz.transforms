@@ -10,7 +10,7 @@
             <Condition Property="DataType" Value="Alphanumeric" />
         </OutputItem>
         <OutputItem>
-            <Content>TEXT</Content>
+            <Content>MEDIUMTEXT</Content>
             <Condition Property="DataType" Value="Memo" />
         </OutputItem>
 		<OutputItem>

@@ -2,6 +2,7 @@ package org.colorcoding.tools.btulz.transformer;
 
 import java.lang.reflect.Method;
 
+import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.model.Domain;
 import org.colorcoding.tools.btulz.model.IBusinessObject;
 import org.colorcoding.tools.btulz.model.IBusinessObjectItem;
@@ -18,7 +19,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * 默认解释器
- * 
+ *
  * @author Niuren.Zhu
  *
  */
@@ -117,7 +118,7 @@ class XmlParser implements IXmlParser {
 				try {
 					method.invoke(object, this.convert(type, childNode.getNodeValue()));
 				} catch (Exception e) {
-					System.out.println(String.format("setting [%s]'s value occurred error %s",
+					Environment.getLogger().error(String.format("setting [%s]'s value occurred error %s",
 							arrts.item(i).getNodeName(), e.getMessage()));
 				}
 				break;
@@ -127,9 +128,9 @@ class XmlParser implements IXmlParser {
 }
 
 /**
- * 
+ *
  * 旧版解释器
- * 
+ *
  * @author Niuren.Zhu
  *
  */
@@ -292,7 +293,7 @@ class XmlParser1 extends XmlParser {
 			} else if (node.getNodeName().equals("Linked")) {
 				object.setLinked(this.convert(String.class, node.getNodeValue()));
 			} else if (node.getNodeName().equals("DefaultValue")) {
-				object.setLinked(this.convert(String.class, node.getNodeValue()));
+				object.setDefaultValue(this.convert(String.class, node.getNodeValue()));
 			} else if (node.getNodeName().equals("FixedDataType")) {
 				if (node.getNodeValue() != null) {
 					String value = node.getNodeValue();

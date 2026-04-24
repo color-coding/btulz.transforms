@@ -4,17 +4,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.model.Domain;
 import org.colorcoding.tools.btulz.model.IDomain;
 
 /**
  * excel文件和领域模型的转换器
- * 
+ *
  * @author Niuren.Zhu
  *
  */
@@ -32,7 +31,7 @@ public class ExcelTransformer extends FileTransformer {
 
 	/**
 	 * 是否忽略注释的表格（名称前缀为!--）
-	 * 
+	 *
 	 * @return
 	 */
 
@@ -74,7 +73,7 @@ public class ExcelTransformer extends FileTransformer {
 
 	/**
 	 * 当前领域模型输出为xml格式
-	 * 
+	 *
 	 * @param outFolder
 	 *            输出目录
 	 * @throws Exception
@@ -93,13 +92,7 @@ public class ExcelTransformer extends FileTransformer {
 				throw new Exception("invaild file.");
 			}
 			stream = new FileInputStream(file);
-			if (file.getName().toLowerCase().endsWith(".xls")) {
-				workbook = new HSSFWorkbook(stream);
-			} else if (file.getName().toLowerCase().endsWith(".xlsx")) {
-				workbook = new XSSFWorkbook(stream);
-			} else {
-				throw new Exception("file was not be supported.");
-			}
+			workbook = WorkbookFactory.create(stream);
 			IDomain domain = new Domain();
 			this.parse(domain, file.getName());
 			this.parse(domain, workbook);
@@ -116,7 +109,7 @@ public class ExcelTransformer extends FileTransformer {
 
 	/**
 	 * 解析文件名称
-	 * 
+	 *
 	 * @param domain
 	 *            目标模型
 	 * @param fileName
@@ -145,15 +138,16 @@ public class ExcelTransformer extends FileTransformer {
 				domain.setShortName(shortName);
 			}
 		} catch (Exception e) {
+			Environment.getLogger().error(e);
 		}
 	}
 
 	/**
 	 * 分析工作簿
-	 * 
+	 *
 	 * @param domain
 	 *            填充的领域模型
-	 * 
+	 *
 	 * @param workbook
 	 *            待分析的工作簿
 	 * @throws TransformException
@@ -171,7 +165,7 @@ public class ExcelTransformer extends FileTransformer {
 
 	/**
 	 * 分析表格
-	 * 
+	 *
 	 * @param domain
 	 *            填充的领域模型
 	 * @param sheet
@@ -195,7 +189,7 @@ public class ExcelTransformer extends FileTransformer {
 
 	/**
 	 * 创建解释器
-	 * 
+	 *
 	 * @param sheet
 	 *            待解释的表格
 	 * @return null表示无可用解释器

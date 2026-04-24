@@ -99,8 +99,8 @@ public class Variable {
 	}
 
 	/**
-	 * 原始数据，全部小写
-	 * 
+	 * 判断值路径是否全部小写
+	 *
 	 * @return
 	 */
 	public boolean isLowerCase() {

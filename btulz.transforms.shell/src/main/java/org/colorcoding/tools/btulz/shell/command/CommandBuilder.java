@@ -92,7 +92,7 @@ public class CommandBuilder implements Comparable<CommandBuilder> {
 	/**
 	 * 形成命令
 	 * 
-	 * @return 命令字符串
+	 * @return 命令字符串数组
 	 */
 	public String[] toCommands() {
 		ArrayList<String> commands = new ArrayList<>();

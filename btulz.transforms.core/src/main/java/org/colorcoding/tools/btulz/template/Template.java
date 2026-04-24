@@ -42,7 +42,7 @@ public class Template extends TemplateRegion {
 	/**
 	 * 文件编码
 	 * 
-	 * 以模板文件为准，不存则为utf-8
+	 * 以模板文件为准，未设置时返回null
 	 * 
 	 * @return
 	 * @throws UnsupportedEncodingException

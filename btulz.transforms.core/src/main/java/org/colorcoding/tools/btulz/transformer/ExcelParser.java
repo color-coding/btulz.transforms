@@ -37,7 +37,7 @@ public class ExcelParser implements IExcelParser {
 	public static Object getCellValue(Cell cell) {
 		Object cellValue = null;
 		if (cell != null) {
-			CellType cellType = cell.getCellTypeEnum();// CellType.forInt(cell.getCellType());
+			CellType cellType = cell.getCellType();
 			if (cellType == CellType.STRING) {
 				cellValue = cell.getStringCellValue();
 			} else if (cellType == CellType.NUMERIC) {

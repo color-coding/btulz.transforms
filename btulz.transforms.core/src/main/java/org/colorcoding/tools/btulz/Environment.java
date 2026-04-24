@@ -155,14 +155,12 @@ public class Environment {
 	 */
 	public static String getEncoding(String fileName) {
 		String charset = "GBK";
-		try {
+		try (BufferedInputStream bin = new BufferedInputStream(new FileInputStream(fileName))) {
 			byte[] first3Bytes = new byte[3];
 			boolean checked = false;
-			BufferedInputStream bin = new BufferedInputStream(new FileInputStream(fileName));
 			bin.mark(100);
 			int read = bin.read(first3Bytes, 0, 3);
 			if (read == -1) {
-				bin.close();
 				return charset; // 文件编码为 ANSI
 			} else if (first3Bytes[0] == (byte) 0xFF && first3Bytes[1] == (byte) 0xFE) {
 				charset = "UTF-16LE"; // 文件编码为 Unicode
@@ -208,10 +206,8 @@ public class Environment {
 					}
 				}
 			}
-			bin.close();
 		} catch (Exception e) {
 			getLogger().error(String.format("parse [%s] encoding faild, %s", fileName, e));
-		} finally {
 		}
 		return charset;
 	}

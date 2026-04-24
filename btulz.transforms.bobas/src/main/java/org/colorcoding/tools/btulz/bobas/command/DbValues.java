@@ -24,17 +24,9 @@ public class DbValues extends ArrayList<DbValue> {
 
 	private static final long serialVersionUID = -1684584523309129310L;
 
-	private volatile static DbValues dbValues;
-
-	protected synchronized static DbValues create(String valueFile) {
-		if (dbValues == null) {
-			synchronized (DbValues.class) {
-				if (dbValues == null) {
-					dbValues = new DbValues();
-					dbValues.init(valueFile);
-				}
-			}
-		}
+	protected static DbValues create(String valueFile) {
+		DbValues dbValues = new DbValues();
+		dbValues.init(valueFile);
 		return dbValues;
 	}
 

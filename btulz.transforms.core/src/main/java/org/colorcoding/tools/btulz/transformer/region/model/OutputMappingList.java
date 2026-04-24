@@ -52,7 +52,7 @@ public class OutputMappingList extends ArrayList<OutputMapping> {
 	/**
 	 * 创建数据映射集合
 	 * 
-	 * @param inputStream 数据文件路径
+	 * @param inputStream 数据文件流
 	 * @return
 	 * @throws JAXBException
 	 */

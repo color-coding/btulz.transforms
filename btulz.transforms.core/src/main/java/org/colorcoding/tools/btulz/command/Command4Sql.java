@@ -25,7 +25,7 @@ public class Command4Sql extends Command<Command4Sql> {
 
 	public Command4Sql() {
 		this.setName(COMMAND_PROMPT);
-		this.setDescription("运行SQL脚本说明");
+		this.setDescription("Run SQL scripts");
 	}
 
 	@Override
@@ -37,23 +37,23 @@ public class Command4Sql extends Command<Command4Sql> {
 	protected Argument[] createArguments() {
 		ArrayList<Argument> arguments = new ArrayList<>();
 		// 添加自身参数
-		arguments.add(new Argument("-SqlFile", "使用的SQL文件"));
-		arguments.add(new Argument("-Company", "公司标记，用于数据库对象前缀"));
-		arguments.add(new Argument("-DbServer", "数据库地址"));
-		arguments.add(new Argument("-DbPort", "数据库端口"));
-		arguments.add(new Argument("-DbSchema", "应用架构"));
-		arguments.add(new Argument("-DbName", "数据库名称"));
-		arguments.add(new Argument("-DbUser", "数据库用户"));
-		arguments.add(new Argument("-DbPassword", "数据库用户密码"));
+		arguments.add(new Argument("-SqlFile", "SQL file to use"));
+		arguments.add(new Argument("-Company", "Company tag for database object prefix"));
+		arguments.add(new Argument("-DbServer", "Database server address"));
+		arguments.add(new Argument("-DbPort", "Database port"));
+		arguments.add(new Argument("-DbSchema", "Database schema"));
+		arguments.add(new Argument("-DbName", "Database name"));
+		arguments.add(new Argument("-DbUser", "Database user"));
+		arguments.add(new Argument("-DbPassword", "Database user password"));
 		return arguments.toArray(new Argument[] {});
 	}
 
 	/**
-	 * 为帮助添加调用代码的示例
+	 * 为帮助添加调用SQL脚本的示例
 	 */
 	@Override
 	protected void moreHelps(StringBuilder stringBuilder) {
-		stringBuilder.append("示例：");
+		stringBuilder.append("Example:");
 		stringBuilder.append(NEW_LINE);
 		stringBuilder.append("  ");
 		stringBuilder.append(COMMAND_PROMPT);
@@ -82,7 +82,7 @@ public class Command4Sql extends Command<Command4Sql> {
 			SqlTransformer sqlTransformer = new SqlTransformer();
 			for (Argument argument : arguments) {
 				if (!argument.isInputed()) {
-					// 没有输出的参数不做处理
+					// 没有输入的参数不做处理
 					continue;
 				}
 				if (argument.getName().equalsIgnoreCase("-SqlFile")) {

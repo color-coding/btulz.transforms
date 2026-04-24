@@ -23,8 +23,11 @@ public class BusinessObject implements IBusinessObject, Cloneable {
 	}
 
 	@Override
-	public boolean equals(Object property) {
-		return this.equals((IBusinessObject) property);
+	public boolean equals(Object obj) {
+		if (obj instanceof IBusinessObject) {
+			return this.equals((IBusinessObject) obj);
+		}
+		return false;
 	}
 
 	@Override

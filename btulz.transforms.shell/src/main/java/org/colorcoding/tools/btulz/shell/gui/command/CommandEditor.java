@@ -105,16 +105,19 @@ public class CommandEditor extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				FileWriter fileWriter = null;
 				try {
-					if (CommandEditor.this.textField.getText() == null
-							|| CommandEditor.this.textField.getText().isEmpty()) {
+					String fileName = CommandEditor.this.textField.getText();
+					if (fileName == null || fileName.isEmpty()) {
 						throw new Exception("not input name.");
+					}
+					if (fileName.contains("..") || fileName.contains(File.separator) || fileName.contains("/")) {
+						throw new Exception("invalid file name.");
 					}
 					File workFolder = new File(CommandEditor.this.getWorkFolder());
 					if (!workFolder.exists()) {
 						workFolder.mkdirs();
 					}
 					fileWriter = new FileWriter(
-							workFolder.getPath() + File.separator + CommandEditor.this.textField.getText());
+							workFolder.getPath() + File.separator + fileName);
 					fileWriter.write(CommandEditor.this.textArea.getText());
 					fileWriter.flush();
 					JOptionPane.showMessageDialog(CommandEditor.this, "Successfully saved.", "Command Editor",

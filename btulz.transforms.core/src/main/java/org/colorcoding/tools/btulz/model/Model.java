@@ -24,8 +24,11 @@ public class Model implements IModel, Cloneable {
 	}
 
 	@Override
-	public boolean equals(Object model) {
-		return this.equals((IModel) model);
+	public boolean equals(Object obj) {
+		if (obj instanceof IModel) {
+			return this.equals((IModel) obj);
+		}
+		return false;
 	}
 
 	@Override

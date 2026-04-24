@@ -28,7 +28,7 @@ public class Command4DsJar extends Command4Release<Command4DsJar> {
 
 	public Command4DsJar() {
 		this.setName(COMMAND_PROMPT);
-		this.setDescription("执行jar包中的数据结构和SQL说明");
+		this.setDescription("Execute data structures and SQL in jar package");
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class Command4DsJar extends Command4Release<Command4DsJar> {
 		return true;// 有参数才调用
 	}
 
-	private Argument jarArgument = new Argument("-JarFile", "待分析的jar包");
+	private Argument jarArgument = new Argument("-JarFile", "Jar package to analyze");
 
 	@Override
 	protected File getJarFile() throws UnsupportedEncodingException {
@@ -66,24 +66,24 @@ public class Command4DsJar extends Command4Release<Command4DsJar> {
 		}
 		// 添加自身参数
 		arguments.add(this.jarArgument);// "-JarFile", "待分析的jar包"，全局变量
-		arguments.add(new Argument("-DsTemplate", "使用的模板"));
-		arguments.add(new Argument("-SqlFilter", "SQL过滤标记"));
-		arguments.add(new Argument("-Company", "公司标记，用于数据库对象前缀"));
-		arguments.add(new Argument("-DbServer", "数据库地址"));
-		arguments.add(new Argument("-DbPort", "数据库端口"));
-		arguments.add(new Argument("-DbSchema", "应用架构"));
-		arguments.add(new Argument("-DbName", "数据库名称"));
-		arguments.add(new Argument("-DbUser", "数据库用户"));
-		arguments.add(new Argument("-DbPassword", "数据库用户密码"));
+		arguments.add(new Argument("-DsTemplate", "Template to use"));
+		arguments.add(new Argument("-SqlFilter", "SQL filter tag"));
+		arguments.add(new Argument("-Company", "Company tag for database object prefix"));
+		arguments.add(new Argument("-DbServer", "Database server address"));
+		arguments.add(new Argument("-DbPort", "Database port"));
+		arguments.add(new Argument("-DbSchema", "Database schema"));
+		arguments.add(new Argument("-DbName", "Database name"));
+		arguments.add(new Argument("-DbUser", "Database user"));
+		arguments.add(new Argument("-DbPassword", "Database user password"));
 		return arguments.toArray(new Argument[] {});
 	}
 
 	/**
-	 * 为帮助添加调用代码的示例
+	 * 为帮助添加调用jar包数据结构的示例
 	 */
 	@Override
 	protected void moreHelps(StringBuilder stringBuilder) {
-		stringBuilder.append("示例：");
+		stringBuilder.append("Example:");
 		stringBuilder.append(NEW_LINE);
 		stringBuilder.append("  ");
 		stringBuilder.append(COMMAND_PROMPT);
@@ -116,7 +116,7 @@ public class Command4DsJar extends Command4Release<Command4DsJar> {
 			JarTransformer jarTransformer = new JarTransformer();
 			for (Argument argument : arguments) {
 				if (!argument.isInputed()) {
-					// 没有输出的参数不做处理
+					// 没有输入的参数不做处理
 					continue;
 				}
 				if (argument.getName().equalsIgnoreCase("-DsTemplate")) {

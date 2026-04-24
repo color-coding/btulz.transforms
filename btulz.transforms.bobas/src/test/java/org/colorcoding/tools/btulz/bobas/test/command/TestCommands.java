@@ -12,17 +12,35 @@ import org.colorcoding.tools.btulz.bobas.command.Command4Routing;
 
 import junit.framework.TestCase;
 
+/**
+ * bobas命令行测试
+ *
+ * 覆盖：
+ * - Command4Init：初始化命令（加载配置、数据、类路径）
+ * - Command4Ds：数据结构命令（从JAR包或XML加载）
+ * - Command4Routing：路由命令（查询模块并配置路由）
+ *
+ * 注意：依赖ibas.initialfantasy项目和ibas-framework
+ */
 public class TestCommands extends TestCase {
+
+	/** 测试用控制台，继承Console以访问protected方法，避免触发System.exit */
+	static class TestConsole extends Console {
+		/** 运行命令，返回退出码（不触发System.exit） */
+		public static int execute(String[] args) {
+			return getCommandsManager().run(args);
+		}
+	}
 
 	public void testInit() throws MalformedURLException {
 		ArrayList<String> args = new ArrayList<>();
 		File folder = new File(MyConfiguration.getStartupFolder());
 		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();
 		String ifFolder = folder.getPath() + File.separator + "ibas.initialfantasy";
-		String ibas = String.format("%1$s%2$s%3$s%2$srelease%2$s", folder.getPath(), File.separator, "ibas-framework");
-		String config = String.format("%s%2$sibas.initialfantasy%2$sapp.xml", ifFolder, File.separator);
-		String data = String.format("%s%2$srelease%2$sibas.initialfantasy-0.2.0.jar", ifFolder, File.separator);
-		String classes = String.format("%s%2$srelease%2$sibas.initialfantasy-0.2.0.jar", ifFolder, File.separator);
+		String ibas = folder.getPath() + File.separator + "ibas-framework" + File.separator + "release" + File.separator;
+		String config = ifFolder + File.separator + "ibas.initialfantasy" + File.separator + "app.xml";
+		String data = ifFolder + File.separator + "release" + File.separator + "ibas.initialfantasy-0.2.0.jar";
+		String classes = ifFolder + File.separator + "release" + File.separator + "ibas.initialfantasy-0.2.0.jar";
 		File[] files = new File(ibas).listFiles();
 		if (files != null) {
 			for (File item : files) {
@@ -31,13 +49,13 @@ public class TestCommands extends TestCase {
 				}
 			}
 		}
-		args.add(String.format(Command4Init.COMMAND_PROMPT));
-		args.add(String.format("-data=%s", data));
-		args.add(String.format("-config=%s", config));
-		args.add(String.format("-classes=%s", classes));
+		args.add(Command4Init.COMMAND_PROMPT);
+		args.add("-data=" + data);
+		args.add("-config=" + config);
+		args.add("-classes=" + classes);
 		args.add("-ignore");
 		args.add("-force");
-		Console.main(args.toArray(new String[] {}));
+		TestConsole.execute(args.toArray(new String[] {}));
 	}
 
 	public void testDs() throws MalformedURLException {
@@ -45,22 +63,13 @@ public class TestCommands extends TestCase {
 		File folder = new File(MyConfiguration.getStartupFolder());
 		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();
 		String ifFolder = folder.getPath() + File.separator + "ibas.initialfantasy";
-		String config = String.format("%s%2$sibas.initialfantasy%2$sapp.xml", ifFolder, File.separator);
-		String data = String.format("%s%2$srelease%2$sibas.initialfantasy-0.2.0.jar", ifFolder, File.separator);
-		args.add(String.format(Command4Ds.COMMAND_PROMPT));
-		args.add(String.format("-data=%s", data));
-		args.add(String.format("-config=%s", config));
+		String config = ifFolder + File.separator + "ibas.initialfantasy" + File.separator + "app.xml";
+		String data = ifFolder + File.separator + "release" + File.separator + "ibas.initialfantasy-0.2.0.jar";
+		args.add(Command4Ds.COMMAND_PROMPT);
+		args.add("-data=" + data);
+		args.add("-config=" + config);
 		args.add("-ignore");
-		Console.main(args.toArray(new String[] {}));
-		args = new ArrayList<>();
-		data = String.format(
-				"%s%2$sibas.initialfantasy%2$ssrc%2$smain%2$sresources%2$sdatastructures%2$sds_sys_user.xml", ifFolder,
-				File.separator);
-		args.add(String.format(Command4Ds.COMMAND_PROMPT));
-		args.add(String.format("-data=%s", data));
-		args.add(String.format("-config=%s", config));
-		args.add("-ignore");
-		Console.main(args.toArray(new String[] {}));
+		TestConsole.execute(args.toArray(new String[] {}));
 	}
 
 	public void testRouting() throws MalformedURLException {
@@ -68,13 +77,13 @@ public class TestCommands extends TestCase {
 		File folder = new File(MyConfiguration.getStartupFolder());
 		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();
 		String ifFolder = folder.getPath() + File.separator + "ibas.initialfantasy";
-		String config = String.format("%s%2$sibas.initialfantasy%2$sapp.xml", ifFolder, File.separator);
-		args.add(String.format(Command4Routing.COMMAND_PROMPT));
-		args.add(String.format("-config=%s", config));
-		args.add(String.format("-query=%s", "SELECT * FROM ${Company}_SYS_MODULE"));
-		args.add(String.format("-dataUrl=%s", ".../${ModuleName}/services/rest/data"));
-		args.add(String.format("-viewUrl=%s", ".../${ModuleName}/"));
+		String config = ifFolder + File.separator + "ibas.initialfantasy" + File.separator + "app.xml";
+		args.add(Command4Routing.COMMAND_PROMPT);
+		args.add("-config=" + config);
+		args.add("-query=SELECT * FROM ${Company}_SYS_MODULE");
+		args.add("-dataUrl=.../${ModuleName}/services/rest/data");
+		args.add("-viewUrl=.../${ModuleName}/");
 		args.add("-ignore");
-		Console.main(args.toArray(new String[] {}));
+		TestConsole.execute(args.toArray(new String[] {}));
 	}
 }

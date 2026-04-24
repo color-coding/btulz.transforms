@@ -396,16 +396,15 @@ public class CodeTransformer extends Transformer {
 		File outFile = new File(outFolder.getPath() + File.separator + name);
 		// 获取模板文件的编码，以此编码输出文件
 		String encoding = Environment.getEncoding(source.getPath());
-		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(source), encoding));
-		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile), encoding));
-		String readString = null;
-		while ((readString = reader.readLine()) != null) {
-			writer.write(readString);
-			writer.newLine();
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(source), encoding));
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile), encoding))) {
+			String readString = null;
+			while ((readString = reader.readLine()) != null) {
+				writer.write(readString);
+				writer.newLine();
+			}
+			writer.flush();
 		}
-		reader.close();
-		writer.flush();
-		writer.close();
 	}
 
 	private String getFilePath(File folder, String name, Parameters parameters) throws Exception {

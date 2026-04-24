@@ -1,7 +1,6 @@
 package org.colorcoding.tools.btulz.shell;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -31,8 +30,17 @@ public class Environment {
 	 */
 	public static String getStartupFolder() {
 		try {
-			String path = java.net.URLDecoder
-					.decode(Environment.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "UTF-8");
+			String path = Environment.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+			try {
+				path = new URL(Environment.class.getProtectionDomain().getCodeSource().getLocation().toString()).toURI()
+						.getPath();
+			} catch (Exception e) {
+				// fallback to URLDecoder
+				try {
+					path = java.net.URLDecoder.decode(path, "UTF-8");
+				} catch (Exception e2) {
+				}
+			}
 			if (path != null) {
 				if (path.split(":").length > 2) {
 					path = path.substring(path.indexOf(":") + 1, path.length());
@@ -48,12 +56,13 @@ public class Environment {
 			if (file.isFile()) {
 				file = file.getParentFile();
 			}
-			if (file.getParentFile().isDirectory() && file.getParentFile().getName().equals("WEB-INF")) {
+			File parentFile = file.getParentFile();
+			if (parentFile != null && parentFile.isDirectory() && parentFile.getName().equals("WEB-INF")) {
 				// web路径
-				file = file.getParentFile();
+				file = parentFile;
 			}
 			return file.getPath();
-		} catch (UnsupportedEncodingException e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -88,7 +97,7 @@ public class Environment {
 	/**
 	 * 获取资源地址
 	 * 
-	 * @param type 资源名称
+	 * @param name 资源名称
 	 * @return 统一格式（此对象避免路径的中文问题）
 	 * @throws URISyntaxException
 	 */

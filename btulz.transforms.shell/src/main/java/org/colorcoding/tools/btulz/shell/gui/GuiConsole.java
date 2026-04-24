@@ -1,10 +1,12 @@
 package org.colorcoding.tools.btulz.shell.gui;
 
+import javax.swing.SwingUtilities;
+
 import org.colorcoding.tools.btulz.shell.gui.command.MainFrame;
 
 /**
  * 用户图形界面控制台
- * 
+ *
  * @author Niuren.Zhu
  *
  */
@@ -24,7 +26,7 @@ public class GuiConsole {
 	}
 
 	public void run(String[] args) {
-		this.showUI();
+		SwingUtilities.invokeLater(() -> showUI());
 	}
 
 	protected void showUI() {

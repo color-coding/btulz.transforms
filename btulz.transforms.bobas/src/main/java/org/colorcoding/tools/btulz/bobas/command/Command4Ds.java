@@ -30,29 +30,29 @@ public class Command4Ds extends Command<Command4Ds> {
 
 	public Command4Ds() {
 		this.setName(COMMAND_PROMPT);
-		this.setDescription("创建数据结构");
+		this.setDescription("Create data structures");
 	}
 
 	@Override
 	protected Argument[] createArguments() {
 		ArrayList<Argument> arguments = new ArrayList<>();
 		// 添加自身参数
-		arguments.add(new Argument("-data", "模型数据，待解析文件（jar、xml）"));
-		arguments.add(new Argument("-config", "配置文件"));
-		arguments.add(new Argument("-dbSign", "数据库标记（可忽略）"));
-		arguments.add(new Argument("-template", "数据结构解析模板（可忽略）"));
-		arguments.add(new Argument("-sql", "数据脚本文件（可忽略）"));
-		arguments.add(new Argument("-dbValue", "数据库值说明文件（可忽略）"));
-		arguments.add(new Argument("-ignore", "忽略错误"));
+		arguments.add(new Argument("-data", "Model data (jar/xml file to parse)"));
+		arguments.add(new Argument("-config", "Configuration file"));
+		arguments.add(new Argument("-dbSign", "Database tag (optional)"));
+		arguments.add(new Argument("-template", "Data structure template (optional)"));
+		arguments.add(new Argument("-sql", "SQL script file (optional)"));
+		arguments.add(new Argument("-dbValue", "Database value description file (optional)"));
+		arguments.add(new Argument("-ignore", "Ignore errors"));
 		return arguments.toArray(new Argument[] {});
 	}
 
 	/**
-	 * 为帮助添加调用代码的示例
+	 * 为帮助添加调用数据结构的示例
 	 */
 	@Override
 	protected void moreHelps(StringBuilder stringBuilder) {
-		stringBuilder.append("示例：");
+		stringBuilder.append("Example:");
 		stringBuilder.append(NEW_LINE);
 		stringBuilder.append("  ");
 		stringBuilder.append(COMMAND_PROMPT);
@@ -62,6 +62,14 @@ public class Command4Ds extends Command<Command4Ds> {
 		stringBuilder.append("-config=D:\\tomcat\\config\\app.xml");
 		stringBuilder.append(" ");
 		stringBuilder.append("-ignore");
+		stringBuilder.append(" ");
+		stringBuilder.append("-dbSign=Master");
+		stringBuilder.append(" ");
+		stringBuilder.append("-template=ds_mssql_ibas_classic.xml");
+		stringBuilder.append(" ");
+		stringBuilder.append("-sql=sql_mssql");
+		stringBuilder.append(" ");
+		stringBuilder.append("-dbValue=db_values.xml");
 		super.moreHelps(stringBuilder);
 	}
 
@@ -82,12 +90,12 @@ public class Command4Ds extends Command<Command4Ds> {
 			boolean ignore = false;
 			for (Argument argument : arguments) {
 				if (!argument.isInputed()) {
-					// 没有输出的参数不做处理
+					// 没有输入的参数不做处理
 					continue;
 				}
 				if (argument.getName().equalsIgnoreCase("-data")) {
 					argData = argument.getValue();
-				} else if (argument.getName().equalsIgnoreCase("-emplate")) {
+				} else if (argument.getName().equalsIgnoreCase("-template")) {
 					argTemplate = argument.getValue();
 				} else if (argument.getName().equalsIgnoreCase("-sql")) {
 					argSql = argument.getValue();
@@ -148,7 +156,7 @@ public class Command4Ds extends Command<Command4Ds> {
 			if (argDbPort == null || argDbPort.isEmpty()) {
 				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "DbPort"));
 			}
-			// 数据库框架
+			// 数据库模式
 			String argDbSchema = dbValues
 					.getValue(config.getConfigValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_TYPE), "DbSchema");
 			if (argDbSchema == null) {

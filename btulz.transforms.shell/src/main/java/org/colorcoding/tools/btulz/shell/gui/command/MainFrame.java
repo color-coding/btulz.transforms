@@ -111,7 +111,7 @@ public class MainFrame extends JFrame {
 		BuilderTab builderPane = new BuilderTab();
 		builderPane.setName("pane_builder");
 		JScrollPane scrollPane = new JScrollPane(builderPane, ScrollPaneLayout.VERTICAL_SCROLLBAR_AS_NEEDED,
-				ScrollPaneLayout.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+				ScrollPaneLayout.HORIZONTAL_SCROLLBAR_NEVER);
 		panel.add(scrollPane);
 		builderPane.addBuilderTabListener(new BuilderTabListener() {
 			@Override
@@ -137,6 +137,7 @@ public class MainFrame extends JFrame {
 			width = height / 9 * 16;
 		}
 		this.setSize(width / 3 * 2, height / 3 * 2);
+		this.setMaximumSize(new Dimension(width, height));
 		this.setLocationRelativeTo(null);// 移到中间
 		this.setVisible(true);
 	}
@@ -151,7 +152,8 @@ public class MainFrame extends JFrame {
 		if (height / 9 * 16 < width) {
 			width = height / 9 * 16;
 		}
-		if (this.getWidth() <= width && this.getHeight() < height) {
+		Dimension d = this.getPreferredSize();
+		if (d.width <= width && d.height <= height) {
 			super.pack();
 		}
 	}

@@ -36,7 +36,7 @@ public class Command {
 	private CommandEventSupport support;
 
 	/**
-	 * 添加事务监听
+	 * 添加命令监听
 	 * 
 	 * @param listener
 	 */
@@ -51,7 +51,7 @@ public class Command {
 	}
 
 	/**
-	 * 移出事务监听
+	 * 移除命令监听
 	 * 
 	 * @param listener
 	 */
@@ -100,9 +100,9 @@ public class Command {
 		return this.run(this.getCommandBuilder().toCommands());
 	}
 
-	private Thread commonThread = null;
-	private Thread errorThread = null;
-	private Process process = null;
+	private volatile Thread commonThread = null;
+	private volatile Thread errorThread = null;
+	private volatile Process process = null;
 
 	private String getCharsetName() {
 		if (System.getProperty("os.name").startsWith("Windows"))
@@ -113,7 +113,7 @@ public class Command {
 	/**
 	 * 运行命令
 	 * 
-	 * @param command 命令字符
+	 * @param commands 命令字符数组
 	 * @return 命令运行返回值
 	 */
 	public int run(String[] commands) {
@@ -146,7 +146,7 @@ public class Command {
 					}
 				}
 			});
-			// 开启线程2，错误输出
+			// 开启错误输出线程
 			this.errorThread = new Thread(new Runnable() {
 				public synchronized void run() {
 					try (BufferedReader read = new BufferedReader(
@@ -188,6 +188,7 @@ public class Command {
 	public void destroy() {
 		if (this.process != null) {
 			this.process.destroy();
+			this.process = null;
 		}
 		this.fireMessages(MessageType.common, String.format("[%s] was stop.",
 				this.getCommandBuilder() != null ? this.getCommandBuilder().getName() : "unknown"));

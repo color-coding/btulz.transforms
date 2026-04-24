@@ -6,31 +6,36 @@ import java.util.UUID;
 import org.colorcoding.tools.btulz.template.Parameter;
 import org.colorcoding.tools.btulz.test.Environment;
 import org.colorcoding.tools.btulz.transformer.CodeTransformer;
-import org.colorcoding.tools.btulz.util.NamingRules;
 
 import junit.framework.TestCase;
 
+/**
+ * 代码转换器测试
+ *
+ * 覆盖： - CodeTransformer属性设置与参数添加 - CodeTransformer.transform()代码生成（需要外部依赖环境）
+ */
 public class TestCodeTransformer extends TestCase {
 
-	public void testNaming() {
+	/** CodeTransformer属性设置与参数添加 */
+	public void testCodeTransformer_Properties() {
+		CodeTransformer transformer = new CodeTransformer();
+		transformer.setTemplateFolder("/templates/ibas_classic");
+		transformer.setOutputFolder("/output");
+		transformer.setGroupId("org.colorcoding");
+		transformer.setArtifactId("ibas");
+		transformer.setProjectVersion("0.0.1");
+		transformer.setProjectUrl("http://colorcoding.org");
+		transformer.addParameters(new Parameter("Company", "CC"));
+		transformer.addParameters(new Parameter("ibasVersion", "0.1.2"));
 
-		System.out.println(NamingRules.RULES_NAME_CAMEL_CASE_LOWER + ":");
-		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_LOWER, "BOCode"));
-		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_LOWER, "BOE"));
-		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_LOWER, "ItemCode"));
-		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_LOWER, "itemName"));
-		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_LOWER, "boCode"));
-		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_LOWER, "boe"));
-
-		System.out.println(NamingRules.RULES_NAME_CAMEL_CASE_UPPER + ":");
-		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_UPPER, "BOCode"));
-		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_UPPER, "BOE"));
-		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_UPPER, "ItemCode"));
-		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_UPPER, "itemName"));
-		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_UPPER, "boCode"));
-		System.out.println(NamingRules.format(NamingRules.RULES_NAME_CAMEL_CASE_UPPER, "boe"));
+		assertEquals("/templates/ibas_classic", transformer.getTemplateFolder());
+		assertEquals("/output", transformer.getOutputFolder());
+		assertEquals("org.colorcoding", transformer.getGroupId());
+		assertEquals("ibas", transformer.getArtifactId());
+		assertNotNull(transformer.getParameters());
 	}
 
+	/** Eclipse代码模板转换（需要外部环境） */
 	public void testEclipseCode() throws Exception {
 		CodeTransformer codeTransformer = new CodeTransformer();
 		codeTransformer.setTemplateFolder(Environment.getCodeFolder()
@@ -45,30 +50,10 @@ public class TestCodeTransformer extends TestCase {
 		codeTransformer.addParameters(new Parameter("ibasVersion", "0.1.2"));
 		codeTransformer.addParameters(new Parameter("ibasIfVersion", "0.1.0"));
 		codeTransformer.addParameters(new Parameter("ProjectId", UUID.randomUUID().toString()));
-		// codeTransformer.addDomains(Environment.getWorkingFolder() + File.separator +
-		// Environment.getXmlModelsFileOld());
-		// codeTransformer.addDomains(Environment.getCodeFolder() + String.format(
-		// "/ibas-typescript/test/apps/trainingtesting/resources/ds_trainingtesting.xml",
-		// File.separator));
 		codeTransformer.addDomains(Environment.getCodeFolder()
 				+ "/ibas.initialfantasy/ibas.initialfantasy/src/main/resources/datastructures".replace("/",
 						File.separator));
 		codeTransformer.transform();
 	}
 
-	public void testSampleCode() throws Exception {
-		CodeTransformer codeTransformer = new CodeTransformer();
-		codeTransformer.setTemplateFolder("E:\\MyWorks\\ColorCoding\\btulz4ibcp\\code\\eclipse\\ibcp_160911");
-		codeTransformer.setOutputFolder(Environment.getOutputFolder());
-		codeTransformer.setGroupId("org.colorcoding");
-		codeTransformer.setArtifactId("ibas");
-		codeTransformer.setProjectVersion("0.0.1");
-		codeTransformer.setProjectUrl("http://colorcoding.org");
-		codeTransformer.addParameters(new Parameter("ibasVersion", "0.1.1"));
-		codeTransformer.addParameters(new Parameter("ProjectId", UUID.randomUUID().toString()));
-		codeTransformer.addDomains(Environment.getDomainFolder());
-		// codeTransformer.addDomain((new testModels()).createDomain());
-
-		codeTransformer.transform();
-	}
 }

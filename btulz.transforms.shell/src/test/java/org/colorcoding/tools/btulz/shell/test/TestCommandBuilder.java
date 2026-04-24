@@ -18,12 +18,21 @@ import org.colorcoding.tools.btulz.shell.command.ValidValues;
 
 import junit.framework.TestCase;
 
+/**
+ * 命令构建器测试
+ *
+ * 覆盖：
+ * - CommandBuilder创建与ValidValues（布尔/枚举/自定义/模板可选值）
+ * - XML序列化/反序列化往返
+ * - CommandManager加载命令配置并执行
+ */
 public class TestCommandBuilder extends TestCase {
 
 	public enum emYesNo {
 		Yes, No
 	};
 
+	/** 创建CommandBuilder并验证各种ValidValues类型与序列化往返 */
 	public void testCreate() throws JAXBException {
 		CommandBuilder commandBuilder = new CommandBuilder();
 		commandBuilder.setName("test");
@@ -62,26 +71,12 @@ public class TestCommandBuilder extends TestCase {
 		commandItem.setContent("");
 		commandItem.getValidValues().setClassName(TemplateGetter.class.getName());
 		commandItem.getValidValues().get();
-		index++;
-
-		for (CommandItem item : commandBuilder.getItems()) {
-			if (item == null) {
-				continue;
-			}
-			System.out.print(item.getName());
-			System.out.print(" ");
-			System.out.print(item.getValidValues().getClassName());
-			System.out.println();
-			for (ValidValue validValue : item.getValidValues()) {
-				System.out.println(validValue);
-			}
-		}
 
 		String xml = Serializer.toXmlString(commandBuilder, true, CommandBuilder.class, CommandItem.class,
 				ValidValue.class, ValidValues.class);
 		System.out.println(xml);
 
-		System.out.println();
+		// 反序列化验证
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
 		stringBuilder.append(
@@ -98,16 +93,12 @@ public class TestCommandBuilder extends TestCase {
 		System.out.println(xml);
 	}
 
+	/** CommandManager加载命令配置并执行 */
 	public void testCommandManager() {
 		CommandManager manager = CommandManager.create();
 		List<CommandBuilder> commandBuilders = manager.getCommands();
 		for (CommandBuilder commandBuilder : commandBuilders) {
 			System.out.println(commandBuilder.toString());
-			System.out.println(Command.toCommand(commandBuilder.toCommands()));
-		}
-		System.out.println();
-		System.out.println();
-		for (CommandBuilder commandBuilder : commandBuilders) {
 			Command command = new Command(commandBuilder);
 			command.addListener(new CommandListener() {
 				@Override
@@ -120,9 +111,7 @@ public class TestCommandBuilder extends TestCase {
 				}
 			});
 			command.run();
-			System.out.println();
 		}
-
 	}
 
 }

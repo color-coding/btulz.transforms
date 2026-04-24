@@ -2,7 +2,6 @@ package org.colorcoding.tools.btulz.shell.command;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -85,9 +84,7 @@ public class CommandManager {
 	}
 
 	/**
-	 * 加载资源命名构造器
-	 * 
-	 * @return
+	 * 加载资源中的命令构造器
 	 */
 	protected void loadResources() {
 		// 加载jar包命令
@@ -104,11 +101,14 @@ public class CommandManager {
 			// 加载工作目录资源
 			File workFolder = new File(Environment.getWorkingFolder());
 			if (workFolder != null) {
-				for (File file : workFolder.listFiles()) {
-					if (file.getName().endsWith(".jar")) {
-						JarFile jarFile = new JarFile(file);
-						this.loadResources(jarFile);
-						jarFile.close();
+				File[] jarFiles = workFolder.listFiles();
+				if (jarFiles != null) {
+					for (File file : jarFiles) {
+						if (file.getName().endsWith(".jar")) {
+							try (JarFile jarFile = new JarFile(file)) {
+								this.loadResources(jarFile);
+							}
+						}
 					}
 				}
 			}
@@ -133,10 +133,10 @@ public class CommandManager {
 				if (!jarEntry.getName().endsWith(".xml")) {
 					continue;
 				}
-				InputStream inputStream = jarFile.getInputStream(jarEntry);
-				if (inputStream != null) {
-					this.addCommands(inputStream, this.getCommandName(jarEntry.getName()));
-					inputStream.close();
+				try (InputStream inputStream = jarFile.getInputStream(jarEntry)) {
+					if (inputStream != null) {
+						this.addCommands(inputStream, this.getCommandName(jarEntry.getName()));
+					}
 				}
 			}
 		}
@@ -148,9 +148,9 @@ public class CommandManager {
 		File file = new File(fileFolder);
 		if (file.exists()) {
 			if (file.isFile()) {
-				try {
-					this.addCommands(new FileInputStream(file), this.getCommandName(file.getName()));
-				} catch (FileNotFoundException e) {
+				try (FileInputStream fis = new FileInputStream(file)) {
+					this.addCommands(fis, this.getCommandName(file.getName()));
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			} else {

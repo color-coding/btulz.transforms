@@ -4,39 +4,39 @@ import java.io.File;
 
 import org.colorcoding.tools.btulz.test.Environment;
 import org.colorcoding.tools.btulz.transformer.DsTransformer;
-import org.colorcoding.tools.btulz.transformer.DsTransformer4Jar;
 import org.colorcoding.tools.btulz.transformer.JarTransformer;
 import org.colorcoding.tools.btulz.transformer.SqlTransformer;
-import org.colorcoding.tools.btulz.transformer.SqlTransformer4Jar;
 
 import junit.framework.TestCase;
 
+/**
+ * 数据库转换器测试
+ *
+ * 覆盖： - DsTransformer：数据结构创建（SQLite为代表） - SqlTransformer：SQL初始化脚本执行（MSSQL为代表） -
+ * JarTransformer：JAR包中结构及SQL的创建
+ *
+ * 注意：MYSQL/PGSQL/HANA等与MSSQL/SQLite流程一致，仅连接参数不同； 多数测试依赖外部数据库环境，文件存在性检查后执行
+ */
 public class TestDbTransformer extends TestCase {
 
-	/**
-	 * 测试数据结构创建
-	 * 
-	 * @throws Exception
-	 */
+	/** 数据结构创建（SQLite为代表） */
 	public void testDS() throws Exception {
 		System.err.println("运行请清理test-classes目录的历史文件。");
 		DsTransformer dsTransformer = new DsTransformer();
 		dsTransformer.setTemplateFile("ds_sqlite_ibas_classic.xml");
 		dsTransformer.addDomains(Environment.getWorkingFolder() + File.separator + Environment.getXmlModelsFileOld());
-		// dsTransformer.addDomains(
-		// "E:\\MyWorks\\ColorCoding\\ibas.initialfantasy\\ibas.initialfantasy\\src\\main\\resources\\datastructures");
 		dsTransformer.setCompany("CC");
 		dsTransformer.setDbServer("ibas-db-sybase");
 		dsTransformer.setDbPort("2638");
 		dsTransformer.setDbSchema("dbo");
-		// dsTransformer.setDbName("ibas_demo");
 		dsTransformer.setDbName("ibas_demo.db");
 		dsTransformer.setDbUser("dba");
 		dsTransformer.setDbPassword("1q2w3e");
 		dsTransformer.transform();
 	}
 
-	public void testInitMSSQL() throws Exception {
+	/** SQL初始化脚本执行（MSSQL为代表） */
+	public void testInitSQL() throws Exception {
 		File file = new File(Environment.getSqlsFolder() + File.separator + "sql_mssql_ibas_initialization.xml");
 		if (file.exists() && file.isFile()) {
 			SqlTransformer sqlTransformer = new SqlTransformer();
@@ -52,108 +52,7 @@ public class TestDbTransformer extends TestCase {
 		}
 	}
 
-	public void testInitMYSQL() throws Exception {
-		File file = new File(Environment.getSqlsFolder() + File.separator + "sql_mysql_ibas_initialization.xml");
-		if (file.exists() && file.isFile()) {
-			SqlTransformer sqlTransformer = new SqlTransformer();
-			sqlTransformer.setSqlFile(file.getPath());
-			sqlTransformer.setCompany("CC");
-			sqlTransformer.setDbServer("ibas-dev-mysql");
-			sqlTransformer.setDbPort("3306");
-			sqlTransformer.setDbName("ibas_demo" + String.format("_%s", this.hashCode()));
-			sqlTransformer.setDbUser("root");
-			sqlTransformer.setDbPassword("1q2w3e");
-			sqlTransformer.transform();
-		}
-	}
-
-	public void testInitPGSQL() throws Exception {
-		File file = new File(Environment.getSqlsFolder() + File.separator + "sql_pgsql_ibas_initialization.xml");
-		if (file.exists() && file.isFile()) {
-			SqlTransformer sqlTransformer = new SqlTransformer();
-			sqlTransformer.setSqlFile(file.getPath());
-			sqlTransformer.setCompany("CC");
-			sqlTransformer.setDbServer("ibas-dev-pgsql");
-			sqlTransformer.setDbPort("5432");
-			sqlTransformer.setDbName("ibas_demo" + String.format("_%s", this.hashCode()));
-			sqlTransformer.setDbUser("postgres");
-			sqlTransformer.setDbPassword("1q2w3e");
-			sqlTransformer.transform();
-		}
-	}
-
-	public void testInitHANA() throws Exception {
-		File file = new File(Environment.getSqlsFolder() + File.separator + "sql_hana_ibas_initialization.xml");
-		if (file.exists() && file.isFile()) {
-			SqlTransformer sqlTransformer = new SqlTransformer();
-			sqlTransformer.setSqlFile(file.getPath());
-			sqlTransformer.setCompany("CC");
-			sqlTransformer.setDbServer("ibas-dev-hana");
-			sqlTransformer.setDbPort("30015");
-			sqlTransformer.setDbName("ibas_demo" + String.format("_%s", this.hashCode()));
-			sqlTransformer.setDbUser("SYSTEM");
-			sqlTransformer.setDbPassword("AVAtech2015!");
-			sqlTransformer.transform();
-		}
-	}
-
-	/**
-	 * 测试jar包中数据结构创建
-	 * 
-	 * @throws Exception
-	 */
-	public void testDsJar() throws Exception {
-		System.err.println("运行请清理test-classes目录的历史文件。");
-		File folder = new File(Environment.getSqlsFolder());
-		File[] files = folder.listFiles();
-		if (files != null) {
-			for (File file : files) {
-				DsTransformer4Jar dsTransformer = new DsTransformer4Jar();
-				dsTransformer.setTemplateFile("ds_mssql_ibas_classic.xml");
-				dsTransformer.addDomains(file);
-				dsTransformer.setCompany("CC");
-				dsTransformer.setDbServer("ibas-dev-mssql");
-				dsTransformer.setDbPort("1433");
-				dsTransformer.setDbSchema("dbo");
-				dsTransformer.setDbName("ibas_demo" + "_" + this.hashCode());
-				dsTransformer.setDbUser("sa");
-				dsTransformer.setDbPassword("1q2w3e");
-				dsTransformer.transform();
-			}
-		}
-	}
-
-	/**
-	 * 测试jar包中sql执行
-	 * 
-	 * @throws Exception
-	 */
-	public void testSqlJar() throws Exception {
-		System.err.println("运行请清理test-classes目录的历史文件。");
-		File folder = new File(Environment.getSqlsFolder());
-		File[] files = folder.listFiles();
-		if (files != null) {
-			for (File file : files) {
-				SqlTransformer4Jar sqlTransformer = new SqlTransformer4Jar();
-				sqlTransformer.setSqlFilter("sql_mssql");
-				sqlTransformer.setSqlFile(file.getPath());
-				sqlTransformer.setCompany("CC");
-				sqlTransformer.setDbServer("ibas-dev-mssql");
-				sqlTransformer.setDbPort("1433");
-				sqlTransformer.setDbName("ibas_demo" + "_" + this.hashCode());
-				sqlTransformer.setDbSchema("dbo");
-				sqlTransformer.setDbUser("sa");
-				sqlTransformer.setDbPassword("1q2w3e");
-				sqlTransformer.transform();
-			}
-		}
-	}
-
-	/**
-	 * 测试jar包中的结构及sql创建
-	 * 
-	 * @throws Exception
-	 */
+	/** JAR包中的结构及SQL创建 */
 	public void testJar() throws Exception {
 		System.err.println("运行请清理test-classes目录的历史文件。");
 		File folder = new File(Environment.getSqlsFolder());

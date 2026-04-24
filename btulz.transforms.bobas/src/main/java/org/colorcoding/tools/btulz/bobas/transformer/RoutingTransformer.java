@@ -59,7 +59,7 @@ public class RoutingTransformer extends Transformer {
 
 	public String getOutFile() {
 		if (this.outFile == null || this.outFile.isEmpty()) {
-			this.outFile = MyConfiguration.getWorkFolder() + "/service_routiong.xml";
+			this.outFile = MyConfiguration.getWorkFolder() + "/service_routing.xml";
 		}
 		return outFile;
 	}

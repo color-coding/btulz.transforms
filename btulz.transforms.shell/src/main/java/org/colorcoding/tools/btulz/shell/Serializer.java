@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -33,7 +34,7 @@ public class Serializer {
 			Class<?>[] knownTypes = new Class[types.length + 1];
 			knownTypes[0] = object.getClass();
 			for (int i = 0; i < types.length; i++) {
-				knownTypes[i + 1] = types[0];
+				knownTypes[i + 1] = types[i];
 			}
 			JAXBContext context = JAXBContext.newInstance(knownTypes);
 			Marshaller marshaller = context.createMarshaller();
@@ -89,7 +90,7 @@ public class Serializer {
 		Class<?>[] knownTypes = new Class[types.length + 1];
 		knownTypes[0] = object.getClass();
 		for (int i = 0; i < types.length; i++) {
-			knownTypes[i + 1] = types[0];
+			knownTypes[i + 1] = types[i];
 		}
 		JAXBContext context = JAXBContext.newInstance(knownTypes);
 		Marshaller marshaller = context.createMarshaller();
@@ -113,7 +114,7 @@ public class Serializer {
 		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");// 编码格式
 		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, false);// 是否省略xm头声明信息
 		Unmarshaller unmarshaller = context.createUnmarshaller();
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(value.getBytes());
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(value.getBytes(StandardCharsets.UTF_8));
 		return unmarshaller.unmarshal(inputStream);
 	}
 

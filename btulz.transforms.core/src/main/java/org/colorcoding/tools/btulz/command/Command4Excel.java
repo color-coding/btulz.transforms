@@ -27,7 +27,7 @@ public class Command4Excel extends Command4Release<Command4Excel> {
 
 	public Command4Excel() {
 		this.setName(COMMAND_PROMPT);
-		this.setDescription("根据excel文件输出模型");
+		this.setDescription("Output models from Excel file");
 	}
 
 	@Override
@@ -53,18 +53,18 @@ public class Command4Excel extends Command4Release<Command4Excel> {
 			arguments.add(argument);
 		}
 		// 添加自身参数
-		arguments.add(new Argument("-ExcelFile", "解析的excel文件"));
-		arguments.add(new Argument("-OutputFolder", "模型输出的目录"));
-		arguments.add(new Argument("-IgnoreSheet", "忽略注释的表格，即“!--”前缀表格"));
+		arguments.add(new Argument("-ExcelFile", "Excel file to parse"));
+		arguments.add(new Argument("-OutputFolder", "Output directory for models"));
+		arguments.add(new Argument("-IgnoreSheet", "Ignore commented sheets (prefixed with \"!--\")"));
 		return arguments.toArray(new Argument[] {});
 	}
 
 	/**
-	 * 为帮助添加调用代码的示例
+	 * 为帮助添加调用excel解析的示例
 	 */
 	@Override
 	protected void moreHelps(StringBuilder stringBuilder) {
-		stringBuilder.append("示例：");
+		stringBuilder.append("Example:");
 		stringBuilder.append(NEW_LINE);
 		stringBuilder.append("  ");
 		stringBuilder.append(COMMAND_PROMPT); // 命令
@@ -84,7 +84,7 @@ public class Command4Excel extends Command4Release<Command4Excel> {
 			String fileName = null;
 			for (Argument argument : arguments) {
 				if (!argument.isInputed()) {
-					// 没有输出的参数不做处理
+					// 没有输入的参数不做处理
 					continue;
 				}
 				if (excelTransformer == null) {
@@ -103,8 +103,7 @@ public class Command4Excel extends Command4Release<Command4Excel> {
 			}
 			excelTransformer.load(fileName, false);
 			excelTransformer.transform();
-			// 没有执行方法
-			return RETURN_VALUE_NO_COMMAND_EXECUTION;
+			return RETURN_VALUE_SUCCESS;
 		} catch (Exception e) {
 			this.print(e);
 			return RETURN_VALUE_TRANSFORM_FAILD;

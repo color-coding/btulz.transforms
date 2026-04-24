@@ -25,8 +25,11 @@ public class Domain implements IDomain, Cloneable {
 	}
 
 	@Override
-	public boolean equals(Object model) {
-		return this.equals((IDomain) model);
+	public boolean equals(Object obj) {
+		if (obj instanceof IDomain) {
+			return this.equals((IDomain) obj);
+		}
+		return false;
 	}
 
 	@Override

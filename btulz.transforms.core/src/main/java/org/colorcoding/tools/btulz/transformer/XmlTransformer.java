@@ -162,9 +162,10 @@ public class XmlTransformer extends FileTransformer {
 		transformer.setOutputProperty(OutputKeys.ENCODING, XML_FILE_ENCODING);
 		transformer.setOutputProperty(OutputKeys.INDENT, XML_FILE_INDENT);
 		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		PrintWriter pw = new PrintWriter(new File(fileName), XML_FILE_ENCODING);
-		StreamResult result = new StreamResult(pw);
-		transformer.transform(source, result);
+		try (PrintWriter pw = new PrintWriter(new File(fileName), XML_FILE_ENCODING)) {
+			StreamResult result = new StreamResult(pw);
+			transformer.transform(source, result);
+		}
 
 		Environment.getLogger().info(String.format("end transform domain to file."));
 	}

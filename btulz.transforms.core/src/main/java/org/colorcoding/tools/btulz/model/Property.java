@@ -24,8 +24,11 @@ public class Property implements IProperty, Cloneable {
 	}
 
 	@Override
-	public boolean equals(Object property) {
-		return this.equals((IProperty) property);
+	public boolean equals(Object obj) {
+		if (obj instanceof IProperty) {
+			return this.equals((IProperty) obj);
+		}
+		return false;
 	}
 
 	@Override
