@@ -24,7 +24,7 @@ public class Command4DsJar extends Command4Release<Command4DsJar> {
 	/**
 	 * 返回值，300，转换错误
 	 */
-	public static final int RETURN_VALUE_TRANSFORM_FAILD = 300;
+	public static final int RETURN_VALUE_TRANSFORM_FAILED = 300;
 
 	public Command4DsJar() {
 		this.setName(COMMAND_PROMPT);
@@ -151,7 +151,7 @@ public class Command4DsJar extends Command4Release<Command4DsJar> {
 			return RETURN_VALUE_NO_COMMAND_EXECUTION;
 		} catch (Exception e) {
 			this.print(e);
-			return RETURN_VALUE_TRANSFORM_FAILD;
+			return RETURN_VALUE_TRANSFORM_FAILED;
 		}
 	}
 

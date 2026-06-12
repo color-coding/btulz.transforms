@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!DOCTYPE ArrayList>
 <!-- 业务对象 -->
-<ns3:ArrayList xmlns:ns2="http://colorcoding.org/btulz/util" xmlns:ns3="http://colorcoding.org/btulz/transformers">
+<ns3:ArrayList xmlns:ns2="http://colorcoding.org/btulz/util"
+	xmlns:ns3="http://colorcoding.org/btulz/transformers">
 	<!-- 基类类型说明 -->
 	<OutputMapping Name="bo.class" Binding="Model" Unmatched="EXCEPTION">
 		<OutputItem>
@@ -82,32 +83,62 @@
 	<!-- 标记类型说明 -->
 	<OutputMapping Name="an.type" Binding="Property" Unmatched="EXCEPTION">
 		<OutputItem>
-			<Content>DbFieldType.ALPHANUMERIC</Content>
+			<Content>DataType.ALPHANUMERIC</Content>
 			<Condition Property="DataType" Value="Alphanumeric" />
 		</OutputItem>
 		<OutputItem>
-			<Content>DbFieldType.MEMO</Content>
+			<Content>DataType.MEMO</Content>
 			<Condition Property="DataType" Value="Memo" />
 		</OutputItem>
 		<OutputItem>
-			<Content>DbFieldType.NUMERIC</Content>
+			<Content>DataType.NUMERIC</Content>
 			<Condition Property="DataType" Value="Numeric" />
 		</OutputItem>
 		<OutputItem>
-			<Content>DbFieldType.NUMERIC</Content>
+			<Content>DataType.NUMERIC, editType = EditType.TIME</Content>
 			<Condition Property="DataType" Value="Date" />
 			<Condition Property="DataSubType" Value="Time" />
 		</OutputItem>
 		<OutputItem>
-			<Content>DbFieldType.DATE</Content>
+			<Content>DataType.DATE</Content>
 			<Condition Property="DataType" Value="Date" />
 		</OutputItem>
 		<OutputItem>
-			<Content>DbFieldType.DECIMAL</Content>
+			<Content>DataType.DECIMAL, editType = EditType.PRICE</Content>
+			<Condition Property="DataType" Value="Decimal" />
+			<Condition Property="DataSubType" Value="Price" />
+		</OutputItem>
+		<OutputItem>
+			<Content>DataType.DECIMAL, editType = EditType.QUANTITY</Content>
+			<Condition Property="DataType" Value="Decimal" />
+			<Condition Property="DataSubType" Value="Quantity" />
+		</OutputItem>
+		<OutputItem>
+			<Content>DataType.DECIMAL, editType = EditType.SUM</Content>
+			<Condition Property="DataType" Value="Decimal" />
+			<Condition Property="DataSubType" Value="Sum" />
+		</OutputItem>
+		<OutputItem>
+			<Content>DataType.DECIMAL, editType = EditType.RATE</Content>
+			<Condition Property="DataType" Value="Decimal" />
+			<Condition Property="DataSubType" Value="Rate" />
+		</OutputItem>
+		<OutputItem>
+			<Content>DataType.DECIMAL, editType = EditType.PERCENTAGE</Content>
+			<Condition Property="DataType" Value="Decimal" />
+			<Condition Property="DataSubType" Value="Percentage" />
+		</OutputItem>
+		<OutputItem>
+			<Content>DataType.DECIMAL, editType = EditType.MEASUREMENT</Content>
+			<Condition Property="DataType" Value="Decimal" />
+			<Condition Property="DataSubType" Value="Measurement" />
+		</OutputItem>
+		<OutputItem>
+			<Content>DataType.DECIMAL</Content>
 			<Condition Property="DataType" Value="Decimal" />
 		</OutputItem>
 		<OutputItem>
-			<Content>DbFieldType.BYTES</Content>
+			<Content>DataType.BYTES</Content>
 			<Condition Property="DataType" Value="Bytes" />
 		</OutputItem>
 	</OutputMapping>

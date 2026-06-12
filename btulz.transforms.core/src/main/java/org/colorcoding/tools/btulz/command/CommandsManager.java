@@ -118,40 +118,40 @@ public class CommandsManager {
 			}
 			return command.run(cArgs);
 		} catch (InstantiationException | IllegalAccessException e) {
-			this.print("call command [%s] faild.", prompt);
+			this.print("call command [%s] failed.", prompt);
 			this.print(e.toString());
-			return Command.RETURN_VALUE_COMMAND_EXECUTION_FAILD;
+			return Command.RETURN_VALUE_COMMAND_EXECUTION_FAILED;
 		}
 	}
 
 	private void printRegistedCommands() {
 		// 列出当前存在的命令
 		StringBuilder invalidCommands = new StringBuilder();
-		invalidCommands.append(String.format("invaild command:"));
+		invalidCommands.append(String.format("invalid command:"));
 		invalidCommands.append(NEW_LINE);
-		StringBuilder vaildCommands = new StringBuilder();
-		vaildCommands.append("vaild commands:");
-		vaildCommands.append(NEW_LINE);
+		StringBuilder validCommands = new StringBuilder();
+		validCommands.append("valid commands:");
+		validCommands.append(NEW_LINE);
 		for (Class<? extends Command<?>> item : this.getCommands().values()) {
 			try {
 				Command<?> command = item.newInstance();
-				vaildCommands.append("    ");
-				vaildCommands.append(command.getName());
+				validCommands.append("    ");
+				validCommands.append(command.getName());
 				for (int i = command.getName().length(); i < 10; i++) {
-					vaildCommands.append(" ");
+					validCommands.append(" ");
 				}
-				vaildCommands.append(command.getDescription());
-				vaildCommands.append(NEW_LINE);
+				validCommands.append(command.getDescription());
+				validCommands.append(NEW_LINE);
 			} catch (InstantiationException | IllegalAccessException e) {
-				vaildCommands.append("    ");
-				vaildCommands.append(item.getSimpleName());
+				validCommands.append("    ");
+				validCommands.append(item.getSimpleName());
 				invalidCommands.append(NEW_LINE);
 				invalidCommands.append("    ");
 				invalidCommands.append(e.toString());
 				invalidCommands.append(NEW_LINE);
 			}
 		}
-		this.print(vaildCommands.toString());
+		this.print(validCommands.toString());
 		if (invalidCommands.length() > 1) {
 			this.print(invalidCommands.toString());
 		}

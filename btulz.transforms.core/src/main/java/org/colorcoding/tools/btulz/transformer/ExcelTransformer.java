@@ -89,7 +89,7 @@ public class ExcelTransformer extends FileTransformer {
 		Workbook workbook = null;
 		try {
 			if (file == null || !file.isFile() || !file.exists()) {
-				throw new Exception("invaild file.");
+				throw new Exception("invalid file.");
 			}
 			stream = new FileInputStream(file);
 			workbook = WorkbookFactory.create(stream);

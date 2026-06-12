@@ -228,9 +228,9 @@ public class CodeTransformer extends Transformer {
 			if (newDomain == null) {
 				domains.add(domain.clone());
 			} else {
-				IDomain tmpDomian = domain.clone();
-				newDomain.getBusinessObjects().addAll(tmpDomian.getBusinessObjects());
-				newDomain.getModels().addAll(tmpDomian.getModels());
+				IDomain tmpDomain = domain.clone();
+				newDomain.getBusinessObjects().addAll(tmpDomain.getBusinessObjects());
+				newDomain.getModels().addAll(tmpDomain.getModels());
 			}
 		}
 		for (IDomain domain : domains) {

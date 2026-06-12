@@ -209,7 +209,7 @@ public class DataTransformer extends Transformer {
 			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
 			Element element = document.getDocumentElement();
 			if (element == null) {
-				throw new SAXException("invaild xml data.");
+				throw new SAXException("invalid xml data.");
 			}
 			String dataName = element.getNodeName().toLowerCase();
 			String perfix = null;
@@ -318,7 +318,7 @@ public class DataTransformer extends Transformer {
 										if (opRslt.getResultCode() != 0) {
 											// 保存失败
 											Environment.getLogger()
-													.error(String.format("delete faild [%s].", opRslt.getMessage()));
+													.error(String.format("delete failed [%s].", opRslt.getMessage()));
 											if (this.isInterruptOnError()) {
 												throw new Exception(opRslt.getMessage());
 											}
@@ -335,7 +335,7 @@ public class DataTransformer extends Transformer {
 					opRslt = boRepository.saveData(data);
 					if (opRslt.getResultCode() != 0) {
 						// 保存失败
-						Environment.getLogger().error(String.format("save faild [%s].", opRslt.getMessage()));
+						Environment.getLogger().error(String.format("save failed [%s].", opRslt.getMessage()));
 						if (this.isInterruptOnError()) {
 							throw new Exception(opRslt.getMessage());
 						}

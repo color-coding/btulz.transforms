@@ -15,14 +15,14 @@ public abstract class Transformer implements ITransformer {
 
 	}
 
-	private boolean keeepResults;
+	private boolean keepResults;
 
 	public final boolean isKeepResults() {
-		return this.keeepResults;
+		return this.keepResults;
 	}
 
 	public final void setKeepResults(boolean value) {
-		this.keeepResults = value;
+		this.keepResults = value;
 	}
 
 	private boolean interruptOnError;

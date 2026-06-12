@@ -166,7 +166,7 @@ public class Command4Init extends Command<Command4Init> {
 					ClassLoader.getSystemClassLoader())) {
 				if (test) {
 					// 测试类加载器
-					this.testClassLoder(classLoader);
+					this.testClassLoader(classLoader);
 					return RETURN_VALUE_NO_COMMAND_EXECUTION;
 				}
 				Class<?> dtType = classLoader.loadClass(DataTransformer4Jar.class.getName());
@@ -201,11 +201,11 @@ public class Command4Init extends Command<Command4Init> {
 			} else {
 				this.print(e);
 			}
-			return RETURN_VALUE_COMMAND_EXECUTION_FAILD;
+			return RETURN_VALUE_COMMAND_EXECUTION_FAILED;
 		}
 	}
 
-	private void testClassLoder(ClassLoader4Transformer classLoader) {
+	private void testClassLoader(ClassLoader4Transformer classLoader) {
 		for (URL url : classLoader.getURLs()) {
 			this.print("registered library %s", url.toString());
 		}

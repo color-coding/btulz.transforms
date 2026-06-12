@@ -93,7 +93,7 @@ public class RoutingTransformer extends Transformer {
 		// 读取配置文件
 		MyConfiguration.create(this.getConfigFile());
 		if (this.getQuery() == null || this.getQuery().isEmpty()) {
-			throw new Exception("invaild query.");
+			throw new Exception("invalid query.");
 		}
 		IDataTable table;
 		try (BORepository4Transformer boRepository = new BORepository4Transformer()) {

@@ -5,10 +5,10 @@
     <Item Content="java" Editable="false" />
     <Item Content="-Dfile.encoding=utf-8" Description="使用utf-8编码方式" Editable="false" />
     <Item Content="-jar" Description="执行jar包" Editable="false" />
-    <Item Content="btulz.transforms.core-0.1.1.jar" Description="包名称" Editable="false" />
+    <Item Content="btulz.transforms.core-0.2.0.jar" Description="包名称" Editable="false" />
     <Item Content="code" Description="子命令" Editable="false" />
     <Item Content="-TemplateFolder=${VALUE}" Description="使用的模板">
-        <ValidValues ClassName="org.colorcoding.tools.btulz.shell.command.TemplateGetter" Definitions="Template=code;WorkFile=btulz.transforms.core-0.1.1.jar;WorkFile=" />
+        <ValidValues ClassName="org.colorcoding.tools.btulz.shell.command.TemplateGetter" Definitions="Template=code;WorkFile=btulz.transforms.core-0.2.0.jar;WorkFile=" />
     </Item>
     <Item Content="-OutputFolder=${VALUE}" Description="输出目录" Value="${WORK_FOLDER}temp">
         <ValidValues ClassName="javax.swing.JFileChooser"/>

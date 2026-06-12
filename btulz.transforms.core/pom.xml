@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.colorcoding.tools</groupId>
 	<artifactId>btulz.transforms.core</artifactId>
-	<version>0.1.1</version>
+	<version>0.2.0</version>
 	<packaging>jar</packaging>
 	<name>btulz.transforms.core</name>
 	<url>https://colorcoding.org/tools/btulz/core</url>

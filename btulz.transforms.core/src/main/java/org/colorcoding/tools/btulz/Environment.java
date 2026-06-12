@@ -207,7 +207,7 @@ public class Environment {
 				}
 			}
 		} catch (Exception e) {
-			getLogger().error(String.format("parse [%s] encoding faild, %s", fileName, e));
+			getLogger().error(String.format("parse [%s] encoding failed, %s", fileName, e));
 		}
 		return charset;
 	}

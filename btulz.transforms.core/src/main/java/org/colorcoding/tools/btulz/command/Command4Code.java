@@ -23,7 +23,7 @@ public class Command4Code extends Command4Release<Command4Code> {
 	/**
 	 * 返回值，300，转换错误
 	 */
-	public static final int RETURN_VALUE_TRANSFORM_FAILD = 300;
+	public static final int RETURN_VALUE_TRANSFORM_FAILED = 300;
 
 	public Command4Code() {
 		this.setName(COMMAND_PROMPT);
@@ -132,7 +132,7 @@ public class Command4Code extends Command4Release<Command4Code> {
 			return RETURN_VALUE_NO_COMMAND_EXECUTION;
 		} catch (Exception e) {
 			this.print(e);
-			return RETURN_VALUE_TRANSFORM_FAILD;
+			return RETURN_VALUE_TRANSFORM_FAILED;
 		}
 	}
 

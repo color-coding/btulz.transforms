@@ -39,7 +39,7 @@ public class Variable {
 				}
 				variables.add(variable);
 			}
-			String line = System.getProperty("line.seperator", "\n");
+			String line = System.getProperty("line.separator", "\n");
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder
 					.append(String.format("template: get [%s] parameters in [%s].", variables.size(), string.trim()));

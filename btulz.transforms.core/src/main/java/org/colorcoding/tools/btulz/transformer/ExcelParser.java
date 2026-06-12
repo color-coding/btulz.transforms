@@ -374,8 +374,8 @@ public class ExcelParser implements IExcelParser {
 			model.setModelType(this.convertData(row.getCell(COLUMN_INDEX_MODEL_TYPE), emModelType.class));
 			model.setEntity(this.convertData(row.getCell(COLUMN_INDEX_IS_ENTITY), Boolean.class));
 			useCount++;// 自身行
-			useCount++;// propety标题1
-			useCount++;// propety标题2
+			useCount++;// property标题1
+			useCount++;// property标题2
 			// 开始属性行处理
 			for (int iRow = row.getRowNum() + useCount; iRow < sheet.getLastRowNum(); iRow++) {
 				useCount++;
@@ -398,7 +398,7 @@ public class ExcelParser implements IExcelParser {
 					// 属性行
 					useCount += area.parse(row, model);
 				} else {
-					Environment.getLogger().warn(String.format("sheet [%s] row [%s] is unkown.",
+					Environment.getLogger().warn(String.format("sheet [%s] row [%s] is unknown.",
 							row.getSheet().getSheetName(), row.getRowNum() + 1));
 					break;
 				}

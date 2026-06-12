@@ -125,7 +125,7 @@
     <Field Name="UserName" Description="名称" DataType="db_Alpha" SubType="st_None" EditSize="100" PropertyName="UserName" FixedDataType="String" />
     <Field Name="PassWord" Description="用户密码" DataType="db_Alpha" SubType="st_None" EditSize="100" PropertyName="UserPassword" FixedDataType="String" />
     <Field Name="Activated" Description="激活" DataType="db_Alpha" SubType="st_None" EditSize="1" PropertyName="Activated" FixedDataType="emYesNo" DefaultValue="Y" />
-    <Field Name="SupperUser" Description="超级用户" DataType="db_Alpha" SubType="st_None" EditSize="1" PropertyName="SupperUser" FixedDataType="emYesNo" DefaultValue="N" />
+    <Field Name="SuperUser" Description="超级用户" DataType="db_Alpha" SubType="st_None" EditSize="1" PropertyName="SuperUser" FixedDataType="emYesNo" DefaultValue="N" />
     <Field Name="eMail" Description="电子邮件地址" DataType="db_Alpha" SubType="st_None" EditSize="100" PropertyName="eMail" FixedDataType="String" DefaultValue="N" />
     <Field Name="ObjectKey" Description="对象编号" DataType="db_Numeric" SubType="st_None" EditSize="8" PropertyName="ObjectKey" FixedDataType="Integer" IsPrimaryKey="Yes" />
     <Field Name="ObjectCode" Description="对象类型" DataType="db_Alpha" SubType="st_None" EditSize="30" PropertyName="ObjectCode" FixedDataType="String" />

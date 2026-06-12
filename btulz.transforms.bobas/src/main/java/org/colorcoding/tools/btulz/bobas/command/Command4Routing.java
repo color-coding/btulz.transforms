@@ -27,7 +27,7 @@ public class Command4Routing extends Command<Command4Routing> {
 	 */
 	public final static String COMMAND_PROMPT = "routing";
 
-	protected final static String MSG_INVAILD_ARGUMENT = "invaild argument [%s].";
+	protected final static String MSG_INVALID_ARGUMENT = "invalid argument [%s].";
 
 	@Override
 	protected Argument[] createArguments() {
@@ -105,7 +105,7 @@ public class Command4Routing extends Command<Command4Routing> {
 			} else {
 				this.print(e);
 			}
-			return RETURN_VALUE_COMMAND_EXECUTION_FAILD;
+			return RETURN_VALUE_COMMAND_EXECUTION_FAILED;
 		}
 	}
 

@@ -38,7 +38,7 @@ public abstract class Command<C> {
 	/**
 	 * 返回值，1，错误，运行命令失败
 	 */
-	public static final int RETURN_VALUE_COMMAND_EXECUTION_FAILD = 1;
+	public static final int RETURN_VALUE_COMMAND_EXECUTION_FAILED = 1;
 	/**
 	 * 新行字符
 	 */

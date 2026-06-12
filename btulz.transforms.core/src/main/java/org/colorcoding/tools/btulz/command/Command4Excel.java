@@ -23,7 +23,7 @@ public class Command4Excel extends Command4Release<Command4Excel> {
 	/**
 	 * 返回值，300，转换错误
 	 */
-	public static final int RETURN_VALUE_TRANSFORM_FAILD = 300;
+	public static final int RETURN_VALUE_TRANSFORM_FAILED = 300;
 
 	public Command4Excel() {
 		this.setName(COMMAND_PROMPT);
@@ -106,7 +106,7 @@ public class Command4Excel extends Command4Release<Command4Excel> {
 			return RETURN_VALUE_SUCCESS;
 		} catch (Exception e) {
 			this.print(e);
-			return RETURN_VALUE_TRANSFORM_FAILD;
+			return RETURN_VALUE_TRANSFORM_FAILED;
 		}
 	}
 

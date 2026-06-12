@@ -26,7 +26,7 @@ public class Command4Ds extends Command<Command4Ds> {
 	 */
 	public final static String COMMAND_PROMPT = "ds";
 
-	protected final static String MSG_INVAILD_ARGUMENT = "invaild argument [%s].";
+	protected final static String MSG_INVALID_ARGUMENT = "invalid argument [%s].";
 
 	public Command4Ds() {
 		this.setName(COMMAND_PROMPT);
@@ -114,7 +114,7 @@ public class Command4Ds extends Command<Command4Ds> {
 			}
 			File file = new File(argConfig);
 			if (!file.isFile() || !file.exists()) {
-				throw new IOException("invaild config file.");
+				throw new IOException("invalid config file.");
 			}
 			// 读取配置文件
 			ConfigurationManagerFile config = new ConfigurationManagerFile();
@@ -123,7 +123,7 @@ public class Command4Ds extends Command<Command4Ds> {
 			// 加载数据库说明值
 			DbValues dbValues = DbValues.create(argDbValue);
 			if (dbValues == null || dbValues.isEmpty()) {
-				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "DbValues"));
+				throw new RuntimeException(String.format(MSG_INVALID_ARGUMENT, "DbValues"));
 			}
 			// 数据解析模板
 			if (argTemplate == null || argTemplate.isEmpty()) {
@@ -131,7 +131,7 @@ public class Command4Ds extends Command<Command4Ds> {
 						"DsTemplate");
 			}
 			if (argTemplate == null || argTemplate.isEmpty()) {
-				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "DsTemplate"));
+				throw new RuntimeException(String.format(MSG_INVALID_ARGUMENT, "DsTemplate"));
 			}
 			// 脚本文件
 			if (argSql == null || argSql.isEmpty()) {
@@ -139,33 +139,33 @@ public class Command4Ds extends Command<Command4Ds> {
 						"SqlFilter");
 			}
 			if (argSql == null || argSql.isEmpty()) {
-				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "SqlFilter"));
+				throw new RuntimeException(String.format(MSG_INVALID_ARGUMENT, "SqlFilter"));
 			}
 			// 待解析的文件
 			if (argData == null || argData.isEmpty()) {
-				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "JarFile"));
+				throw new RuntimeException(String.format(MSG_INVALID_ARGUMENT, "JarFile"));
 			}
 			// 公司标记
 			String argCompany = config.getConfigValue(MyConfiguration.CONFIG_ITEM_COMPANY);
 			if (argCompany == null || argCompany.isEmpty()) {
-				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "Company"));
+				throw new RuntimeException(String.format(MSG_INVALID_ARGUMENT, "Company"));
 			}
 			// 数据库端口
 			String argDbPort = dbValues.getValue(config.getConfigValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_TYPE),
 					"DbPort");
 			if (argDbPort == null || argDbPort.isEmpty()) {
-				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "DbPort"));
+				throw new RuntimeException(String.format(MSG_INVALID_ARGUMENT, "DbPort"));
 			}
 			// 数据库模式
 			String argDbSchema = dbValues
 					.getValue(config.getConfigValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_TYPE), "DbSchema");
 			if (argDbSchema == null) {
-				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "DbSchema"));
+				throw new RuntimeException(String.format(MSG_INVALID_ARGUMENT, "DbSchema"));
 			}
 			// 数据库地址
 			String argDbServer = config.getConfigValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_SERVER);
 			if (argDbServer == null || argDbServer.isEmpty()) {
-				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "DbServer"));
+				throw new RuntimeException(String.format(MSG_INVALID_ARGUMENT, "DbServer"));
 			}
 			// 提取端口号
 			if (argDbServer.indexOf(":") > 0) {
@@ -176,21 +176,21 @@ public class Command4Ds extends Command<Command4Ds> {
 			// 数据库名称
 			String argDbName = config.getConfigValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_NAME);
 			if (argDbName == null || argDbName.isEmpty()) {
-				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "DbName"));
+				throw new RuntimeException(String.format(MSG_INVALID_ARGUMENT, "DbName"));
 			}
 			// 数据库用户
 			String argDbUser = config.getConfigValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_USER_ID);
 			if (argDbUser == null || argDbUser.isEmpty()) {
-				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "DbUser"));
+				throw new RuntimeException(String.format(MSG_INVALID_ARGUMENT, "DbUser"));
 			}
 			// 数据库用户密码
 			String argDbPassword = config.getConfigValue(argDbSign + MyConfiguration.CONFIG_ITEM_DB_USER_PASSWORD);
 			if (argDbPassword == null || argDbPassword.isEmpty()) {
-				throw new RuntimeException(String.format(MSG_INVAILD_ARGUMENT, "DbPassword"));
+				throw new RuntimeException(String.format(MSG_INVALID_ARGUMENT, "DbPassword"));
 			}
 			file = new File(argData);
 			if (!file.isFile() || !file.exists()) {
-				throw new IOException("invaild data file.");
+				throw new IOException("invalid data file.");
 			}
 			if (file.getName().toLowerCase().endsWith(".jar")) {
 				JarTransformer transformer = new JarTransformer();
@@ -223,7 +223,7 @@ public class Command4Ds extends Command<Command4Ds> {
 			return RETURN_VALUE_SUCCESS;
 		} catch (Exception e) {
 			this.print(e);
-			return RETURN_VALUE_COMMAND_EXECUTION_FAILD;
+			return RETURN_VALUE_COMMAND_EXECUTION_FAILED;
 		}
 	}
 
