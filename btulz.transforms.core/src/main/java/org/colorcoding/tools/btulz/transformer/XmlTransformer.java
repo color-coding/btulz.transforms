@@ -15,6 +15,8 @@ import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.model.IBusinessObject;
 import org.colorcoding.tools.btulz.model.IBusinessObjectItem;
 import org.colorcoding.tools.btulz.model.IDomain;
+import org.colorcoding.tools.btulz.model.IIndex;
+import org.colorcoding.tools.btulz.model.IIndexProperty;
 import org.colorcoding.tools.btulz.model.IModel;
 import org.colorcoding.tools.btulz.model.IProperty;
 import org.colorcoding.tools.btulz.model.data.emYesNo;
@@ -140,6 +142,17 @@ public class XmlTransformer extends FileTransformer {
 				this.writeElement(property, propertyElement);
 				modelElement.appendChild(propertyElement);
 			}
+			// 模型索引
+			for (IIndex index : model.getIndexes()) {
+				Element indexElement = document.createElement("Index");
+				this.writeElement(index, indexElement);
+				for (IIndexProperty indexProperty : index.getIndexProperties()) {
+					Element indexPropertyElement = document.createElement("IndexProperty");
+					this.writeElement(indexProperty, indexPropertyElement);
+					indexElement.appendChild(indexPropertyElement);
+				}
+				modelElement.appendChild(indexElement);
+			}
 			root.appendChild(modelElement);
 		}
 		// 业务对象
@@ -209,6 +222,28 @@ public class XmlTransformer extends FileTransformer {
 		}
 		if (property.getDefaultValue() != null && !property.getDefaultValue().isEmpty()) {
 			element.setAttribute("DefaultValue", property.getDefaultValue());
+		}
+	}
+
+	private void writeElement(IIndex index, Element element) {
+		if (index.getName() != null && !index.getName().isEmpty()) {
+			element.setAttribute("Name", index.getName());
+		}
+		if (index.getShortName() != null && !index.getShortName().isEmpty()) {
+			element.setAttribute("ShortName", index.getShortName());
+		}
+		if (index.getDescription() != null && !index.getDescription().isEmpty()) {
+			element.setAttribute("Description", index.getDescription());
+		}
+		if (index.getIndexType() != null) {
+			element.setAttribute("IndexType", String.valueOf(index.getIndexType()));
+		}
+	}
+
+	private void writeElement(IIndexProperty indexProperty, Element element) {
+		element.setAttribute("Name", indexProperty.getName());
+		if (indexProperty.getDirection() != null && !indexProperty.getDirection().isEmpty()) {
+			element.setAttribute("Direction", indexProperty.getDirection());
 		}
 	}
 

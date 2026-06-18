@@ -188,4 +188,30 @@
 			<Condition Property="Last" Operation="NOT_EQUAL" Value="true" />
 		</OutputItem>
 	</OutputMapping>
+	<!-- 索引类型说明 -->
+	<OutputMapping Name="db.index_type" Binding="Index" Unmatched="EXCEPTION">
+		<OutputItem>
+			<Content></Content>
+			<Condition Property="IndexType" Value="NonClustered" />
+		</OutputItem>
+		<OutputItem>
+			<Content>CLUSTERED</Content>
+			<Condition Property="IndexType" Value="Clustered" />
+		</OutputItem>
+		<OutputItem>
+			<Content>UNIQUE</Content>
+			<Condition Property="IndexType" Value="Unique" />
+		</OutputItem>
+		<OutputItem>
+			<Content>UNIQUE CLUSTERED</Content>
+			<Condition Property="IndexType" Value="UniqueClustered" />
+		</OutputItem>
+	</OutputMapping>
+	<!-- 索引属性分割符 -->
+	<OutputMapping Name="," Binding="IndexProperty" Unmatched="SKIP">
+		<OutputItem>
+			<Content>,</Content>
+			<Condition Property="Last" Operation="NOT_EQUAL" Value="true" />
+		</OutputItem>
+	</OutputMapping>
 </ns3:ArrayList>

@@ -1,5 +1,6 @@
 package org.colorcoding.tools.btulz.transformer.region.model;
 
+import org.colorcoding.tools.btulz.model.IIndexes;
 import org.colorcoding.tools.btulz.model.IModel;
 import org.colorcoding.tools.btulz.model.IProperties;
 import org.colorcoding.tools.btulz.model.data.emModelType;
@@ -70,6 +71,11 @@ public class Model extends Entity implements IModel {
 	@Override
 	public IProperties getProperties() {
 		return this.entity.getProperties();
+	}
+
+	@Override
+	public IIndexes getIndexes() {
+		return this.entity.getIndexes();
 	}
 
 }

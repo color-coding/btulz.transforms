@@ -55,14 +55,21 @@ public interface IModel {
 
 	/**
 	 * 获取-属性集合
-	 * 
+	 *
 	 * @return
 	 */
 	IProperties getProperties();
 
 	/**
+	 * 获取-索引集合
+	 *
+	 * @return
+	 */
+	IIndexes getIndexes();
+
+	/**
 	 * 获取-绑定到
-	 * 
+	 *
 	 * @return
 	 */
 	String getMapped();

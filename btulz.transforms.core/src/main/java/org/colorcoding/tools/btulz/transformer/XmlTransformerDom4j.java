@@ -5,6 +5,8 @@ import java.io.File;
 import org.colorcoding.tools.btulz.model.IBusinessObject;
 import org.colorcoding.tools.btulz.model.IBusinessObjectItem;
 import org.colorcoding.tools.btulz.model.IDomain;
+import org.colorcoding.tools.btulz.model.IIndex;
+import org.colorcoding.tools.btulz.model.IIndexProperty;
 import org.colorcoding.tools.btulz.model.IModel;
 import org.colorcoding.tools.btulz.model.IProperty;
 import org.colorcoding.tools.btulz.model.data.emYesNo;
@@ -39,6 +41,15 @@ public class XmlTransformerDom4j extends XmlTransformer {
 			for (IProperty property : model.getProperties()) {
 				Element propertyElement = modelElement.addElement("Property");
 				this.writeElement(property, propertyElement);
+			}
+			// 模型索引
+			for (IIndex index : model.getIndexes()) {
+				Element indexElement = modelElement.addElement("Index");
+				this.writeElement(index, indexElement);
+				for (IIndexProperty indexProperty : index.getIndexProperties()) {
+					Element indexPropertyElement = indexElement.addElement("IndexProperty");
+					this.writeElement(indexProperty, indexPropertyElement);
+				}
 			}
 		}
 		// 业务对象
@@ -106,6 +117,28 @@ public class XmlTransformerDom4j extends XmlTransformer {
 		}
 	}
 
+	private void writeElement(IIndex index, Element element) {
+		if (index.getName() != null && !index.getName().isEmpty()) {
+			element.addAttribute("Name", index.getName());
+		}
+		if (index.getShortName() != null && !index.getShortName().isEmpty()) {
+			element.addAttribute("ShortName", index.getShortName());
+		}
+		if (index.getDescription() != null && !index.getDescription().isEmpty()) {
+			element.addAttribute("Description", index.getDescription());
+		}
+		if (index.getIndexType() != null) {
+			element.addAttribute("IndexType", String.valueOf(index.getIndexType()));
+		}
+	}
+
+	private void writeElement(IIndexProperty indexProperty, Element element) {
+		element.addAttribute("Name", indexProperty.getName());
+		if (indexProperty.getDirection() != null && !indexProperty.getDirection().isEmpty()) {
+			element.addAttribute("Direction", indexProperty.getDirection());
+		}
+	}
+
 	private void writeElement(IBusinessObject bo, Element element) {
 		if (bo.getName() != null && bo.getName().equals(bo.getMappedModel())) {
 			element.addAttribute("MappedModel", bo.getMappedModel());
@@ -113,7 +146,6 @@ public class XmlTransformerDom4j extends XmlTransformer {
 		} else {
 			element.addAttribute("Name", bo.getName());
 			element.addAttribute("Description", bo.getDescription());
-			element.addAttribute("ShortName", bo.getShortName());
 			element.addAttribute("ShortName", bo.getShortName());
 			element.addAttribute("MappedModel", bo.getMappedModel());
 		}
@@ -137,7 +169,6 @@ public class XmlTransformerDom4j extends XmlTransformer {
 		for (IBusinessObjectItem item : boItem.getRelatedBOs()) {
 			Element biElement = element.addElement("RelatedBO");
 			this.writeElement(item, biElement);
-			element.appendContent(biElement);
 		}
 	}
 }

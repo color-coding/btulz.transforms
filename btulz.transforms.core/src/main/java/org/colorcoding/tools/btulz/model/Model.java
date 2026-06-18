@@ -39,6 +39,7 @@ public class Model implements IModel, Cloneable {
 	public Model() {
 		this.setEntity(true);
 		this.properties = new Properties();
+		this.indexes = new Indexes();
 	}
 
 	@XmlAttribute(name = "Name")
@@ -109,6 +110,16 @@ public class Model implements IModel, Cloneable {
 			this.properties = new Properties();
 		}
 		return this.properties;
+	}
+
+	@XmlElement(name = "Index", type = Index.class, required = false)
+	private IIndexes indexes;
+
+	public IIndexes getIndexes() {
+		if (this.indexes == null) {
+			this.indexes = new Indexes();
+		}
+		return this.indexes;
 	}
 
 	@Override

@@ -38,8 +38,6 @@ public class RegionsFactory {
 				return new RegionProperty();
 			} else if (RegionPrimaryProperty.REGION_DELIMITER.equals(delimiter)) {
 				return new RegionPrimaryProperty();
-			} else if (RegionUniqueProperty.REGION_DELIMITER.equals(delimiter)) {
-				return new RegionUniqueProperty();
 			} else if (RegionModelHasPrimary.REGION_DELIMITER.equals(delimiter)) {
 				return new RegionModelHasPrimary();
 			} else if (RegionModelHasUnique.REGION_DELIMITER.equals(delimiter)) {
@@ -56,6 +54,12 @@ public class RegionsFactory {
 				return new RegionBusinessObjectItemModel();
 			} else if (RegionBusinessObjectItems.REGION_DELIMITER.equals(delimiter)) {
 				return new RegionBusinessObjectItems();
+			} else if (RegionModelIndex.REGION_DELIMITER.equals(delimiter)) {
+				return new RegionModelIndex();
+			} else if (RegionIndexProperty.REGION_DELIMITER.equals(delimiter)) {
+				return new RegionIndexProperty();
+			} else if (RegionModelHasIndex.REGION_DELIMITER.equals(delimiter)) {
+				return new RegionModelHasIndex();
 			}
 		}
 		return null;

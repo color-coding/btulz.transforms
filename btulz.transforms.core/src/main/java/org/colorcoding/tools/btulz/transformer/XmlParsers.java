@@ -7,6 +7,8 @@ import org.colorcoding.tools.btulz.model.Domain;
 import org.colorcoding.tools.btulz.model.IBusinessObject;
 import org.colorcoding.tools.btulz.model.IBusinessObjectItem;
 import org.colorcoding.tools.btulz.model.IDomain;
+import org.colorcoding.tools.btulz.model.IIndex;
+import org.colorcoding.tools.btulz.model.IIndexProperty;
 import org.colorcoding.tools.btulz.model.IModel;
 import org.colorcoding.tools.btulz.model.IProperty;
 import org.colorcoding.tools.btulz.model.data.emBORelation;
@@ -28,6 +30,8 @@ class XmlParser implements IXmlParser {
 	protected String xml_element_sign_domain = "Domain";
 	protected String xml_element_sign_model = "Model";
 	protected String xml_element_sign_property = "Property";
+	protected String xml_element_sign_index = "Index";
+	protected String xml_element_sign_index_property = "IndexProperty";
 	protected String xml_element_sign_businessobject = "BusinessObject";
 	protected String xml_element_sign_businessobject_item = "RelatedBO";
 
@@ -59,11 +63,24 @@ class XmlParser implements IXmlParser {
 						// 非元素节点不处理
 						continue;
 					}
-					if (!childNode.getNodeName().equals(this.xml_element_sign_property)) {
-						continue;
+					if (childNode.getNodeName().equals(this.xml_element_sign_property)) {
+						IProperty property = model.getProperties().create();
+						this.setValues(childNode.getAttributes(), property);
+					} else if (childNode.getNodeName().equals(this.xml_element_sign_index)) {
+						IIndex index = model.getIndexes().create();
+						this.setValues(childNode.getAttributes(), index);
+						for (int k = 0; k < childNode.getChildNodes().getLength(); k++) {
+							Node grandNode = childNode.getChildNodes().item(k);
+							if (grandNode.getNodeType() != Node.ELEMENT_NODE) {
+								// 非元素节点不处理
+								continue;
+							}
+							if (grandNode.getNodeName().equals(this.xml_element_sign_index_property)) {
+								IIndexProperty property = index.getIndexProperties().create();
+								this.setValues(grandNode.getAttributes(), property);
+							}
+						}
 					}
-					IProperty property = model.getProperties().create();
-					this.setValues(childNode.getAttributes(), property);
 				}
 			}
 			// 业务对象赋值

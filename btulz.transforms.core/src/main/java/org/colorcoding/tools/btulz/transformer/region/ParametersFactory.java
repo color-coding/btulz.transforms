@@ -3,12 +3,14 @@ package org.colorcoding.tools.btulz.transformer.region;
 import org.colorcoding.tools.btulz.model.IBusinessObject;
 import org.colorcoding.tools.btulz.model.IBusinessObjectItem;
 import org.colorcoding.tools.btulz.model.IDomain;
+import org.colorcoding.tools.btulz.model.IIndex;
 import org.colorcoding.tools.btulz.model.IModel;
 import org.colorcoding.tools.btulz.model.IProperty;
 import org.colorcoding.tools.btulz.template.Parameter;
 import org.colorcoding.tools.btulz.transformer.region.model.BusinessObject;
 import org.colorcoding.tools.btulz.transformer.region.model.BusinessObjectItem;
 import org.colorcoding.tools.btulz.transformer.region.model.Domain;
+import org.colorcoding.tools.btulz.transformer.region.model.Index;
 import org.colorcoding.tools.btulz.transformer.region.model.Model;
 import org.colorcoding.tools.btulz.transformer.region.model.Property;
 
@@ -82,6 +84,16 @@ public class ParametersFactory {
 			}
 		}
 		return this.createParameter(RegionProperty.REGION_PARAMETER_NAME, property);
+	}
+
+	public Parameter createParameter(IIndex entity, Parameter... parameters) {
+		Index index = new Index(entity);
+		if (parameters != null) {
+			for (Parameter item : parameters) {
+				index.addOutputMappings(item);
+			}
+		}
+		return this.createParameter(RegionModelIndex.REGION_PARAMETER_NAME, index);
 	}
 
 }
