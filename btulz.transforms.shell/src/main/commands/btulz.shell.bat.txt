@@ -22,7 +22,7 @@ if exist "%WORK_FOLDER%%BTULZ_SHELL%" (
   GOTO :EOF
 )
 echo --应用[%BTULZ_SHELL%]不存在
-set TOOLS_URL=http://maven.colorcoding.org/repository/maven-releases/org/colorcoding/tools/btulz.transforms.shell/0.1.1/
+set TOOLS_URL=https://maven.colorcoding.org/repository/maven-releases/org/colorcoding/tools/btulz.transforms.shell/0.1.1/
 echo --下载:[%TOOLS_URL%%BTULZ_SHELL%]
 curl -fsSL -o %BTULZ_SHELL% %TOOLS_URL%%BTULZ_SHELL%
 
