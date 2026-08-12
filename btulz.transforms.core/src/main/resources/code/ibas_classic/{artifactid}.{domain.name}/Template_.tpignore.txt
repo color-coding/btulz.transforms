@@ -1,0 +1,38 @@
+# Package Files
+\Q/\E.*\.jar
+\Q/\E.*\.war
+\Q/\E.*\.ear
+
+# virtual machine crash logs
+\Q/\E.*hs_err_pid.*
+
+# ibas packages
+\Q/src/main/webapp/3rdparty/ibas/\E.*
+\Q/src/main/webapp/3rdparty/openui5/\E.*
+\Q/src/main/webapp/3rdparty/shell/\E.*
+\Q/src/main/webapp/modules/\E.*
+
+# files
+\Q/\E.*_log_.*\.txt
+\Q/\E.*\.tmp
+\Q/\E.*\.class
+\Q/\E.*\.js
+\Q/\E.*\.glf
+\Q/\E.*\.map
+\Q/\E.*\.d\.ts
+
+# mac os files
+\Q/\E\.DS_Store
+
+# work folder
+\Q/target/\E.*
+\Q/release/\E.*
+\Q/.vs/\E.*
+\Q/.vscode/\E.*
+\Q/node_modules/\E.*
+\Q/build/\E.*
+\Q/debug/\E.*
+\Q/.metadata/\E.*
+\Q/.recommenders/\E.*
+\Q/RemoteSystemsTempFiles/\E.*
+\Q/Servers/\E.*
