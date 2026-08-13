@@ -172,7 +172,7 @@ public class Command4Init extends Command<Command4Init> {
 				Class<?> dtType = classLoader.loadClass(DataTransformer4Jar.class.getName());
 				Environment.getLogger().debug(String.format("DataTransformer loaded by %s.",
 						dtType.getClassLoader().getClass().getSimpleName()));
-				Object transformer = dtType.newInstance();
+				Object transformer = dtType.getConstructor().newInstance();
 				Method method = dtType.getMethod("setInterruptOnError", boolean.class);
 				method.invoke(transformer, !ignore);
 				method = dtType.getMethod("setForceSave", boolean.class);
@@ -232,9 +232,9 @@ public class Command4Init extends Command<Command4Init> {
 							// public构造方法
 							&& Modifier.isPublic(item.getModifiers())) {
 						try {
-							type.newInstance();
+							type.getConstructor().newInstance();
 							this.print("pass new instance.");
-						} catch (InstantiationException | IllegalAccessException e) {
+						} catch (Exception e) {
 							this.print(e);
 						}
 						break;

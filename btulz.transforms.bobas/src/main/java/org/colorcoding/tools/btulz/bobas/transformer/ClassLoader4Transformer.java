@@ -56,7 +56,7 @@ public class ClassLoader4Transformer extends URLClassLoader {
 		List<String> classNames = new ArrayList<>();
 		for (URL url : getURLs()) {
 			try {
-				File file = new File(java.net.URLDecoder.decode(url.getPath(), "UTF-8"));
+				File file = new File(url.toURI());
 				if (!file.exists()) {
 					continue;
 				}

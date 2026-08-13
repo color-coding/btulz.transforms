@@ -3,9 +3,9 @@ package org.colorcoding.tools.btulz.test.transformer;
 import java.io.File;
 import java.io.StringWriter;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
 
 import org.colorcoding.tools.btulz.model.Domain;
 import org.colorcoding.tools.btulz.model.IDomain;

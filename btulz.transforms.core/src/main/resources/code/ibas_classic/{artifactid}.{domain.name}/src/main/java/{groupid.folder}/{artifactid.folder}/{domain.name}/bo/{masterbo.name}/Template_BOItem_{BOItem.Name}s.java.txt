@@ -1,7 +1,8 @@
 package ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.bo.${MasterBO.getName().toLowerCase()};
 
 import java.beans.PropertyChangeEvent;
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.XmlSeeAlso;
+import jakarta.xml.bind.annotation.XmlType;
 import org.colorcoding.ibas.bobas.common.*;
 import org.colorcoding.ibas.bobas.bo.*;
 import ${GroupId}.${ArtifactId}.${Domain.getName().toLowerCase()}.MyConfiguration;

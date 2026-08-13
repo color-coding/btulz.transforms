@@ -1,7 +1,7 @@
 package org.colorcoding.tools.btulz.model;
 
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlSeeAlso;
+import jakarta.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.util.ArrayList;

@@ -4,24 +4,29 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Iterator;
+import java.util.function.Predicate;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlSeeAlso;
+import jakarta.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
-import org.colorcoding.tools.btulz.util.ArrayList;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "ArrayList", namespace = Environment.NAMESPACE_BTULZ_TRANSFORMERS)
 @XmlType(name = "ArrayList", namespace = Environment.NAMESPACE_BTULZ_TRANSFORMERS)
 @XmlSeeAlso({ OutputMapping.class })
-public class OutputMappingList extends ArrayList<OutputMapping> {
+public class OutputMappingList implements Iterable<OutputMapping> {
 
-	private static final long serialVersionUID = -2593755555586051681L;
+	@XmlElement(name = "OutputMapping", type = OutputMapping.class)
+	private java.util.ArrayList<OutputMapping> items = new java.util.ArrayList<>();
 
 	/**
 	 * 创建数据映射集合
@@ -59,19 +64,46 @@ public class OutputMappingList extends ArrayList<OutputMapping> {
 	public static OutputMappingList create(InputStream stream) throws JAXBException {
 		JAXBContext context = JAXBContext.newInstance(OutputMappingList.class, OutputMapping.class);
 		Unmarshaller unmarshaller = context.createUnmarshaller();
-		OutputMappingList mappings = (OutputMappingList) unmarshaller.unmarshal(stream);
-		return mappings;
+		return unmarshaller.unmarshal(new javax.xml.transform.stream.StreamSource(stream), OutputMappingList.class)
+				.getValue();
 	}
 
-	@XmlElement(name = "OutputMapping", type = OutputMapping.class)
-	private ArrayList<OutputMapping> getItems() {
-		return this;
+	@Override
+	public Iterator<OutputMapping> iterator() {
+		return items.iterator();
 	}
 
-	@SuppressWarnings({ "unused" })
-	private void setItems(ArrayList<OutputMapping> values) {
-		for (Object e : values) {
-			this.add((OutputMapping) e);
+	public boolean add(OutputMapping value) {
+		return items.add(value);
+	}
+
+	public boolean addAll(Iterable<? extends OutputMapping> values) {
+		if (values != null) {
+			for (OutputMapping value : values) {
+				items.add(value);
+			}
 		}
+		return true;
+	}
+
+	public int size() {
+		return items.size();
+	}
+
+	public boolean isEmpty() {
+		return items.isEmpty();
+	}
+
+	public OutputMapping get(int index) {
+		return items.get(index);
+	}
+
+	public OutputMapping firstOrDefault(Predicate<? super OutputMapping> filter) {
+		for (OutputMapping value : items) {
+			if (value != null && filter.test(value)) {
+				return value;
+			}
+		}
+		return null;
 	}
 }

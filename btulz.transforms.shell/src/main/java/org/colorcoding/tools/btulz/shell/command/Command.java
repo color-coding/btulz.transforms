@@ -132,17 +132,21 @@ public class Command {
 					commands[i] = commands[i].replace("\"", "\\\"");
 				}
 			}
-			this.process = Runtime.getRuntime().exec(commands, null, workFolder);
+			Process runningProcess = Runtime.getRuntime().exec(commands, null, workFolder);
+			this.process = runningProcess;
 			this.commonThread = new Thread(new Runnable() {
 				public synchronized void run() {
 					try (BufferedReader read = new BufferedReader(
-							new InputStreamReader(process.getInputStream(), Command.this.getCharsetName()))) {
+							new InputStreamReader(runningProcess.getInputStream(), Command.this.getCharsetName()))) {
 						String line = null;
 						while ((line = read.readLine()) != null) {
 							Command.this.fireMessages(MessageType.common, line);
 						}
-					} catch (Exception e) {
-						e.printStackTrace();
+						} catch (IOException e) {
+							// 停止进程时关闭输出流，readLine 可能收到 Stream closed；这是正常退出。
+							if (runningProcess.isAlive()) {
+								e.printStackTrace();
+							}
 					}
 				}
 			});
@@ -150,20 +154,23 @@ public class Command {
 			this.errorThread = new Thread(new Runnable() {
 				public synchronized void run() {
 					try (BufferedReader read = new BufferedReader(
-							new InputStreamReader(process.getErrorStream(), Command.this.getCharsetName()))) {
+							new InputStreamReader(runningProcess.getErrorStream(), Command.this.getCharsetName()))) {
 						String line = null;
 						while ((line = read.readLine()) != null) {
 							Command.this.fireMessages(MessageType.error, line);
 						}
-					} catch (Exception e) {
-						e.printStackTrace();
+						} catch (IOException e) {
+							// 停止进程时关闭错误流，readLine 可能收到 Stream closed；这是正常退出。
+							if (runningProcess.isAlive()) {
+								e.printStackTrace();
+							}
 					}
 				}
 			});
 			this.commonThread.start();
 			this.errorThread.start();
-			this.process.waitFor();
-			return this.process.exitValue();
+			runningProcess.waitFor();
+			return runningProcess.exitValue();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return -9999;
@@ -188,7 +195,6 @@ public class Command {
 	public void destroy() {
 		if (this.process != null) {
 			this.process.destroy();
-			this.process = null;
 		}
 		this.fireMessages(MessageType.common, String.format("[%s] was stop.",
 				this.getCommandBuilder() != null ? this.getCommandBuilder().getName() : "unknown"));

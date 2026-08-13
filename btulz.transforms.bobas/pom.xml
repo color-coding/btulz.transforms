@@ -21,8 +21,14 @@
 	</developers>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<ibas.version>0.2.0</ibas.version>
+		<maven.compiler.version>3.15.0</maven.compiler.version>
+		<maven.dependency.version>3.10.0</maven.dependency.version>
+		<maven.jar.version>3.5.1</maven.jar.version>
+		<maven.source.version>3.4.0</maven.source.version>
 		<btulz.core.version>0.2.0</btulz.core.version>
+		<eclipselink.version>4.0.6</eclipselink.version>
+		<ibas.version>0.2.0</ibas.version>
+		<junit.version>4.13.2</junit.version>
 	</properties>
 	<build>
 		<pluginManagement>
@@ -58,17 +64,16 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.14.0</version>
+				<version>${maven.compiler.version}</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<release>21</release>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.4.2</version>
+				<version>${maven.jar.version}</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -81,7 +86,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>${maven.dependency.version}</version>
 				<executions>
 					<execution>
 						<id>copy-dependencies</id>
@@ -91,6 +96,7 @@
 						</goals>
 						<configuration>
 							<outputDirectory>${project.build.directory}/lib</outputDirectory>
+							<includeScope>runtime</includeScope>
 							<overWriteReleases>false</overWriteReleases>
 							<overWriteSnapshots>false</overWriteSnapshots>
 							<overWriteIfNewer>true</overWriteIfNewer>
@@ -101,7 +107,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.3.1</version>
+				<version>${maven.source.version}</version>
 				<executions>
 					<execution>
 						<phase>verify</phase>
@@ -128,13 +134,19 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.13.2</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.colorcoding.tools</groupId>
 			<artifactId>btulz.transforms.core</artifactId>
 			<version>${btulz.core.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.glassfish.jaxb</groupId>
+					<artifactId>jaxb-runtime</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.colorcoding.ibas</groupId>

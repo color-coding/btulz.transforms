@@ -2,9 +2,9 @@ package org.colorcoding.tools.btulz.test.transformer;
 
 import java.io.File;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 
 import org.colorcoding.tools.btulz.Serializer;
 import org.colorcoding.tools.btulz.model.IDomain;

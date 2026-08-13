@@ -1,7 +1,6 @@
 package org.colorcoding.tools.btulz.bobas.test.transformer;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 
 import org.colorcoding.ibas.bobas.MyConfiguration;
@@ -29,7 +28,7 @@ public class TestDataTransformer extends TestCase {
 	/** 类加载器测试：父优先委派，框架类由父加载器加载，业务类由子加载器加载 */
 	@SuppressWarnings("unused")
 	public void testClassLoader()
-			throws ClassNotFoundException, IOException, InstantiationException, IllegalAccessException {
+			throws Exception {
 		File folder = new File(MyConfiguration.getStartupFolder());
 		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();
 		String ifPath = folder.getPath() + File.separator + "ibas.initialfantasy";
@@ -43,11 +42,11 @@ public class TestDataTransformer extends TestCase {
 		// 框架类：父加载器能找到，由父加载器加载
 		Class<?> type = loader.loadClass(Criteria.class.getName());
 		assertTrue("框架类应由父加载器加载", !type.getClassLoader().equals(loader));
-		ICriteria criteria = (ICriteria) type.newInstance();
+		ICriteria criteria = (ICriteria) type.getConstructor().newInstance();
 		// 业务类：父加载器找不到，由子加载器加载
 		type = loader.loadClass("org.colorcoding.ibas.bobas.organization.initial.OrganizationManager");
 		assertTrue("业务类应由子加载器加载", type.getClassLoader().equals(loader));
-		OrganizationManager manager = (OrganizationManager) type.newInstance();
+		OrganizationManager manager = (OrganizationManager) type.getConstructor().newInstance();
 		loader.close();
 	}
 

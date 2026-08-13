@@ -9,7 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlType;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 

@@ -3,7 +3,7 @@ package org.colorcoding.tools.btulz.util;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.Environment;
 

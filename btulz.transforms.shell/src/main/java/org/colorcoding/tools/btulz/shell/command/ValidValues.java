@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.shell.Environment;
 
@@ -97,7 +97,7 @@ public class ValidValues implements Iterable<ValidValue> {
 				this.getValues().add(new ValidValue(Boolean.FALSE.toString()));
 			} else if (ValidValuesGetter.class.isAssignableFrom(type)) {
 				// 可选值获取者
-				Object object = type.newInstance();
+				Object object = type.getConstructor().newInstance();
 				if (object instanceof ValidValuesGetter) {
 					ValidValuesGetter getter = (ValidValuesGetter) object;
 					for (ValidValue validValue : getter.get(this.getDefinitions())) {

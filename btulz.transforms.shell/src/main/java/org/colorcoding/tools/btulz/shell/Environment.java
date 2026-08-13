@@ -32,8 +32,7 @@ public class Environment {
 		try {
 			String path = Environment.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 			try {
-				path = new URL(Environment.class.getProtectionDomain().getCodeSource().getLocation().toString()).toURI()
-						.getPath();
+				path = Environment.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
 			} catch (Exception e) {
 				// fallback to URLDecoder
 				try {
@@ -47,6 +46,10 @@ public class Environment {
 				}
 				if (path.indexOf("!") > 0) {
 					path = path.substring(0, path.indexOf("!"));
+				}
+				// URI.getPath() 可能返回 file:/...，必须先转换再交给 File。
+				if (path.regionMatches(true, 0, "file:", 0, 5)) {
+					path = new File(new URI(path)).getPath();
 				}
 			}
 			if (path == null) {

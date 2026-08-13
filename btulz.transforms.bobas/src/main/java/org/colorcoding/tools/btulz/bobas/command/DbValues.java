@@ -4,25 +4,30 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.transform.stream.StreamSource;
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Unmarshaller;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlSeeAlso;
+import jakarta.xml.bind.annotation.XmlType;
 
 import org.colorcoding.tools.btulz.bobas.Environment;
 
 @XmlRootElement(name = "DbValues", namespace = Environment.NAMESPACE_BTULZ_BOBAS)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DbValues", namespace = Environment.NAMESPACE_BTULZ_BOBAS)
 @XmlSeeAlso({ DbValue.class })
-public class DbValues extends ArrayList<DbValue> {
+public class DbValues implements Iterable<DbValue> {
 
-	private static final long serialVersionUID = -1684584523309129310L;
+	@XmlElement(name = "DbValue")
+	private ArrayList<DbValue> values = new ArrayList<>();
 
 	protected static DbValues create(String valueFile) {
 		DbValues dbValues = new DbValues();
@@ -41,7 +46,7 @@ public class DbValues extends ArrayList<DbValue> {
 			}
 			JAXBContext context = JAXBContext.newInstance(DbValues.class, DbValue.class, DbValueItem.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
-			this.setValues((DbValues) unmarshaller.unmarshal(inputStream));
+			this.setValues(unmarshaller.unmarshal(new StreamSource(inputStream), DbValues.class).getValue());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		} finally {
@@ -54,25 +59,33 @@ public class DbValues extends ArrayList<DbValue> {
 		}
 	}
 
-	@XmlElement(name = "DbValue")
-	protected DbValue[] getValues() {
-		return this.toArray(new DbValue[] {});
+	@Override
+	public Iterator<DbValue> iterator() {
+		return this.values.iterator();
+	}
+
+	public boolean isEmpty() {
+		return this.values.isEmpty();
+	}
+
+	public void add(DbValue value) {
+		this.values.add(value);
 	}
 
 	protected void setValues(DbValue[] value) {
-		this.clear();
+		this.values.clear();
 		if (value != null) {
 			for (DbValue item : value) {
-				this.add(item);
+				this.values.add(item);
 			}
 		}
 	}
 
 	protected void setValues(DbValues value) {
-		this.clear();
+		this.values.clear();
 		if (value != null) {
 			for (DbValue item : value) {
-				this.add(item);
+				this.values.add(item);
 			}
 		}
 	}
@@ -95,6 +108,9 @@ public class DbValues extends ArrayList<DbValue> {
 @XmlType(name = "DbValue", namespace = Environment.NAMESPACE_BTULZ_BOBAS)
 @XmlSeeAlso({ DbValueItem.class })
 class DbValue {
+
+	public DbValue() {
+	}
 
 	@XmlAttribute(name = "Name")
 	private String name;
@@ -126,6 +142,9 @@ class DbValue {
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "DbValueItem", namespace = Environment.NAMESPACE_BTULZ_BOBAS)
 class DbValueItem {
+
+	public DbValueItem() {
+	}
 
 	@XmlAttribute(name = "Key")
 	private String key;

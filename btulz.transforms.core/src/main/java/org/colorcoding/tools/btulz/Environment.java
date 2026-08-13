@@ -1,13 +1,17 @@
 package org.colorcoding.tools.btulz;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -104,6 +108,11 @@ public class Environment {
 				if (path.indexOf("!") > 0) {
 					path = path.substring(0, path.indexOf("!"));
 				}
+				// jar:file:/... 的 URI 在 getPath() 后仍可能保留 file: 前缀。
+				// 这里必须在进入 File 之前转换，否则 file: 会被当作目录名。
+				if (path.regionMatches(true, 0, "file:", 0, 5)) {
+					path = new File(new URI(path)).getPath();
+				}
 			}
 			if (path == null) {
 				path = System.getProperty("user.dir");
@@ -154,61 +163,40 @@ public class Environment {
 	 * @throws Exception
 	 */
 	public static String getEncoding(String fileName) {
-		String charset = "GBK";
-		try (BufferedInputStream bin = new BufferedInputStream(new FileInputStream(fileName))) {
-			byte[] first3Bytes = new byte[3];
-			boolean checked = false;
-			bin.mark(100);
-			int read = bin.read(first3Bytes, 0, 3);
-			if (read == -1) {
-				return charset; // 文件编码为 ANSI
-			} else if (first3Bytes[0] == (byte) 0xFF && first3Bytes[1] == (byte) 0xFE) {
-				charset = "UTF-16LE"; // 文件编码为 Unicode
-				checked = true;
-			} else if (first3Bytes[0] == (byte) 0xFE && first3Bytes[1] == (byte) 0xFF) {
-				charset = "UTF-16BE"; // 文件编码为 Unicode big endian
-				checked = true;
-			} else if (first3Bytes[0] == (byte) 0xEF && first3Bytes[1] == (byte) 0xBB
-					&& first3Bytes[2] == (byte) 0xBF) {
-				charset = "UTF-8"; // 文件编码为 UTF-8
-				checked = true;
+		try {
+			byte[] bytes = Files.readAllBytes(Paths.get(fileName));
+			if (bytes.length >= 2 && bytes[0] == (byte) 0xFF && bytes[1] == (byte) 0xFE) {
+				return "UTF-16LE";
 			}
-			bin.reset();
-			if (!checked) {
-				@SuppressWarnings("unused")
-				int loc = 0;
-				while ((read = bin.read()) != -1) {
-					loc++;
-					if (read >= 0xF0)
-						break;
-					if (0x80 <= read && read <= 0xBF) // 单独出现BF以下的，也算是GBK
-						break;
-					if (0xC0 <= read && read <= 0xDF) {
-						read = bin.read();
-						if (0x80 <= read && read <= 0xBF) // 双字节 (0xC0 -
-															// 0xDF)
-							// (0x80
-							// - 0xBF),也可能在GB编码内
-							continue;
-						else
-							break;
-					} else if (0xE0 <= read && read <= 0xEF) {// 也有可能出错，但是几率较小
-						read = bin.read();
-						if (0x80 <= read && read <= 0xBF) {
-							read = bin.read();
-							if (0x80 <= read && read <= 0xBF) {
-								charset = "UTF-8";
-								break;
-							} else
-								break;
-						} else
-							break;
-					}
-				}
+			if (bytes.length >= 2 && bytes[0] == (byte) 0xFE && bytes[1] == (byte) 0xFF) {
+				return "UTF-16BE";
+			}
+			if (bytes.length >= 3 && bytes[0] == (byte) 0xEF && bytes[1] == (byte) 0xBB
+					&& bytes[2] == (byte) 0xBF) {
+				return "UTF-8";
+			}
+			try {
+				StandardCharsets.UTF_8.newDecoder()
+						.onMalformedInput(CodingErrorAction.REPORT)
+						.onUnmappableCharacter(CodingErrorAction.REPORT)
+						.decode(ByteBuffer.wrap(bytes));
+				return "UTF-8";
+			} catch (CharacterCodingException e) {
+				// 兼容现有的 GBK 模板，例如 Windows .bat 模板。
+				return "GBK";
 			}
 		} catch (Exception e) {
 			getLogger().error(String.format("parse [%s] encoding failed, %s", fileName, e));
 		}
-		return charset;
+		return "UTF-8";
+	}
+
+	/** 判断模板/输出文件是否为 Windows 批处理文件。 */
+	public static boolean isWindowsBatchFile(String fileName) {
+		if (fileName == null) {
+			return false;
+		}
+		String name = fileName.toLowerCase();
+		return name.endsWith(".bat") || name.endsWith(".bat.txt");
 	}
 }

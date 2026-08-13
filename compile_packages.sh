@@ -75,6 +75,13 @@ if [ -e ${WORK_FOLDER}/release ]; then
     -cvf btulz.transforms.tar \
     btulz.transforms.* \
     bobas.businessobjectscommon-* \
+    jakarta.xml.bind-api-* \
+    jaxb-runtime-* \
+    jaxb-core-* \
+    txw2-* \
+    istack-commons-runtime-* \
+    jakarta.activation-api-* \
+    angus-activation-* \
     log4j-* \
     mysql-connector-* \
     ngdbc-* \

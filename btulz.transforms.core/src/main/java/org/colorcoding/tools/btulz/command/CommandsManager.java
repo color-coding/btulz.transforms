@@ -111,13 +111,13 @@ public class CommandsManager {
 			return Command.RETURN_VALUE_NOT_FOUND_COMMAND_PROMPT;
 		}
 		try {
-			Command<?> command = commandType.newInstance();
+			Command<?> command = commandType.getConstructor().newInstance();
 			String[] cArgs = new String[args.length - 1];
 			for (int i = 1; i < args.length; i++) {
 				cArgs[i - 1] = args[i];
 			}
 			return command.run(cArgs);
-		} catch (InstantiationException | IllegalAccessException e) {
+		} catch (Exception e) {
 			this.print("call command [%s] failed.", prompt);
 			this.print(e.toString());
 			return Command.RETURN_VALUE_COMMAND_EXECUTION_FAILED;
@@ -134,7 +134,7 @@ public class CommandsManager {
 		validCommands.append(NEW_LINE);
 		for (Class<? extends Command<?>> item : this.getCommands().values()) {
 			try {
-				Command<?> command = item.newInstance();
+				Command<?> command = item.getConstructor().newInstance();
 				validCommands.append("    ");
 				validCommands.append(command.getName());
 				for (int i = command.getName().length(); i < 10; i++) {
@@ -142,7 +142,7 @@ public class CommandsManager {
 				}
 				validCommands.append(command.getDescription());
 				validCommands.append(NEW_LINE);
-			} catch (InstantiationException | IllegalAccessException e) {
+			} catch (Exception e) {
 				validCommands.append("    ");
 				validCommands.append(item.getSimpleName());
 				invalidCommands.append(NEW_LINE);

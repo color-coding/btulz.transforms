@@ -2,7 +2,7 @@ package org.colorcoding.tools.btulz.shell.test;
 
 import java.util.List;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 
 import org.colorcoding.tools.btulz.shell.Serializer;
 import org.colorcoding.tools.btulz.shell.command.Command;

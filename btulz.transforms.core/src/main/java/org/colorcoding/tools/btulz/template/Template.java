@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
@@ -86,7 +87,23 @@ public class Template extends TemplateRegion {
 			outputFile.createNewFile();
 		}
 		this.export(parameters,
-				new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), this.getEncoding())));
+				new TemplateWriter(new OutputStreamWriter(new FileOutputStream(outputFile), this.getEncoding()),
+						Environment.isWindowsBatchFile(this.getTemplateFile()) ? "\r\n" : "\n"));
+	}
+
+	/** BufferedWriter with a stable line ending for Windows batch templates. */
+	private static final class TemplateWriter extends BufferedWriter {
+		private final String lineSeparator;
+
+		private TemplateWriter(OutputStreamWriter writer, String lineSeparator) {
+			super(writer);
+			this.lineSeparator = lineSeparator;
+		}
+
+		@Override
+		public void newLine() throws IOException {
+			this.write(this.lineSeparator);
+		}
 	}
 
 	/**

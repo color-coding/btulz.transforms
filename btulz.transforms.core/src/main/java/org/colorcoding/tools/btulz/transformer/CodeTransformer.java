@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.model.IBusinessObject;
@@ -398,10 +398,12 @@ public class CodeTransformer extends Transformer {
 		String encoding = Environment.getEncoding(source.getPath());
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(source), encoding));
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile), encoding))) {
+			String lineSeparator = Environment.isWindowsBatchFile(source.getName()) ? "\r\n"
+					: "\n";
 			String readString = null;
 			while ((readString = reader.readLine()) != null) {
 				writer.write(readString);
-				writer.newLine();
+				writer.write(lineSeparator);
 			}
 			writer.flush();
 		}

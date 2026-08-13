@@ -597,13 +597,9 @@ public class CommandTab extends WorkingTab {
 
 				Arrays.sort(files, new Comparator<File>() {
 					public int compare(File f1, File f2) {
-						long diff = f1.lastModified() - f2.lastModified();
-						if (diff > 0)
-							return 1;
-						else if (diff == 0)
-							return 0;
-						else
-							return -1;
+						// 最新历史命令排在最前面。
+						int result = Long.compare(f2.lastModified(), f1.lastModified());
+						return result != 0 ? result : f2.getName().compareTo(f1.getName());
 					}
 
 					public boolean equals(Object obj) {
