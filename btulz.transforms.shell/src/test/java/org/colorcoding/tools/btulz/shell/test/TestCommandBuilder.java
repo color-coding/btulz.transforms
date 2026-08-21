@@ -1,17 +1,20 @@
 package org.colorcoding.tools.btulz.shell.test;
 
-import java.util.List;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.JarOutputStream;
 
 import jakarta.xml.bind.JAXBException;
 
 import org.colorcoding.tools.btulz.shell.Serializer;
-import org.colorcoding.tools.btulz.shell.command.Command;
 import org.colorcoding.tools.btulz.shell.command.CommandBuilder;
 import org.colorcoding.tools.btulz.shell.command.CommandItem;
-import org.colorcoding.tools.btulz.shell.command.CommandListener;
 import org.colorcoding.tools.btulz.shell.command.CommandManager;
-import org.colorcoding.tools.btulz.shell.command.CommandMessageEvent;
-import org.colorcoding.tools.btulz.shell.command.MessageType;
 import org.colorcoding.tools.btulz.shell.command.TemplateGetter;
 import org.colorcoding.tools.btulz.shell.command.ValidValue;
 import org.colorcoding.tools.btulz.shell.command.ValidValues;
@@ -24,7 +27,7 @@ import junit.framework.TestCase;
  * 覆盖：
  * - CommandBuilder创建与ValidValues（布尔/枚举/自定义/模板可选值）
  * - XML序列化/反序列化往返
- * - CommandManager加载命令配置并执行
+ * - CommandManager加载命令配置（独立JAR与classloader的jar:URL）
  */
 public class TestCommandBuilder extends TestCase {
 
@@ -93,25 +96,103 @@ public class TestCommandBuilder extends TestCase {
 		System.out.println(xml);
 	}
 
-	/** CommandManager加载命令配置并执行 */
-	public void testCommandManager() {
-		CommandManager manager = CommandManager.create();
-		List<CommandBuilder> commandBuilders = manager.getCommands();
-		for (CommandBuilder commandBuilder : commandBuilders) {
-			System.out.println(commandBuilder.toString());
-			Command command = new Command(commandBuilder);
-			command.addListener(new CommandListener() {
-				@Override
-				public void messaged(CommandMessageEvent messageEvent) {
-					if (messageEvent.getType() == MessageType.error) {
-						System.err.println(messageEvent.getMessage());
-					} else {
-						System.out.println(messageEvent.getMessage());
-					}
-				}
-			});
-			command.run();
+	/** 数据库命令应由一个 XML 根据 validvalues.database.xml 生成不同数据库参数。 */
+	public void testDatabaseCommandBuilder() throws Exception {
+		Path definitions = Files.createTempFile("btulz-validvalues-", ".xml");
+		Files.write(definitions, ("<DatabaseFeatures>"
+				+ "<DatabaseType Name=\"MSSQL\"><Feature Key=\"DsTemplate\" Value=\"ds_mssql.xml\"/>"
+				+ "<Feature Key=\"SqlFilter\" Value=\"sql_mssql_\"/></DatabaseType>"
+				+ "<DatabaseType Name=\"PGSQL\"><Feature Key=\"DsTemplate\" Value=\"ds_pgsql.xml\"/>"
+				+ "<Feature Key=\"SqlFilter\" Value=\"sql_pgsql_\"/></DatabaseType>"
+				+ "</DatabaseFeatures>").getBytes(StandardCharsets.UTF_8));
+		CommandBuilder builder = new CommandBuilder();
+		builder.setName("database");
+		CommandItem type = builder.getItems().create();
+		type.setName("DbType");
+		type.setValue("MSSQL");
+		type.getValidValues().setRule(ValidValues.RULE_FEATURES);
+		type.getValidValues().setDefinitions(definitions.toString());
+		CommandItem template = builder.getItems().create();
+		template.setName("DsTemplate");
+		template.setContent("-Template=${VALUE}");
+		CommandItem sqlFilter = builder.getItems().create();
+		sqlFilter.setName("SqlFilter");
+		sqlFilter.setContent("-SqlFilter=${VALUE}");
+		String[] commands = builder.toCommands();
+		assertEquals(2, commands.length);
+		assertEquals("-Template=ds_mssql.xml", commands[0]);
+		assertEquals("-SqlFilter=sql_mssql_", commands[1]);
+		assertEquals(2, type.getValidValues().size());
+		builder.applyDefinition("PGSQL");
+		type.setValue("PGSQL");
+		assertEquals("ds_pgsql.xml", template.getValue());
+		assertEquals("sql_pgsql_", sqlFilter.getValue());
+		template.setValue("custom.xml");
+		assertEquals("-Template=custom.xml", builder.toCommands()[0]);
+		Files.deleteIfExists(definitions);
+	}
+
+	/** Shell 应直接分析独立 JAR 中的命令和同 JAR 特性资源。 */
+	public void testLoadIndependentJar() throws Exception {
+		Path file = Files.createTempFile("btulz-command-", ".jar");
+		try (JarOutputStream output = new JarOutputStream(Files.newOutputStream(file))) {
+			this.writeJarEntry(output, "commands/validvalues.test.xml",
+					"<Definitions><Definition Name=\"A\"><Feature Key=\"Port\" Value=\"100\"/></Definition></Definitions>");
+			this.writeJarEntry(output, "commands/sample.xml",
+					"<ns2:CommandBuilder DefinitionItem=\"Type\" xmlns:ns2=\"http://colorcoding.org/btulz/shell/commands\">"
+							+ "<Item Name=\"Type\" Content=\"\" Value=\"A\"><ValidValues Rule=\"features\" Definitions=\"commands/validvalues.test.xml\"/></Item>"
+							+ "<Item Name=\"Port\" Content=\"-Port=${VALUE}\"/></ns2:CommandBuilder>");
 		}
+		CommandManager manager = new CommandManager();
+		try (JarFile jarFile = new JarFile(file.toFile())) {
+			manager.loadResources(jarFile);
+		}
+		assertEquals(1, manager.getCommands().size());
+		assertEquals("-Port=100", manager.getCommands().get(0).toCommands()[0]);
+		Files.deleteIfExists(file);
+	}
+
+	/** 依赖 jar 通过 classloader 的 jar:URL 加载命令，特性在加载期初始化，之后关闭 jar 不影响使用。 */
+	public void testLoadJarUrlCommands() throws Exception {
+		Path file = Files.createTempFile("btulz-command-url-", ".jar");
+		try (JarOutputStream output = new JarOutputStream(Files.newOutputStream(file))) {
+			// classloader 按 "commands" 目录资源定位，需写入目录条目
+			output.putNextEntry(new JarEntry("commands/"));
+			output.closeEntry();
+			this.writeJarEntry(output, "commands/validvalues.test.xml",
+					"<DatabaseFeatures><DatabaseType Name=\"A\"><Feature Key=\"Port\" Value=\"100\"/></DatabaseType></DatabaseFeatures>");
+			this.writeJarEntry(output, "commands/sample.xml",
+					"<ns2:CommandBuilder DefinitionItem=\"Type\" xmlns:ns2=\"http://colorcoding.org/btulz/shell/commands\">"
+							+ "<Item Name=\"Type\" Content=\"\" Value=\"A\"><ValidValues Rule=\"features\" Definitions=\"commands/validvalues.test.xml\"/></Item>"
+							+ "<Item Name=\"Port\" Content=\"-Port=${VALUE}\"/></ns2:CommandBuilder>");
+		}
+		URLClassLoader loader = new URLClassLoader(new URL[] { file.toUri().toURL() },
+				Thread.currentThread().getContextClassLoader());
+		Thread.currentThread().setContextClassLoader(loader);
+		try {
+			CommandManager manager = new CommandManager();
+			manager.initialize();
+			CommandBuilder builder = null;
+			for (CommandBuilder item : manager.getCommands()) {
+				if ("sample".equals(item.getName())) {
+					builder = item;
+					break;
+				}
+			}
+			assertNotNull(builder);
+			// jar 已在加载后关闭，命令生成不应再依赖 jar 资源
+			assertEquals("-Port=100", builder.toCommands()[0]);
+		} finally {
+			Thread.currentThread().setContextClassLoader(loader.getParent());
+			loader.close();
+		}
+		Files.deleteIfExists(file);
+	}
+
+	private void writeJarEntry(JarOutputStream output, String name, String value) throws Exception {
+		output.putNextEntry(new JarEntry(name));
+		output.write(value.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+		output.closeEntry();
 	}
 
 }

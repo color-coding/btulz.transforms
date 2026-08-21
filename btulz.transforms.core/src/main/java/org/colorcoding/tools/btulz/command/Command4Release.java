@@ -22,7 +22,7 @@ public abstract class Command4Release<C> extends Command<C> {
 	/**
 	 * 释放资源命令
 	 */
-	public static final String ARGUMENT_NAME_RELEASE = "-Release";
+	public static final String ARGUMENT_NAME_RELEASE = "-release";
 	/**
 	 * 返回值，5，错误，输入输出异常
 	 */
@@ -90,7 +90,7 @@ public abstract class Command4Release<C> extends Command<C> {
 	protected final int run(Argument[] arguments) {
 		ArrayList<Argument> others = new ArrayList<>();
 		for (Argument argument : arguments) {
-			if (argument.getName().equalsIgnoreCase("-Release")) {
+			if (argument.getName().equalsIgnoreCase(ARGUMENT_NAME_RELEASE)) {
 				// 释放资源命令
 				try {
 					if (argument.isInputed()) {
@@ -113,7 +113,7 @@ public abstract class Command4Release<C> extends Command<C> {
 	@Override
 	protected void moreHelps(StringBuilder stringBuilder) {
 		stringBuilder.append(" ");
-		stringBuilder.append("-Release"); // 释放模板到当前目录
+		stringBuilder.append(ARGUMENT_NAME_RELEASE); // 释放模板到当前目录
 		super.moreHelps(stringBuilder);
 	}
 
@@ -121,7 +121,7 @@ public abstract class Command4Release<C> extends Command<C> {
 	 * 创建自身参数
 	 */
 	protected Argument[] createArguments() {
-		return new Argument[] { new Argument("-Release", "Release resource templates") };
+		return new Argument[] { new Argument(ARGUMENT_NAME_RELEASE, "Release resource templates") };
 	}
 
 	/**

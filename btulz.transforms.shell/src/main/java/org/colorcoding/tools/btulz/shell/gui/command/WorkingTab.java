@@ -13,8 +13,10 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JScrollBar;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
@@ -107,6 +109,7 @@ public class WorkingTab extends JPanel {
 	}
 
 	private JTextArea textMessages;
+	private JScrollPane scrollMessages;
 	private JTextField textCommands;
 	private JButton button_stop = null;
 	private JButton button_run = null;
@@ -177,7 +180,8 @@ public class WorkingTab extends JPanel {
 		gridBagConstraints.weighty = 100.0;
 		this.textMessages = new JTextArea();
 		this.textMessages.setEditable(false);
-		panel.add(new JScrollPane(this.textMessages), gridBagConstraints);
+		this.scrollMessages = new JScrollPane(this.textMessages);
+		panel.add(this.scrollMessages, gridBagConstraints);
 	}
 
 	public String getRunningCommand() {
@@ -193,10 +197,15 @@ public class WorkingTab extends JPanel {
 			return;
 		}
 		this.button_run.setEnabled(true);
+		if (button == null) {
+			// 命令自然结束时只更新状态，不切换面板，也不清除日志。
+			if (this.button_stop.getText().equals(MSG_STOP)) {
+				this.button_stop.setText(MSG_GO_BACK);
+			}
+			return;
+		}
 		if (this.button_stop.getText().equals(MSG_GO_BACK)) {
-			// 返回界面
-			this.textCommands.setText(null);
-			this.textMessages.setText(null);
+			// 返回命令界面；保留日志，便于再次查看。
 			if (!this.getPanels().isEmpty()) {
 				this.changeLayout(this.getPanels().get(this.getPanels().size() - 1).getName());
 			}
@@ -213,14 +222,24 @@ public class WorkingTab extends JPanel {
 	}
 
 	protected void logMessages(String msg) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(() -> this.logMessages(msg));
+			return;
+		}
 		Document document = this.textMessages.getDocument();
 		if (document == null) {
 			return;
 		}
 		try {
+			JScrollBar verticalBar = this.scrollMessages.getVerticalScrollBar();
+			boolean followOutput = verticalBar.getValue() + verticalBar.getVisibleAmount()
+					>= verticalBar.getMaximum() - 16;
 			document.insertString(document.getLength(), msg, null);
 			document.insertString(document.getLength(), "\n", null);
-			this.textMessages.setCaretPosition(document.getLength());
+			if (followOutput) {
+				this.textMessages.setCaretPosition(document.getLength());
+				verticalBar.setValue(verticalBar.getMaximum());
+			}
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}

@@ -53,14 +53,14 @@ public class Command4Code extends Command4Release<Command4Code> {
 			arguments.add(argument);
 		}
 		// 添加自身参数
-		arguments.add(new Argument("-TemplateFolder", "Template to use"));
-		arguments.add(new Argument("-OutputFolder", "Output directory for code"));
-		arguments.add(new Argument("-GroupId", "Group namespace"));
-		arguments.add(new Argument("-ArtifactId", "Project namespace"));
-		arguments.add(new Argument("-ProjectVersion", "Version"));
-		arguments.add(new Argument("-ProjectUrl", "Project URL"));
-		arguments.add(new Argument("-Domains", "Model directory or file to use"));
-		arguments.add(new Argument("-Parameters", "Additional parameters in JSON format"));
+		arguments.add(new Argument("-templateFolder", "Template to use"));
+		arguments.add(new Argument("-outputFolder", "Output directory for code"));
+		arguments.add(new Argument("-groupId", "Group namespace"));
+		arguments.add(new Argument("-artifactId", "Project namespace"));
+		arguments.add(new Argument("-projectVersion", "Version"));
+		arguments.add(new Argument("-projectUrl", "Project URL"));
+		arguments.add(new Argument("-domains", "Model directory or file to use"));
+		arguments.add(new Argument("-parameters", "Additional parameters in JSON format"));
 		return arguments.toArray(new Argument[] {});
 	}
 
@@ -74,22 +74,22 @@ public class Command4Code extends Command4Release<Command4Code> {
 		stringBuilder.append("  ");
 		stringBuilder.append(COMMAND_PROMPT); // 命令
 		stringBuilder.append(" ");
-		stringBuilder.append("-TemplateFolder=eclipse/ibas_classic"); // 使用的模板
+		stringBuilder.append("-templateFolder=eclipse/ibas_classic"); // 使用的模板
 		stringBuilder.append(" ");
-		stringBuilder.append("-OutputFolder=D:\\temp"); // 输出目录
+		stringBuilder.append("-outputFolder=D:\\temp"); // 输出目录
 		stringBuilder.append(" ");
-		stringBuilder.append("-GroupId=org.colorcoding");// 组标记
+		stringBuilder.append("-groupId=org.colorcoding");// 组标记
 		stringBuilder.append(" ");
-		stringBuilder.append("-ArtifactId=ibas");// 项目标记
+		stringBuilder.append("-artifactId=ibas");// 项目标记
 		stringBuilder.append(" ");
-		stringBuilder.append("-ProjectVersion=0.0.1");// 项目版本
+		stringBuilder.append("-projectVersion=0.0.1");// 项目版本
 		stringBuilder.append(" ");
-		stringBuilder.append("-ProjectUrl=http://colorcoding.org");// 项目地址
+		stringBuilder.append("-projectUrl=http://colorcoding.org");// 项目地址
 		stringBuilder.append(" ");
-		stringBuilder.append("-Domains=D:\\initialization"); // 模型文件
+		stringBuilder.append("-domains=D:\\initialization"); // 模型文件
 		stringBuilder.append(" ");
 		stringBuilder.append(
-				"-Parameters=[{\"name\":\"ibasVersion\",\"value\":\"0.1.1\"},{\"name\":\"jerseyVersion\",\"value\":\"2.22.1\"}]"); // 其他参数
+				"-parameters=[{\"name\":\"ibasVersion\",\"value\":\"0.1.1\"},{\"name\":\"jerseyVersion\",\"value\":\"2.22.1\"}]"); // 其他参数
 		super.moreHelps(stringBuilder);
 	}
 
@@ -104,21 +104,21 @@ public class Command4Code extends Command4Release<Command4Code> {
 				}
 				if (codeTransformer == null)
 					codeTransformer = new CodeTransformer();
-				if (argument.getName().equalsIgnoreCase("-TemplateFolder")) {
+				if (argument.getName().equalsIgnoreCase("-templateFolder")) {
 					codeTransformer.setTemplateFolder(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-OutputFolder")) {
+				} else if (argument.getName().equalsIgnoreCase("-outputFolder")) {
 					codeTransformer.setOutputFolder(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-GroupId")) {
+				} else if (argument.getName().equalsIgnoreCase("-groupId")) {
 					codeTransformer.setGroupId(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-ArtifactId")) {
+				} else if (argument.getName().equalsIgnoreCase("-artifactId")) {
 					codeTransformer.setArtifactId(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-ProjectVersion")) {
+				} else if (argument.getName().equalsIgnoreCase("-projectVersion")) {
 					codeTransformer.setProjectVersion(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-ProjectUrl")) {
+				} else if (argument.getName().equalsIgnoreCase("-projectUrl")) {
 					codeTransformer.setProjectUrl(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-Domains")) {
+				} else if (argument.getName().equalsIgnoreCase("-domains")) {
 					codeTransformer.addDomains(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-Parameters")) {
+				} else if (argument.getName().equalsIgnoreCase("-parameters")) {
 					codeTransformer.addParameters(this.createParameters(argument.getValue()));
 				}
 			}

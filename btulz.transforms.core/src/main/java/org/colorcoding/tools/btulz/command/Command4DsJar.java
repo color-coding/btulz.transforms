@@ -46,7 +46,7 @@ public class Command4DsJar extends Command4Release<Command4DsJar> {
 		return true;// 有参数才调用
 	}
 
-	private Argument jarArgument = new Argument("-JarFile", "Jar package to analyze");
+	private Argument jarArgument = new Argument("-jarFile", "Jar package to analyze");
 
 	@Override
 	protected File getJarFile() throws UnsupportedEncodingException {
@@ -65,16 +65,16 @@ public class Command4DsJar extends Command4Release<Command4DsJar> {
 			arguments.add(argument);
 		}
 		// 添加自身参数
-		arguments.add(this.jarArgument);// "-JarFile", "待分析的jar包"，全局变量
-		arguments.add(new Argument("-DsTemplate", "Template to use"));
-		arguments.add(new Argument("-SqlFilter", "SQL filter tag"));
-		arguments.add(new Argument("-Company", "Company tag for database object prefix"));
-		arguments.add(new Argument("-DbServer", "Database server address"));
-		arguments.add(new Argument("-DbPort", "Database port"));
-		arguments.add(new Argument("-DbSchema", "Database schema"));
-		arguments.add(new Argument("-DbName", "Database name"));
-		arguments.add(new Argument("-DbUser", "Database user"));
-		arguments.add(new Argument("-DbPassword", "Database user password"));
+		arguments.add(this.jarArgument);// "-jarFile", "待分析的jar包"，全局变量
+		arguments.add(new Argument("-dsTemplate", "Template to use"));
+		arguments.add(new Argument("-sqlFilter", "SQL filter tag"));
+		arguments.add(new Argument("-company", "Company tag for database object prefix"));
+		arguments.add(new Argument("-dbServer", "Database server address"));
+		arguments.add(new Argument("-dbPort", "Database port"));
+		arguments.add(new Argument("-dbSchema", "Database schema"));
+		arguments.add(new Argument("-dbName", "Database name"));
+		arguments.add(new Argument("-dbUser", "Database user"));
+		arguments.add(new Argument("-dbPassword", "Database user password"));
 		return arguments.toArray(new Argument[] {});
 	}
 
@@ -88,25 +88,25 @@ public class Command4DsJar extends Command4Release<Command4DsJar> {
 		stringBuilder.append("  ");
 		stringBuilder.append(COMMAND_PROMPT);
 		stringBuilder.append(" ");
-		stringBuilder.append("-DsTemplate=ds_mysql_ibas_classic.xml");
+		stringBuilder.append("-dsTemplate=ds_mysql_ibas_classic.xml");
 		stringBuilder.append(" ");
-		stringBuilder.append("-SqlFilter=sql_mysql");
+		stringBuilder.append("-sqlFilter=sql_mysql");
 		stringBuilder.append(" ");
-		stringBuilder.append("-JarFile=D:\\initialization\\ibas.trainingtesting-0.0.1.jar");
+		stringBuilder.append("-jarFile=D:\\initialization\\ibas.trainingtesting-0.0.1.jar");
 		stringBuilder.append(" ");
-		stringBuilder.append("-Company=CC");
+		stringBuilder.append("-company=CC");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbServer=ibas-dev-mysql");
+		stringBuilder.append("-dbServer=ibas-dev-mysql");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbPort=3306");
+		stringBuilder.append("-dbPort=3306");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbSchema=");
+		stringBuilder.append("-dbSchema=");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbName=ibas_demo");
+		stringBuilder.append("-dbName=ibas_demo");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbUser=root");
+		stringBuilder.append("-dbUser=root");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbPassword=1q2w3e");
+		stringBuilder.append("-dbPassword=1q2w3e");
 		super.moreHelps(stringBuilder);
 	}
 
@@ -119,25 +119,25 @@ public class Command4DsJar extends Command4Release<Command4DsJar> {
 					// 没有输入的参数不做处理
 					continue;
 				}
-				if (argument.getName().equalsIgnoreCase("-DsTemplate")) {
+				if (argument.getName().equalsIgnoreCase("-dsTemplate")) {
 					jarTransformer.setDsTemplate(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-SqlFilter")) {
+				} else if (argument.getName().equalsIgnoreCase("-sqlFilter")) {
 					jarTransformer.setSqlFilter(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-JarFile")) {
+				} else if (argument.getName().equalsIgnoreCase("-jarFile")) {
 					jarTransformer.setJarFile(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-Company")) {
+				} else if (argument.getName().equalsIgnoreCase("-company")) {
 					jarTransformer.setCompany(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbServer")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbServer")) {
 					jarTransformer.setDbServer(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbPort")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbPort")) {
 					jarTransformer.setDbPort(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbSchema")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbSchema")) {
 					jarTransformer.setDbSchema(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbName")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbName")) {
 					jarTransformer.setDbName(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbUser")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbUser")) {
 					jarTransformer.setDbUser(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbPassword")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbPassword")) {
 					jarTransformer.setDbPassword(argument.getValue());
 				}
 			}

@@ -24,7 +24,7 @@ import junit.framework.TestCase;
  * 覆盖： - XmlTransformer：从内存Domain对象加载并保存 - XmlTransformer：从XML文件加载域模型 -
  * XmlTransformerDom4j：使用Dom4j实现的XML转换 - 转换器属性设置(interruptOnError/keepResults)
  *
- * 注意：XmlTransformer被TestTemplate、TestRegionDomain等高级功能使用
+ * 注意：XmlTransformer被TestRegionDomain等高级功能使用
  */
 public class TestXmlTransformer extends TestCase {
 

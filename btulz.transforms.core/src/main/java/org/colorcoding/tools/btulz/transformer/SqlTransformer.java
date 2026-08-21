@@ -1,7 +1,10 @@
 package org.colorcoding.tools.btulz.transformer;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
 
+import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.transformer.region.RegionDomain;
 
 /**
@@ -11,6 +14,7 @@ import org.colorcoding.tools.btulz.transformer.region.RegionDomain;
  *
  */
 public class SqlTransformer extends DbTransformer {
+	public static final String DEFAULT_SQL_FILTER = "sql_";
 
 	private String sqlFile;
 
@@ -25,14 +29,14 @@ public class SqlTransformer extends DbTransformer {
 	private String sqlFilter;
 
 	public String getSqlFilter() {
-		if (this.sqlFilter == null) {
-			this.sqlFilter = "";
+		if (this.sqlFilter == null || this.sqlFilter.trim().isEmpty()) {
+			this.sqlFilter = DEFAULT_SQL_FILTER;
 		}
 		return sqlFilter;
 	}
 
 	public void setSqlFilter(String sqlFilter) {
-		this.sqlFilter = sqlFilter;
+		this.sqlFilter = sqlFilter == null ? null : sqlFilter.toLowerCase();
 	}
 
 	/**
@@ -47,22 +51,42 @@ public class SqlTransformer extends DbTransformer {
 
 	@Override
 	public void transform() throws Exception {
+		this.clearResults();
 		File sqlFile = new File(this.getSqlFile());
 		if (sqlFile.isFile()) {
 			String fileName = sqlFile.getName().toLowerCase();
-			if (fileName.indexOf(this.getSqlFilter()) >= 0 && fileName.endsWith(".xml")) {
-				this.transform(sqlFile);
+			if (fileName.endsWith(".xml")) {
+				this.transformContinuously(sqlFile);
 			}
 		} else if (sqlFile.isDirectory()) {
 			File[] files = sqlFile.listFiles();
 			if (files != null) {
+				Arrays.sort(files, Comparator.comparing(File::getName, String.CASE_INSENSITIVE_ORDER));
 				for (File file : files) {
 					String fileName = file.getName().toLowerCase();
-					if (fileName.indexOf(this.getSqlFilter()) >= 0 && fileName.endsWith(".xml")) {
-						this.transform(file);
+					if (fileName.startsWith(this.getSqlFilter()) && fileName.endsWith(".xml")) {
+						this.transformContinuously(file);
 					}
 				}
 			}
+		}
+	}
+
+	/**
+	 * 执行单个SQL文件；配置为不中断时记录错误并继续处理后续文件。
+	 *
+	 * @param sqlFile SQL文件
+	 * @throws Exception 执行错误
+	 */
+	private void transformContinuously(File sqlFile) throws Exception {
+		try {
+			this.transform(sqlFile);
+		} catch (Exception e) {
+			if (this.isInterruptOnError()) {
+				throw e;
+			}
+			this.logError(e);
+			Environment.getLogger().error(e);
 		}
 	}
 

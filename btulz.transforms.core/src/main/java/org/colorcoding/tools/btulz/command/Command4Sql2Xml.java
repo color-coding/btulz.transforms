@@ -20,17 +20,17 @@ public class Command4Sql2Xml extends Command<Command4Sql2Xml> {
 	@Override
 	protected Argument[] createArguments() {
 		ArrayList<Argument> arguments = new ArrayList<>();
-		arguments.add(new Argument("-SqlFile", "SQL file to convert"));
-		arguments.add(new Argument("-OutputFile", "Output XML file"));
-		arguments.add(new Argument("-DbType", "Database type, such as hana or mysql"));
-		arguments.add(new Argument("-StatementCount", "SQL statements per XML file"));
-		arguments.add(new Argument("-Company", "Company tag for database object prefix"));
-		arguments.add(new Argument("-DbServer", "Database server address"));
-		arguments.add(new Argument("-DbPort", "Database port"));
-		arguments.add(new Argument("-DbSchema", "Database schema"));
-		arguments.add(new Argument("-DbName", "Database name"));
-		arguments.add(new Argument("-DbUser", "Database user"));
-		arguments.add(new Argument("-DbPassword", "Database user password"));
+		arguments.add(new Argument("-sqlFile", "SQL file to convert"));
+		arguments.add(new Argument("-outputFile", "Output XML file"));
+		arguments.add(new Argument("-dbType", "Database type, such as hana or mysql"));
+		arguments.add(new Argument("-statementCount", "SQL statements per XML file"));
+		arguments.add(new Argument("-company", "Company tag for database object prefix"));
+		arguments.add(new Argument("-dbServer", "Database server address"));
+		arguments.add(new Argument("-dbPort", "Database port"));
+		arguments.add(new Argument("-dbSchema", "Database schema"));
+		arguments.add(new Argument("-dbName", "Database name"));
+		arguments.add(new Argument("-dbUser", "Database user"));
+		arguments.add(new Argument("-dbPassword", "Database user password"));
 		return arguments.toArray(new Argument[] {});
 	}
 

@@ -29,10 +29,10 @@ public class BuilderTab extends JPanel {
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		int count = 0;
-		gridBagConstraints.gridy = count;// 组件的纵坐标
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+		gridBagConstraints.anchor = GridBagConstraints.NORTH;
 		gridBagConstraints.weightx = 100.0;
+		gridBagConstraints.weighty = 0.0;
 		gridBagConstraints.insets = new Insets(2, 2, 2, 2);
 		for (CommandBuilder commandBuilder : CommandManager.create().getCommands()) {
 			BuilderButton builderButton = new BuilderButton(commandBuilder);
@@ -42,10 +42,14 @@ public class BuilderTab extends JPanel {
 					BuilderTab.this.onBuilderClick((BuilderButton) e.getSource());
 				}
 			});
-			count++;
-			gridBagConstraints.gridy = count;// 组件的纵坐标
+			gridBagConstraints.gridy = count++;// 组件的纵坐标
 			this.add(builderButton, gridBagConstraints);
 		}
+		// 剩余空间放在列表下方，使命令按钮始终靠顶排列。
+		gridBagConstraints.gridy = count;
+		gridBagConstraints.weighty = 100.0;
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
+		this.add(new JPanel(), gridBagConstraints);
 	}
 
 	private BuilderTabListener listener;

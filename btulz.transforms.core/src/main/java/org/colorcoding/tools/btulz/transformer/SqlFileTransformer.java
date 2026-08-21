@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import java.nio.file.Files;
+import java.util.Locale;
 
 import org.colorcoding.tools.btulz.Serializer;
 import org.colorcoding.tools.btulz.Environment;
@@ -70,7 +71,16 @@ public class SqlFileTransformer extends DbTransformer {
 		if (!source.isFile()) {
 			throw new Exception(String.format("sql file [%s] not exists.", this.getSqlFile()));
 		}
-		this.transformFile(source, this.outputFile == null || this.outputFile.isEmpty() ? source.getParentFile() : null);
+		File outputDirectory = null;
+		if (this.outputFile == null || this.outputFile.isEmpty()) {
+			outputDirectory = source.getParentFile();
+		} else {
+			File outputTarget = new File(this.outputFile);
+			if (outputTarget.isDirectory()) {
+				outputDirectory = outputTarget;
+			}
+		}
+		this.transformFile(source, outputDirectory);
 	}
 
 	private void transformFile(File source, File outputDirectory) throws Exception {
@@ -79,7 +89,9 @@ public class SqlFileTransformer extends DbTransformer {
 		}
 		List<SqlStatement> statements = new ArrayList<>();
 		int part = 1;
-		try (SqlReader reader = new SqlReader(new InputStreamReader(new FileInputStream(source), StandardCharsets.UTF_8))) {
+		boolean backslashEscapes = "mysql".equalsIgnoreCase(this.dbType);
+		try (SqlReader reader = new SqlReader(new InputStreamReader(new FileInputStream(source), StandardCharsets.UTF_8),
+				backslashEscapes)) {
 			SqlStatement statement;
 			while ((statement = reader.next()) != null) {
 				statements.add(statement);
@@ -113,14 +125,28 @@ public class SqlFileTransformer extends DbTransformer {
 		DataStructureOrchestration orchestration = (DataStructureOrchestration) Serializer.fromXmlString(
 				content.toString(), DataStructureOrchestration.class);
 		orchestration.getActions().clear();
+		String sourceName = source.getName();
+		String sourceBase = sourceName;
+		int sourceDot = sourceBase.lastIndexOf('.');
+		if (sourceDot > 0) {
+			sourceBase = sourceBase.substring(0, sourceDot);
+		}
+		String databaseType = this.dbType.toUpperCase(Locale.ROOT);
+		String partDescription = this.statementCount == Integer.MAX_VALUE ? ""
+				: String.format("，分片 %03d", part);
+		orchestration.setName(String.format("sql_%s_%s%s", this.dbType.toLowerCase(Locale.ROOT), sourceBase,
+				this.statementCount == Integer.MAX_VALUE ? "" : String.format("_part%03d", part)));
+		orchestration.setDescription(String.format("%s SQL脚本执行编排（源文件：%s%s）", databaseType, sourceName,
+				partDescription));
 		ISqlExecutionAction action = orchestration.getActions().create();
-		action.setName(source.getName());
+		action.setName(sourceName);
+		action.setDescription(String.format("执行 SQL 文件：%s%s", sourceName, partDescription));
 		for (SqlStatement item : statements) {
 			ISqlExecutionActionStep step = action.getSteps().create();
 			step.setName(String.format("line %s", item.line));
 			step.setScript(item.sql);
 		}
-		Files.writeString(output.toPath(), Serializer.toXmlString(orchestration, true), StandardCharsets.UTF_8);
+		Files.write(output.toPath(), Serializer.toXmlString(orchestration, true).getBytes(StandardCharsets.UTF_8));
 		Environment.getLogger().info(String.format("converted SQL file [%s] to XML [%s], statements [%s].",
 				source.getPath(), output.getPath(), statements.size()));
 	}
@@ -164,6 +190,7 @@ public class SqlFileTransformer extends DbTransformer {
 
 	private static final class SqlReader implements AutoCloseable {
 		private final BufferedReader reader;
+		private final boolean backslashEscapes;
 		private final StringBuilder buffer = new StringBuilder();
 		private long line = 1;
 		private long statementLine;
@@ -172,7 +199,10 @@ public class SqlFileTransformer extends DbTransformer {
 		private boolean previousStar;
 		private String dollarQuote;
 
-		private SqlReader(InputStreamReader input) { this.reader = new BufferedReader(input); }
+		private SqlReader(InputStreamReader input, boolean backslashEscapes) {
+			this.reader = new BufferedReader(input);
+			this.backslashEscapes = backslashEscapes;
+		}
 
 		private SqlStatement next() throws Exception {
 			int value;
@@ -204,7 +234,7 @@ public class SqlFileTransformer extends DbTransformer {
 						escaped = false;
 						continue;
 					}
-					if (current == '\\' && !bracketQuote) {
+					if (this.backslashEscapes && current == '\\' && !bracketQuote) {
 						escaped = true;
 						continue;
 					}
@@ -261,6 +291,12 @@ public class SqlFileTransformer extends DbTransformer {
 			}
 			String sql = buffer.toString().trim();
 			buffer.setLength(0);
+			// 文件末尾的 GO 批次分隔符后没有语句，忽略它
+			int goLine = sql.lastIndexOf('\n');
+			String lastLine = (goLine < 0 ? sql : sql.substring(goLine + 1)).trim();
+			if ("GO".equalsIgnoreCase(lastLine)) {
+				sql = goLine < 0 ? "" : sql.substring(0, goLine).trim();
+			}
 			return sql.isEmpty() ? null : new SqlStatement(sql, statementLine);
 		}
 
@@ -284,7 +320,8 @@ public class SqlFileTransformer extends DbTransformer {
 			int newline = text.lastIndexOf('\n');
 			String lastLine = text.substring(newline + 1).trim();
 			if (!"GO".equalsIgnoreCase(lastLine)) return null;
-			String sql = text.substring(0, newline).trim();
+			// GO 是缓冲首行时无前序语句；否则取最后一个换行之前的内容。
+			String sql = newline < 0 ? "" : text.substring(0, newline).trim();
 			buffer.setLength(0);
 			if (sql.isEmpty()) return null;
 			SqlStatement result = new SqlStatement(sql, statementLine);

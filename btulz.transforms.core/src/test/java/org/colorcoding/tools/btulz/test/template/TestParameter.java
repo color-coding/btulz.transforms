@@ -35,7 +35,7 @@ public class TestParameter extends TestCase {
 		assertEquals("hello world", p.getValue(""));
 		assertEquals("hello world", p.getValue((String) null));
 		assertEquals(11, p.getValue("length()"));
-		assertEquals("hello", p.getValue("toString()"));
+		assertEquals("hello world", p.getValue("toString()"));
 	}
 
 	/** Parameters去重、按名获取、类型获取、批量添加 */

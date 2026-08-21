@@ -21,6 +21,23 @@ import org.colorcoding.tools.btulz.shell.Environment;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "ValidValues", namespace = Environment.NAMESPACE_BTULZ_SHELL_COMMANDS)
 public class ValidValues implements Iterable<ValidValue> {
+	public static final String RULE_FEATURES = "features";
+	public static final String RULE_FILE = "file";
+	public static final String RULE_TEMPLATE = "template";
+	public static final String RULE_UUID = "uuid";
+
+	/** Shell 内置规则。ClassName 仅作为旧命令和扩展规则的兼容入口。 */
+	@XmlAttribute(name = "Rule")
+	private String rule;
+
+	public final String getRule() {
+		return rule;
+	}
+
+	public final void setRule(String rule) {
+		this.rule = rule;
+	}
+
 	/**
 	 * 取值类型
 	 */
@@ -46,10 +63,8 @@ public class ValidValues implements Iterable<ValidValue> {
 
 	@XmlElement(name = "ValidValue", type = ValidValue.class)
 	List<ValidValue> getValuesProxy() {
-		if (this.getClassName() != null) {
-			return null;
-		}
-		if (this.getClassName() != null && !this.getClassName().isEmpty()) {
+		if ((this.getClassName() != null && !this.getClassName().isEmpty())
+				|| (this.getRule() != null && !this.getRule().isEmpty())) {
 			return null;
 		}
 		return this.getValues();
@@ -76,6 +91,12 @@ public class ValidValues implements Iterable<ValidValue> {
 	public void get() {
 		if (this.getValues().size() > 0) {
 			// 存在值，则表示已经初始化过
+			return;
+		}
+		if (RULE_TEMPLATE.equalsIgnoreCase(this.getRule())) {
+			for (ValidValue validValue : new TemplateGetter().get(this.getDefinitions())) {
+				this.getValues().add(validValue);
+			}
 			return;
 		}
 		if (this.getClassName() == null || this.getClassName().isEmpty()) {
