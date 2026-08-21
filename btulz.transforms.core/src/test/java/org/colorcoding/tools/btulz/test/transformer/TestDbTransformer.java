@@ -1,6 +1,10 @@
 package org.colorcoding.tools.btulz.test.transformer;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.colorcoding.tools.btulz.test.Environment;
 import org.colorcoding.tools.btulz.transformer.DsTransformer;
@@ -18,6 +22,43 @@ import junit.framework.TestCase;
  * 注意：MYSQL/PGSQL/HANA等与MSSQL/SQLite流程一致，仅连接参数不同； 多数测试依赖外部数据库环境，文件存在性检查后执行
  */
 public class TestDbTransformer extends TestCase {
+
+	/** 目录模式只处理 SQL 前缀匹配的 XML，不应读取 Domain XML。 */
+	public void testSqlDirectoryFilter() throws Exception {
+		Path folder = Files.createTempDirectory("btulz-sql-filter-");
+		Path domain = Files.createFile(folder.resolve("ds_initialfantasy.xml"));
+		Path mysql = Files.createFile(folder.resolve("sql_mysql_initialization.xml"));
+		Path pgsql = Files.createFile(folder.resolve("sql_pgsql_initialization.xml"));
+		Path misplaced = Files.createFile(folder.resolve("backup_sql_mysql_initialization.xml"));
+		try {
+			CollectingSqlTransformer transformer = new CollectingSqlTransformer();
+			transformer.setSqlFile(folder.toString());
+			transformer.setSqlFilter("sql_mysql_");
+			transformer.transform();
+			assertEquals(1, transformer.files.size());
+			assertEquals(mysql.toFile(), transformer.files.get(0));
+
+			transformer = new CollectingSqlTransformer();
+			transformer.setSqlFile(folder.toString());
+			transformer.transform();
+			assertEquals(2, transformer.files.size());
+		} finally {
+			Files.deleteIfExists(domain);
+			Files.deleteIfExists(mysql);
+			Files.deleteIfExists(pgsql);
+			Files.deleteIfExists(misplaced);
+			Files.deleteIfExists(folder);
+		}
+	}
+
+	private static class CollectingSqlTransformer extends SqlTransformer {
+		private final List<File> files = new ArrayList<>();
+
+		@Override
+		public void transform(File file) {
+			this.files.add(file);
+		}
+	}
 
 	/** 数据结构创建（SQLite为代表） */
 	public void testDS() throws Exception {

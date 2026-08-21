@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import org.colorcoding.tools.btulz.Environment;
@@ -55,6 +57,7 @@ public class DsTransformer extends DbTransformer {
 		if (file.isDirectory()) {
 			File[] files = file.listFiles();
 			if (files != null) {
+				Arrays.sort(files, Comparator.comparing(File::getName, String.CASE_INSENSITIVE_ORDER));
 				for (File item : files) {
 					String name = item.getName().toLowerCase();
 					if (!name.startsWith("ds_") || !name.endsWith(".xml")) {

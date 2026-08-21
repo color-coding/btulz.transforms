@@ -2,6 +2,7 @@ package org.colorcoding.tools.btulz.shell.gui;
 
 import javax.swing.SwingUtilities;
 
+import org.colorcoding.tools.btulz.shell.command.CommandManager;
 import org.colorcoding.tools.btulz.shell.gui.command.MainFrame;
 
 /**
@@ -26,6 +27,16 @@ public class GuiConsole {
 	}
 
 	public void run(String[] args) {
+		System.setProperty("apple.awt.application.name", "btulz.transforms.shell");
+		if (args != null) {
+			for (String arg : args) {
+				if ("-help".equalsIgnoreCase(arg) || "--help".equalsIgnoreCase(arg)) {
+					// 启动参数帮助是命令行输出，不启动 GUI，也不依赖 About 页。
+					System.out.println(CommandManager.create().getHelpMessage());
+					return;
+				}
+			}
+		}
 		SwingUtilities.invokeLater(() -> showUI());
 	}
 

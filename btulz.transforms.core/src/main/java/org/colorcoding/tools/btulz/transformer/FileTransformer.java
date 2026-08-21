@@ -1,7 +1,9 @@
 package org.colorcoding.tools.btulz.transformer;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 import org.colorcoding.tools.btulz.Environment;
@@ -126,6 +128,7 @@ public abstract class FileTransformer extends Transformer implements IFileTransf
 		} else if (file.isDirectory()) {
 			File[] files = file.listFiles();
 			if (files != null) {
+				Arrays.sort(files, Comparator.comparing(File::getName, String.CASE_INSENSITIVE_ORDER));
 				for (File subFile : files) {
 					if (subFile.isFile()) {
 						this.loadFile(subFile, false);

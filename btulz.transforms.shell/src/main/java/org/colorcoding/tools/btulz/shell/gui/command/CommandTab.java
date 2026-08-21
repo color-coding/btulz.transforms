@@ -35,6 +35,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneLayout;
 import javax.swing.Scrollable;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -45,6 +46,7 @@ import org.colorcoding.tools.btulz.shell.command.CommandBuilder;
 import org.colorcoding.tools.btulz.shell.command.CommandItem;
 import org.colorcoding.tools.btulz.shell.command.CommandListener;
 import org.colorcoding.tools.btulz.shell.command.CommandMessageEvent;
+import org.colorcoding.tools.btulz.shell.command.ValidValues;
 
 /**
  * 命令执行（UI右侧）
@@ -65,9 +67,16 @@ public class CommandTab extends WorkingTab {
 	public static final int MAX_HISTORY_LIST = 10;
 
 	public CommandTab(CommandBuilder commandBuilder) {
-		super(commandBuilder.getName());
+		this(commandBuilder.getName(), commandBuilder, true);
+	}
+
+	/** 供 About 等页面复用命令执行逻辑，但自行提供页面内容。 */
+	protected CommandTab(String title, CommandBuilder commandBuilder, boolean initializeCommandPanel) {
+		super(title);
 		this.setBuilder(commandBuilder);
-		this.initPanel(PANEL_COMMAND);
+		if (initializeCommandPanel) {
+			this.initPanel(PANEL_COMMAND);
+		}
 	}
 
 	private CommandBuilder builder;
@@ -212,7 +221,7 @@ public class CommandTab extends WorkingTab {
 								CommandBuilder commandBuilder = (CommandBuilder) object;
 								for (CommandItem item : commandBuilder.getItems().getItems()) {
 									CommandItem commandItem = CommandTab.this.getBuilder().getItems().firstOrDefault(
-											c -> c.getContent() != null && c.getContent().equals(item.getContent()),
+											c -> CommandTab.this.isSameCommandItem(c, item),
 											true);
 									if (commandItem != null) {
 										// 找到了对应项目
@@ -282,10 +291,64 @@ public class CommandTab extends WorkingTab {
 		panel.add(scrollPane, gridBagConstraints);
 	}
 
+	/** Name 是稳定标识；旧历史没有 Name 时才回退到 Content。 */
+	private boolean isSameCommandItem(CommandItem current, CommandItem history) {
+		if (current.getName() != null && history.getName() != null) {
+			return current.getName().equalsIgnoreCase(history.getName());
+		}
+		return current.getContent() != null && current.getContent().equals(history.getContent());
+	}
+
 	private static final String control_name_button = "btn_value_";
 	private static final String control_name_combox = "cmb_value_";
 	private static final String control_name_text = "txt_value_";
 	private static final String control_name_checkbox = "chk_value_";
+
+	private Component getValueComponent(CommandItem item, Container container) {
+		if (container == null) {
+			return null;
+		}
+		String comboName = control_name_combox + item.hashCode();
+		String textName = control_name_text + item.hashCode();
+		for (Component component : container.getComponents()) {
+			if (comboName.equals(component.getName()) || textName.equals(component.getName())) {
+				return component;
+			}
+			if (component instanceof Container) {
+				Component value = this.getValueComponent(item, (Container) component);
+				if (value != null) {
+					return value;
+				}
+			}
+		}
+		return null;
+	}
+
+	/** 数据定义变更后，将特性值刷新到 GUI 控件。 */
+	private void applyDefinition(String name, CommandItem definitionItem, Container container) {
+		if (name == null || name.isBlank()) {
+			return;
+		}
+		this.getBuilder().applyDefinition(name);
+		for (CommandItem item : this.getBuilder().getItems()) {
+			if (item == definitionItem) {
+				continue;
+			}
+			Component component = this.getValueComponent(item, container);
+			if (component instanceof JTextField) {
+				((JTextField) component).setText(item.getValue());
+			} else if (component instanceof JComboBox<?>) {
+				JComboBox<?> comboBox = (JComboBox<?>) component;
+				for (int i = 0; i < comboBox.getItemCount(); i++) {
+					Object value = comboBox.getItemAt(i);
+					if (value instanceof ComboxItem && java.util.Objects.equals(item.getValue(), ((ComboxItem) value).value)) {
+						comboBox.setSelectedIndex(i);
+						break;
+					}
+				}
+			}
+		}
+	}
 
 	private void addCommandItemLine(CommandItem commandItem, JPanel panel, GridBagConstraints gridBagConstraints) {
 		// 添加命令内容
@@ -305,10 +368,15 @@ public class CommandTab extends WorkingTab {
 		gridBagConstraints.weightx = 40.0;
 		if (commandItem.getValidValues().size() > 0) {
 			// 设置了有效值相关
-			ComboxItem[] values = new ComboxItem[commandItem.getValidValues().size() + 1];
-			values[0] = ComboxItem.PLEASE_SELECT;
-			for (int i = 0; i < values.length - 1; i++) {
-				values[i + 1] = new ComboxItem(commandItem.getValidValues().get(i).getValue(),
+			boolean definitionSelector = commandItem.getName() != null && commandItem.getName()
+					.equalsIgnoreCase(this.getBuilder().getDefinitionItem());
+			int offset = definitionSelector ? 0 : 1;
+			ComboxItem[] values = new ComboxItem[commandItem.getValidValues().size() + offset];
+			if (!definitionSelector) {
+				values[0] = ComboxItem.PLEASE_SELECT;
+			}
+			for (int i = 0; i < commandItem.getValidValues().size(); i++) {
+				values[i + offset] = new ComboxItem(commandItem.getValidValues().get(i).getValue(),
 						commandItem.getValidValues().get(i).getDescription());
 			}
 			JComboBox<?> comboBox = new JComboBox<ComboxItem>(values);
@@ -332,6 +400,10 @@ public class CommandTab extends WorkingTab {
 						if (this.getCommandItem() != null) {
 							ComboxItem value = (ComboxItem) comboBox.getSelectedItem();
 							this.getCommandItem().setValue(value.value);
+							if (this.getCommandItem().getName() != null && this.getCommandItem().getName()
+									.equalsIgnoreCase(CommandTab.this.getBuilder().getDefinitionItem())) {
+								CommandTab.this.applyDefinition(value.value, this.getCommandItem(), panel);
+							}
 						}
 					}
 				}
@@ -436,8 +508,8 @@ public class CommandTab extends WorkingTab {
 		gridBagConstraints.weightx = 20.0;
 		JButton button = new JButton("...");
 		button.setName(control_name_button + commandItem.hashCode());
-		if (commandItem.getValidValues().getClassName() != null
-				&& commandItem.getValidValues().getClassName().equals(JFileChooser.class.getName())) {
+		if (ValidValues.RULE_FILE.equalsIgnoreCase(commandItem.getValidValues().getRule())
+				|| JFileChooser.class.getName().equals(commandItem.getValidValues().getClassName())) {
 			button.addActionListener(new ActionListener() {
 				private JTextField textField;
 
@@ -537,8 +609,8 @@ public class CommandTab extends WorkingTab {
 					}
 				}
 			});
-		} else if (commandItem.getValidValues().getClassName() != null
-				&& commandItem.getValidValues().getClassName().equals(java.util.UUID.class.getName())) {
+		} else if (ValidValues.RULE_UUID.equalsIgnoreCase(commandItem.getValidValues().getRule())
+				|| java.util.UUID.class.getName().equals(commandItem.getValidValues().getClassName())) {
 			button.addActionListener(new ActionListener() {
 				private JTextField textField;
 
@@ -638,7 +710,9 @@ public class CommandTab extends WorkingTab {
 		if (CommandTab.this.command != null) {
 			CommandTab.this.command.destroy();
 		}
-		this.button_run.setEnabled(true);
+		if (this.button_run != null) {
+			this.button_run.setEnabled(true);
+		}
 	}
 
 	protected void onButtonRunClick(JButton button) {
@@ -658,7 +732,7 @@ public class CommandTab extends WorkingTab {
 				int ret = command.run();
 				// 命令执行完成，自动点击stop钮。
 				CommandTab.this.command = null;// 清除命令
-				CommandTab.this.onButtonStopClick(null);
+				SwingUtilities.invokeLater(() -> CommandTab.this.onButtonStopClick(null));
 				if (ret != 1) {
 					// 非执行失败
 					// 记录运行命令

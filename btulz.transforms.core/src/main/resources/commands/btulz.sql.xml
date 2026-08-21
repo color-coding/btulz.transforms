@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE CommandBuilder>
+<ns2:CommandBuilder Description="创建脚本" DefinitionItem="DbType"
+    xmlns:ns2="http://colorcoding.org/btulz/shell/commands">
+    <Item Name="Java" Content="java" Editable="false" />
+    <Item Name="JarOption" Content="-jar" Description="执行jar包" Editable="false" />
+    <Item Name="Application" Content="btulz.transforms.core-0.2.0.jar" Description="包名称" Editable="false" />
+    <Item Name="Command" Content="sql" Description="子命令" Editable="false" />
+    <Item Name="DbType" Description="数据库类型" Value="MSSQL" Editable="false">
+        <ValidValues Rule="features" Definitions="commands/validvalues.database.xml" />
+    </Item>
+    <Item Name="Company" Content="-Company=${VALUE}" Description="公司" Value="CC" />
+    <Item Name="SqlFilter" Content="-SqlFilter=${VALUE}" Description="SQL文件名前缀" />
+    <Item Name="DbServer" Content="-DbServer=${VALUE}" Description="数据库地址" />
+    <Item Name="DbPort" Content="-DbPort=${VALUE}" Description="数据库端口" />
+    <Item Name="DbSchema" Content="-DbSchema=${VALUE}" Description="数据库架构" />
+    <Item Name="DbName" Content="-DbName=${VALUE}" Description="数据库名称" Value="ibas_demo" />
+    <Item Name="DbUser" Content="-DbUser=${VALUE}" Description="用户" />
+    <Item Name="DbPassword" Content="-DbPassword=${VALUE}" Description="密码" Value="1q2w3e" />
+    <Item Name="SqlFile" Content="-SqlFile=${VALUE}" Description="执行的文件" Value="${WORK_FOLDER}initialization">
+        <ValidValues Rule="file" />
+    </Item>
+</ns2:CommandBuilder>

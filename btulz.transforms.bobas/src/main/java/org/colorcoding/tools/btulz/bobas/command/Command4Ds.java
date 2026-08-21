@@ -69,7 +69,7 @@ public class Command4Ds extends Command<Command4Ds> {
 		stringBuilder.append(" ");
 		stringBuilder.append("-sql=sql_mssql");
 		stringBuilder.append(" ");
-		stringBuilder.append("-dbValue=db_values.xml");
+		stringBuilder.append("-dbValue=validvalues.database.xml");
 		super.moreHelps(stringBuilder);
 	}
 

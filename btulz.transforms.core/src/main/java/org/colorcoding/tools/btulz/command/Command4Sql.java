@@ -38,6 +38,7 @@ public class Command4Sql extends Command<Command4Sql> {
 		ArrayList<Argument> arguments = new ArrayList<>();
 		// 添加自身参数
 		arguments.add(new Argument("-SqlFile", "SQL file to use"));
+		arguments.add(new Argument("-SqlFilter", "SQL file name prefix when scanning a directory"));
 		arguments.add(new Argument("-Company", "Company tag for database object prefix"));
 		arguments.add(new Argument("-DbServer", "Database server address"));
 		arguments.add(new Argument("-DbPort", "Database port"));
@@ -59,6 +60,8 @@ public class Command4Sql extends Command<Command4Sql> {
 		stringBuilder.append(COMMAND_PROMPT);
 		stringBuilder.append(" ");
 		stringBuilder.append("-SqlFile=D:\\sql_mysql_ibas_initialization.xml");
+		stringBuilder.append(" ");
+		stringBuilder.append("-SqlFilter=sql_mysql_");
 		stringBuilder.append(" ");
 		stringBuilder.append("-Company=CC");
 		stringBuilder.append(" ");
@@ -87,6 +90,8 @@ public class Command4Sql extends Command<Command4Sql> {
 				}
 				if (argument.getName().equalsIgnoreCase("-SqlFile")) {
 					sqlTransformer.setSqlFile(argument.getValue());
+				} else if (argument.getName().equalsIgnoreCase("-SqlFilter")) {
+					sqlTransformer.setSqlFilter(argument.getValue());
 				} else if (argument.getName().equalsIgnoreCase("-Company")) {
 					sqlTransformer.setCompany(argument.getValue());
 				} else if (argument.getName().equalsIgnoreCase("-DbServer")) {

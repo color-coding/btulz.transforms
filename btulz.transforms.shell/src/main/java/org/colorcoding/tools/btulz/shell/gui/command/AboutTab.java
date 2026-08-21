@@ -6,10 +6,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.net.URI;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import org.colorcoding.tools.btulz.shell.Environment;
+import org.colorcoding.tools.btulz.shell.command.CommandBuilder;
+import org.colorcoding.tools.btulz.shell.command.CommandItem;
 
 /**
  * 关于和帮助
@@ -17,7 +21,7 @@ import javax.swing.JPanel;
  * @author Niuren.Zhu
  *
  */
-public class AboutTab extends WorkingTab {
+public class AboutTab extends CommandTab {
 
 	private static final long serialVersionUID = 7201855758302708134L;
 
@@ -27,8 +31,51 @@ public class AboutTab extends WorkingTab {
 	public static final String PANEL_ABOUT = "about_panel";
 
 	public AboutTab() {
-		super("about");
+		super("about", createHelpBuilder(), false);
 		this.initPanel(PANEL_ABOUT);
+	}
+
+	private static CommandBuilder createHelpBuilder() {
+		CommandBuilder builder = new CommandBuilder();
+		builder.setName("help");
+		CommandItem item = builder.getItems().create();
+		item.setName("Java");
+		item.setContent("java");
+		item.setEditable(false);
+		item = builder.getItems().create();
+		item.setName("JarOption");
+		item.setContent("-jar");
+		item.setEditable(false);
+		item = builder.getItems().create();
+		item.setName("Application");
+		item.setContent(getShellApplication());
+		item.setEditable(false);
+		item = builder.getItems().create();
+		item.setName("Help");
+		item.setContent("-help");
+		item.setEditable(false);
+		return builder;
+	}
+
+	/** 获取当前 shell 应用路径，避免将版本号写死在 About 页面。 */
+	private static String getShellApplication() {
+		try {
+			URI location = AboutTab.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+			File application = new File(location);
+			if (application.isFile()) {
+				return application.getName();
+			}
+		} catch (Exception e) {
+			// 回退到工作目录扫描。
+		}
+		File folder = new File(Environment.getWorkingFolder());
+		File[] applications = folder.listFiles((dir, name) -> name.startsWith("btulz.transforms.shell-")
+				&& name.endsWith(".jar"));
+		if (applications != null && applications.length > 0) {
+			java.util.Arrays.sort(applications, java.util.Comparator.comparing(File::getName));
+			return applications[applications.length - 1].getName();
+		}
+		return new File(folder, "btulz.transforms.shell.jar").getName();
 	}
 
 	@Override
@@ -60,7 +107,7 @@ public class AboutTab extends WorkingTab {
 		panel.add(label, gridBagConstraints);
 		count++;
 		gridBagConstraints.gridy = count;// 组件的纵坐标
-		label = new JLabel("copyright 2016 color-coding studio");
+		label = new JLabel("copyright 2026 color-coding studio");
 		label.setFont(font);
 		panel.add(label, gridBagConstraints);
 		count++;
@@ -94,8 +141,4 @@ public class AboutTab extends WorkingTab {
 		panel.add(label, gridBagConstraints);
 	}
 
-	protected void onButtonRunClick(JButton button) {
-		super.onButtonRunClick(button);
-		this.setRunningCommand(new String[] { "-help" });
-	}
 }
