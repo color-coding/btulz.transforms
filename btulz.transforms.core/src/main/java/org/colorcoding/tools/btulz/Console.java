@@ -5,6 +5,7 @@ import org.colorcoding.tools.btulz.command.Command4Ds;
 import org.colorcoding.tools.btulz.command.Command4DsJar;
 import org.colorcoding.tools.btulz.command.Command4Excel;
 import org.colorcoding.tools.btulz.command.Command4Sql;
+import org.colorcoding.tools.btulz.command.Command4Sql2Xml;
 import org.colorcoding.tools.btulz.command.CommandsManager;
 
 /**
@@ -25,6 +26,7 @@ public class Console {
 					commandsManager.register(Command4Code.class);
 					commandsManager.register(Command4Ds.class);
 					commandsManager.register(Command4Sql.class);
+					commandsManager.register(Command4Sql2Xml.class);
 					commandsManager.register(Command4DsJar.class);
 					commandsManager.register(Command4Excel.class);
 				}

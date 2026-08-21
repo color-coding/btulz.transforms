@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE DataStructureOrchestration>
+<ns2:DataStructureOrchestration xmlns:ns2="http://colorcoding.org/btulz/transformers">
+    <Name>sql_dm8</Name>
+    <Description>DM8 SQL脚本执行模板</Description>
+    <Integrated>true</Integrated>
+    <DriverName>dm.jdbc.driver.DmDriver</DriverName>
+    <DbUrl>jdbc:dm://${DbServer}:${DbPort}?schema=&quot;&quot;${DbName}&quot;&quot;</DbUrl>
+    <DbUser>${DbUser}</DbUser>
+    <DbPassword>${DbPassword}</DbPassword>
+</ns2:DataStructureOrchestration>

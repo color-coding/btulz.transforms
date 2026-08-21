@@ -70,9 +70,10 @@ public class SqlTransformer extends DbTransformer {
 		if (!sqlFile.exists() || !sqlFile.isFile()) {
 			throw new Exception(String.format("sql file [%s] not exists.", this.getSqlFile()));
 		}
+		File templateFile = sqlFile;
 		sqlFile = new File(this.getOutputFile(sqlFile.getName()));
 		RegionDomain template = new RegionDomain();
-		template.setTemplateFile(this.getSqlFile());
+		template.setTemplateFile(templateFile.getPath());
 		template.export(this.getRuntimeParameters(), sqlFile);
 		super.execute(sqlFile);
 	}

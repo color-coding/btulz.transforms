@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE DataStructureOrchestration>
+<ns2:DataStructureOrchestration xmlns:ns2="http://colorcoding.org/btulz/transformers">
+    <Name>sql_mysql</Name>
+    <Description>MYSQL SQL脚本执行模板</Description>
+    <Integrated>true</Integrated>
+    <DriverName>com.mysql.cj.jdbc.Driver</DriverName>
+    <DbUrl>jdbc:mysql://${DbServer}:${DbPort}/${DbName}?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=${Timezone}</DbUrl>
+    <DbUser>${DbUser}</DbUser>
+    <DbPassword>${DbPassword}</DbPassword>
+    <EncodeDbUrl>true</EncodeDbUrl>
+</ns2:DataStructureOrchestration>
