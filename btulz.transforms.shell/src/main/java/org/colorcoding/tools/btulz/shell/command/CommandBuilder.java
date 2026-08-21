@@ -1,8 +1,10 @@
 package org.colorcoding.tools.btulz.shell.command;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -80,11 +82,83 @@ public class CommandBuilder implements Comparable<CommandBuilder> {
 
 	private List<Variable> variables;
 
+	@XmlAttribute(name = "DefinitionItem")
+	private String definitionItem;
+
+	private transient ResourceDefinitions resourceDefinitions;
+	private transient Function<String, InputStream> resourceLoader;
+	private transient String appliedDefinition;
+
+	public String getDefinitionItem() {
+		return definitionItem == null || definitionItem.isBlank() ? "DbType" : definitionItem;
+	}
+
+	public void setDefinitionItem(String definitionItem) {
+		this.definitionItem = definitionItem;
+	}
+
+	void setResourceLoader(Function<String, InputStream> resourceLoader) {
+		this.resourceLoader = resourceLoader;
+	}
+
+	/** 加载命令绑定的通用值定义资源。 */
+	public synchronized void initializeDefinitions() {
+		CommandItem typeItem = this.getItems().firstOrDefault(
+				item -> this.getDefinitionItem().equalsIgnoreCase(item.getName()), true);
+		if (typeItem == null) {
+			return;
+		}
+		if (this.resourceDefinitions == null) {
+			String source = typeItem.getValidValues().getDefinitions();
+			if (source == null || source.isBlank()) {
+				return;
+			}
+			this.resourceDefinitions = ResourceDefinitions.loadDefinitions(source, this.resourceLoader);
+		}
+		if (typeItem.getValidValues().isEmpty()) {
+			for (ResourceDefinitions.Definition definition : this.resourceDefinitions.getDefinitions()) {
+				typeItem.getValidValues().add(
+						new ValidValue(definition.getValue(), definition.getDescription()));
+			}
+		}
+		if (this.appliedDefinition == null || !this.appliedDefinition.equalsIgnoreCase(typeItem.getValue())) {
+			this.applyDefinition(typeItem.getValue());
+		}
+	}
+
+	/** 将指定定义的数据特性同步到同名命令项。 */
+	public synchronized void applyDefinition(String name) {
+		if (this.resourceDefinitions == null) {
+			return;
+		}
+		ResourceDefinitions.Definition definition = this.resourceDefinitions.find(name);
+		if (definition == null) {
+			throw new IllegalArgumentException("unknown definition [" + name + "].");
+		}
+		for (CommandItem item : this.getItems()) {
+			if (item.getName() == null || item.getName().isBlank()) {
+				continue;
+			}
+			String value = definition.get(item.getName());
+			if (value != null) {
+				item.setValue(value);
+			}
+		}
+		this.appliedDefinition = name;
+	}
+
 	protected List<Variable> getVariables() {
 		if (this.variables == null) {
 			this.variables = new ArrayList<>();
 			this.variables.add(new Variable(Variable.VARIABLE_NAME_WORK_FOLDER, this.getWorkFolder()));
 			this.variables.add(new Variable(Variable.VARIABLE_NAME_FILE_SEPARATOR, File.separator));
+		}
+		for (CommandItem item : this.getItems()) {
+			if (item.getName() != null && !item.getName().isBlank()) {
+				String variableName = "${" + item.getName() + "}";
+				this.variables.removeIf(variable -> variableName.equals(variable.getName()));
+				this.variables.add(new Variable(variableName, item.getValue()));
+			}
 		}
 		return this.variables;
 	}
@@ -95,6 +169,7 @@ public class CommandBuilder implements Comparable<CommandBuilder> {
 	 * @return 命令字符串数组
 	 */
 	public String[] toCommands() {
+		this.initializeDefinitions();
 		ArrayList<String> commands = new ArrayList<>();
 		for (CommandItem commandItem : this.getItems()) {
 			if (commandItem == null) {

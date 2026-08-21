@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import java.nio.file.Files;
+import java.util.Locale;
 
 import org.colorcoding.tools.btulz.Serializer;
 import org.colorcoding.tools.btulz.Environment;
@@ -70,7 +71,16 @@ public class SqlFileTransformer extends DbTransformer {
 		if (!source.isFile()) {
 			throw new Exception(String.format("sql file [%s] not exists.", this.getSqlFile()));
 		}
-		this.transformFile(source, this.outputFile == null || this.outputFile.isEmpty() ? source.getParentFile() : null);
+		File outputDirectory = null;
+		if (this.outputFile == null || this.outputFile.isEmpty()) {
+			outputDirectory = source.getParentFile();
+		} else {
+			File outputTarget = new File(this.outputFile);
+			if (outputTarget.isDirectory()) {
+				outputDirectory = outputTarget;
+			}
+		}
+		this.transformFile(source, outputDirectory);
 	}
 
 	private void transformFile(File source, File outputDirectory) throws Exception {
@@ -113,8 +123,22 @@ public class SqlFileTransformer extends DbTransformer {
 		DataStructureOrchestration orchestration = (DataStructureOrchestration) Serializer.fromXmlString(
 				content.toString(), DataStructureOrchestration.class);
 		orchestration.getActions().clear();
+		String sourceName = source.getName();
+		String sourceBase = sourceName;
+		int sourceDot = sourceBase.lastIndexOf('.');
+		if (sourceDot > 0) {
+			sourceBase = sourceBase.substring(0, sourceDot);
+		}
+		String databaseType = this.dbType.toUpperCase(Locale.ROOT);
+		String partDescription = this.statementCount == Integer.MAX_VALUE ? ""
+				: String.format("，分片 %03d", part);
+		orchestration.setName(String.format("sql_%s_%s%s", this.dbType.toLowerCase(Locale.ROOT), sourceBase,
+				this.statementCount == Integer.MAX_VALUE ? "" : String.format("_part%03d", part)));
+		orchestration.setDescription(String.format("%s SQL脚本执行编排（源文件：%s%s）", databaseType, sourceName,
+				partDescription));
 		ISqlExecutionAction action = orchestration.getActions().create();
-		action.setName(source.getName());
+		action.setName(sourceName);
+		action.setDescription(String.format("执行 SQL 文件：%s%s", sourceName, partDescription));
 		for (SqlStatement item : statements) {
 			ISqlExecutionActionStep step = action.getSteps().create();
 			step.setName(String.format("line %s", item.line));

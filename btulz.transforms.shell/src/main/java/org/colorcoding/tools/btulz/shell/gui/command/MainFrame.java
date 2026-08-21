@@ -2,7 +2,10 @@ package org.colorcoding.tools.btulz.shell.gui.command;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Taskbar;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,7 +42,26 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		super("btulz.transforms.shell");
 		URL url = this.getClass().getResource("/images/icon.png");
-		this.setIconImage(new ImageIcon(url).getImage());
+		if (url != null) {
+			Image image = new ImageIcon(url).getImage();
+			this.setIconImage(image);
+			this.setTaskbarIcon(image);
+		}
+	}
+
+	/** 设置 macOS Dock 和支持该能力的系统任务栏图标。 */
+	private void setTaskbarIcon(Image image) {
+		try {
+			if (!Taskbar.isTaskbarSupported()) {
+				return;
+			}
+			Taskbar taskbar = Taskbar.getTaskbar();
+			if (taskbar.isSupported(Taskbar.Feature.ICON_IMAGE)) {
+				taskbar.setIconImage(image);
+			}
+		} catch (UnsupportedOperationException | SecurityException e) {
+			// 无任务栏或不允许修改图标时，仍保留 JFrame 图标。
+		}
 	}
 
 	public void initialize() {
@@ -75,8 +97,10 @@ public class MainFrame extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		JLabel label = new JLabel("Commands");
-		label.setHorizontalAlignment(SwingConstants.LEFT);
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		label.setFont(new java.awt.Font("Dialog", 3, 18));
+		label.setMaximumSize(new Dimension(Integer.MAX_VALUE, label.getPreferredSize().height));
 		label.setForeground(Color.BLUE);
 		label.setToolTipText("double click to reload.");
 		label.addMouseListener(new MouseListener() {

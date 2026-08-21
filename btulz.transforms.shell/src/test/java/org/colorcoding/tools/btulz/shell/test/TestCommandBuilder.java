@@ -1,6 +1,11 @@
 package org.colorcoding.tools.btulz.shell.test;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.JarOutputStream;
 
 import jakarta.xml.bind.JAXBException;
 
@@ -112,6 +117,68 @@ public class TestCommandBuilder extends TestCase {
 			});
 			command.run();
 		}
+	}
+
+	/** 数据库命令应由一个 XML 根据 validvalues.database.xml 生成不同数据库参数。 */
+	public void testDatabaseCommandBuilder() throws Exception {
+		Path definitions = Files.createTempFile("btulz-validvalues-", ".xml");
+		Files.writeString(definitions, "<DatabaseFeatures>"
+				+ "<DatabaseType Name=\"MSSQL\"><Feature Key=\"DsTemplate\" Value=\"ds_mssql.xml\"/>"
+				+ "<Feature Key=\"SqlFilter\" Value=\"sql_mssql_\"/></DatabaseType>"
+				+ "<DatabaseType Name=\"PGSQL\"><Feature Key=\"DsTemplate\" Value=\"ds_pgsql.xml\"/>"
+				+ "<Feature Key=\"SqlFilter\" Value=\"sql_pgsql_\"/></DatabaseType>"
+				+ "</DatabaseFeatures>");
+		CommandBuilder builder = new CommandBuilder();
+		builder.setName("database");
+		CommandItem type = builder.getItems().create();
+		type.setName("DbType");
+		type.setValue("MSSQL");
+		type.getValidValues().setRule(ValidValues.RULE_FEATURES);
+		type.getValidValues().setDefinitions(definitions.toString());
+		CommandItem template = builder.getItems().create();
+		template.setName("DsTemplate");
+		template.setContent("-Template=${VALUE}");
+		CommandItem sqlFilter = builder.getItems().create();
+		sqlFilter.setName("SqlFilter");
+		sqlFilter.setContent("-SqlFilter=${VALUE}");
+		String[] commands = builder.toCommands();
+		assertEquals(2, commands.length);
+		assertEquals("-Template=ds_mssql.xml", commands[0]);
+		assertEquals("-SqlFilter=sql_mssql_", commands[1]);
+		assertEquals(2, type.getValidValues().size());
+		builder.applyDefinition("PGSQL");
+		type.setValue("PGSQL");
+		assertEquals("ds_pgsql.xml", template.getValue());
+		assertEquals("sql_pgsql_", sqlFilter.getValue());
+		template.setValue("custom.xml");
+		assertEquals("-Template=custom.xml", builder.toCommands()[0]);
+		Files.deleteIfExists(definitions);
+	}
+
+	/** Shell 应直接分析独立 JAR 中的命令和同 JAR 特性资源。 */
+	public void testLoadIndependentJar() throws Exception {
+		Path file = Files.createTempFile("btulz-command-", ".jar");
+		try (JarOutputStream output = new JarOutputStream(Files.newOutputStream(file))) {
+			this.writeJarEntry(output, "commands/validvalues.test.xml",
+					"<Definitions><Definition Name=\"A\"><Feature Key=\"Port\" Value=\"100\"/></Definition></Definitions>");
+			this.writeJarEntry(output, "commands/sample.xml",
+					"<ns2:CommandBuilder DefinitionItem=\"Type\" xmlns:ns2=\"http://colorcoding.org/btulz/shell/commands\">"
+							+ "<Item Name=\"Type\" Content=\"\" Value=\"A\"><ValidValues Rule=\"features\" Definitions=\"commands/validvalues.test.xml\"/></Item>"
+							+ "<Item Name=\"Port\" Content=\"-Port=${VALUE}\"/></ns2:CommandBuilder>");
+		}
+		CommandManager manager = new CommandManager();
+		try (JarFile jarFile = new JarFile(file.toFile())) {
+			manager.loadResources(jarFile);
+		}
+		assertEquals(1, manager.getCommands().size());
+		assertEquals("-Port=100", manager.getCommands().get(0).toCommands()[0]);
+		Files.deleteIfExists(file);
+	}
+
+	private void writeJarEntry(JarOutputStream output, String name, String value) throws Exception {
+		output.putNextEntry(new JarEntry(name));
+		output.write(value.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+		output.closeEntry();
 	}
 
 }

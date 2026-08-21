@@ -7,6 +7,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import org.colorcoding.tools.btulz.Environment;
@@ -120,6 +122,7 @@ public class Command4Init extends Command<Command4Init> {
 						if (file.isDirectory()) {
 							File[] lsItems = file.listFiles();
 							if (lsItems != null) {
+								Arrays.sort(lsItems, Comparator.comparing(File::getName, String.CASE_INSENSITIVE_ORDER));
 								for (File lsItem : lsItems) {
 									if (!lsItem.isFile()) {
 										continue;

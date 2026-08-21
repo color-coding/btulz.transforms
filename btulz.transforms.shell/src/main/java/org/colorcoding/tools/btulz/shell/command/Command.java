@@ -169,8 +169,16 @@ public class Command {
 			});
 			this.commonThread.start();
 			this.errorThread.start();
-			runningProcess.waitFor();
-			return runningProcess.exitValue();
+			int exitValue = runningProcess.waitFor();
+			// 进程退出后仍需等待两个读取线程排空管道，否则短输出（例如 -help）
+			// 可能在 finally 中销毁进程前尚未送达 GUI。
+			if (this.commonThread != null) {
+				this.commonThread.join(5000);
+			}
+			if (this.errorThread != null) {
+				this.errorThread.join(5000);
+			}
+			return exitValue;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return -9999;
