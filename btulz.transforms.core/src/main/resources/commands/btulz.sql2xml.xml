@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE CommandBuilder>
+<ns2:CommandBuilder Description="SQL转XML"
+    xmlns:ns2="http://colorcoding.org/btulz/shell/commands">
+    <Item Content="java" Editable="false" />
+    <Item Content="-jar" Description="执行jar包" Editable="false" />
+    <Item Content="btulz.transforms.core-0.2.0.jar" Description="包名称" Editable="false" />
+    <Item Content="sql2xml" Description="子命令" Editable="false" />
+    <Item Content="-DbType=${VALUE}" Description="数据库类型" Value="hana">
+        <ValidValues>
+            <ValidValue Description="HANA" Value="hana" />
+            <ValidValue Description="MYSQL" Value="mysql" />
+            <ValidValue Description="PGSQL" Value="pgsql" />
+            <ValidValue Description="MSSQL" Value="mssql" />
+            <ValidValue Description="SQLite" Value="sqlite" />
+            <ValidValue Description="SYBASE" Value="sybase" />
+        </ValidValues>
+    </Item>
+    <Item Content="-SqlFile=${VALUE}" Description="SQL文件或目录" Value="${WORK_FOLDER}initialization">
+        <ValidValues ClassName="javax.swing.JFileChooser" />
+    </Item>
+    <Item Content="-OutputFile=${VALUE}" Description="输出文件或目录" Optional="true" />
+    <Item Content="-StatementCount=${VALUE}" Description="每个XML包含的语句数" Value="-1" Optional="true" />
+</ns2:CommandBuilder>

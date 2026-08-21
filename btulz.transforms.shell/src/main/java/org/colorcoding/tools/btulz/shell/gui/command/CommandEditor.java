@@ -6,8 +6,11 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -103,7 +106,7 @@ public class CommandEditor extends JPanel {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FileWriter fileWriter = null;
+				Writer fileWriter = null;
 				try {
 					String fileName = CommandEditor.this.textField.getText();
 					if (fileName == null || fileName.isEmpty()) {
@@ -116,8 +119,8 @@ public class CommandEditor extends JPanel {
 					if (!workFolder.exists()) {
 						workFolder.mkdirs();
 					}
-					fileWriter = new FileWriter(
-							workFolder.getPath() + File.separator + fileName);
+					fileWriter = new OutputStreamWriter(new FileOutputStream(
+							workFolder.getPath() + File.separator + fileName), StandardCharsets.UTF_8);
 					fileWriter.write(CommandEditor.this.textArea.getText());
 					fileWriter.flush();
 					JOptionPane.showMessageDialog(CommandEditor.this, "Successfully saved.", "Command Editor",

@@ -3,6 +3,7 @@ package org.colorcoding.tools.btulz;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -116,7 +117,7 @@ public class Serializer {
 		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");// 编码格式
 		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, false);// 是否省略xm头声明信息
 		Unmarshaller unmarshaller = context.createUnmarshaller();
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(value.getBytes());
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(value.getBytes(StandardCharsets.UTF_8));
 		return unmarshaller.unmarshal(inputStream);
 
 	}
