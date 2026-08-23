@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlType;
@@ -158,6 +160,7 @@ public class DataTransformer extends Transformer {
 		if (file.isDirectory()) {
 			File[] files = file.listFiles();
 			if (files != null) {
+				Arrays.sort(files, Comparator.comparing(File::getName, String.CASE_INSENSITIVE_ORDER));
 				for (File item : files) {
 					bos.addAll(this.analysisData(item));
 				}

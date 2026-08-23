@@ -15,14 +15,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
-import org.colorcoding.tools.btulz.bobas.Environment;
-
-@XmlRootElement(name = "DbValues", namespace = Environment.NAMESPACE_BTULZ_BOBAS)
-@XmlType(name = "DbValues", namespace = Environment.NAMESPACE_BTULZ_BOBAS)
+@XmlRootElement(name = "DatabaseFeatures")
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlType(name = "DatabaseFeatures")
 @XmlSeeAlso({ DbValue.class })
 public class DbValues extends ArrayList<DbValue> {
 
-	private static final long serialVersionUID = -1684584523309129310L;
+	@XmlElement(name = "DatabaseType")
+	private ArrayList<DbValue> values = new ArrayList<>();
 
 	protected static DbValues create(String valueFile) {
 		DbValues dbValues = new DbValues();
@@ -37,7 +37,10 @@ public class DbValues extends ArrayList<DbValue> {
 				inputStream = new FileInputStream(new File(valueFile));
 			}
 			if (inputStream == null) {
-				inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("db_values.xml");
+				inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("commands/validvalues.database.xml");
+			}
+			if (inputStream == null) {
+				throw new IllegalArgumentException("database features not found [" + valueFile + "].");
 			}
 			JAXBContext context = JAXBContext.newInstance(DbValues.class, DbValue.class, DbValueItem.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -54,7 +57,6 @@ public class DbValues extends ArrayList<DbValue> {
 		}
 	}
 
-	@XmlElement(name = "DbValue")
 	protected DbValue[] getValues() {
 		return this.toArray(new DbValue[] {});
 	}
@@ -71,7 +73,7 @@ public class DbValues extends ArrayList<DbValue> {
 	protected void setValues(DbValues value) {
 		this.clear();
 		if (value != null) {
-			for (DbValue item : value) {
+			for (DbValue item : value.values) {
 				this.add(item);
 			}
 		}
@@ -92,7 +94,7 @@ public class DbValues extends ArrayList<DbValue> {
 }
 
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name = "DbValue", namespace = Environment.NAMESPACE_BTULZ_BOBAS)
+@XmlType(name = "DatabaseType")
 @XmlSeeAlso({ DbValueItem.class })
 class DbValue {
 
@@ -107,7 +109,7 @@ class DbValue {
 		this.name = name;
 	}
 
-	@XmlElement(name = "DbValueItem")
+	@XmlElement(name = "Feature")
 	private ArrayList<DbValueItem> items;
 
 	public ArrayList<DbValueItem> getItems() {
@@ -124,7 +126,7 @@ class DbValue {
 }
 
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name = "DbValueItem", namespace = Environment.NAMESPACE_BTULZ_BOBAS)
+@XmlType(name = "Feature")
 class DbValueItem {
 
 	@XmlAttribute(name = "Key")

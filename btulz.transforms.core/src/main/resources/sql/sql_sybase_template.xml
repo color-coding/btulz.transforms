@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE DataStructureOrchestration>
+<ns2:DataStructureOrchestration xmlns:ns2="http://colorcoding.org/btulz/transformers">
+    <Name>sql_sybase</Name>
+    <Description>SYBASE SQL脚本执行模板</Description>
+    <Integrated>true</Integrated>
+    <DriverName>com.sybase.jdbc4.jdbc.SybDriver</DriverName>
+    <DbUrl>jdbc:sybase:Tds:${DbServer}:${DbPort}?ServiceName=${DbName}</DbUrl>
+    <DbUser>${DbUser}</DbUser>
+    <DbPassword>${DbPassword}</DbPassword>
+</ns2:DataStructureOrchestration>

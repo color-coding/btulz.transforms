@@ -57,59 +57,43 @@ $END_BOITEM$
                     if (data.isNew) {
                         this.viewData = data;
                         this.show();
+                        return;
+                    }
+                    let criteria: ibas.ICriteria = data.criteria();
+                    if (!ibas.objects.isNull(criteria) && criteria.conditions.length > 0) {
+                        this.fetchData(criteria);
+                        return;
                     } else {
-                        let criteria: ibas.ICriteria = data.criteria();
-                        if (criteria?.conditions.length > 0) {
-                            // 有效的查询对象查询
-                            let that: this = this;
-                            let boRepository: bo.BORepository${Domain.getName()} = new bo.BORepository${Domain.getName()}();
-                            boRepository.fetch${BO.getName()}({
-                                criteria: criteria,
-                                onCompleted(opRslt: ibas.IOperationResult<bo.${BO.getName()}>): void {
-                                    try {
-                                        if (opRslt.resultCode !== 0) {
-                                            throw new Error(opRslt.message);
-                                        }
-                                        if (opRslt.resultObjects.length > 0) {
-                                            that.viewData = opRslt.resultObjects.firstOrDefault();
-                                            that.show();
-                                        } else {
-                                            that.messages({
-                                                type: ibas.emMessageType.WARNING,
-                                                message: ibas.i18n.prop("shell_data_deleted_and_created"),
-                                                onCompleted(): void {
-                                                    that.show();
-                                                }
-                                            });
-                                        }
-                                    } catch (error) {
-                                        that.messages(error);
-                                    }
-                                }
-                            });
-                        } else {
-                            super.run.apply(this, arguments);
-                        }
+                        this.viewData = data;
+                        this.show();
                     }
                 } else {
                     super.run.apply(this, arguments);
                 }
             }
             /** 查询数据 */
-            protected fetchData(criteria: ibas.ICriteria | string): void {
+            protected fetchData(criteria: ibas.ICriteria | string | number): void {
                 this.busy(true);
                 let that: this = this;
-                if (typeof criteria === "string") {
+                if (typeof criteria === "string" || typeof criteria === "number") {
                     let condition: ibas.ICondition;
-                    let value: string = criteria;
+                    let value: string | number = criteria;
                     criteria = new ibas.Criteria();
                     criteria.result = 1;
 $BEGIN_BO_MODEL$
 $BEGIN_MODEL_HAS_PRIMARY$
 $BEGIN_MODEL_PRIMARY_PROPERTY$
                     condition = criteria.conditions.create();
-                    condition.alias = bo.${Model.getName()}.PROPERTY_${Property.getName().toUpperCase()}_NAME;
-                    condition.value = value;
+$BEGIN_MODEL_MODELTYPE_IS_DOCUMENT$
+                    condition.alias = bo.${Model.getName()}.PROPERTY_DOCENTRY_NAME;
+$END_MODEL_MODELTYPE_IS_DOCUMENT$
+$BEGIN_MODEL_MODELTYPE_IS_MASTERDATA$
+                    condition.alias = typeof value === "number" ? bo.${Model.getName()}.PROPERTY_DOCENTRY_NAME : bo.${Model.getName()}.PROPERTY_CODE_NAME;
+$END_MODEL_MODELTYPE_IS_MASTERDATA$
+$BEGIN_MODEL_MODELTYPE_IS_SIMPLE$
+                    condition.alias = bo.${Model.getName()}.PROPERTY_OBJECTKEY_NAME;
+$END_MODEL_MODELTYPE_IS_SIMPLE$
+                    condition.value = String(value);
 $END_MODEL_PRIMARY_PROPERTY$
 $END_MODEL_HAS_PRIMARY$
 $END_BO_MODEL$

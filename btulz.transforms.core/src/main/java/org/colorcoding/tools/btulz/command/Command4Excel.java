@@ -53,9 +53,9 @@ public class Command4Excel extends Command4Release<Command4Excel> {
 			arguments.add(argument);
 		}
 		// 添加自身参数
-		arguments.add(new Argument("-ExcelFile", "Excel file to parse"));
-		arguments.add(new Argument("-OutputFolder", "Output directory for models"));
-		arguments.add(new Argument("-IgnoreSheet", "Ignore commented sheets (prefixed with \"!--\")"));
+		arguments.add(new Argument("-excelFile", "Excel file to parse"));
+		arguments.add(new Argument("-outputFolder", "Output directory for models"));
+		arguments.add(new Argument("-ignoreSheet", "Ignore commented sheets (prefixed with \"!--\")"));
 		return arguments.toArray(new Argument[] {});
 	}
 
@@ -69,11 +69,11 @@ public class Command4Excel extends Command4Release<Command4Excel> {
 		stringBuilder.append("  ");
 		stringBuilder.append(COMMAND_PROMPT); // 命令
 		stringBuilder.append(" ");
-		stringBuilder.append("-ExcelFile=D:\\temp\\domain_models_template_v4.0.xlsx"); // 使用的文件
+		stringBuilder.append("-excelFile=D:\\temp\\domain_models_template_v4.0.xlsx"); // 使用的文件
 		stringBuilder.append(" ");
-		stringBuilder.append("-OutputFolder=D:\\temp"); // 输出目录
+		stringBuilder.append("-outputFolder=D:\\temp"); // 输出目录
 		stringBuilder.append(" ");
-		stringBuilder.append("-IgnoreSheet=yes"); // 忽略注释表格
+		stringBuilder.append("-ignoreSheet=yes"); // 忽略注释表格
 		super.moreHelps(stringBuilder);
 	}
 
@@ -91,11 +91,11 @@ public class Command4Excel extends Command4Release<Command4Excel> {
 					excelTransformer = new ExcelTransformer();
 					excelTransformer.setInterruptOnError(true);
 				}
-				if (argument.getName().equalsIgnoreCase("-ExcelFile")) {
+				if (argument.getName().equalsIgnoreCase("-excelFile")) {
 					fileName = argument.getValue();
-				} else if (argument.getName().equalsIgnoreCase("-OutputFolder")) {
+				} else if (argument.getName().equalsIgnoreCase("-outputFolder")) {
 					excelTransformer.setOutputFolder(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-IgnoreSheet")) {
+				} else if (argument.getName().equalsIgnoreCase("-ignoreSheet")) {
 					if ("no".equalsIgnoreCase(argument.getValue())) {
 						excelTransformer.setIgnoreSheet(false);
 					}

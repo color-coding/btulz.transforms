@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE DataStructureOrchestration>
+<ns2:DataStructureOrchestration xmlns:ns2="http://colorcoding.org/btulz/transformers">
+    <Name>sql_mssql</Name>
+    <Description>MSSQL SQL脚本执行模板</Description>
+    <Integrated>true</Integrated>
+    <DriverName>com.microsoft.sqlserver.jdbc.SQLServerDriver</DriverName>
+    <DbUrl>jdbc:sqlserver://${DbServer}:${DbPort};DatabaseName=${DbName};encrypt=false</DbUrl>
+    <DbUser>${DbUser}</DbUser>
+    <DbPassword>${DbPassword}</DbPassword>
+</ns2:DataStructureOrchestration>

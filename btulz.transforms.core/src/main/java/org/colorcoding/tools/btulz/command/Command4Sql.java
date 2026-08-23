@@ -37,14 +37,16 @@ public class Command4Sql extends Command<Command4Sql> {
 	protected Argument[] createArguments() {
 		ArrayList<Argument> arguments = new ArrayList<>();
 		// 添加自身参数
-		arguments.add(new Argument("-SqlFile", "SQL file to use"));
-		arguments.add(new Argument("-Company", "Company tag for database object prefix"));
-		arguments.add(new Argument("-DbServer", "Database server address"));
-		arguments.add(new Argument("-DbPort", "Database port"));
-		arguments.add(new Argument("-DbSchema", "Database schema"));
-		arguments.add(new Argument("-DbName", "Database name"));
-		arguments.add(new Argument("-DbUser", "Database user"));
-		arguments.add(new Argument("-DbPassword", "Database user password"));
+		arguments.add(new Argument("-sqlFile", "SQL file to use"));
+		arguments.add(new Argument("-sqlFilter", "SQL file name prefix when scanning a directory"));
+		arguments.add(new Argument("-company", "Company tag for database object prefix"));
+		arguments.add(new Argument("-dbServer", "Database server address"));
+		arguments.add(new Argument("-dbPort", "Database port"));
+		arguments.add(new Argument("-dbSchema", "Database schema"));
+		arguments.add(new Argument("-dbName", "Database name"));
+		arguments.add(new Argument("-dbUser", "Database user"));
+		arguments.add(new Argument("-dbPassword", "Database user password"));
+		arguments.add(new Argument("-ignore", "Ignore errors and continue with the next SQL file"));
 		return arguments.toArray(new Argument[] {});
 	}
 
@@ -58,21 +60,25 @@ public class Command4Sql extends Command<Command4Sql> {
 		stringBuilder.append("  ");
 		stringBuilder.append(COMMAND_PROMPT);
 		stringBuilder.append(" ");
-		stringBuilder.append("-SqlFile=D:\\sql_mysql_ibas_initialization.xml");
+		stringBuilder.append("-sqlFile=D:\\sql_mysql_ibas_initialization.xml");
 		stringBuilder.append(" ");
-		stringBuilder.append("-Company=CC");
+		stringBuilder.append("-sqlFilter=sql_mysql_");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbServer=ibas-dev-mysql");
+		stringBuilder.append("-company=CC");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbPort=3306");
+		stringBuilder.append("-dbServer=ibas-dev-mysql");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbSchema=");
+		stringBuilder.append("-dbPort=3306");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbName=ibas_demo");
+		stringBuilder.append("-dbSchema=");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbUser=root");
+		stringBuilder.append("-dbName=ibas_demo");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbPassword=1q2w3e");
+		stringBuilder.append("-dbUser=root");
+		stringBuilder.append(" ");
+		stringBuilder.append("-dbPassword=1q2w3e");
+		stringBuilder.append(" ");
+		stringBuilder.append("-ignore");
 		super.moreHelps(stringBuilder);
 	}
 
@@ -80,31 +86,37 @@ public class Command4Sql extends Command<Command4Sql> {
 	public int run(Argument[] arguments) {
 		try {
 			SqlTransformer sqlTransformer = new SqlTransformer();
+			boolean ignore = false;
 			for (Argument argument : arguments) {
 				if (!argument.isInputed()) {
 					// 没有输入的参数不做处理
 					continue;
 				}
-				if (argument.getName().equalsIgnoreCase("-SqlFile")) {
+				if (argument.getName().equalsIgnoreCase("-sqlFile")) {
 					sqlTransformer.setSqlFile(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-Company")) {
+				} else if (argument.getName().equalsIgnoreCase("-sqlFilter")) {
+					sqlTransformer.setSqlFilter(argument.getValue());
+				} else if (argument.getName().equalsIgnoreCase("-company")) {
 					sqlTransformer.setCompany(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbServer")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbServer")) {
 					sqlTransformer.setDbServer(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbPort")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbPort")) {
 					sqlTransformer.setDbPort(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbSchema")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbSchema")) {
 					sqlTransformer.setDbSchema(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbName")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbName")) {
 					sqlTransformer.setDbName(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbUser")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbUser")) {
 					sqlTransformer.setDbUser(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbPassword")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbPassword")) {
 					sqlTransformer.setDbPassword(argument.getValue());
+				} else if (argument.getName().equalsIgnoreCase("-ignore")) {
+					ignore = true;
 				}
 			}
 			if (sqlTransformer != null && sqlTransformer.getSqlFile() != null) {
 				// 必要参数赋值后才可运行
+				sqlTransformer.setInterruptOnError(!ignore);
 				sqlTransformer.transform();
 				return RETURN_VALUE_SUCCESS;
 			}

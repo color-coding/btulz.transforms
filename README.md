@@ -37,7 +37,7 @@ A Java toolkit for code generation, database structure creation, SQL execution, 
 
 - **🔧 代码生成** — 基于模板引擎，从领域模型自动生成 BOBAS 框架代码（Java、TypeScript、配置文件等）
 - **🗄️ 数据库结构创建** — 自动生成并执行多数据库 DDL，支持创建/更新/删除数据表结构
-- **📜 SQL 执行** — 命令行 SQL 执行工具，支持脚本编排与条件分支
+- **📜 SQL 执行** — 命令行 SQL 执行工具，支持脚本编排、条件分支和错误跳过
 - **📊 Excel 解析** — 解析 Excel 中的领域模型并输出 XML 模型文件
 - **🔄 数据初始化** — 从 JAR 包分析业务对象，自动处理数据结构和初始化数据
 - **🎨 GUI 界面** — Swing GUI 命令执行器（Shell 模块），XML 定义命令表单
@@ -108,6 +108,19 @@ java -jar btulz.transforms.core-0.2.0.jar  excel  -help    # 解析 Excel 领域
 java -jar btulz.transforms.core-0.2.0.jar  ls              # 列出可用命令
 ```
 
+SQL 目录执行示例：
+
+```bash
+java -jar btulz.transforms.core-0.2.0.jar sql \
+  -sqlFile=./initialization \
+  -sqlFilter=sql_mysql_ \
+  -dbServer=localhost -dbPort=3306 -dbName=ibas_demo \
+  -dbUser=root -dbPassword=1q2w3e \
+  -ignore
+```
+
+`-ignore` 会记录当前失败的 SQL 文件并继续执行后续文件；未指定时遇到错误立即停止。
+
 ### BOBAS 模块
 
 ```bash
@@ -116,6 +129,8 @@ java -jar btulz.transforms.bobas-0.2.0.jar  ds       -help  # 数据库结构（
 java -jar btulz.transforms.bobas-0.2.0.jar  routing  -help  # 路由配置
 ```
 
+命令参数统一采用 lower camel case：单词参数全小写（如 `-data`、`-ignore`），复合参数首词小写、后续单词首字母大写（如 `-dbSign`、`-sqlFile`、`-dataUrl`）。参数匹配不区分大小写，旧写法仍可使用。
+
 ### Shell GUI
 
 ```bash
@@ -123,7 +138,7 @@ java -jar btulz.transforms.shell-0.1.1.jar          # 启动 Swing GUI
 btulz.shell.sh / btulz.shell.bat                    # 快速启动脚本
 ```
 
-> 💡 `code` 命令使用默认模板时需加 `-Release` 参数。
+> 💡 `code` 命令使用默认模板时需加 `-release` 参数。
 
 ---
 
@@ -152,7 +167,7 @@ btulz.shell.sh / btulz.shell.bat                    # 快速启动脚本
 **继承体系**:
 ```
 Command<C>                    — 抽象基类（run, createArguments, 参数检查）
-  └─ Command4Release<C>       — 增加 JAR 资源提取（-Release 标志）
+  └─ Command4Release<C>       — 增加 JAR 资源提取（-release 标志）
        └─ Command4Code        — 代码生成
        └─ Command4Ds          — 数据结构创建
        └─ Command4Sql         — SQL 执行

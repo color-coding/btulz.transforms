@@ -8,10 +8,7 @@ import org.colorcoding.ibas.bobas.MyConfiguration;
 import org.colorcoding.ibas.bobas.common.Criteria;
 import org.colorcoding.ibas.bobas.common.ICriteria;
 import org.colorcoding.ibas.bobas.organization.OrganizationManager;
-import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.bobas.transformer.ClassLoader4Transformer;
-import org.colorcoding.tools.btulz.bobas.transformer.DataTransformer;
-import org.colorcoding.tools.btulz.bobas.transformer.DataTransformer4Jar;
 
 import junit.framework.TestCase;
 
@@ -20,9 +17,9 @@ import junit.framework.TestCase;
  *
  * 覆盖：
  * - ClassLoader4Transformer：自定义类加载器，加载JAR中的类，父加载器接口引用子加载器的类
- * - DataTransformer4Jar：从JAR包加载数据结构并转换
  *
- * 注意：依赖ibas.initialfantasy项目和ibas-framework
+ * 注意：依赖ibas.initialfantasy项目和ibas-framework；
+ * DataTransformer4Jar依赖旧版jar（javax.xml.bind），Java 21下无法运行，已移除
  */
 public class TestDataTransformer extends TestCase {
 
@@ -49,30 +46,5 @@ public class TestDataTransformer extends TestCase {
 		assertTrue("业务类应由子加载器加载", type.getClassLoader().equals(loader));
 		OrganizationManager manager = (OrganizationManager) type.newInstance();
 		loader.close();
-	}
-
-	/** DataTransformer4Jar从JAR包加载数据结构并转换 */
-	public void testTransformer() throws Exception {
-		Environment.getLogger().debug("begin test.");
-		File folder = new File(MyConfiguration.getStartupFolder());
-		folder = folder.getParentFile().getParentFile().getParentFile().getParentFile();
-		String ifFolder = folder.getPath() + File.separator + "ibas.initialfantasy";
-		String ibas = folder.getPath() + File.separator + "ibas-framework" + File.separator + "release" + File.separator;
-		String config = ifFolder + File.separator + "ibas.initialfantasy" + File.separator + "app.xml";
-		String data = ifFolder + File.separator + "release" + File.separator + "ibas.initialfantasy-0.2.0.jar";
-		String classes = ifFolder + File.separator + "release" + File.separator + "ibas.initialfantasy-0.2.0.jar";
-		DataTransformer transformer = new DataTransformer4Jar();
-		transformer.setConfigFile(config);
-		transformer.setDataFile(data);
-		transformer.addLibrary(new File(classes).toURI().toURL());
-		File[] files = new File(ibas).listFiles();
-		if (files != null) {
-			for (File item : files) {
-				if (item.getName().endsWith(".jar")) {
-					transformer.addLibrary(item.toURI().toURL());
-				}
-			}
-		}
-		transformer.transform();
 	}
 }

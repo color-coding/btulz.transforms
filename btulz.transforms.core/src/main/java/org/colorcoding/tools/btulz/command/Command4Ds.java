@@ -53,15 +53,15 @@ public class Command4Ds extends Command4Release<Command4Code> {
 			arguments.add(argument);
 		}
 		// 添加自身参数
-		arguments.add(new Argument("-TemplateFile", "Template to use"));
-		arguments.add(new Argument("-Company", "Company tag for database object prefix"));
-		arguments.add(new Argument("-DbServer", "Database server address"));
-		arguments.add(new Argument("-DbPort", "Database port"));
-		arguments.add(new Argument("-DbSchema", "Database schema"));
-		arguments.add(new Argument("-DbName", "Database name"));
-		arguments.add(new Argument("-DbUser", "Database user"));
-		arguments.add(new Argument("-DbPassword", "Database user password"));
-		arguments.add(new Argument("-Domains", "Model directory or file to use"));
+		arguments.add(new Argument("-templateFile", "Template to use"));
+		arguments.add(new Argument("-company", "Company tag for database object prefix"));
+		arguments.add(new Argument("-dbServer", "Database server address"));
+		arguments.add(new Argument("-dbPort", "Database port"));
+		arguments.add(new Argument("-dbSchema", "Database schema"));
+		arguments.add(new Argument("-dbName", "Database name"));
+		arguments.add(new Argument("-dbUser", "Database user"));
+		arguments.add(new Argument("-dbPassword", "Database user password"));
+		arguments.add(new Argument("-domains", "Model directory or file to use"));
 		return arguments.toArray(new Argument[] {});
 	}
 
@@ -75,23 +75,23 @@ public class Command4Ds extends Command4Release<Command4Code> {
 		stringBuilder.append("  ");
 		stringBuilder.append(COMMAND_PROMPT);
 		stringBuilder.append(" ");
-		stringBuilder.append("-TemplateFile=ds_mysql_ibas_classic.xml");
+		stringBuilder.append("-templateFile=ds_mysql_ibas_classic.xml");
 		stringBuilder.append(" ");
-		stringBuilder.append("-Company=CC");
+		stringBuilder.append("-company=CC");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbServer=ibas-dev-mysql");
+		stringBuilder.append("-dbServer=ibas-dev-mysql");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbPort=3306");
+		stringBuilder.append("-dbPort=3306");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbSchema=");
+		stringBuilder.append("-dbSchema=");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbName=ibas_demo");
+		stringBuilder.append("-dbName=ibas_demo");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbUser=root");
+		stringBuilder.append("-dbUser=root");
 		stringBuilder.append(" ");
-		stringBuilder.append("-DbPassword=1q2w3e");
+		stringBuilder.append("-dbPassword=1q2w3e");
 		stringBuilder.append(" ");
-		stringBuilder.append("-Domains=D:\\initialization");
+		stringBuilder.append("-domains=D:\\initialization");
 		super.moreHelps(stringBuilder);
 	}
 
@@ -104,23 +104,23 @@ public class Command4Ds extends Command4Release<Command4Code> {
 					// 没有输入的参数不做处理
 					continue;
 				}
-				if (argument.getName().equalsIgnoreCase("-TemplateFile")) {
+				if (argument.getName().equalsIgnoreCase("-templateFile")) {
 					dsTransformer.setTemplateFile(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-Company")) {
+				} else if (argument.getName().equalsIgnoreCase("-company")) {
 					dsTransformer.setCompany(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbServer")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbServer")) {
 					dsTransformer.setDbServer(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbPort")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbPort")) {
 					dsTransformer.setDbPort(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbSchema")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbSchema")) {
 					dsTransformer.setDbSchema(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbName")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbName")) {
 					dsTransformer.setDbName(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbUser")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbUser")) {
 					dsTransformer.setDbUser(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-DbPassword")) {
+				} else if (argument.getName().equalsIgnoreCase("-dbPassword")) {
 					dsTransformer.setDbPassword(argument.getValue());
-				} else if (argument.getName().equalsIgnoreCase("-Domains")) {
+				} else if (argument.getName().equalsIgnoreCase("-domains")) {
 					dsTransformer.addDomains(argument.getValue());
 				}
 			}
