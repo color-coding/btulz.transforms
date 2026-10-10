@@ -2,14 +2,14 @@ package org.colorcoding.tools.btulz.transformer;
 
 import java.io.File;
 import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.colorcoding.tools.btulz.Environment;
 import org.colorcoding.tools.btulz.model.IBusinessObject;
@@ -21,13 +21,12 @@ import org.colorcoding.tools.btulz.model.IModel;
 import org.colorcoding.tools.btulz.model.IProperty;
 import org.colorcoding.tools.btulz.model.data.emYesNo;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /**
  * xml文件和领域模型的转换器
  * 
- * 使用的DOM解析
+ * 使用DOM读取，StAX按指定顺序写入元素和属性
  * 
  * @author Niuren.Zhu
  *
@@ -128,158 +127,188 @@ public class XmlTransformer extends FileTransformer {
 	protected void save(File outFolder, IDomain domain) throws Exception {
 		String fileName = this.getSaveFilePath(outFolder.getPath(), domain);
 		Environment.getLogger().info(String.format("begin transform domain to file [%s].", fileName));
-		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-		// 领域模型
-		Element root = document.createElement("Domain");
-		this.writeElement(domain, root);
-		// 模型
-		for (IModel model : domain.getModels()) {
-			Element modelElement = document.createElement("Model");
-			this.writeElement(model, modelElement);
-			// 模型属性
-			for (IProperty property : model.getProperties()) {
-				Element propertyElement = document.createElement("Property");
-				this.writeElement(property, propertyElement);
-				modelElement.appendChild(propertyElement);
-			}
-			// 模型索引
-			for (IIndex index : model.getIndexes()) {
-				Element indexElement = document.createElement("Index");
-				this.writeElement(index, indexElement);
-				for (IIndexProperty indexProperty : index.getIndexProperties()) {
-					Element indexPropertyElement = document.createElement("IndexProperty");
-					this.writeElement(indexProperty, indexPropertyElement);
-					indexElement.appendChild(indexPropertyElement);
+		try (OutputStream out = Files.newOutputStream(new File(fileName).toPath())) {
+			XMLStreamWriter writer = XMLOutputFactory.newInstance().createXMLStreamWriter(out, XML_FILE_ENCODING);
+			try {
+				writer.writeStartDocument(XML_FILE_ENCODING, "1.0");
+				this.writeStartElement(writer, "Domain", 0, false);
+				this.writeElement(domain, writer);
+				for (IModel model : domain.getModels()) {
+					boolean emptyModel = model.getProperties().isEmpty() && model.getIndexes().isEmpty();
+					this.writeStartElement(writer, "Model", 1, emptyModel);
+					this.writeElement(model, writer);
+					for (IProperty property : model.getProperties()) {
+						this.writeStartElement(writer, "Property", 2, true);
+						this.writeElement(property, writer);
+					}
+					for (IIndex index : model.getIndexes()) {
+						boolean emptyIndex = index.getIndexProperties().isEmpty();
+						this.writeStartElement(writer, "Index", 2, emptyIndex);
+						this.writeElement(index, writer);
+						for (IIndexProperty indexProperty : index.getIndexProperties()) {
+							this.writeStartElement(writer, "IndexProperty", 3, true);
+							this.writeElement(indexProperty, writer);
+						}
+						if (!emptyIndex) {
+							this.writeEndElement(writer, 2);
+						}
+					}
+					if (!emptyModel) {
+						this.writeEndElement(writer, 1);
+					}
 				}
-				modelElement.appendChild(indexElement);
+				for (IBusinessObject businessObject : domain.getBusinessObjects()) {
+					boolean empty = businessObject.getRelatedBOs().isEmpty();
+					this.writeStartElement(writer, "BusinessObject", 1, empty);
+					this.writeElement(businessObject, writer);
+					for (IBusinessObjectItem item : businessObject.getRelatedBOs()) {
+						this.writeRelatedBO(writer, item, 2);
+					}
+					if (!empty) {
+						this.writeEndElement(writer, 1);
+					}
+				}
+				this.writeEndElement(writer, 0);
+				writer.writeCharacters("\n");
+				writer.writeEndDocument();
+				writer.flush();
+			} finally {
+				writer.close();
 			}
-			root.appendChild(modelElement);
 		}
-		// 业务对象
-		for (IBusinessObject businessObject : domain.getBusinessObjects()) {
-			Element boElement = document.createElement("BusinessObject");
-			this.writeElement(businessObject, boElement);
-			for (IBusinessObjectItem boItem : businessObject.getRelatedBOs()) {
-				Element biElement = document.createElement("RelatedBO");
-				this.writeElement(boItem, biElement, document);
-				boElement.appendChild(biElement);
-			}
-			root.appendChild(boElement);
-		}
-		document.appendChild(root);
-		// 将xml写到文件中
-		javax.xml.transform.Transformer transformer = TransformerFactory.newInstance().newTransformer();
-		DOMSource source = new DOMSource(document);
-		// 添加xml 头信息
-		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-		transformer.setOutputProperty(OutputKeys.ENCODING, XML_FILE_ENCODING);
-		transformer.setOutputProperty(OutputKeys.INDENT, XML_FILE_INDENT);
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		try (PrintWriter pw = new PrintWriter(new File(fileName), XML_FILE_ENCODING)) {
-			StreamResult result = new StreamResult(pw);
-			transformer.transform(source, result);
-		}
-
-		Environment.getLogger().info(String.format("end transform domain to file."));
+		Environment.getLogger().info("end transform domain to file.");
 	}
 
-	private void writeElement(IDomain domain, Element element) {
-		element.setAttribute("Name", domain.getName());
-		element.setAttribute("ShortName", domain.getShortName());
+	private void writeRelatedBO(XMLStreamWriter writer, IBusinessObjectItem item, int depth) throws XMLStreamException {
+		boolean empty = item.getRelatedBOs().isEmpty();
+		this.writeStartElement(writer, "RelatedBO", depth, empty);
+		this.writeElement(item, writer);
+		for (IBusinessObjectItem child : item.getRelatedBOs()) {
+			this.writeRelatedBO(writer, child, depth + 1);
+		}
+		if (!empty) {
+			this.writeEndElement(writer, depth);
+		}
 	}
 
-	private void writeElement(IModel model, Element element) {
-		element.setAttribute("Name", model.getName());
-		element.setAttribute("Description", model.getDescription());
-		element.setAttribute("ModelType", String.valueOf(model.getModelType()));
-		element.setAttribute("Mapped", model.getMapped());
+	private void writeIndent(XMLStreamWriter writer, int depth) throws XMLStreamException {
+		if ("yes".equals(XML_FILE_INDENT)) {
+			writer.writeCharacters("\n" + "  ".repeat(depth));
+		}
+	}
+
+	private void writeStartElement(XMLStreamWriter writer, String name, int depth, boolean empty) throws XMLStreamException {
+		this.writeIndent(writer, depth);
+		if (empty) {
+			writer.writeEmptyElement(name);
+		} else {
+			writer.writeStartElement(name);
+		}
+	}
+
+	private void writeEndElement(XMLStreamWriter writer, int depth) throws XMLStreamException {
+		this.writeIndent(writer, depth);
+		writer.writeEndElement();
+	}
+
+	private void writeAttribute(XMLStreamWriter writer, String name, String value) throws XMLStreamException {
+		// 与原保存行为一致：省略null属性，保留空字符串属性。
+		if (value != null) {
+			writer.writeAttribute(name, value);
+		}
+	}
+
+	private void writeElement(IDomain domain, XMLStreamWriter writer) throws XMLStreamException {
+		this.writeAttribute(writer, "Name", domain.getName());
+		this.writeAttribute(writer, "ShortName", domain.getShortName());
+	}
+
+	private void writeElement(IModel model, XMLStreamWriter writer) throws XMLStreamException {
+		this.writeAttribute(writer, "Name", model.getName());
+		this.writeAttribute(writer, "Description", model.getDescription());
+		this.writeAttribute(writer, "ModelType", String.valueOf(model.getModelType()));
+		this.writeAttribute(writer, "Mapped", model.getMapped());
 		if (!model.isEntity()) {
-			element.setAttribute("Entity", String.valueOf(emYesNo.valueOf(model.isEntity())));
+			this.writeAttribute(writer, "Entity", String.valueOf(emYesNo.valueOf(model.isEntity())));
 		}
 	}
 
-	private void writeElement(IProperty property, Element element) {
-		element.setAttribute("Name", property.getName());
-		element.setAttribute("Description", property.getDescription());
-		element.setAttribute("DataType", String.valueOf(property.getDataType()));
-		element.setAttribute("DataSubType", String.valueOf(property.getDataSubType()));
-		element.setAttribute("EditSize", String.valueOf(property.getEditSize()));
+	private void writeElement(IProperty property, XMLStreamWriter writer) throws XMLStreamException {
+		this.writeAttribute(writer, "Name", property.getName());
+		this.writeAttribute(writer, "Description", property.getDescription());
+		this.writeAttribute(writer, "DataType", String.valueOf(property.getDataType()));
+		this.writeAttribute(writer, "DataSubType", String.valueOf(property.getDataSubType()));
+		this.writeAttribute(writer, "EditSize", String.valueOf(property.getEditSize()));
 		if (property.getDeclaredType() != null && !property.getDeclaredType().isEmpty()) {
-			element.setAttribute("DeclaredType", String.valueOf(property.getDeclaredType()));
+			this.writeAttribute(writer, "DeclaredType", String.valueOf(property.getDeclaredType()));
 		}
-		element.setAttribute("Mapped", property.getMapped());
+		this.writeAttribute(writer, "Mapped", property.getMapped());
 		if (property.isPrimaryKey()) {
-			element.setAttribute("PrimaryKey", String.valueOf(emYesNo.valueOf(property.isPrimaryKey())));
+			this.writeAttribute(writer, "PrimaryKey", String.valueOf(emYesNo.valueOf(property.isPrimaryKey())));
 		}
 		if (property.isUniqueKey()) {
-			element.setAttribute("UniqueKey", String.valueOf(emYesNo.valueOf(property.isUniqueKey())));
+			this.writeAttribute(writer, "UniqueKey", String.valueOf(emYesNo.valueOf(property.isUniqueKey())));
 		}
 		if (property.isSearchKey()) {
-			element.setAttribute("SearchKey", String.valueOf(emYesNo.valueOf(property.isSearchKey())));
+			this.writeAttribute(writer, "SearchKey", String.valueOf(emYesNo.valueOf(property.isSearchKey())));
 		}
 		if (property.getLinked() != null && !property.getLinked().isEmpty()) {
-			element.setAttribute("Linked", property.getLinked());
+			this.writeAttribute(writer, "Linked", property.getLinked());
 		}
 		if (property.getDefaultValue() != null && !property.getDefaultValue().isEmpty()) {
-			element.setAttribute("DefaultValue", property.getDefaultValue());
+			this.writeAttribute(writer, "DefaultValue", property.getDefaultValue());
 		}
 	}
 
-	private void writeElement(IIndex index, Element element) {
+	private void writeElement(IIndex index, XMLStreamWriter writer) throws XMLStreamException {
 		if (index.getName() != null && !index.getName().isEmpty()) {
-			element.setAttribute("Name", index.getName());
+			this.writeAttribute(writer, "Name", index.getName());
 		}
 		if (index.getShortName() != null && !index.getShortName().isEmpty()) {
-			element.setAttribute("ShortName", index.getShortName());
+			this.writeAttribute(writer, "ShortName", index.getShortName());
 		}
 		if (index.getDescription() != null && !index.getDescription().isEmpty()) {
-			element.setAttribute("Description", index.getDescription());
+			this.writeAttribute(writer, "Description", index.getDescription());
 		}
 		if (index.getIndexType() != null) {
-			element.setAttribute("IndexType", String.valueOf(index.getIndexType()));
+			this.writeAttribute(writer, "IndexType", String.valueOf(index.getIndexType()));
 		}
 	}
 
-	private void writeElement(IIndexProperty indexProperty, Element element) {
-		element.setAttribute("Name", indexProperty.getName());
-		if (indexProperty.getDirection() != null && !indexProperty.getDirection().isEmpty()) {
-			element.setAttribute("Direction", indexProperty.getDirection());
+	private void writeElement(IIndexProperty indexProperty, XMLStreamWriter writer) throws XMLStreamException {
+		this.writeAttribute(writer, "Name", indexProperty.getName());
+		String direction = indexProperty.getDirection();
+		if (direction != null && !direction.isEmpty() && !"ASC".equalsIgnoreCase(direction)) {
+			this.writeAttribute(writer, "Direction", direction);
 		}
 	}
 
-	private void writeElement(IBusinessObject bo, Element element) {
+	private void writeElement(IBusinessObject bo, XMLStreamWriter writer) throws XMLStreamException {
 		if (bo.getName() != null && bo.getName().equals(bo.getMappedModel())) {
-			element.setAttribute("MappedModel", bo.getMappedModel());
-			element.setAttribute("ShortName", bo.getShortName());
+			this.writeAttribute(writer, "MappedModel", bo.getMappedModel());
+			this.writeAttribute(writer, "ShortName", bo.getShortName());
 		} else {
-			element.setAttribute("Name", bo.getName());
-			element.setAttribute("Description", bo.getDescription());
-			element.setAttribute("ShortName", bo.getShortName());
-			element.setAttribute("MappedModel", bo.getMappedModel());
+			this.writeAttribute(writer, "Name", bo.getName());
+			this.writeAttribute(writer, "Description", bo.getDescription());
+			this.writeAttribute(writer, "ShortName", bo.getShortName());
+			this.writeAttribute(writer, "MappedModel", bo.getMappedModel());
 		}
 	}
 
-	private void writeElement(IBusinessObjectItem boItem, Element element, Document document) {
-		element.setAttribute("Relation", String.valueOf(boItem.getRelation()));
+	private void writeElement(IBusinessObjectItem boItem, XMLStreamWriter writer) throws XMLStreamException {
+		this.writeAttribute(writer, "Relation", String.valueOf(boItem.getRelation()));
 		if (boItem.getName() != null && boItem.getName().equals(boItem.getMappedModel())) {
-			element.setAttribute("MappedModel", boItem.getMappedModel());
+			this.writeAttribute(writer, "MappedModel", boItem.getMappedModel());
 			if (boItem.getShortName() != null && !boItem.getShortName().isEmpty()) {
-				element.setAttribute("ShortName", boItem.getShortName());
+				this.writeAttribute(writer, "ShortName", boItem.getShortName());
 			}
 		} else {
-			element.setAttribute("Name", boItem.getName());
-			element.setAttribute("Description", boItem.getDescription());
+			this.writeAttribute(writer, "Name", boItem.getName());
+			this.writeAttribute(writer, "Description", boItem.getDescription());
 			if (boItem.getShortName() != null && !boItem.getShortName().isEmpty()) {
-				element.setAttribute("ShortName", boItem.getShortName());
+				this.writeAttribute(writer, "ShortName", boItem.getShortName());
 			}
-			element.setAttribute("MappedModel", boItem.getMappedModel());
-		}
-		if (document != null) {
-			for (IBusinessObjectItem item : boItem.getRelatedBOs()) {
-				Element biElement = document.createElement("RelatedBO");
-				this.writeElement(item, biElement);
-				element.appendChild(biElement);
-			}
+			this.writeAttribute(writer, "MappedModel", boItem.getMappedModel());
 		}
 	}
 

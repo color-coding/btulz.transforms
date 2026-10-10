@@ -57,10 +57,14 @@ A Java toolkit for code generation, database structure creation, SQL execution, 
 ### 模块依赖关系
 
 ```
-core   (无内部依赖；外部: log4j, dom4j, JDBC, Apache POI)
+core   (无内部依赖；外部: Log4j 2, JDBC, Apache POI)
 bobas  (依赖 core + bobas.businessobjectscommon)
 shell  (无内部依赖；独立 UI)
 ```
+
+日志使用 Log4j 2.26.1，默认以 INFO 级别输出到控制台。自定义配置使用 `log4j2.properties`，启动目录中的配置优先于 JAR 内置配置；原 `log4j.properties` 需改为 Log4j 2 格式。
+
+工具仅使用 MySQL JDBC，已排除 X DevAPI 所需的 `protobuf-java`。BOBAS 初始化使用内置 XML 序列化，不依赖 Jersey、MOXy 或邮件库；应用的 Web 配置仍可使用 Jersey。Excel 转换所需的 POI、JAXB 及数据库驱动继续保留。
 
 ---
 

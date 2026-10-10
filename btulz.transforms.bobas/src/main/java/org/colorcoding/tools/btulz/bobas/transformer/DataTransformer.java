@@ -25,7 +25,7 @@ import org.colorcoding.ibas.bobas.common.IOperationResult;
 import org.colorcoding.ibas.bobas.organization.OrganizationFactory;
 import org.colorcoding.ibas.bobas.repository.RepositoryException;
 import org.colorcoding.ibas.bobas.serialization.ISerializer;
-import org.colorcoding.ibas.bobas.serialization.SerializationFactory;
+import org.colorcoding.ibas.bobas.serialization.SerializerManager;
 import org.colorcoding.ibas.bobas.task.Daemon;
 import org.colorcoding.tools.btulz.bobas.Environment;
 import org.colorcoding.tools.btulz.transformer.TransformException;
@@ -166,7 +166,8 @@ public class DataTransformer extends Transformer {
 				}
 			}
 		} else if (file.isFile()) {
-			ISerializer serializer = SerializationFactory.createManager().create("xml");
+			// 初始化文件仅使用内置XML序列化，不加载应用配置中的Web序列化实现。
+			ISerializer serializer = new SerializerManager().create("xml");
 			String name = file.getName().toLowerCase();
 			if (name.startsWith("bo.") && name.endsWith(".xml")) {
 				String boName = this.getClassName(new FileInputStream(file));

@@ -359,7 +359,7 @@ public class CodeTransformer extends Transformer {
 							if (parameter.getName().equalsIgnoreCase(RegionDomain.REGION_PARAMETER_NAME)) {
 								if (parameter.getValue() instanceof IDomain) {
 									IDomain domain = (IDomain) parameter.getValue();
-									XmlTransformer xmlTransformer = new XmlTransformerDom4j();
+									XmlTransformer xmlTransformer = new XmlTransformer();
 									xmlTransformer.setInterruptOnError(true);
 									xmlTransformer.load(domain);
 									xmlTransformer.save(outFolder.getPath());

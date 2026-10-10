@@ -82,12 +82,12 @@ if [ -e ${WORK_FOLDER}/release ]; then
     istack-commons-runtime-* \
     jakarta.activation-api-* \
     angus-activation-* \
-    log4j-* \
+    log4j-api-2*.jar \
+    log4j-core-2*.jar \
     mysql-connector-* \
     ngdbc-* \
     postgresql-* \
     mssql-jdbc-* \
-    dom4j-* \
     btulz.shell.*
 fi
 cd ${WORK_FOLDER}

@@ -1,7 +1,6 @@
 package org.colorcoding.tools.btulz;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -13,8 +12,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Configurator;
 
 /**
  * 运行环境
@@ -57,25 +57,15 @@ public class Environment {
 	public synchronized static Logger getLogger() {
 		if (logger == null) {
 			try {
-				File file = new File(getStartupFolder() + File.separator + "log4j.properties");
-				if (file.exists() && file.isFile()) {
-					PropertyConfigurator.configure(file.getPath());
-				} else {
-					URI path = getResource("log4j.properties");
-					if (path != null && path.getPath() != null) {
-						PropertyConfigurator.configure(path.getPath());
-					} else {
-						InputStream stream = Thread.currentThread().getContextClassLoader()
-								.getResourceAsStream("log4j.properties");
-						if (stream != null) {
-							PropertyConfigurator.configure(stream);
-						}
-					}
+				File file = new File(getStartupFolder() + File.separator + "log4j2.properties");
+				URI configuration = file.isFile() ? file.toURI() : getResource("log4j2.properties");
+				if (configuration != null) {
+					Configurator.reconfigure(configuration);
 				}
-				logger = Logger.getLogger("btulz.transforms");
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}
+			logger = LogManager.getLogger("btulz.transforms");
 		}
 		return logger;
 	}

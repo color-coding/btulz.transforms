@@ -14,7 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.colorcoding.ibas.bobas.bo.BusinessObject;
 import org.colorcoding.ibas.bobas.bo.IBusinessObject;
 import org.colorcoding.ibas.bobas.serialization.ISerializer;
-import org.colorcoding.ibas.bobas.serialization.SerializationFactory;
+import org.colorcoding.ibas.bobas.serialization.SerializerManager;
 import org.colorcoding.tools.btulz.transformer.TransformException;
 import org.xml.sax.SAXException;
 
@@ -36,7 +36,8 @@ public class DataTransformer4Jar extends DataTransformer {
 			ArrayList<IBusinessObject> bos = new ArrayList<>();
 			JarFile jarFile = new JarFile(file);
 			try {
-				ISerializer serializer = SerializationFactory.createManager().create("xml");
+				// 初始化文件仅使用内置XML序列化，不加载应用配置中的Web序列化实现。
+				ISerializer serializer = new SerializerManager().create("xml");
 				Enumeration<JarEntry> jarEntries = jarFile.entries();
 				if (jarEntries != null) {
 					ArrayList<JarEntry> JarEntryList = new ArrayList<>();

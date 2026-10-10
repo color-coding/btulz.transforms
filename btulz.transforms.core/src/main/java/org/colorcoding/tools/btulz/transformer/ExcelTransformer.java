@@ -63,7 +63,7 @@ public class ExcelTransformer extends FileTransformer {
 	public final void transform() throws Exception {
 		XmlTransformer xmlTransformer = null;
 		for (IDomain domain : this.getWorkingDomains()) {
-			xmlTransformer = new XmlTransformerDom4j();
+			xmlTransformer = new XmlTransformer();
 			xmlTransformer.load(domain);
 			xmlTransformer.setInterruptOnError(true);
 			xmlTransformer.setKeepResults(false);
