@@ -49,6 +49,14 @@
 		<Feature Key="DbPort" Value="-1"/>
 		<Feature Key="DbSchema" Value=""/>
 	</DatabaseType>
+	<DatabaseType Name="H2">
+		<Feature Key="DsTemplate" Value="ds_h2_ibas_classic.xml"/>
+		<Feature Key="SqlFilter" Value="sql_h2_"/>
+		<Feature Key="DbServer" Value="embedded"/>
+		<Feature Key="DbUser" Value="sa"/>
+		<Feature Key="DbPort" Value="-1"/>
+		<Feature Key="DbSchema" Value=""/>
+	</DatabaseType>
 	<DatabaseType Name="DM8">
 		<Feature Key="DsTemplate" Value="ds_dm8_ibas_classic.xml"/>
 		<Feature Key="SqlFilter" Value="sql_dm8_"/>

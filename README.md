@@ -41,7 +41,7 @@ A Java toolkit for code generation, database structure creation, SQL execution, 
 - **📊 Excel 解析** — 解析 Excel 中的领域模型并输出 XML 模型文件
 - **🔄 数据初始化** — 从 JAR 包分析业务对象，自动处理数据结构和初始化数据
 - **🎨 GUI 界面** — Swing GUI 命令执行器（Shell 模块），XML 定义命令表单
-- **🌐 多数据库支持** — MSSQL、MySQL、PostgreSQL、SAP HANA、SQLite、Sybase、达梦 DM8
+- **🌐 多数据库支持** — MSSQL、MySQL、PostgreSQL、SAP HANA、SQLite、H2、Sybase、达梦 DM8
 - **🧩 模板系统** — 区域标记（Region Markers）驱动的模板解析，支持变量替换与迭代
 
 ---
@@ -155,10 +155,13 @@ btulz.shell.sh / btulz.shell.bat                    # 快速启动脚本
 | PostgreSQL | ✅ |
 | SAP HANA | ✅ |
 | SQLite | ✅ |
+| H2 | ✅ |
 | Sybase | ✅ |
 | 达梦 DM8 | ✅ |
 
-> ⚠️ Core 模块 POM 仅内置 MSSQL、MySQL、PostgreSQL、HANA 的 JDBC 驱动，其余需自行提供。
+> ⚠️ Core 模块 POM 仅内置 MSSQL、MySQL、PostgreSQL、HANA、H2 的 JDBC 驱动，其余需自行提供。
+
+H2 内存数据库示例使用 `mem:ibas;DB_CLOSE_DELAY=-1` 作为数据库名称。内存数据库仅属于当前 JVM；通过独立进程初始化并启动服务时，请使用同一个文件数据库路径，例如 `./data/ibas`。
 
 ---
 
