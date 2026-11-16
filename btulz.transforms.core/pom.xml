@@ -22,7 +22,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.version>3.15.0</maven.compiler.version>
-		<maven.dependency.version>3.10.0</maven.dependency.version>
+		<maven.dependency.version>3.11.0</maven.dependency.version>
 		<maven.jar.version>3.5.1</maven.jar.version>
 		<maven.source.version>3.4.0</maven.source.version>
 		<jakarta.xml.bind.version>4.0.2</jakarta.xml.bind.version>
@@ -94,7 +94,7 @@
 		<repository>
 			<id>ibas-maven</id>
 			<name>ibas maven repository</name>
-			<url>https://maven.colorcoding.org/repository/maven-public/</url>
+            <url>https://maven.colorcoding.org/repository/maven-public/</url>
 			<layout>default</layout>
 			<snapshots>
 				<enabled>false</enabled>
@@ -131,12 +131,12 @@
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>mssql-jdbc</artifactId>
-			<version>13.4.0.jre11</version>
+			<version>13.6.2.jre11</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
-			<version>9.2.0</version>
+			<version>26.10.0</version>
 			<!-- Only JDBC is used; protobuf-java is required by X DevAPI. -->
 			<exclusions>
 				<exclusion>
@@ -163,7 +163,7 @@
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>5.5.1</version>
+			<version>6.0.0</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -22,7 +22,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.version>3.15.0</maven.compiler.version>
-		<maven.dependency.version>3.10.0</maven.dependency.version>
+		<maven.dependency.version>3.11.0</maven.dependency.version>
 		<maven.jar.version>3.5.1</maven.jar.version>
 		<maven.source.version>3.4.0</maven.source.version>
 		<btulz.core.version>0.2.0</btulz.core.version>
@@ -123,7 +123,7 @@
 		<repository>
 			<id>ibas-maven</id>
 			<name>ibas maven repository</name>
-			<url>https://maven.colorcoding.org/repository/maven-public/</url>
+            <url>https://maven.colorcoding.org/repository/maven-public/</url>
 			<layout>default</layout>
 			<snapshots>
 				<enabled>false</enabled>
